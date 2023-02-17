@@ -1,0 +1,24 @@
+body {
+    text-align: center;
+    width: 200px;
+}
+
+button {
+    width: 100%;
+    color: white;
+    background: linear-gradient(#01a9e1, #5bc4bc);
+    border-width: 0;
+    border-radius: 20px;
+    padding: 5px;
+    font-weight: bold;
+}
+
+button:disabled {
+    width: 100%;
+    color: black;
+    background: linear-gradient(#9dd0e0, #8fc4c0);
+    border-width: 0;
+    border-radius: 20px;
+    padding: 5px;
+    font-weight: bold;
+}
