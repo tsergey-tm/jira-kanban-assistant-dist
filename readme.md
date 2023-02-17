@@ -9,7 +9,7 @@
 Переходим в каталог, где будете держать плагин.
 Там выполняете 
 ```bash
-git checkout https://github.com/tsergey-tm/jira-kanban-assistant-dist.git
+git clone https://github.com/tsergey-tm/jira-kanban-assistant-dist.git
 ``` 
 Или через клиента получаете файлы из https://github.com/tsergey-tm/jira-kanban-assistant-dist.git 
 
