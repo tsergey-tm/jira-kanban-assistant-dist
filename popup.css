@@ -5,8 +5,8 @@ body {
 
 button {
     width: 100%;
-    color: white;
-    background: linear-gradient(#01a9e1, #5bc4bc);
+    color: #2c3e50;
+    background: linear-gradient(#a862ea, #eedffb);
     border-width: 0;
     border-radius: 20px;
     padding: 5px;
@@ -15,8 +15,8 @@ button {
 
 button:disabled {
     width: 100%;
-    color: black;
-    background: linear-gradient(#9dd0e0, #8fc4c0);
+    color: darkgrey;
+    background: linear-gradient(#eedffb, #f6effd);
     border-width: 0;
     border-radius: 20px;
     padding: 5px;
