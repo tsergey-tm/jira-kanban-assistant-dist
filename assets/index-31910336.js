@@ -50748,7 +50748,7 @@ const KanbanStat = {
       ps.waste = calcStat(timeWaste);
       ps.times = [];
       for (let index = 0; index < tmp.columnsCnt; index++) {
-        ps.times.push(sum(timesCols[index]) / dayShift);
+        ps.times.push(mean(timesCols[index]) / dayShift);
       }
       let tLead = sum(timeLead);
       if (tLead === 0) {
@@ -50762,7 +50762,7 @@ const KanbanStat = {
         ps.effPercent = 100 * sum(timeWork) / tLead;
         ps.timesPercent = [];
         for (let index = 0; index < tmp.columnsCnt; index++) {
-          ps.timesPercent.push(100 * ps.times[index] / tLead);
+          ps.timesPercent.push(100 * sum(timesCols[index]) / dayShift / tLead);
         }
       }
     }
