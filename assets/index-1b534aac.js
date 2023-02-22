@@ -53093,45 +53093,47 @@ const __default__ = {
       this.loadingMax = loadingMaxSteps;
       this.loadingCurr = 60;
       this.loading = true;
-      let issuesToLoad = Object.keys(this.issuesStat);
-      for (const issue of this.boardAllData.issuesData.issues) {
-        if (!issuesToLoad.includes(issue.key)) {
-          issuesToLoad.push(issue.key);
-        }
-      }
-      let issuesToLoadCnt = issuesToLoad.length;
-      try {
-        let url = this.jiraBase + "/rest/api/2/search";
-        let req = {
-          jql: "",
-          startAt: 0,
-          maxResults: 100,
-          fields: []
-        };
-        if (((_a2 = this.conf) == null ? void 0 : _a2.issueSizeField) !== null && ((_b2 = this.conf) == null ? void 0 : _b2.issueSizeField) !== void 0) {
-          req.fields.push(this.conf.issueSizeField);
-        }
-        while (issuesToLoad.length > 0) {
-          let issKeys = issuesToLoad.splice(0, 100);
-          req.jql = "issuekey in (" + issKeys.join(",") + ")";
-          let data = await fetch(
-            url,
-            {
-              method: "POST",
-              headers: {
-                "Content-type": "application/json"
-              },
-              body: JSON.stringify(req)
-            }
-          ).then((res) => res.json());
-          this.loadingMax = loadingMaxSteps * issuesToLoadCnt;
-          this.loadingCurr = (loadingMaxSteps - 1) * issuesToLoadCnt - issuesToLoad.length;
-          for (const issue of data.issues) {
-            this.issues.push(issue);
+      if (this.conf.issueSizeField !== null && this.conf.issueSizeField !== void 0) {
+        let issuesToLoad = Object.keys(this.issuesStat);
+        for (const issue of this.boardAllData.issuesData.issues) {
+          if (!issuesToLoad.includes(issue.key)) {
+            issuesToLoad.push(issue.key);
           }
         }
-      } catch (e2) {
-        console.warn(e2);
+        let issuesToLoadCnt = issuesToLoad.length;
+        try {
+          let url = this.jiraBase + "/rest/api/2/search";
+          let req = {
+            jql: "",
+            startAt: 0,
+            maxResults: 100,
+            fields: []
+          };
+          if (((_a2 = this.conf) == null ? void 0 : _a2.issueSizeField) !== null && ((_b2 = this.conf) == null ? void 0 : _b2.issueSizeField) !== void 0) {
+            req.fields.push(this.conf.issueSizeField);
+          }
+          while (issuesToLoad.length > 0) {
+            let issKeys = issuesToLoad.splice(0, 100);
+            req.jql = "issuekey in (" + issKeys.join(",") + ")";
+            let data = await fetch(
+              url,
+              {
+                method: "POST",
+                headers: {
+                  "Content-type": "application/json"
+                },
+                body: JSON.stringify(req)
+              }
+            ).then((res) => res.json());
+            this.loadingMax = loadingMaxSteps * issuesToLoadCnt;
+            this.loadingCurr = (loadingMaxSteps - 1) * issuesToLoadCnt - issuesToLoad.length;
+            for (const issue of data.issues) {
+              this.issues.push(issue);
+            }
+          }
+        } catch (e2) {
+          console.warn(e2);
+        }
       }
       await this.recalcDetailedLTD();
     },
