@@ -266,28 +266,28 @@
   padding: 0.2rem 0;
 }
 
-.ControlChart[data-v-599dbf25] {
+.ControlChart[data-v-1c926ffc] {
   height: 50%;
 }
-.long-time-issues-config[data-v-599dbf25] {
+.control-chart-issues-config[data-v-1c926ffc] {
   padding: 0.2rem;
 }
-.long-time-issues-table[data-v-599dbf25] {
+.control-chart-issues-table[data-v-1c926ffc] {
   border-collapse: collapse;
 }
-.long-time-issues-table-head[data-v-599dbf25] {
+.control-chart-issues-table-head[data-v-1c926ffc] {
   text-align: center;
   border: 1px solid rgba(0, 0, 0, 0.25);
   padding: 0.2rem;
   font-weight: bold;
 }
-.long-time-issues-table-item[data-v-599dbf25] {
+.control-chart-issues-table-item[data-v-1c926ffc] {
   text-align: right;
   vertical-align: top;
   border: 1px solid rgba(0, 0, 0, 0.25);
   padding: 0.2rem;
 }
-.long-time-issues-winners[data-v-599dbf25] {
+.control-chart-issues-winners[data-v-1c926ffc] {
   padding: 1rem;
 }
 
@@ -436,8 +436,11 @@ h1 {
   color: var(--color-text);
   background-color: rgba(0, 143, 191, 0.1);
   position: fixed;
-  left: 1rem;
+  right: 1rem;
   bottom: 1rem;
   font-size: xx-large;
+}
+a.icon-info-down {
+  text-decoration: underline dotted;
 }
 .vfm--fixed{position:fixed}.vfm--absolute{position:absolute}.vfm--inset{top:0;right:0;bottom:0;left:0}.vfm--overlay{background-color:#00000080}.vfm--prevent-none{pointer-events:none}.vfm--prevent-auto{pointer-events:auto}.vfm--outline-none:focus{outline:none}.vfm-fade-enter-active,.vfm-fade-leave-active{transition:opacity .3s}.vfm-fade-enter-from,.vfm-fade-leave-to{opacity:0}.vfm-bounce-back{transition-property:transform;transition-duration:.3s}.vfm-slide-up-enter-active,.vfm-slide-up-leave-active,.vfm-slide-down-enter-active,.vfm-slide-down-leave-active{transition:transform .3s ease}.vfm-slide-down-enter-from,.vfm-slide-down-leave-to{transform:translateY(100vh)}.vfm-slide-up-enter-from,.vfm-slide-up-leave-to{transform:translateY(-100vh)}.vfm-slide-right-enter-active,.vfm-slide-right-leave-active,.vfm-slide-left-enter-active,.vfm-slide-left-leave-active{transition:transform .3s ease}.vfm-slide-right-enter-from,.vfm-slide-right-leave-to{transform:translate(100vw)}.vfm-slide-left-enter-from,.vfm-slide-left-leave-to{transform:translate(-100vw)}.vfm-swipe-banner-back,.vfm-swipe-banner-forward{position:fixed;top:0;bottom:0;width:27px;z-index:10}.vfm-swipe-banner-back{left:0}.vfm-swipe-banner-forward{right:0}

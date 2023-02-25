@@ -53616,13 +53616,13 @@ const _sfc_main$f = {
     }
   }
 };
-const _hoisted_1$d = { class: "name-progressbar-name" };
+const _hoisted_1$f = { class: "name-progressbar-name" };
 function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", {
     class: "name-progressbar-box",
     style: normalizeStyle$1($options.progressLoadingStyle)
   }, [
-    createBaseVNode("span", _hoisted_1$d, toDisplayString$1($props.title), 1)
+    createBaseVNode("span", _hoisted_1$f, toDisplayString$1($props.title), 1)
   ], 4);
 }
 const NameProgressBar = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-adea8f9f"]]);
@@ -59976,16 +59976,16 @@ const _sfc_main$e = {
     }
   }
 };
-const _hoisted_1$c = { class: "triage-selector" };
+const _hoisted_1$e = { class: "triage-selector" };
 const _hoisted_2$8 = { style: { "clear": "both" } };
-const _hoisted_3$6 = { key: 0 };
-const _hoisted_4$4 = {
+const _hoisted_3$8 = { key: 0 };
+const _hoisted_4$5 = {
   key: 1,
   class: "triage-table"
 };
 const _hoisted_5$3 = ["innerHTML"];
 const _hoisted_6$3 = ["innerHTML"];
-const _hoisted_7$2 = ["innerHTML"];
+const _hoisted_7$3 = ["innerHTML"];
 const _hoisted_8$2 = ["innerHTML"];
 const _hoisted_9$2 = ["innerHTML"];
 const _hoisted_10$2 = ["innerHTML"];
@@ -60004,9 +60004,10 @@ const _hoisted_22 = ["innerHTML"];
 const _hoisted_23 = ["innerHTML"];
 const _hoisted_24 = ["innerHTML"];
 const _hoisted_25 = ["innerHTML"];
+const _hoisted_26 = ["title", "href"];
 function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$c, [
+    createBaseVNode("div", _hoisted_1$e, [
       createBaseVNode("div", {
         class: normalizeClass(["triage-selector-item", { "triage-selector-item-selected": _ctx.selected === "lead" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "lead")
@@ -60017,8 +60018,8 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
       }, toDisplayString$1(_ctx.$t("triage.tab.name", { col: $options.cycleTriageColName })), 3)
     ]),
     createBaseVNode("div", _hoisted_2$8, [
-      !Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("div", _hoisted_3$6, toDisplayString$1($options.triageTable), 1)) : createCommentVNode("", true),
-      Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$4, [
+      !Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("div", _hoisted_3$8, toDisplayString$1($options.triageTable), 1)) : createCommentVNode("", true),
+      Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$5, [
         createBaseVNode("thead", null, [
           createBaseVNode("tr", null, [
             createBaseVNode("th", {
@@ -60032,7 +60033,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
             createBaseVNode("th", {
               class: "triage-table-th",
               innerHTML: this.$t("triage.column.shelf-life-ratio")
-            }, null, 8, _hoisted_7$2),
+            }, null, 8, _hoisted_7$3),
             createBaseVNode("th", {
               class: "triage-table-th",
               innerHTML: this.$t("triage.column.desired-delivery-date")
@@ -60114,7 +60115,13 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
           }), 256))
         ])
       ])) : createCommentVNode("", true)
-    ])
+    ]),
+    createBaseVNode("a", {
+      class: "icon-info-down",
+      title: _ctx.$t("triage.help.text"),
+      href: _ctx.$t("triage.help.link"),
+      target: "_blank"
+    }, " ‽ ", 8, _hoisted_26)
   ], 64);
 }
 const TriageTable = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render$d]]);
@@ -60137,18 +60144,18 @@ const _sfc_main$d = {
     }
   }
 };
-const _hoisted_1$b = { class: "jira-filters-box" };
+const _hoisted_1$d = { class: "jira-filters-box" };
 const _hoisted_2$7 = { class: "jira-filter-box-title" };
-const _hoisted_3$5 = ["onClick"];
+const _hoisted_3$7 = ["onClick"];
 function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$b, [
+  return openBlock(), createElementBlock("div", _hoisted_1$d, [
     createBaseVNode("div", _hoisted_2$7, toDisplayString$1($props.title) + ":", 1),
     (openBlock(true), createElementBlock(Fragment, null, renderList($props.filters, (filter2) => {
       return openBlock(), createElementBlock("div", {
         class: normalizeClass(["jira-filter-box-item", { "jira-filter-box-item-selected": $props.selectedFilters.includes(filter2.id) }]),
         key: filter2.id,
         onClick: ($event) => $options.onClick(filter2.id)
-      }, toDisplayString$1(filter2.name), 11, _hoisted_3$5);
+      }, toDisplayString$1(filter2.name), 11, _hoisted_3$7);
     }), 128))
   ]);
 }
@@ -60254,13 +60261,13 @@ const _sfc_main$c = {
   }
 };
 const _withScopeId = (n2) => (pushScopeId("data-v-d67583f4"), n2 = n2(), popScopeId(), n2);
-const _hoisted_1$a = { class: "jira-columns-box" };
+const _hoisted_1$c = { class: "jira-columns-box" };
 const _hoisted_2$6 = { class: "jira-columns-box-title" };
-const _hoisted_3$4 = { class: "jira-columns-box-table" };
-const _hoisted_4$3 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
+const _hoisted_3$6 = { class: "jira-columns-box-table" };
+const _hoisted_4$4 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
 const _hoisted_5$2 = { class: "jira-columns-box-table-header" };
 const _hoisted_6$2 = { class: "jira-columns-box-table-header" };
-const _hoisted_7$1 = ["onClick"];
+const _hoisted_7$2 = ["onClick"];
 const _hoisted_8$1 = { class: "jira-columns-box-table-header" };
 const _hoisted_9$1 = ["onClick"];
 const _hoisted_10$1 = { class: "jira-columns-box-table-header" };
@@ -60272,12 +60279,12 @@ const _hoisted_15$1 = ["onClick"];
 const _hoisted_16$1 = { class: "jira-columns-box-table-header" };
 const _hoisted_17$1 = ["onClick"];
 function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$a, [
+  return openBlock(), createElementBlock("div", _hoisted_1$c, [
     createBaseVNode("div", _hoisted_2$6, toDisplayString$1($props.title) + ":", 1),
-    createBaseVNode("table", _hoisted_3$4, [
+    createBaseVNode("table", _hoisted_3$6, [
       createBaseVNode("thead", null, [
         createBaseVNode("tr", null, [
-          _hoisted_4$3,
+          _hoisted_4$4,
           (openBlock(true), createElementBlock(Fragment, null, renderList($props.columns, (column) => {
             return openBlock(), createElementBlock("td", _hoisted_5$2, toDisplayString$1(column.name), 1);
           }), 256))
@@ -60293,7 +60300,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
                 "jira-columns-box-table-item-unsel": $props.workColumns.includes(column.id) || $props.waitColumns.includes(column.id) || $props.readyColumns.includes(column.id)
               }]),
               onClick: ($event) => $options.skipOnClick(column.id)
-            }, "  ", 10, _hoisted_7$1);
+            }, "  ", 10, _hoisted_7$2);
           }), 256))
         ]),
         createBaseVNode("tr", null, [
@@ -66347,9 +66354,15 @@ const messages = {
           const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
           return _normalize(["Selected columns: ", _interpolate(_named("columns")), ", swimlanes: ", _interpolate(_named("swimlanes")), ", filters: ", _interpolate(_named("filters"))]);
         },
-        "help": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Information about columns, lines and filters selected for analysis.\nTo change settings, click on the gear icon."]);
+        "help": {
+          "text": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Information about columns, lines and filters selected for analysis.\nTo change settings, click on the gear icon.\nFor a detailed description, click on this icon."]);
+          },
+          "link": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+          }
         }
       }
     },
@@ -66412,9 +66425,15 @@ const messages = {
           return _normalize(["Cycle time"]);
         }
       },
-      "help": (ctx) => {
-        const { normalize: _normalize } = ctx;
-        return _normalize(["main.help"]);
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["On this screen is presented:\nThe average value of WIP for periods.\nThe ratio of time how many completed tasks were carried out in the columns of work by the time spent in the waiting columns for the periods.\nDelivery time and cycle of completed tasks for periods.\nThe capacity of the team for the period."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+        }
       }
     },
     "total-wip": {
@@ -66448,6 +66467,16 @@ const messages = {
         "min": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Minimum"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["This screen contains aggregated values of total WIP on the board by the periods."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
         }
       }
     },
@@ -66507,6 +66536,16 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["Count issues in progress"]);
         }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["This screen contains aggregated values of WIP in the columns according by the periods."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+        }
       }
     },
     "avg-time-by-columns": {
@@ -66535,6 +66574,16 @@ const messages = {
       "title": (ctx) => {
         const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
         return _normalize(["Average time by columns for released issues: ", _interpolate(_named("title"))]);
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["This screen shows the time that spent in the columns the tasks completed in the period.\nYou can choose both the ratio to the delivery time and absolute values."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+        }
       }
     },
     "lead-time-distributions": {
@@ -66587,9 +66636,19 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["Thin-tailed"]);
         }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["A diagram on the basis of which you can make a probabilistic forecast about the time of task.\nOn the horizontal axis is laid by LEAD TIME,\nBy vertical - the number of tasks performed with such LEAD TIME.\nIf the tasks are has the dimensions, then the diagram can be viewed for each of them."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+        }
       }
     },
-    "long-times": {
+    "control-chart": {
       "config": {
         "search": (ctx) => {
           const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
@@ -66643,6 +66702,16 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["Issues"]);
         }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["The control chart shows the dispersion of the task execution time.\nIt is used to search and analyze the reasons leading to the instability of the work process."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+        }
       }
     },
     "analyze-by-wip": {
@@ -66684,6 +66753,16 @@ const messages = {
         "throughput": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Throughput"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Parameters of throughput, efficiency,\nlead time and cycle time of completed tasks\nby the average WIP during the production of the task"]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
         }
       }
     },
@@ -66949,6 +67028,16 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["No size"]);
         }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Too big to hint\nJust click on the icon to open the link"]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+        }
       }
     },
     "app-config": {
@@ -67109,9 +67198,15 @@ const messages = {
           const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
           return _normalize(["Выбрано колонок: ", _interpolate(_named("columns")), ", линий: ", _interpolate(_named("swimlanes")), ", фильтров: ", _interpolate(_named("filters"))]);
         },
-        "help": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Информация о выбранных для анализа колонок, линий и фильтров.\nЧтобы изменить настройки, нажмите на значок шестерёнки."]);
+        "help": {
+          "text": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Информация о выбранных для анализа колонок, линий и фильтров.\nЧтобы изменить настройки, нажмите на значок шестерёнки.\nДля подробного описания кликните на значок."]);
+          },
+          "link": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0"]);
+          }
         }
       }
     },
@@ -67174,9 +67269,15 @@ const messages = {
           return _normalize(["Время цикла"]);
         }
       },
-      "help": (ctx) => {
-        const { normalize: _normalize } = ctx;
-        return _normalize(["На этом экране представлены:\nСреднее значение незавершенной работы (WIP) по периодам\nОтношение времени сколько завершенные задачи провели в колонках работы ко времени проведенном в колонках ожидания"]);
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["На этом экране представлены:\nСреднее значение незавершенной работы (WIP) по периодам.\nОтношение времени сколько завершенные задачи провели в колонках работы ко времени проведенном в колонках ожидания по периодам.\nВремя поставки и цикла завершенных задач по периодам.\nПропускная способность команды по периодам."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9-%D1%8D%D0%BA%D1%80%D0%B0%D0%BD"]);
+        }
       }
     },
     "total-wip": {
@@ -67210,6 +67311,16 @@ const messages = {
         "min": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Минимум"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["На этом экране представлены агрегированные значения общей незавершенной работы на доске по периодам."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BE%D0%B1%D1%89%D0%B8%D0%B9-wip"]);
         }
       }
     },
@@ -67269,6 +67380,16 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["Число незавершенных задач"]);
         }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["На этом экране представлены агрегированные значения незавершенной работы в колонках по периодам."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#wip-%D0%BF%D0%BE-%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BA%D0%B0%D0%BC"]);
+        }
       }
     },
     "avg-time-by-columns": {
@@ -67290,13 +67411,23 @@ const messages = {
           },
           "day": (ctx) => {
             const { normalize: _normalize } = ctx;
-            return _normalize(["Время в колонке для завершенных задач"]);
+            return _normalize(["Время в колонке для завершенных задач, дни"]);
           }
         }
       },
       "title": (ctx) => {
         const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
         return _normalize(["Среднее время по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["На этом экране представлено время, которые провели в колонках завершенные в периоде задачи.\nМожно выбрать как отношение к времени поставки, так и абсолютные значения."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%81%D1%80%D0%B5%D0%B4%D0%BD%D0%B5%D0%B5-%D0%B2%D1%80%D0%B5%D0%BC%D1%8F-%D0%BF%D0%BE-%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BA%D0%B0%D0%BC"]);
+        }
       }
     },
     "lead-time-distributions": {
@@ -67349,9 +67480,19 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["с коротким хвостом"]);
         }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Диаграмма, на основе которой можно делать вероятностный прогноз о времени выполнения задач.\nПо горизонтальной оси откладывается Lead Time,\nпо вертикальной — количество задач, выполненных с таким Lead Time.\nЕсли у задач заданы размеры, то диаграмму можно посмотреть для каждого из них."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%B8-%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F"]);
+        }
       }
     },
-    "long-times": {
+    "control-chart": {
       "config": {
         "search": (ctx) => {
           const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
@@ -67405,6 +67546,16 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["Задачи"]);
         }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Контрольная диаграмма показывает дисперсию времени выполнения задач.\nИспользуется для поиска и анализа причин, приводящих к нестабильности рабочего процесса."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0"]);
+        }
       }
     },
     "analyze-by-wip": {
@@ -67446,6 +67597,16 @@ const messages = {
         "throughput": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Пропускная способность"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Параметры пропускной способности, эффективности,\nвремени поставки и времени цикла завершенных задач\n по среднему WIP за время производства задачи"]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7-%D0%BF%D0%BE-wip"]);
         }
       }
     },
@@ -67711,6 +67872,16 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["Без размера"]);
         }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["'Это неописуемо' - кричала чихуахуа бегая вокруг баобаба.\nПросто кликните по иконке, чтобы открыть ссылку"]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%82%D1%80%D0%B8%D0%B0%D0%B6"]);
+        }
       }
     },
     "app-config": {
@@ -67757,7 +67928,7 @@ const messages = {
       "field": {
         "issue-size": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Поле для размена задач (тип Option):"]);
+          return _normalize(["Поле для размера задач (тип Option):"]);
         },
         "value-acquisition-lifecycle": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -67812,14 +67983,14 @@ const messages = {
   }
 };
 const i18n = createI18n({
-  locale: getLocale(),
+  locale: getDefaultLocale(),
   fallbackLocale: "en",
   legacy: false,
   globalInjection: true,
   messages,
   runtimeOnly: false
 });
-function getLocale() {
+function getDefaultLocale() {
   let l2 = void 0;
   try {
     l2 = localStorage.getItem("user.locale");
@@ -67854,7 +68025,7 @@ const _sfc_main$b = {
     }
   }
 };
-const _hoisted_1$9 = ["value"];
+const _hoisted_1$b = ["value"];
 function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
   return withDirectives((openBlock(), createElementBlock("select", {
     onChange: _cache[0] || (_cache[0] = ($event) => $options.switchLanguage($event)),
@@ -67864,7 +68035,7 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
       return openBlock(), createElementBlock("option", {
         key: `${locale}`,
         value: locale
-      }, toDisplayString$1(_ctx.$t(`locale.${locale}`)), 9, _hoisted_1$9);
+      }, toDisplayString$1(_ctx.$t(`locale.${locale}`)), 9, _hoisted_1$b);
     }), 128))
   ], 544)), [
     [vModelSelect, _ctx.$i18n.locale]
@@ -68014,13 +68185,13 @@ const _sfc_main$a = {
     }
   }
 };
-const _hoisted_1$8 = { class: "app-config-option-header" };
+const _hoisted_1$a = { class: "app-config-option-header" };
 const _hoisted_2$5 = { class: "app-config-locale" };
-const _hoisted_3$3 = { class: "app-config-buttons" };
-const _hoisted_4$2 = ["value"];
+const _hoisted_3$5 = { class: "app-config-buttons" };
+const _hoisted_4$3 = ["value"];
 const _hoisted_5$1 = ["value"];
 const _hoisted_6$1 = ["value"];
-const _hoisted_7 = { class: "app-config-option-box" };
+const _hoisted_7$1 = { class: "app-config-option-box" };
 const _hoisted_8 = /* @__PURE__ */ createBaseVNode("datalist", { id: "defaultNumbers" }, [
   /* @__PURE__ */ createBaseVNode("option", { value: "13" }),
   /* @__PURE__ */ createBaseVNode("option", { value: "26" }),
@@ -68059,7 +68230,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
     "swipe-to-close": "none"
   }, {
     default: withCtx(() => [
-      createBaseVNode("div", _hoisted_1$8, toDisplayString$1(_ctx.$t("app-config.title")), 1),
+      createBaseVNode("div", _hoisted_1$a, toDisplayString$1(_ctx.$t("app-config.title")), 1),
       createBaseVNode("div", _hoisted_2$5, [
         createVNode(_component_i18n_t, { keypath: "app-config.locale" }, {
           default: withCtx(() => [
@@ -68068,13 +68239,13 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
           _: 1
         })
       ]),
-      createBaseVNode("div", _hoisted_3$3, [
+      createBaseVNode("div", _hoisted_3$5, [
         createBaseVNode("input", {
           type: "button",
           value: _ctx.$t("app-config.button.apply"),
           class: "app-config-button",
           onClick: _cache[0] || (_cache[0] = ($event) => $options.onApply())
-        }, null, 8, _hoisted_4$2),
+        }, null, 8, _hoisted_4$3),
         createBaseVNode("input", {
           type: "button",
           value: _ctx.$t("app-config.button.save"),
@@ -68088,7 +68259,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
           onClick: _cache[2] || (_cache[2] = ($event) => $options.onDiscard())
         }, null, 8, _hoisted_6$1)
       ]),
-      createBaseVNode("div", _hoisted_7, [
+      createBaseVNode("div", _hoisted_7$1, [
         createVNode(_component_i18n_t, { keypath: "app-config.period" }, {
           default: withCtx(() => [
             withDirectives(createBaseVNode("input", {
@@ -68822,7 +68993,19 @@ const _sfc_main$9 = {
         },
         xAxis: {
           axisPointer: {
-            show: true
+            show: true,
+            snap: true,
+            label: {
+              formatter: function(value) {
+                if ((value == null ? void 0 : value.value) === void 0) {
+                  return "";
+                }
+                return new Date(value.value).toLocaleDateString(
+                  i18n.global.locale.value,
+                  { dateStyle: "short" }
+                );
+              }
+            }
           },
           type: "time",
           axisLabel: {
@@ -68831,7 +69014,7 @@ const _sfc_main$9 = {
               if (value === void 0) {
                 return "";
               }
-              return new Date(value).toLocaleDateString();
+              return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
             }
           }
         },
@@ -68908,13 +69091,22 @@ const _sfc_main$9 = {
     }
   }
 };
+const _hoisted_1$9 = ["title", "href"];
 function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
-  return openBlock(), createBlock(_component_v_chart, {
-    class: "TotalWIPChart",
-    option: $options.option,
-    autoresize: ""
-  }, null, 8, ["option"]);
+  return openBlock(), createElementBlock(Fragment, null, [
+    createVNode(_component_v_chart, {
+      class: "TotalWIPChart",
+      option: $options.option,
+      autoresize: ""
+    }, null, 8, ["option"]),
+    createBaseVNode("a", {
+      class: "icon-info-down",
+      title: _ctx.$t("total-wip.help.text"),
+      href: _ctx.$t("total-wip.help.link"),
+      target: "_blank"
+    }, " ‽ ", 8, _hoisted_1$9)
+  ], 64);
 }
 const TotalWIPChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$9, [["render", _sfc_render$8]]);
 const WIPsChart_vue_vue_type_style_index_0_lang = "";
@@ -68982,7 +69174,16 @@ const _sfc_main$8 = {
         },
         xAxis: {
           axisPointer: {
-            show: true
+            show: true,
+            snap: true,
+            label: {
+              formatter: function(value) {
+                if ((value == null ? void 0 : value.value) === void 0) {
+                  return "";
+                }
+                return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+              }
+            }
           },
           type: "time",
           axisLabel: {
@@ -68991,7 +69192,7 @@ const _sfc_main$8 = {
               if (value === void 0) {
                 return "";
               }
-              return new Date(value).toLocaleDateString();
+              return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
             }
           }
         },
@@ -69051,12 +69252,13 @@ const _sfc_main$8 = {
     }
   }
 };
-const _hoisted_1$7 = { class: "wips-chart-selector" };
+const _hoisted_1$8 = { class: "wips-chart-selector" };
 const _hoisted_2$4 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_3$4 = ["title", "href"];
 function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$7, [
+    createBaseVNode("div", _hoisted_1$8, [
       createBaseVNode("div", {
         class: normalizeClass(["wips-chart-selector-item", { "wips-chart-selector-item-selected": _ctx.selected === "max" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "max")
@@ -69084,7 +69286,13 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
         option: $options.option,
         autoresize: ""
       }, null, 8, ["option"])
-    ])
+    ]),
+    createBaseVNode("a", {
+      class: "icon-info-down",
+      title: _ctx.$t("wip-by-columns.help.text"),
+      href: _ctx.$t("wip-by-columns.help.link"),
+      target: "_blank"
+    }, " ‽ ", 8, _hoisted_3$4)
   ], 64);
 }
 const WIPsChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$8, [["render", _sfc_render$7]]);
@@ -69142,7 +69350,19 @@ const _sfc_main$7 = {
         },
         xAxis: {
           axisPointer: {
-            show: true
+            show: true,
+            snap: true,
+            label: {
+              formatter: function(value) {
+                if ((value == null ? void 0 : value.value) === void 0) {
+                  return "";
+                }
+                return new Date(value.value).toLocaleDateString(
+                  [],
+                  { dateStyle: "short" }
+                );
+              }
+            }
           },
           type: "time",
           axisLabel: {
@@ -69151,7 +69371,7 @@ const _sfc_main$7 = {
               if (value === void 0) {
                 return "";
               }
-              return new Date(value).toLocaleDateString();
+              return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
             }
           }
         },
@@ -69212,12 +69432,13 @@ const _sfc_main$7 = {
     }
   }
 };
-const _hoisted_1$6 = { class: "avg-times-chart-selector" };
+const _hoisted_1$7 = { class: "avg-times-chart-selector" };
 const _hoisted_2$3 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_3$3 = ["title", "href"];
 function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$6, [
+    createBaseVNode("div", _hoisted_1$7, [
       createBaseVNode("div", {
         class: normalizeClass(["avg-times-chart-selector-item", { "avg-times-chart-selector-item-selected": _ctx.selected === "perc" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "perc")
@@ -69233,7 +69454,13 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
         option: $options.option,
         autoresize: ""
       }, null, 8, ["option"])
-    ])
+    ]),
+    createBaseVNode("a", {
+      class: "icon-info-down",
+      title: _ctx.$t("avg-time-by-columns.help.text"),
+      href: _ctx.$t("avg-time-by-columns.help.link"),
+      target: "_blank"
+    }, " ‽ ", 8, _hoisted_3$3)
   ], 64);
 }
 const AvgTimesChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$7, [["render", _sfc_render$6]]);
@@ -69305,7 +69532,19 @@ const _sfc_main$6 = {
             show: false,
             boundaryGap: false,
             axisPointer: {
-              show: true
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if ((value == null ? void 0 : value.value) === void 0) {
+                    return "";
+                  }
+                  return new Date(value.value).toLocaleDateString(
+                    i18n.global.locale.value,
+                    { dateStyle: "short" }
+                  );
+                }
+              }
             },
             type: "time",
             min: "dataMin",
@@ -69316,7 +69555,19 @@ const _sfc_main$6 = {
             show: false,
             boundaryGap: false,
             axisPointer: {
-              show: true
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if ((value == null ? void 0 : value.value) === void 0) {
+                    return "";
+                  }
+                  return new Date(value.value).toLocaleDateString(
+                    i18n.global.locale.value,
+                    { dateStyle: "short" }
+                  );
+                }
+              }
             },
             type: "time",
             min: "dataMin",
@@ -69327,7 +69578,19 @@ const _sfc_main$6 = {
             show: false,
             boundaryGap: false,
             axisPointer: {
-              show: true
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if ((value == null ? void 0 : value.value) === void 0) {
+                    return "";
+                  }
+                  return new Date(value.value).toLocaleDateString(
+                    i18n.global.locale.value,
+                    { dateStyle: "short" }
+                  );
+                }
+              }
             },
             type: "time",
             min: "dataMin",
@@ -69337,7 +69600,19 @@ const _sfc_main$6 = {
             gridIndex: 3,
             boundaryGap: false,
             axisPointer: {
-              show: true
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if ((value == null ? void 0 : value.value) === void 0) {
+                    return "";
+                  }
+                  return new Date(value.value).toLocaleDateString(
+                    i18n.global.locale.value,
+                    { dateStyle: "short" }
+                  );
+                }
+              }
             },
             axisLabel: {
               hideOverlap: true,
@@ -69345,7 +69620,10 @@ const _sfc_main$6 = {
                 if (value === void 0) {
                   return "";
                 }
-                return new Date(value).toLocaleDateString();
+                return new Date(value).toLocaleDateString(
+                  i18n.global.locale.value,
+                  { dateStyle: "short" }
+                );
               }
             },
             type: "time",
@@ -69590,7 +69868,7 @@ const _sfc_main$6 = {
     }
   }
 };
-const _hoisted_1$5 = ["title"];
+const _hoisted_1$6 = ["title", "href"];
 function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
@@ -69599,10 +69877,12 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
       option: $options.option,
       autoresize: ""
     }, null, 8, ["option"]),
-    createBaseVNode("div", {
+    createBaseVNode("a", {
       class: "icon-info-down",
-      title: _ctx.$t("main.help")
-    }, " ‽ ", 8, _hoisted_1$5)
+      title: _ctx.$t("main.help.text"),
+      href: _ctx.$t("main.help.link"),
+      target: "_blank"
+    }, " ‽ ", 8, _hoisted_1$6)
   ], 64);
 }
 const MainStatChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$6, [["render", _sfc_render$5]]);
@@ -69698,6 +69978,7 @@ const _sfc_main$5 = {
             boundaryGap: false,
             axisPointer: {
               show: true,
+              snap: true,
               triggerTooltip: false
             },
             axisLabel: {
@@ -69717,6 +69998,7 @@ const _sfc_main$5 = {
             boundaryGap: false,
             axisPointer: {
               show: true,
+              snap: true,
               triggerTooltip: false
             },
             axisLabel: {
@@ -69736,6 +70018,7 @@ const _sfc_main$5 = {
             boundaryGap: false,
             axisPointer: {
               show: true,
+              snap: true,
               triggerTooltip: false
             },
             axisLabel: {
@@ -69755,6 +70038,7 @@ const _sfc_main$5 = {
             boundaryGap: false,
             axisPointer: {
               show: true,
+              snap: true,
               triggerTooltip: false
             },
             axisLabel: {
@@ -69906,18 +70190,27 @@ const _sfc_main$5 = {
     }
   }
 };
+const _hoisted_1$5 = ["title", "href"];
 function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
-  return openBlock(), createBlock(_component_v_chart, {
-    class: "StatByWIPChart",
-    option: $options.option,
-    autoresize: ""
-  }, null, 8, ["option"]);
+  return openBlock(), createElementBlock(Fragment, null, [
+    createVNode(_component_v_chart, {
+      class: "StatByWIPChart",
+      option: $options.option,
+      autoresize: ""
+    }, null, 8, ["option"]),
+    createBaseVNode("a", {
+      class: "icon-info-down",
+      title: _ctx.$t("analyze-by-wip.help.text"),
+      href: _ctx.$t("analyze-by-wip.help.link"),
+      target: "_blank"
+    }, " ‽ ", 8, _hoisted_1$5)
+  ], 64);
 }
 const StatByWIPChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$5, [["render", _sfc_render$4]]);
-const LongTimeIssues_vue_vue_type_style_index_0_scoped_599dbf25_lang = "";
+const ControlChart_vue_vue_type_style_index_0_scoped_1c926ffc_lang = "";
 const _sfc_main$4 = {
-  name: "LongTimeChart",
+  name: "ControlChart",
   components: {
     VChart: S
   },
@@ -69949,7 +70242,7 @@ const _sfc_main$4 = {
     issuesStat: {
       immediate: true,
       deep: true,
-      handler(newVal, oldVal) {
+      handler() {
         this.calcData();
       }
     }
@@ -69982,8 +70275,8 @@ const _sfc_main$4 = {
         times[times.length - 1].push(issueStat.lead);
         issues.push(issue);
       }
-      columns.push(this.$t("long-times.columns.cycle"));
-      columns.push(this.$t("long-times.columns.lead"));
+      columns.push(this.$t("control-chart.columns.cycle"));
+      columns.push(this.$t("control-chart.columns.lead"));
       let tt = [];
       for (let time of times) {
         let stat = calcStat(time);
@@ -70003,11 +70296,11 @@ const _sfc_main$4 = {
         dCols.push(this.issuesView.columns[i]);
       }
       let dRows = [
-        [this.$t("long-times.row.min")],
-        [this.$t("long-times.row.med")],
-        [this.$t("long-times.row.max")],
-        [this.$t("long-times.row.bound", { bound: this.bound.toFixed(0) })],
-        [this.$t("long-times.row.winners")]
+        [this.$t("control-chart.row.min")],
+        [this.$t("control-chart.row.med")],
+        [this.$t("control-chart.row.max")],
+        [this.$t("control-chart.row.bound", { bound: this.bound.toFixed(0) })],
+        [this.$t("control-chart.row.winners")]
       ];
       let totalWinners = {};
       this.seekTime = new Date().getTime() - this.weeks * 1e3 * 60 * 60 * 24 * 7;
@@ -70071,7 +70364,7 @@ const _sfc_main$4 = {
       return {
         animation: true,
         title: {
-          text: this.$t("long-times.title", { title: this.title }),
+          text: this.$t("control-chart.title", { title: this.title }),
           left: "center"
         },
         toolbox: {
@@ -70113,23 +70406,35 @@ const _sfc_main$4 = {
         },
         xAxis: {
           axisPointer: {
-            show: true
+            show: true,
+            snap: true,
+            label: {
+              formatter: function(value) {
+                if ((value == null ? void 0 : value.value) === void 0) {
+                  return "";
+                }
+                return new Date(value.value).toLocaleDateString(
+                  i18n.global.locale.value,
+                  { dateStyle: "short" }
+                );
+              }
+            }
           },
           type: "time",
           axisLabel: {
             hideOverlap: true,
-            formatter: function(value, index) {
+            formatter: function(value) {
               if (value === void 0) {
                 return "";
               }
-              return new Date(Number(value)).toLocaleDateString();
+              return new Date(Number(value)).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
             }
           },
           min: "dataMin",
           max: "dataMax"
         },
         yAxis: {
-          name: this.$t("long-times.yAxis.name"),
+          name: this.$t("control-chart.yAxis.name"),
           nameLocation: "middle",
           nameGap: "30",
           minInterval: 1,
@@ -70146,7 +70451,7 @@ const _sfc_main$4 = {
         },
         series: [
           {
-            name: this.$t("long-times.series.issues"),
+            name: this.$t("control-chart.series.issues"),
             data: this.chartData,
             type: "scatter",
             itemStyle: {
@@ -70178,12 +70483,13 @@ const _sfc_main$4 = {
     }
   }
 };
-const _hoisted_1$4 = { class: "long-time-issues-config" };
-const _hoisted_2$2 = { class: "long-time-issues-table" };
-const _hoisted_3$2 = { class: "long-time-issues-table-head" };
-const _hoisted_4$1 = ["innerHTML"];
-const _hoisted_5 = { class: "long-time-issues-winners" };
+const _hoisted_1$4 = { class: "control-chart-issues-config" };
+const _hoisted_2$2 = { class: "control-chart-issues-table" };
+const _hoisted_3$2 = { class: "control-chart-issues-table-head" };
+const _hoisted_4$2 = ["innerHTML"];
+const _hoisted_5 = { class: "control-chart-issues-winners" };
 const _hoisted_6 = ["href"];
+const _hoisted_7 = ["title", "href"];
 function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   const _component_i18n_t = resolveComponent("i18n-t");
@@ -70194,7 +70500,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
       autoresize: ""
     }, null, 8, ["option"]),
     createBaseVNode("div", _hoisted_1$4, [
-      createVNode(_component_i18n_t, { keypath: "long-times.config.search" }, {
+      createVNode(_component_i18n_t, { keypath: "control-chart.config.search" }, {
         default: withCtx(() => [
           withDirectives(createBaseVNode("input", {
             type: "number",
@@ -70233,10 +70539,10 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
               return openBlock(), createElementBlock("td", {
                 innerHTML: col,
                 class: normalizeClass({
-                  "long-time-issues-table-head": index < 1,
-                  "long-time-issues-table-item": index > 0
+                  "control-chart-issues-table-head": index < 1,
+                  "control-chart-issues-table-item": index > 0
                 })
-              }, null, 10, _hoisted_4$1);
+              }, null, 10, _hoisted_4$2);
             }), 256))
           ]);
         }), 256))
@@ -70255,10 +70561,16 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
           }), 256))
         ]);
       }), 256))
-    ])
+    ]),
+    createBaseVNode("a", {
+      class: "icon-info-down",
+      title: _ctx.$t("control-chart.help.text"),
+      href: _ctx.$t("control-chart.help.link"),
+      target: "_blank"
+    }, " ‽ ", 8, _hoisted_7)
   ], 64);
 }
-const LongTimeIssues = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-599dbf25"]]);
+const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-1c926ffc"]]);
 const LeadTimeDistributionChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$3 = {
   name: "LeadTimeDistributionChart",
@@ -70327,7 +70639,8 @@ const _sfc_main$3 = {
           nameLocation: "middle",
           nameGap: "30",
           axisPointer: {
-            show: true
+            show: true,
+            snap: true
           },
           type: "value",
           axisLabel: {
@@ -70477,6 +70790,7 @@ const _sfc_main$3 = {
 const _hoisted_1$3 = { class: "ltds-chart-selector" };
 const _hoisted_2$1 = ["onClick"];
 const _hoisted_3$1 = { style: { "height": "90%", "clear": "both" } };
+const _hoisted_4$1 = ["title", "href"];
 function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
@@ -70494,7 +70808,13 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
         option: $options.option,
         autoresize: ""
       }, null, 8, ["option"])
-    ])
+    ]),
+    createBaseVNode("a", {
+      class: "icon-info-down",
+      title: _ctx.$t("lead-time-distributions.help.text"),
+      href: _ctx.$t("lead-time-distributions.help.link"),
+      target: "_blank"
+    }, " ‽ ", 8, _hoisted_4$1)
   ], 64);
 }
 const LeadTimeDistributionChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$3, [["render", _sfc_render$2]]);
@@ -70787,7 +71107,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 var Tabs = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render]]);
 const _hoisted_1 = { style: { "clear": "left" } };
 const _hoisted_2 = { key: 0 };
-const _hoisted_3 = ["title"];
+const _hoisted_3 = ["title", "href"];
 const _hoisted_4 = {
   key: 0,
   style: { "clear": "left", "width": "95vw", "height": "80vh" }
@@ -70803,7 +71123,7 @@ const __default__ = {
     TotalWIPChart,
     AppConfig,
     JiraColumnStatus,
-    LongTimeIssues,
+    ControlChart,
     LeadTimeDistributionChart,
     JiraFilters,
     Tab,
@@ -71280,9 +71600,11 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
         }, null, 8, ["title", "name", "max-value", "value", "loading"]),
         createBaseVNode("div", _hoisted_1, [
           _ctx.kanbanBoardConfig.name ? (openBlock(), createElementBlock("div", _hoisted_2, [
-            createBaseVNode("span", {
+            createBaseVNode("a", {
               class: "icon-info",
-              title: _ctx.$t("app.config-info.help")
+              title: _ctx.$t("app.config-info.help.text"),
+              href: _ctx.$t("app.config-info.help.link"),
+              target: "_blank"
             }, " ‽ ", 8, _hoisted_3),
             createTextVNode(" " + toDisplayString$1(_ctx.$t(
               "app.config-info.text",
@@ -71370,7 +71692,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                 name: _ctx.$t("app.tabs.long-times")
               }, {
                 default: withCtx(() => [
-                  createVNode(LongTimeIssues, {
+                  createVNode(ControlChart, {
                     title: _ctx.kanbanBoardConfig.name,
                     "issues-stat": _ctx.issuesStat,
                     columns: _ctx.columns,
