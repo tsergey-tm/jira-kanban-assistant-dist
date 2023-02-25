@@ -53616,13 +53616,13 @@ const _sfc_main$f = {
     }
   }
 };
-const _hoisted_1$c = { class: "name-progressbar-name" };
+const _hoisted_1$d = { class: "name-progressbar-name" };
 function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", {
     class: "name-progressbar-box",
     style: normalizeStyle$1($options.progressLoadingStyle)
   }, [
-    createBaseVNode("span", _hoisted_1$c, toDisplayString$1($props.title), 1)
+    createBaseVNode("span", _hoisted_1$d, toDisplayString$1($props.title), 1)
   ], 4);
 }
 const NameProgressBar = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-adea8f9f"]]);
@@ -59976,10 +59976,10 @@ const _sfc_main$e = {
     }
   }
 };
-const _hoisted_1$b = { class: "triage-selector" };
+const _hoisted_1$c = { class: "triage-selector" };
 const _hoisted_2$8 = { style: { "clear": "both" } };
 const _hoisted_3$6 = { key: 0 };
-const _hoisted_4$3 = {
+const _hoisted_4$4 = {
   key: 1,
   class: "triage-table"
 };
@@ -60006,7 +60006,7 @@ const _hoisted_24 = ["innerHTML"];
 const _hoisted_25 = ["innerHTML"];
 function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$b, [
+    createBaseVNode("div", _hoisted_1$c, [
       createBaseVNode("div", {
         class: normalizeClass(["triage-selector-item", { "triage-selector-item-selected": _ctx.selected === "lead" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "lead")
@@ -60018,7 +60018,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     ]),
     createBaseVNode("div", _hoisted_2$8, [
       !Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("div", _hoisted_3$6, toDisplayString$1($options.triageTable), 1)) : createCommentVNode("", true),
-      Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$3, [
+      Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$4, [
         createBaseVNode("thead", null, [
           createBaseVNode("tr", null, [
             createBaseVNode("th", {
@@ -60137,11 +60137,11 @@ const _sfc_main$d = {
     }
   }
 };
-const _hoisted_1$a = { class: "jira-filters-box" };
+const _hoisted_1$b = { class: "jira-filters-box" };
 const _hoisted_2$7 = { class: "jira-filter-box-title" };
 const _hoisted_3$5 = ["onClick"];
 function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$a, [
+  return openBlock(), createElementBlock("div", _hoisted_1$b, [
     createBaseVNode("div", _hoisted_2$7, toDisplayString$1($props.title) + ":", 1),
     (openBlock(true), createElementBlock(Fragment, null, renderList($props.filters, (filter2) => {
       return openBlock(), createElementBlock("div", {
@@ -60254,10 +60254,10 @@ const _sfc_main$c = {
   }
 };
 const _withScopeId = (n2) => (pushScopeId("data-v-d67583f4"), n2 = n2(), popScopeId(), n2);
-const _hoisted_1$9 = { class: "jira-columns-box" };
+const _hoisted_1$a = { class: "jira-columns-box" };
 const _hoisted_2$6 = { class: "jira-columns-box-title" };
 const _hoisted_3$4 = { class: "jira-columns-box-table" };
-const _hoisted_4$2 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
+const _hoisted_4$3 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
 const _hoisted_5$2 = { class: "jira-columns-box-table-header" };
 const _hoisted_6$2 = { class: "jira-columns-box-table-header" };
 const _hoisted_7$1 = ["onClick"];
@@ -60272,12 +60272,12 @@ const _hoisted_15$1 = ["onClick"];
 const _hoisted_16$1 = { class: "jira-columns-box-table-header" };
 const _hoisted_17$1 = ["onClick"];
 function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$9, [
+  return openBlock(), createElementBlock("div", _hoisted_1$a, [
     createBaseVNode("div", _hoisted_2$6, toDisplayString$1($props.title) + ":", 1),
     createBaseVNode("table", _hoisted_3$4, [
       createBaseVNode("thead", null, [
         createBaseVNode("tr", null, [
-          _hoisted_4$2,
+          _hoisted_4$3,
           (openBlock(true), createElementBlock(Fragment, null, renderList($props.columns, (column) => {
             return openBlock(), createElementBlock("td", _hoisted_5$2, toDisplayString$1(column.name), 1);
           }), 256))
@@ -66342,9 +66342,15 @@ const messages = {
           return _normalize(["Triage"]);
         }
       },
-      "config-info": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Selected columns: ", _interpolate(_named("columns")), ", swimlanes: ", _interpolate(_named("swimlanes")), ", filters: ", _interpolate(_named("filters"))]);
+      "config-info": {
+        "text": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Selected columns: ", _interpolate(_named("columns")), ", swimlanes: ", _interpolate(_named("swimlanes")), ", filters: ", _interpolate(_named("filters"))]);
+        },
+        "help": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Information about columns, lines and filters selected for analysis.\nTo change settings, click on the gear icon."]);
+        }
       }
     },
     "main": {
@@ -66405,6 +66411,10 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["Cycle time"]);
         }
+      },
+      "help": (ctx) => {
+        const { normalize: _normalize } = ctx;
+        return _normalize(["main.help"]);
       }
     },
     "total-wip": {
@@ -67094,9 +67104,15 @@ const messages = {
           return _normalize(["Триаж"]);
         }
       },
-      "config-info": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Выбрано колонок: ", _interpolate(_named("columns")), ", линий: ", _interpolate(_named("swimlanes")), ", фильтров: ", _interpolate(_named("filters"))]);
+      "config-info": {
+        "text": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Выбрано колонок: ", _interpolate(_named("columns")), ", линий: ", _interpolate(_named("swimlanes")), ", фильтров: ", _interpolate(_named("filters"))]);
+        },
+        "help": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Информация о выбранных для анализа колонок, линий и фильтров.\nЧтобы изменить настройки, нажмите на значок шестерёнки."]);
+        }
       }
     },
     "main": {
@@ -67157,6 +67173,10 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["Время цикла"]);
         }
+      },
+      "help": (ctx) => {
+        const { normalize: _normalize } = ctx;
+        return _normalize(["На этом экране представлены:\nСреднее значение незавершенной работы (WIP) по периодам\nОтношение времени сколько завершенные задачи провели в колонках работы ко времени проведенном в колонках ожидания"]);
       }
     },
     "total-wip": {
@@ -67834,7 +67854,7 @@ const _sfc_main$b = {
     }
   }
 };
-const _hoisted_1$8 = ["value"];
+const _hoisted_1$9 = ["value"];
 function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
   return withDirectives((openBlock(), createElementBlock("select", {
     onChange: _cache[0] || (_cache[0] = ($event) => $options.switchLanguage($event)),
@@ -67844,7 +67864,7 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
       return openBlock(), createElementBlock("option", {
         key: `${locale}`,
         value: locale
-      }, toDisplayString$1(_ctx.$t(`locale.${locale}`)), 9, _hoisted_1$8);
+      }, toDisplayString$1(_ctx.$t(`locale.${locale}`)), 9, _hoisted_1$9);
     }), 128))
   ], 544)), [
     [vModelSelect, _ctx.$i18n.locale]
@@ -67994,10 +68014,10 @@ const _sfc_main$a = {
     }
   }
 };
-const _hoisted_1$7 = { class: "app-config-option-header" };
+const _hoisted_1$8 = { class: "app-config-option-header" };
 const _hoisted_2$5 = { class: "app-config-locale" };
 const _hoisted_3$3 = { class: "app-config-buttons" };
-const _hoisted_4$1 = ["value"];
+const _hoisted_4$2 = ["value"];
 const _hoisted_5$1 = ["value"];
 const _hoisted_6$1 = ["value"];
 const _hoisted_7 = { class: "app-config-option-box" };
@@ -68039,7 +68059,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
     "swipe-to-close": "none"
   }, {
     default: withCtx(() => [
-      createBaseVNode("div", _hoisted_1$7, toDisplayString$1(_ctx.$t("app-config.title")), 1),
+      createBaseVNode("div", _hoisted_1$8, toDisplayString$1(_ctx.$t("app-config.title")), 1),
       createBaseVNode("div", _hoisted_2$5, [
         createVNode(_component_i18n_t, { keypath: "app-config.locale" }, {
           default: withCtx(() => [
@@ -68054,7 +68074,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
           value: _ctx.$t("app-config.button.apply"),
           class: "app-config-button",
           onClick: _cache[0] || (_cache[0] = ($event) => $options.onApply())
-        }, null, 8, _hoisted_4$1),
+        }, null, 8, _hoisted_4$2),
         createBaseVNode("input", {
           type: "button",
           value: _ctx.$t("app-config.button.save"),
@@ -69031,12 +69051,12 @@ const _sfc_main$8 = {
     }
   }
 };
-const _hoisted_1$6 = { class: "wips-chart-selector" };
+const _hoisted_1$7 = { class: "wips-chart-selector" };
 const _hoisted_2$4 = { style: { "height": "100%", "clear": "both" } };
 function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$6, [
+    createBaseVNode("div", _hoisted_1$7, [
       createBaseVNode("div", {
         class: normalizeClass(["wips-chart-selector-item", { "wips-chart-selector-item-selected": _ctx.selected === "max" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "max")
@@ -69192,12 +69212,12 @@ const _sfc_main$7 = {
     }
   }
 };
-const _hoisted_1$5 = { class: "avg-times-chart-selector" };
+const _hoisted_1$6 = { class: "avg-times-chart-selector" };
 const _hoisted_2$3 = { style: { "height": "100%", "clear": "both" } };
 function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$5, [
+    createBaseVNode("div", _hoisted_1$6, [
       createBaseVNode("div", {
         class: normalizeClass(["avg-times-chart-selector-item", { "avg-times-chart-selector-item-selected": _ctx.selected === "perc" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "perc")
@@ -69570,13 +69590,20 @@ const _sfc_main$6 = {
     }
   }
 };
+const _hoisted_1$5 = ["title"];
 function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
-  return openBlock(), createBlock(_component_v_chart, {
-    class: "MainStatChart",
-    option: $options.option,
-    autoresize: ""
-  }, null, 8, ["option"]);
+  return openBlock(), createElementBlock(Fragment, null, [
+    createVNode(_component_v_chart, {
+      class: "MainStatChart",
+      option: $options.option,
+      autoresize: ""
+    }, null, 8, ["option"]),
+    createBaseVNode("div", {
+      class: "icon-info-down",
+      title: _ctx.$t("main.help")
+    }, " ‽ ", 8, _hoisted_1$5)
+  ], 64);
 }
 const MainStatChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$6, [["render", _sfc_render$5]]);
 const _sfc_main$5 = {
@@ -70154,7 +70181,7 @@ const _sfc_main$4 = {
 const _hoisted_1$4 = { class: "long-time-issues-config" };
 const _hoisted_2$2 = { class: "long-time-issues-table" };
 const _hoisted_3$2 = { class: "long-time-issues-table-head" };
-const _hoisted_4 = ["innerHTML"];
+const _hoisted_4$1 = ["innerHTML"];
 const _hoisted_5 = { class: "long-time-issues-winners" };
 const _hoisted_6 = ["href"];
 function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
@@ -70209,7 +70236,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
                   "long-time-issues-table-head": index < 1,
                   "long-time-issues-table-item": index > 0
                 })
-              }, null, 10, _hoisted_4);
+              }, null, 10, _hoisted_4$1);
             }), 256))
           ]);
         }), 256))
@@ -70760,7 +70787,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 var Tabs = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render]]);
 const _hoisted_1 = { style: { "clear": "left" } };
 const _hoisted_2 = { key: 0 };
-const _hoisted_3 = {
+const _hoisted_3 = ["title"];
+const _hoisted_4 = {
   key: 0,
   style: { "clear": "left", "width": "95vw", "height": "80vh" }
 };
@@ -71252,8 +71280,12 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
         }, null, 8, ["title", "name", "max-value", "value", "loading"]),
         createBaseVNode("div", _hoisted_1, [
           _ctx.kanbanBoardConfig.name ? (openBlock(), createElementBlock("div", _hoisted_2, [
-            createTextVNode(toDisplayString$1(_ctx.$t(
-              "app.config-info",
+            createBaseVNode("span", {
+              class: "icon-info",
+              title: _ctx.$t("app.config-info.help")
+            }, " ‽ ", 8, _hoisted_3),
+            createTextVNode(" " + toDisplayString$1(_ctx.$t(
+              "app.config-info.text",
               {
                 columns: _ctx.selectedColumnsCount,
                 swimlanes: _ctx.conf.swimlanes.length,
@@ -71266,7 +71298,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
             }, "⚙")
           ])) : createCommentVNode("", true)
         ]),
-        _ctx.kanbanBoardConfig.name && _ctx.periodStat.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_3, [
+        _ctx.kanbanBoardConfig.name && _ctx.periodStat.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_4, [
           createVNode(unref(Tabs), { options: { defaultTabHash: "tabs-main", useUrlFragment: false } }, {
             default: withCtx(() => [
               createVNode(unref(Tab), {
