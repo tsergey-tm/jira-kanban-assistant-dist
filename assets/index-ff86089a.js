@@ -69856,10 +69856,10 @@ const _sfc_main$6 = {
       };
       for (let item of this.periodStat) {
         serTotalWIP.data.push([item.date, item.totalWip.avg.toFixed(2)]);
+        serThroughput.data.push([item.date, item.throughput]);
         if (item.throughput > 0) {
           serEff.data.push([item.date, item.effPercent.toFixed(2)]);
           serWaste.data.push([item.date, item.wastePercent.toFixed(2)]);
-          serThroughput.data.push([item.date, item.throughput]);
           serLead.data.push([item.date, item.lead.avg.toFixed(2)]);
           serCycle.data.push([item.date, item.cycle.avg.toFixed(2)]);
         }
