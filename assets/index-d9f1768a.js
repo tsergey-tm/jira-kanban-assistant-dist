@@ -59459,118 +59459,173 @@ const _sfc_main$e = {
     }
   },
   methods: {
+    calcSLR: function(issue) {
+      var _a2;
+      let slr = {
+        index: null,
+        str: (_a2 = issue.fields[this.conf.shelfLifeRatioField]) == null ? void 0 : _a2.value
+      };
+      if (slr.str === void 0) {
+        slr.str = "";
+      }
+      if (slr.str !== "") {
+        if (slr.str.includes("1:10")) {
+          slr.index = 5;
+        } else if (slr.str.includes("1:5")) {
+          slr.index = 4;
+        } else if (slr.str.includes("1:2")) {
+          slr.index = 3;
+        } else if (slr.str.includes("1:1")) {
+          slr.index = 2;
+        } else if (slr.str.includes("2:1")) {
+          slr.index = 1;
+        }
+      }
+      if (slr.index === null) {
+        slr.str = '<span class="triage-table-gray">' + this.$t("triage.shelf-life-ratio.display.auto", { val: this.formatSLR(slr.index) }) + "</span>";
+      } else {
+        slr.str = this.formatSLR(slr.index);
+      }
+      return slr;
+    },
+    recalcVAL: function(val, dates) {
+      if (val.str !== "") {
+        let match2 = val.str.match(/^[^0-9]*([0-9]+).*$/);
+        if (match2 !== null) {
+          val.index = Number(match2[1]);
+        }
+      }
+      if (val.index === null) {
+        if (dates.deadlineDiff !== null) {
+          val.index = 1;
+          val.str = '<span class="triage-table-gray">' + this.$t("triage.value-acquisition-lifecycle.display.auto", { val: this.formatVAL(val.index) }) + "</span>";
+        } else if (dates.dddDiff === null) {
+          val.index = 11;
+          val.str = '<span class="triage-table-gray">' + this.$t("triage.value-acquisition-lifecycle.display.auto", { val: this.formatVAL(val.index) }) + "</span>";
+        } else {
+          val.index = 8;
+          val.str = '<span class="triage-table-gray">' + this.$t("triage.value-acquisition-lifecycle.display.auto", { val: this.formatVAL(val.index) }) + "</span>";
+        }
+      } else {
+        val.str = this.formatVAL(val.index);
+      }
+      return val;
+    },
+    calcLTD: function(size2) {
+      let ltd = {
+        str: "",
+        used: null
+      };
+      if (size2 in this.leadTimeDistribution) {
+        if (size2 === "default") {
+          ltd.used = this.leadTimeDistribution.default;
+          ltd.str = '<span class="triage-table-gray">' + this.$t("triage.lead-time-distribution.display.auto", { val: this.formatLTD(ltd.used) }) + "</span>";
+        } else {
+          ltd.used = this.leadTimeDistribution[size2];
+          ltd.str = this.formatLTD(ltd.used);
+        }
+      } else {
+        ltd.used = this.leadTimeDistribution.total;
+        ltd.str = '<span class="triage-table-gray">' + this.$t("triage.lead-time-distribution.display.auto", { val: this.formatLTD(ltd.used) }) + "</span>";
+      }
+      return ltd;
+    },
+    calcDates: function(issue) {
+      let dates = {
+        dddStr: issue.fields[this.conf.desiredDeliveryDateField],
+        deadlineStr: issue.fields[this.conf.deadlineDateField],
+        ddd: null,
+        dddDiff: null,
+        deadline: null,
+        deadlineDiff: null
+      };
+      if (dates.dddStr === void 0) {
+        dates.dddStr = "";
+      }
+      if (dates.deadlineStr === void 0) {
+        dates.deadlineStr = "";
+      }
+      if (dates.dddStr !== "") {
+        dates.ddd = DateTime.fromISO(dates.dddStr, { locale: this.$i18n.locale });
+        if (!dates.ddd.isValid) {
+          dates.ddd = null;
+        } else {
+          dates.ddd = dates.ddd.toLocal().startOf("day");
+          dates.dddStr = dates.ddd.toLocaleString(DateTime.DATE_SHORT);
+        }
+      }
+      if (dates.deadlineStr !== "") {
+        dates.deadline = DateTime.fromISO(dates.deadlineStr, { locale: this.$i18n.locale });
+        if (!dates.deadline.isValid) {
+          dates.deadline = null;
+        } else {
+          dates.deadline = dates.deadline.startOf("day");
+          dates.deadlineStr = dates.deadline.toLocaleString(DateTime.DATE_SHORT);
+        }
+      }
+      if (dates.ddd === null) {
+        dates.dddStr = '<span class="triage-table-gray">' + this.$t("triage.desired-delivered-date.far") + "</span>";
+      } else {
+        dates.dddDiff = dates.ddd.diff(DateTime.now().startOf("day"));
+        dates.dddStr += " (" + this.formatDateDiff(dates.dddDiff) + ")";
+      }
+      if (dates.deadline === null) {
+        dates.deadlineStr = '<span class="triage-table-gray">' + this.$t("triage.desired-delivered-date.not-set") + "</span>";
+      } else {
+        dates.deadlineDiff = dates.deadline.diff(DateTime.now().startOf("day"));
+        dates.deadlineStr += " (" + this.formatDateDiff(dates.deadlineDiff) + ")";
+      }
+      dates.combinedStr = this.$t("triage.desired-delivered-date.combined", {
+        ddd: dates.dddStr,
+        deadline: dates.deadlineStr
+      });
+      return dates;
+    },
     calcLeadTable(colIndex) {
-      var _a2, _b2, _c2;
+      var _a2, _b2;
       const col = this.columns[colIndex];
       let r = [];
       for (const issueKey of col.issues) {
         if (issueKey in this.issuesMap) {
           const issue = this.issuesMap[issueKey];
-          let valueAL = (_a2 = issue.fields[this.conf.valueAcquisitionLifecycleField]) == null ? void 0 : _a2.value;
-          if (valueAL === void 0) {
-            valueAL = "";
+          let val = {
+            str: (_a2 = issue.fields[this.conf.valueAcquisitionLifecycleField]) == null ? void 0 : _a2.value,
+            index: null
+          };
+          if (val.str === void 0) {
+            val.str = "";
           }
-          let ddd = issue.fields[this.conf.desiredDeliveryDateField];
-          if (ddd === void 0) {
-            ddd = "";
-          }
-          let slr = (_b2 = issue.fields[this.conf.shelfLifeRatioField]) == null ? void 0 : _b2.value;
-          if (slr === void 0) {
-            slr = "";
-          }
-          let size2 = (_c2 = issue.fields[this.conf.issueSizeField]) == null ? void 0 : _c2.value;
+          let size2 = (_b2 = issue.fields[this.conf.issueSizeField]) == null ? void 0 : _b2.value;
           if (size2 === void 0) {
             size2 = "default";
           }
-          let valDDD = null;
-          let valDDDDiff = null;
-          if (ddd !== "") {
-            valDDD = DateTime.fromISO(ddd, { locale: this.$i18n.locale });
-            if (!valDDD.isValid) {
-              valDDD = null;
-            }
-          }
-          if (valDDD === null) {
-            ddd = '<span class="triage-table-gray">' + this.$t("triage.desired-delivered-date.far") + "</span>";
-          } else {
-            valDDDDiff = valDDD.startOf("day").diff(DateTime.now().startOf("day"));
-            ddd += " (" + this.formatDateDiff(valDDDDiff) + ")";
-          }
-          let valIndex = null;
-          if (valueAL !== "") {
-            let match2 = valueAL.match(/^[^0-9]*([0-9]+).*$/);
-            if (match2 !== null) {
-              valIndex = Number(match2[1]);
-            }
-          }
-          if (valIndex === null) {
-            if (valDDDDiff === null) {
-              valIndex = 11;
-              valueAL = '<span class="triage-table-gray">' + this.$t("triage.value-acquisition-lifecycle.display.auto", { val: this.formatVAL(valIndex) }) + "</span>";
-            } else {
-              valIndex = 8;
-              valueAL = '<span class="triage-table-gray">' + this.$t("triage.value-acquisition-lifecycle.display.auto", { val: this.formatVAL(valIndex) }) + "</span>";
-            }
-          } else {
-            valueAL = this.formatVAL(valIndex);
-          }
-          let slrIndex = null;
-          if (slr !== "") {
-            if (slr.includes("1:10")) {
-              slrIndex = 5;
-            } else if (slr.includes("1:5")) {
-              slrIndex = 4;
-            } else if (slr.includes("1:2")) {
-              slrIndex = 3;
-            } else if (slr.includes("1:1")) {
-              slrIndex = 2;
-            } else if (slr.includes("2:1")) {
-              slrIndex = 1;
-            }
-          }
-          if (slrIndex === null) {
-            slr = '<span class="triage-table-gray">' + this.$t("triage.shelf-life-ratio.display.auto", { val: this.formatSLR(slrIndex) }) + "</span>";
-          } else {
-            slr = this.formatSLR(slrIndex);
-          }
-          let ltdStr = "";
-          let usedLTD = null;
-          if (size2 in this.leadTimeDistribution) {
-            if (size2 === "default") {
-              usedLTD = this.leadTimeDistribution.default;
-              ltdStr = '<span class="triage-table-gray">' + this.$t("triage.lead-time-distribution.display.auto", { val: this.formatLTD(usedLTD) }) + "</span>";
-            } else {
-              usedLTD = this.leadTimeDistribution[size2];
-              ltdStr = this.formatLTD(usedLTD);
-            }
-          } else {
-            usedLTD = this.leadTimeDistribution.total;
-            ltdStr = '<span class="triage-table-gray">' + this.$t("triage.lead-time-distribution.display.auto", { val: this.formatLTD(usedLTD) }) + "</span>";
-          }
-          let sdr = this.calcStartDateRange(valDDDDiff, usedLTD);
-          let sdrStr = this.formatStartDateRange(sdr);
-          let cosCoord = this.calcCoSCoord(valIndex, slr);
-          let primaryCoSIndex = this.calcCoSIndex(cosCoord);
-          let primaryCoS = this.formatCoS(primaryCoSIndex);
-          let distribution = this.formatDistribution(usedLTD.tail);
-          cosCoord = this.recalcCoSCoord(cosCoord, usedLTD.tail, valDDDDiff, sdr);
-          let cosIndex = this.calcCoSIndex(cosCoord);
-          let cos = this.formatCoS(cosIndex);
+          let dates = this.calcDates(issue);
+          this.recalcVAL(val, dates);
+          let slr = this.calcSLR(issue);
+          let ltd = this.calcLTD(size2);
+          let sdr = this.calcStartDateRange(dates, ltd.used);
+          let cos = this.calcCoSCoord(val.index, slr);
+          cos.primaryCoS = {};
+          cos.primaryCoS.index = this.calcCoSIndex(cos);
+          cos.primaryCoS.str = this.formatCoS(cos.primaryCoS.index);
+          let distribution = this.formatDistribution(ltd.used.tail);
+          this.recalcCoSCoord(cos, ltd.used.tail, dates, sdr);
           r.push({
-            i: this.calcWeight(cosIndex, valDDDDiff),
+            i: this.calcWeight(cos, dates),
             issueKey,
-            val: valueAL,
-            valIndex,
-            slr,
-            ddd,
+            issueSummary: issue.summary,
+            val: val.str,
+            valIndex: val.index,
+            slr: slr.str,
+            ddd: dates.combinedStr,
             size: this.calcIssuesizeName(size2),
-            ltd: ltdStr,
-            sdr: sdrStr,
-            sdrIndex: sdr,
-            primaryCoS,
+            ltd: ltd.str,
+            sdr: sdr.worstStr,
+            sdrIndex: sdr.worst,
+            primaryCoS: cos.primaryCoS.str,
             distribution,
-            cos,
-            cosIndex
+            cos: cos.cos.str,
+            cosIndex: cos.cos.index
           });
         }
       }
@@ -59584,47 +59639,144 @@ const _sfc_main$e = {
         return size2;
       }
     },
-    calcWeight(cosIndex, valDDDDiff) {
-      return (4 - cosIndex) * 1e5 + 5e4 + (valDDDDiff === null ? 4e4 : -valDDDDiff.as("days"));
-    },
-    recalcCoSCoord(cosCoord, tail, valDDDDiff, sdr) {
-      if (valDDDDiff === null) {
-        return { val: 100, slr: 100 };
+    calcWeight(cos, dates) {
+      let res = (4 - cos.cos.index) * 1e6;
+      if (dates.deadlineDiff !== null) {
+        res += 75e4;
+        res -= dates.deadlineDiff.as("days");
+      } else if (dates.dddDiff !== null) {
+        res += 25e4;
+        res -= dates.dddDiff.as("days");
       }
-      if (valDDDDiff.as("days") <= 1) {
-        return { val: cosCoord.val, slr: -1 };
+      return res;
+    },
+    recalcNewCoSCoordBySLA(cosCoord, dateDiff, tail, sdr) {
+      if (dateDiff === null) {
+        return 3;
+      }
+      if (dateDiff.as("days") <= 1) {
+        return 0;
       }
       if (tail < 5.6) {
         switch (sdr) {
           case 1:
-            return { val: cosCoord.val, slr: cosCoord.slr + 2 };
+            return this.calcCoSIndex({
+              val: cosCoord.val,
+              slr: cosCoord.slr + 2
+            });
           case 2:
-            return { val: cosCoord.val, slr: cosCoord.slr + 1 };
+            return this.calcCoSIndex({
+              val: cosCoord.val,
+              slr: cosCoord.slr + 1
+            });
           case 3:
-            return { val: cosCoord.val, slr: cosCoord.slr };
+            return this.calcCoSIndex({ val: cosCoord.val, slr: cosCoord.slr });
           case 4:
-            return { val: cosCoord.val, slr: cosCoord.slr - 1 };
+            return this.calcCoSIndex({
+              val: cosCoord.val,
+              slr: cosCoord.slr - 1
+            });
           case 5:
-            return { val: cosCoord.val, slr: cosCoord.slr - 2 };
+            return this.calcCoSIndex({
+              val: cosCoord.val,
+              slr: cosCoord.slr - 2
+            });
           default:
-            return { val: cosCoord.val, slr: cosCoord.slr - 3 };
+            return this.calcCoSIndex({
+              val: cosCoord.val,
+              slr: cosCoord.slr - 3
+            });
         }
       } else {
         switch (sdr) {
           case 1:
-            return { val: cosCoord.val, slr: cosCoord.slr + 1 };
+            return this.calcCoSIndex({
+              val: cosCoord.val,
+              slr: cosCoord.slr + 1
+            });
           case 2:
-            return { val: cosCoord.val, slr: cosCoord.slr };
+            return this.calcCoSIndex({ val: cosCoord.val, slr: cosCoord.slr });
           case 3:
-            return { val: cosCoord.val - 1, slr: cosCoord.slr };
+            return this.calcCoSIndex({
+              val: cosCoord.val - 1,
+              slr: cosCoord.slr
+            });
           case 4:
-            return { val: cosCoord.val - 1, slr: cosCoord.slr - 1 };
+            return this.calcCoSIndex({
+              val: cosCoord.val - 1,
+              slr: cosCoord.slr - 1
+            });
           case 5:
-            return { val: cosCoord.val - 1, slr: cosCoord.slr - 2 };
+            return this.calcCoSIndex({
+              val: cosCoord.val - 1,
+              slr: cosCoord.slr - 2
+            });
           default:
-            return { val: cosCoord.val - 1, slr: cosCoord.slr - 3 };
+            return this.calcCoSIndex({
+              val: cosCoord.val - 1,
+              slr: cosCoord.slr - 3
+            });
         }
       }
+    },
+    recalcNewCoSCoordByDeadline(cosCoord, dateDiff, tail, sdr) {
+      if (dateDiff === null) {
+        return 3;
+      }
+      if (dateDiff.as("days") <= 1) {
+        return 0;
+      }
+      if (tail < 5.6) {
+        switch (sdr) {
+          case 1:
+            return this.calcCoSIndex({
+              val: cosCoord.val,
+              slr: cosCoord.slr + 2
+            });
+          case 2:
+            return this.calcCoSIndex({
+              val: cosCoord.val,
+              slr: cosCoord.slr + 1
+            });
+          case 3:
+            return this.calcCoSIndex({ val: cosCoord.val, slr: cosCoord.slr });
+          case 4:
+            return this.calcCoSIndex({
+              val: cosCoord.val,
+              slr: cosCoord.slr - 1
+            });
+          case 5:
+            return this.calcCoSIndex({
+              val: cosCoord.val,
+              slr: cosCoord.slr - 2
+            });
+          default:
+            return 0;
+        }
+      } else {
+        switch (sdr) {
+          case 1:
+            return 2;
+          case 2:
+            return 1;
+          case 3:
+            return 1;
+          case 4:
+            return 0;
+          case 5:
+            return 0;
+          default:
+            return 0;
+        }
+      }
+    },
+    recalcCoSCoord(cos, tail, dates, sdr) {
+      cos.dddCoS = { index: this.recalcNewCoSCoordBySLA(cos, dates.dddDiff, tail, sdr) };
+      cos.deadlineCoS = { index: this.recalcNewCoSCoordByDeadline(cos, dates.deadlineDiff, tail, sdr) };
+      cos.cos = {
+        index: Math.min(cos.dddCoS.index, cos.deadlineCoS.index)
+      };
+      cos.cos.str = this.formatCoS(cos.cos.index);
     },
     formatDistribution(tail) {
       return this.$t("triage.tail.display", {
@@ -59689,27 +59841,38 @@ const _sfc_main$e = {
         }
       );
     },
-    calcStartDateRange(dddDiff, ltd) {
-      if (dddDiff === null) {
+    calcStartDateRange(dates, ltd) {
+      function calcSDR(date) {
+        if (date === null) {
+          return 1;
+        }
+        let days = date.as("days");
+        if (days < ltd.leadRanges.q50 - 1) {
+          return 6;
+        }
+        if (days < ltd.leadRanges.q50 + 1) {
+          return 5;
+        }
+        if (days < ltd.leadRanges.q85) {
+          return 4;
+        }
+        if (days < ltd.leadRanges.max) {
+          return 3;
+        }
+        if (days < ltd.leadRanges.max * 2) {
+          return 2;
+        }
         return 1;
       }
-      let days = dddDiff.as("days");
-      if (days < ltd.leadRanges.q50 - 1) {
-        return 6;
-      }
-      if (days < ltd.leadRanges.q50 + 1) {
-        return 5;
-      }
-      if (days < ltd.leadRanges.q85) {
-        return 4;
-      }
-      if (days < ltd.leadRanges.max) {
-        return 3;
-      }
-      if (days < ltd.leadRanges.max * 2) {
-        return 2;
-      }
-      return 1;
+      let sdr = {
+        ddd: calcSDR(dates.dddDiff),
+        deadline: calcSDR(dates.deadlineDiff)
+      };
+      sdr.worst = Math.max(sdr.ddd, sdr.deadline);
+      sdr.dddStr = this.formatStartDateRange(sdr.ddd);
+      sdr.deadlineStr = this.formatStartDateRange(sdr.deadline);
+      sdr.worstStr = this.formatStartDateRange(sdr.worst);
+      return sdr;
     },
     formatStartDateRange(sdr) {
       switch (sdr) {
@@ -59731,70 +59894,70 @@ const _sfc_main$e = {
       if (valIndex === 1) {
         return { val: 0, slr: 0 };
       }
-      return { val: valIndex - 1, slr };
+      return { val: valIndex - 1, slr: slr.index };
     },
-    calcCoSIndex(cosCoord) {
-      if (cosCoord.slr < 0) {
+    calcCoSIndex(cos) {
+      if (cos.slr < 0) {
         return 0;
       }
-      if (cosCoord.val < 0) {
+      if (cos.val < 0) {
         return 0;
       }
-      if (cosCoord.slr === 0) {
+      if (cos.slr === 0) {
         return 1;
       }
-      if (cosCoord.slr === 1) {
-        if (cosCoord.val < 1) {
+      if (cos.slr === 1) {
+        if (cos.val < 1) {
           return 0;
         }
-        if (cosCoord.val < 5) {
+        if (cos.val < 5) {
           return 1;
         }
-        if (cosCoord.val < 9) {
+        if (cos.val < 9) {
           return 2;
         }
         return 3;
       }
-      if (cosCoord.slr === 2) {
-        if (cosCoord.val < 1) {
+      if (cos.slr === 2) {
+        if (cos.val < 1) {
           return 0;
         }
-        if (cosCoord.val < 4) {
+        if (cos.val < 4) {
           return 1;
         }
-        if (cosCoord.val < 7) {
+        if (cos.val < 7) {
           return 2;
         }
         return 3;
       }
-      if (cosCoord.slr === 3) {
-        if (cosCoord.val < 1) {
+      if (cos.slr === 3) {
+        if (cos.val < 1) {
           return 0;
         }
-        if (cosCoord.val < 3) {
+        if (cos.val < 3) {
           return 1;
         }
-        if (cosCoord.val < 6) {
+        if (cos.val < 6) {
           return 2;
         }
         return 3;
       }
-      if (cosCoord.slr === 4) {
-        if (cosCoord.val < 1) {
+      if (cos.slr === 4) {
+        if (cos.val < 1) {
           return 0;
         }
-        if (cosCoord.val < 2) {
+        if (cos.val < 2) {
           return 1;
         }
-        if (cosCoord.val < 5) {
+        if (cos.val < 5) {
           return 2;
         }
         return 3;
       }
-      if (cosCoord.val < 1) {
+      if (cos.val < 1) {
         return 0;
       }
-      if (cosCoord.val < 4) {
+      if (cos.val < 4) {
         return 2;
       }
       return 3;
@@ -59830,10 +59993,10 @@ const _hoisted_11$2 = ["innerHTML"];
 const _hoisted_12$2 = ["innerHTML"];
 const _hoisted_13$2 = ["innerHTML"];
 const _hoisted_14$2 = ["innerHTML"];
-const _hoisted_15$2 = { class: "triage-table-td" };
+const _hoisted_15$2 = ["title"];
 const _hoisted_16$2 = ["href"];
 const _hoisted_17$2 = ["innerHTML"];
-const _hoisted_18 = ["innerHTML"];
+const _hoisted_18$1 = ["innerHTML"];
 const _hoisted_19 = ["innerHTML"];
 const _hoisted_20 = ["innerHTML"];
 const _hoisted_21 = ["innerHTML"];
@@ -59903,11 +60066,14 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
         createBaseVNode("tbody", null, [
           (openBlock(true), createElementBlock(Fragment, null, renderList($options.triageTable, (row) => {
             return openBlock(), createElementBlock("tr", null, [
-              createBaseVNode("td", _hoisted_15$2, [
+              createBaseVNode("td", {
+                class: "triage-table-td",
+                title: row.issueSummary
+              }, [
                 createBaseVNode("a", {
                   href: $props.jiraBase + "/browse/" + row.issueKey
                 }, toDisplayString$1(row.issueKey), 9, _hoisted_16$2)
-              ]),
+              ], 8, _hoisted_15$2),
               createBaseVNode("td", {
                 class: normalizeClass(["triage-table-td", "triage-table-td-val-" + row.valIndex]),
                 innerHTML: row.val
@@ -59915,7 +60081,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
               createBaseVNode("td", {
                 class: "triage-table-td",
                 innerHTML: row.slr
-              }, null, 8, _hoisted_18),
+              }, null, 8, _hoisted_18$1),
               createBaseVNode("td", {
                 class: "triage-table-td",
                 innerHTML: row.ddd
@@ -66566,6 +66732,14 @@ const messages = {
         "far": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Far far away"]);
+        },
+        "not-set": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Not set"]);
+        },
+        "combined": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["DDD: ", _interpolate(_named("ddd")), "<br>DL: ", _interpolate(_named("deadline"))]);
         }
       },
       "value-acquisition-lifecycle": {
@@ -66667,7 +66841,7 @@ const messages = {
         },
         "value-acquisition-lifecycle": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Value-acquisition lifecycle"]);
+          return _normalize(["Value-acquisition<br>lifecycle"]);
         },
         "shelf-life-ratio": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -66675,7 +66849,7 @@ const messages = {
         },
         "desired-delivery-date": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Desired delivery date"]);
+          return _normalize(["Desired delivery date /<br>Deadline"]);
         },
         "issue-size": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -66683,7 +66857,7 @@ const messages = {
         },
         "lead-time-distribution-ranges": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Lead time ranges (50%, 85%, 100%), days"]);
+          return _normalize(["Lead time ranges<br>(50%, 85%, 100%), days"]);
         },
         "start-date-range": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -66823,7 +66997,15 @@ const messages = {
         },
         "desire-delivery-date": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Field for desired delivery date (type Date):"]);
+          return _normalize(["Field for desired delivery date (type Date or DateTime):"]);
+        },
+        "deadline-date": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Field for deadline date (type Date or DateTime):"]);
+        },
+        "dont-use": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Don't use"]);
         }
       },
       "jira-column-status": {
@@ -67302,6 +67484,14 @@ const messages = {
         "far": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Далеко-далеко"]);
+        },
+        "not-set": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Не задано"]);
+        },
+        "combined": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["ЖДП: ", _interpolate(_named("ddd")), "<br>ДЛ: ", _interpolate(_named("deadline"))]);
         }
       },
       "value-acquisition-lifecycle": {
@@ -67411,7 +67601,7 @@ const messages = {
         },
         "desired-delivery-date": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Желаемая дата поставки"]);
+          return _normalize(["Желаемая дата поставки /<br>Дедлайн"]);
         },
         "issue-size": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -67559,7 +67749,15 @@ const messages = {
         },
         "desire-delivery-date": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Поле для желаемой даты поставки (тип Date):"]);
+          return _normalize(["Поле для желаемой даты поставки (тип Date или DateTime):"]);
+        },
+        "deadline-date": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Поле для даты дедлайна (тип Date или DateTime):"]);
+        },
+        "dont-use": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Не используется"]);
         }
       },
       "jira-column-status": {
@@ -67677,11 +67875,13 @@ const _sfc_main$a = {
       localIssueSizeField: this.conf.issueSizeField,
       localValueAcquisitionLifecycleField: this.conf.valueAcquisitionLifecycleField,
       localDesiredDeliveryDateField: this.conf.desiredDeliveryDateField,
+      localDeadlineDateField: this.conf.deadlineDateField,
       localShelfLifeRatioField: this.conf.shelfLifeRatioField,
-      issueSizeOptions: [{ value: null, text: "Don't use" }],
-      valueAcquisitionLifecycleOptions: [{ value: null, text: "Don't use" }],
-      shelfLifeRatioOptions: [{ value: null, text: "Don't use" }],
-      desiredDeliveryDateOptions: [{ value: null, text: "Don't use" }]
+      issueSizeOptions: [{ value: null, text: this.$t("app-config.field.dont-use") }],
+      valueAcquisitionLifecycleOptions: [{ value: null, text: this.$t("app-config.field.dont-use") }],
+      shelfLifeRatioOptions: [{ value: null, text: this.$t("app-config.field.dont-use") }],
+      desiredDeliveryDateOptions: [{ value: null, text: this.$t("app-config.field.dont-use") }],
+      deadlineDateOptions: [{ value: null, text: this.$t("app-config.field.dont-use") }]
     };
   },
   emits: ["jiraConfigSave", "jiraConfigClose"],
@@ -67708,6 +67908,7 @@ const _sfc_main$a = {
         this.localIssueSizeField = this.conf.issueSizeField;
         this.localValueAcquisitionLifecycleField = this.conf.valueAcquisitionLifecycleField;
         this.localDesiredDeliveryDateField = this.conf.desiredDeliveryDateField;
+        this.localDeadlineDateField = this.conf.deadlineDateField;
         this.localShelfLifeRatioField = this.conf.shelfLifeRatioField;
       }
     },
@@ -67732,6 +67933,7 @@ const _sfc_main$a = {
       this.conf.issueSizeField = this.localIssueSizeField;
       this.conf.valueAcquisitionLifecycleField = this.localValueAcquisitionLifecycleField;
       this.conf.desiredDeliveryDateField = this.localDesiredDeliveryDateField;
+      this.conf.deadlineDateField = this.localDeadlineDateField;
       this.conf.shelfLifeRatioField = this.localShelfLifeRatioField;
       this.$emit("jiraConfigClose");
     },
@@ -67756,12 +67958,13 @@ const _sfc_main$a = {
       }
     },
     calcIssueSizeField: function() {
-      var _a2, _b2;
+      var _a2, _b2, _c2;
       if (Array.isArray(this.fieldsData)) {
         this.issueSizeOptions.splice(1);
         this.valueAcquisitionLifecycleOptions.splice(1);
         this.shelfLifeRatioOptions.splice(1);
         this.desiredDeliveryDateOptions.splice(1);
+        this.deadlineDateOptions.splice(1);
         for (const field of this.fieldsData) {
           if (((_a2 = field.schema) == null ? void 0 : _a2.type) === "option") {
             this.issueSizeOptions.push({
@@ -67776,8 +67979,12 @@ const _sfc_main$a = {
               value: field.id,
               text: field.name
             });
-          } else if (((_b2 = field.schema) == null ? void 0 : _b2.type) === "date") {
+          } else if (((_b2 = field.schema) == null ? void 0 : _b2.type) === "date" || ((_c2 = field.schema) == null ? void 0 : _c2.type) === "datetime") {
             this.desiredDeliveryDateOptions.push({
+              value: field.id,
+              text: field.name
+            });
+            this.deadlineDateOptions.push({
               value: field.id,
               text: field.name
             });
@@ -67805,10 +68012,11 @@ const _hoisted_10 = { class: "app-config-issue-size" };
 const _hoisted_11 = { class: "app-config-life-cycle" };
 const _hoisted_12 = { class: "app-config-shelf-life-ratio" };
 const _hoisted_13 = { class: "app-config-desired-delivery-date" };
-const _hoisted_14 = { class: "app-config-buttons" };
-const _hoisted_15 = ["value"];
+const _hoisted_14 = { class: "app-config-deadline-date" };
+const _hoisted_15 = { class: "app-config-buttons" };
 const _hoisted_16 = ["value"];
 const _hoisted_17 = ["value"];
+const _hoisted_18 = ["value"];
 function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_language_switcher = resolveComponent("language-switcher");
   const _component_i18n_t = resolveComponent("i18n-t");
@@ -67819,7 +68027,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock(_component_VueFinalModal, {
     "content-class": "app-config-dialog",
     modelValue: $data.localShowConfigPanel,
-    "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => $data.localShowConfigPanel = $event),
+    "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => $data.localShowConfigPanel = $event),
     "teleport-to": "body",
     "display-directive": "if",
     "hide-overlay": false,
@@ -67942,24 +68150,34 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
         }, null, 8, ["options", "modelValue"])
       ]),
       createBaseVNode("div", _hoisted_14, [
+        createTextVNode(toDisplayString$1(_ctx.$t("app-config.field.deadline-date")) + " ", 1),
+        createVNode(_component_model_select, {
+          options: $data.deadlineDateOptions,
+          modelValue: $data.localDeadlineDateField,
+          "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $data.localDeadlineDateField = $event),
+          id: "deadline-date-field",
+          name: "deadline-dateField"
+        }, null, 8, ["options", "modelValue"])
+      ]),
+      createBaseVNode("div", _hoisted_15, [
         createBaseVNode("input", {
           type: "button",
           value: _ctx.$t("app-config.button.apply"),
           class: "app-config-button",
-          onClick: _cache[8] || (_cache[8] = ($event) => $options.onApply())
-        }, null, 8, _hoisted_15),
+          onClick: _cache[9] || (_cache[9] = ($event) => $options.onApply())
+        }, null, 8, _hoisted_16),
         createBaseVNode("input", {
           type: "button",
           value: _ctx.$t("app-config.button.save"),
           class: "app-config-button",
-          onClick: _cache[9] || (_cache[9] = ($event) => $options.onSave())
-        }, null, 8, _hoisted_16),
+          onClick: _cache[10] || (_cache[10] = ($event) => $options.onSave())
+        }, null, 8, _hoisted_17),
         createBaseVNode("input", {
           type: "button",
           value: _ctx.$t("app-config.button.discard"),
           class: "app-config-button",
-          onClick: _cache[10] || (_cache[10] = ($event) => $options.onDiscard())
-        }, null, 8, _hoisted_17)
+          onClick: _cache[11] || (_cache[11] = ($event) => $options.onDiscard())
+        }, null, 8, _hoisted_18)
       ])
     ]),
     _: 1
@@ -70647,7 +70865,8 @@ const __default__ = {
         issueSizeField: null,
         valueAcquisitionLifecycleField: null,
         shelfLifeRatioField: null,
-        desiredDeliveryDateField: null
+        desiredDeliveryDateField: null,
+        deadlineDateField: null
       };
     },
     startLoading: async function() {
@@ -70795,15 +71014,17 @@ const __default__ = {
       await this.loadIssues();
     },
     loadIssues: async function() {
-      var _a2, _b2, _c2, _d, _e, _f, _g, _h;
+      var _a2, _b2, _c2, _d, _e, _f, _g, _h, _i, _j;
       this.loadingMax = loadingMaxSteps;
       this.loadingCurr = 60;
       this.loading = true;
-      if (this.conf.issueSizeField !== null && this.conf.issueSizeField !== void 0 || this.conf.valueAcquisitionLifecycleField !== null && this.conf.valueAcquisitionLifecycleField !== void 0 || this.conf.shelfLifeRatioField !== null && this.conf.shelfLifeRatioField !== void 0 || this.conf.desiredDeliveryDateField !== null && this.conf.desiredDeliveryDateField !== void 0) {
+      if (this.conf.issueSizeField !== null && this.conf.issueSizeField !== void 0 || this.conf.valueAcquisitionLifecycleField !== null && this.conf.valueAcquisitionLifecycleField !== void 0 || this.conf.shelfLifeRatioField !== null && this.conf.shelfLifeRatioField !== void 0 || this.conf.desiredDeliveryDateField !== null && this.conf.desiredDeliveryDateField !== void 0 || this.conf.deadlineDateField !== null && this.conf.deadlineDateField !== void 0) {
         let issuesToLoad = Object.keys(this.issuesStat);
+        let issuesSummary = {};
         for (const issue of this.boardAllData.issuesData.issues) {
           if (!issuesToLoad.includes(issue.key)) {
             issuesToLoad.push(issue.key);
+            issuesSummary[issue.key] = issue.summary;
           }
         }
         let issuesToLoadCnt = issuesToLoad.length;
@@ -70827,6 +71048,9 @@ const __default__ = {
           if (((_g = this.conf) == null ? void 0 : _g.desiredDeliveryDateField) !== null && ((_h = this.conf) == null ? void 0 : _h.desiredDeliveryDateField) !== void 0) {
             req.fields.push(this.conf.desiredDeliveryDateField);
           }
+          if (((_i = this.conf) == null ? void 0 : _i.deadlineDateField) !== null && ((_j = this.conf) == null ? void 0 : _j.deadlineDateField) !== void 0) {
+            req.fields.push(this.conf.deadlineDateField);
+          }
           while (issuesToLoad.length > 0) {
             let issKeys = issuesToLoad.splice(0, 100);
             req.jql = "issuekey in (" + issKeys.join(",") + ")";
@@ -70844,6 +71068,9 @@ const __default__ = {
             this.loadingCurr = (loadingMaxSteps - 1) * issuesToLoadCnt - issuesToLoad.length;
             for (const issue of data.issues) {
               this.issues.push(issue);
+              if (issue.key in issuesSummary) {
+                issue.summary = issuesSummary[issue.key];
+              }
               this.issuesMap[issue.key] = issue;
             }
           }
@@ -70854,15 +71081,14 @@ const __default__ = {
       await this.recalcDetailedLTD();
     },
     recalcDetailedLTD: async function() {
-      var _a2;
       this.loadingMax = loadingMaxSteps;
       this.loadingCurr = 70;
       this.loading = true;
       let groups = { "default": [] };
       for (let [key, issueStat] of Object.entries(this.issuesStat)) {
         let group = "default";
-        if (key in this.issuesMap) {
-          let sizeField = (_a2 = this.issuesMap[key].fields) == null ? void 0 : _a2.customfield_12902;
+        if (key in this.issuesMap && this.conf.issueSizeField in this.issuesMap[key].fields) {
+          let sizeField = this.issuesMap[key].fields[this.conf.issueSizeField];
           if (sizeField !== null && sizeField !== void 0 && sizeField.value !== void 0 && sizeField.value !== null) {
             group = sizeField.value;
           }
@@ -70987,8 +71213,8 @@ const __default__ = {
       return res;
     },
     showTriage() {
-      var _a2, _b2, _c2, _d;
-      return ((_a2 = this.conf) == null ? void 0 : _a2.valueAcquisitionLifecycleField) !== void 0 && ((_b2 = this.conf) == null ? void 0 : _b2.valueAcquisitionLifecycleField) !== null && ((_c2 = this.conf) == null ? void 0 : _c2.desiredDeliveryDateField) !== void 0 && ((_d = this.conf) == null ? void 0 : _d.desiredDeliveryDateField) !== null;
+      var _a2, _b2, _c2, _d, _e, _f;
+      return ((_a2 = this.conf) == null ? void 0 : _a2.valueAcquisitionLifecycleField) !== void 0 && ((_b2 = this.conf) == null ? void 0 : _b2.valueAcquisitionLifecycleField) !== null && ((_c2 = this.conf) == null ? void 0 : _c2.desiredDeliveryDateField) !== void 0 && ((_d = this.conf) == null ? void 0 : _d.desiredDeliveryDateField) !== null && ((_e = this.conf) == null ? void 0 : _e.deadlineDateField) !== void 0 && ((_f = this.conf) == null ? void 0 : _f.deadlineDateField) !== null;
     },
     appName() {
       var _a2;

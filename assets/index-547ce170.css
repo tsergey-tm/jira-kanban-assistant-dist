@@ -51,34 +51,34 @@
   color: darkgray;
 }
 .triage-table-td-val-1 {
- background-color: rgba(191, 0, 0, 0.1);
+  background-color: rgba(191, 0, 0, 0.1);
 }
 .triage-table-td-val-2 {
- background-color: rgba(196, 0, 23, 0.1);
+  background-color: rgba(196, 0, 23, 0.1);
 }
 .triage-table-td-val-3 {
- background-color: rgba(199, 0, 41, 0.1);
+  background-color: rgba(199, 0, 41, 0.1);
 }
 .triage-table-td-val-4 {
- background-color: rgba(198, 0, 58, 0.1);
+  background-color: rgba(198, 0, 58, 0.1);
 }
 .triage-table-td-val-5 {
- background-color: rgba(195, 0, 75, 0.1);
+  background-color: rgba(195, 0, 75, 0.1);
 }
 .triage-table-td-val-6 {
- background-color: rgba(188, 0, 94, 0.1);
+  background-color: rgba(188, 0, 94, 0.1);
 }
 .triage-table-td-val-7 {
- background-color: rgba(176, 0, 114, 0.1);
+  background-color: rgba(176, 0, 114, 0.1);
 }
 .triage-table-td-val-8 {
- background-color: rgba(158, 0, 135, 0.1);
+  background-color: rgba(158, 0, 135, 0.1);
 }
 .triage-table-td-val-9 {
- background-color: rgba(133, 0, 155, 0.1);
+  background-color: rgba(133, 0, 155, 0.1);
 }
 .triage-table-td-val-10 {
- background-color: rgba(97, 0, 174, 0.1);
+  background-color: rgba(97, 0, 174, 0.1);
 }
 .triage-table-td-val-11 {
   background-color: rgba(0, 0, 191, 0.1);
@@ -202,6 +202,7 @@
 .app-config-issue-size,
 .app-config-life-cycle,
 .app-config-shelf-life-ratio,
+.app-config-deadline-date,
 .app-config-desired-delivery-date {
   margin: 0.1rem 0.5rem;
   width: 50%;
