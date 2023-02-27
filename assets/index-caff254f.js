@@ -69479,6 +69479,26 @@ const _sfc_main$6 = {
   methods: {},
   watch: {},
   computed: {
+    xAxisMin() {
+      let res = Number.MAX_VALUE;
+      for (let item of this.periodStat) {
+        res = Math.min(res, item.date);
+      }
+      if (res === Number.MAX_VALUE) {
+        res = NaN;
+      }
+      return res;
+    },
+    xAxisMax() {
+      let res = Number.MIN_VALUE;
+      for (let item of this.periodStat) {
+        res = Math.max(res, item.date);
+      }
+      if (res === Number.MIN_VALUE) {
+        res = NaN;
+      }
+      return res;
+    },
     option() {
       return {
         animation: true,
@@ -69547,8 +69567,8 @@ const _sfc_main$6 = {
               }
             },
             type: "time",
-            min: "dataMin",
-            max: "dataMax"
+            min: this.xAxisMin,
+            max: this.xAxisMax
           },
           {
             gridIndex: 1,
@@ -69570,8 +69590,8 @@ const _sfc_main$6 = {
               }
             },
             type: "time",
-            min: "dataMin",
-            max: "dataMax"
+            min: this.xAxisMin,
+            max: this.xAxisMax
           },
           {
             gridIndex: 2,
@@ -69593,8 +69613,8 @@ const _sfc_main$6 = {
               }
             },
             type: "time",
-            min: "dataMin",
-            max: "dataMax"
+            min: this.xAxisMin,
+            max: this.xAxisMax
           },
           {
             gridIndex: 3,
@@ -69627,8 +69647,8 @@ const _sfc_main$6 = {
               }
             },
             type: "time",
-            min: "dataMin",
-            max: "dataMax"
+            min: this.xAxisMin,
+            max: this.xAxisMax
           }
         ],
         yAxis: [
