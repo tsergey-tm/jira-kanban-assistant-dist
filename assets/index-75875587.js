@@ -66621,6 +66621,10 @@ const messages = {
         "percent": (ctx) => {
           const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
           return _normalize([_interpolate(_named("group")), " percent of progress"]);
+        },
+        "sum": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Cumulative sum of completed tasks"]);
         }
       },
       "info": (ctx) => {
@@ -67465,6 +67469,10 @@ const messages = {
         "percent": (ctx) => {
           const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
           return _normalize(["Процент выполнения ", _interpolate(_named("group"))]);
+        },
+        "sum": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Накопительная сумма завершенных задач"]);
         }
       },
       "info": (ctx) => {
@@ -70620,6 +70628,16 @@ const _sfc_main$3 = {
   },
   watch: {},
   computed: {
+    yAxisMax() {
+      var _a2;
+      let res = Number.MIN_VALUE;
+      if (((_a2 = this.leadTimeDistribution[this.selected]) == null ? void 0 : _a2.leadRanges) !== void 0) {
+        for (let i = 0; i < this.leadTimeDistribution[this.selected].count.length; i++) {
+          res = Math.max(res, this.leadTimeDistribution[this.selected].count[i]);
+        }
+      }
+      return res === Number.MIN_VALUE ? NaN : res;
+    },
     option() {
       return {
         animation: true,
@@ -70631,8 +70649,8 @@ const _sfc_main$3 = {
           {
             text: this.ltdText,
             textAlign: "left",
-            left: "70%",
-            top: "60%",
+            right: "10%",
+            bottom: "30%",
             textStyle: {
               lineHeight: 25
             }
@@ -70660,7 +70678,15 @@ const _sfc_main$3 = {
           nameGap: "30",
           axisPointer: {
             show: true,
-            snap: true
+            snap: true,
+            label: {
+              formatter: function(value) {
+                if ((value == null ? void 0 : value.value) === void 0) {
+                  return "";
+                }
+                return value.value.toFixed(0);
+              }
+            }
           },
           type: "value",
           axisLabel: {
@@ -70691,7 +70717,8 @@ const _sfc_main$3 = {
                 return value.toFixed(0);
               }
             },
-            min: 0
+            min: 0,
+            max: this.yAxisMax
           },
           {
             axisPointer: {
@@ -70717,22 +70744,18 @@ const _sfc_main$3 = {
     },
     series() {
       var _a2, _b2, _c2;
-      let serCnt = [
-        {
-          name: this.$t("lead-time-distributions.series.count", { group: this.groupName(this.selected) }),
-          type: "bar",
-          barWidth: "10%",
-          barMaxWidth: 10,
-          barMinWidth: 2,
-          data: []
-        }
-      ];
+      let serCnt = [{
+        name: this.$t("lead-time-distributions.series.sum"),
+        type: "line",
+        barWidth: "10%",
+        barMaxWidth: 10,
+        barMinWidth: 2,
+        itemStyle: {
+          color: "transparent"
+        },
+        data: []
+      }];
       if (this.selected === "total" && Object.keys(this.leadTimeDistribution).length > 1) {
-        serCnt[0].type = "line";
-        serCnt[0].itemStyle = { color: "transparent" };
-        for (let i = 0; i < this.leadTimeDistribution["total"].count.length; i++) {
-          serCnt[0].data.push([i, this.leadTimeDistribution["total"].count[i].toFixed(0)]);
-        }
         for (let key of Object.keys(this.leadTimeDistribution)) {
           if (key !== "total") {
             let s2 = {
@@ -70746,24 +70769,39 @@ const _sfc_main$3 = {
             };
             if (((_a2 = this.leadTimeDistribution[key]) == null ? void 0 : _a2.leadRanges) !== void 0) {
               for (let i = 0; i < this.leadTimeDistribution[key].count.length; i++) {
-                s2.data.push([i, this.leadTimeDistribution[key].count[i].toFixed(0)]);
+                if (this.leadTimeDistribution[key].count[i]) {
+                  s2.data.push([i, this.leadTimeDistribution[key].count[i].toFixed(0)]);
+                }
               }
             }
             serCnt.push(s2);
           }
         }
       } else {
+        let s2 = {
+          name: this.groupName("total"),
+          type: "bar",
+          barWidth: "10%",
+          barMaxWidth: 10,
+          barMinWidth: 2,
+          stack: "cnt",
+          data: []
+        };
         if (((_b2 = this.leadTimeDistribution[this.selected]) == null ? void 0 : _b2.leadRanges) !== void 0) {
           for (let i = 0; i < this.leadTimeDistribution[this.selected].count.length; i++) {
-            serCnt[0].data.push([i, this.leadTimeDistribution[this.selected].count[i].toFixed(0)]);
+            if (this.leadTimeDistribution[this.selected].count[i]) {
+              s2.data.push([i, this.leadTimeDistribution[this.selected].count[i].toFixed(0)]);
+            }
           }
         }
+        serCnt.push(s2);
       }
       let serPerc = {
         name: this.$t("lead-time-distributions.series.percent", { group: this.groupName(this.selected) }),
         type: "line",
-        smooth: true,
+        smooth: false,
         smoothMonotone: "x",
+        step: "end",
         yAxisIndex: 1,
         itemStyle: {
           opacity: 0
@@ -70771,9 +70809,13 @@ const _sfc_main$3 = {
         data: []
       };
       if (((_c2 = this.leadTimeDistribution[this.selected]) == null ? void 0 : _c2.leadRanges) !== void 0) {
+        let totalCnt = 0;
         for (let i = 0; i < this.leadTimeDistribution[this.selected].count.length; i++) {
-          serCnt[0].data.push([i, this.leadTimeDistribution[this.selected].count[i].toFixed(0)]);
-          serPerc.data.push([i, (this.leadTimeDistribution[this.selected].percentiles[i] * 100).toFixed(2)]);
+          if (i === 0 || this.leadTimeDistribution[this.selected].count[i] > 0) {
+            totalCnt += this.leadTimeDistribution[this.selected].count[i];
+            serCnt[0].data.push([i, totalCnt.toFixed(0)]);
+            serPerc.data.push([i, (this.leadTimeDistribution[this.selected].percentiles[i] * 100).toFixed(2)]);
+          }
         }
       }
       serCnt.push(serPerc);
