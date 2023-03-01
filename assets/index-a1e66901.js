@@ -14770,9 +14770,9 @@ function cubicRootAt(p0, p1, p2, p3, val, roots2) {
   } else {
     var disc = B * B - 4 * A * C2;
     if (isAroundZero(disc)) {
-      var K = B / A;
-      var t1 = -b2 / a + K;
-      var t2 = -K / 2;
+      var K2 = B / A;
+      var t1 = -b2 / a + K2;
+      var t2 = -K2 / 2;
       if (t1 >= 0 && t1 <= 1) {
         roots2[n2++] = t1;
       }
@@ -18678,10 +18678,10 @@ function nice(val, round2) {
   return exponent >= -20 ? +val.toFixed(exponent < 0 ? -exponent : 0) : val;
 }
 function quantile$1(ascArr, p2) {
-  var H = (ascArr.length - 1) * p2 + 1;
-  var h2 = Math.floor(H);
+  var H2 = (ascArr.length - 1) * p2 + 1;
+  var h2 = Math.floor(H2);
   var v = +ascArr[h2 - 1];
-  var e2 = H - h2;
+  var e2 = H2 - h2;
   return e2 ? v + e2 * (ascArr[h2] - v) : v;
 }
 function numericToNumber(val) {
@@ -25724,8 +25724,8 @@ function format(time, template, isUTC, lang) {
   var q2 = Math.floor((M - 1) / 3) + 1;
   var d = date[dateGetterName(isUTC)]();
   var e2 = date["get" + (isUTC ? "UTC" : "") + "Day"]();
-  var H = date[hoursGetterName(isUTC)]();
-  var h2 = (H - 1) % 12 + 1;
+  var H2 = date[hoursGetterName(isUTC)]();
+  var h2 = (H2 - 1) % 12 + 1;
   var m2 = date[minutesGetterName(isUTC)]();
   var s2 = date[secondsGetterName(isUTC)]();
   var S2 = date[millisecondsGetterName(isUTC)]();
@@ -25735,7 +25735,7 @@ function format(time, template, isUTC, lang) {
   var monthAbbr = timeModel.get("monthAbbr");
   var dayOfWeek2 = timeModel.get("dayOfWeek");
   var dayOfWeekAbbr = timeModel.get("dayOfWeekAbbr");
-  return (template || "").replace(/{yyyy}/g, y2 + "").replace(/{yy}/g, y2 % 100 + "").replace(/{Q}/g, q2 + "").replace(/{MMMM}/g, month[M - 1]).replace(/{MMM}/g, monthAbbr[M - 1]).replace(/{MM}/g, pad(M, 2)).replace(/{M}/g, M + "").replace(/{dd}/g, pad(d, 2)).replace(/{d}/g, d + "").replace(/{eeee}/g, dayOfWeek2[e2]).replace(/{ee}/g, dayOfWeekAbbr[e2]).replace(/{e}/g, e2 + "").replace(/{HH}/g, pad(H, 2)).replace(/{H}/g, H + "").replace(/{hh}/g, pad(h2 + "", 2)).replace(/{h}/g, h2 + "").replace(/{mm}/g, pad(m2, 2)).replace(/{m}/g, m2 + "").replace(/{ss}/g, pad(s2, 2)).replace(/{s}/g, s2 + "").replace(/{SSS}/g, pad(S2, 3)).replace(/{S}/g, S2 + "");
+  return (template || "").replace(/{yyyy}/g, y2 + "").replace(/{yy}/g, y2 % 100 + "").replace(/{Q}/g, q2 + "").replace(/{MMMM}/g, month[M - 1]).replace(/{MMM}/g, monthAbbr[M - 1]).replace(/{MM}/g, pad(M, 2)).replace(/{M}/g, M + "").replace(/{dd}/g, pad(d, 2)).replace(/{d}/g, d + "").replace(/{eeee}/g, dayOfWeek2[e2]).replace(/{ee}/g, dayOfWeekAbbr[e2]).replace(/{e}/g, e2 + "").replace(/{HH}/g, pad(H2, 2)).replace(/{H}/g, H2 + "").replace(/{hh}/g, pad(h2 + "", 2)).replace(/{h}/g, h2 + "").replace(/{mm}/g, pad(m2, 2)).replace(/{m}/g, m2 + "").replace(/{ss}/g, pad(s2, 2)).replace(/{s}/g, s2 + "").replace(/{SSS}/g, pad(S2, 3)).replace(/{S}/g, S2 + "");
 }
 function leveledFormat(tick, idx, formatter, lang, isUTC) {
   var template = null;
@@ -53443,21 +53443,21 @@ function y$1(e2) {
   }), t;
   var t;
 }
-var _ = { autoresize: Boolean }, E$1 = /^on[^a-z]/, x = function(e2) {
-  return E$1.test(e2);
+var _$1 = { autoresize: Boolean }, E$2 = /^on[^a-z]/, x = function(e2) {
+  return E$2.test(e2);
 };
-function j$1(e2, n2) {
+function j$2(e2, n2) {
   var r = unref(e2);
   return r && "object" == typeof r && "value" in r ? r.value || n2 : r || n2;
 }
-var L = { loading: Boolean, loadingOptions: Object }, w$1 = null;
-var z = [], C$1 = [];
+var L$1 = { loading: Boolean, loadingOptions: Object }, w$1 = null;
+var z$1 = [], C$2 = [];
 !function(e2, t) {
   if (e2 && "undefined" != typeof document) {
     var n2, r = true === t.prepend ? "prepend" : "append", o = true === t.singleTag, i = "string" == typeof t.container ? document.querySelector(t.container) : document.getElementsByTagName("head")[0];
     if (o) {
-      var a = z.indexOf(i);
-      -1 === a && (a = z.push(i) - 1, C$1[a] = {}), n2 = C$1[a] && C$1[a][r] ? C$1[a][r] : C$1[a][r] = u();
+      var a = z$1.indexOf(i);
+      -1 === a && (a = z$1.push(i) - 1, C$2[a] = {}), n2 = C$2[a] && C$2[a][r] ? C$2[a][r] : C$2[a][r] = u();
     } else
       n2 = u();
     65279 === e2.charCodeAt(0) && (e2 = e2.substring(1)), n2.styleSheet ? n2.styleSheet.cssText += e2 : n2.appendChild(document.createTextNode(e2));
@@ -53471,7 +53471,7 @@ var z = [], C$1 = [];
     return i.insertAdjacentElement(a2, e3), e3;
   }
 }("x-vue-echarts{display:block;width:100%;height:100%;min-width:0}\n", {});
-var T = function() {
+var T$1 = function() {
   if (null != w$1)
     return w$1;
   if ("undefined" == typeof HTMLElement || "undefined" == typeof customElements)
@@ -53483,16 +53483,16 @@ var T = function() {
   }
   return w$1 = true;
 }();
-var S = defineComponent({ name: "echarts", props: O(O({ option: Object, theme: { type: [Object, String] }, initOptions: Object, updateOptions: Object, group: String, manualUpdate: Boolean }, _), L), emits: {}, inheritAttrs: false, setup: function(t, i) {
+var S = defineComponent({ name: "echarts", props: O(O({ option: Object, theme: { type: [Object, String] }, initOptions: Object, updateOptions: Object, group: String, manualUpdate: Boolean }, _$1), L$1), emits: {}, inheritAttrs: false, setup: function(t, i) {
   var a = i.attrs, p2 = shallowRef(), b2 = shallowRef(), _2 = shallowRef(), E2 = inject("ecTheme", null), A = inject("ecInitOptions", null), L2 = inject("ecUpdateOptions", null), w2 = toRefs(t), z2 = w2.autoresize, C2 = w2.manualUpdate, U2 = w2.loading, D2 = w2.loadingOptions, k2 = computed(function() {
     return _2.value || t.option || null;
   }), S2 = computed(function() {
-    return t.theme || j$1(E2, {});
+    return t.theme || j$2(E2, {});
   }), B = computed(function() {
-    return t.initOptions || j$1(A, {});
-  }), P = computed(function() {
-    return t.updateOptions || j$1(L2, {});
-  }), H = computed(function() {
+    return t.initOptions || j$2(A, {});
+  }), P2 = computed(function() {
+    return t.updateOptions || j$2(L2, {});
+  }), H2 = computed(function() {
     return function(e2) {
       var t2 = {};
       for (var n2 in e2)
@@ -53533,18 +53533,18 @@ var S = defineComponent({ name: "echarts", props: O(O({ option: Object, theme: {
     }
     function o() {
       var t2 = e2 || k2.value;
-      t2 && n2.setOption(t2, P.value);
+      t2 && n2.setOption(t2, P2.value);
     }
   }
   function I() {
     b2.value && (b2.value.dispose(), b2.value = void 0);
   }
-  var N = null;
+  var N2 = null;
   watch(C2, function(n2) {
-    "function" == typeof N && (N(), N = null), n2 || (N = watch(function() {
+    "function" == typeof N2 && (N2(), N2 = null), n2 || (N2 = watch(function() {
       return t.option;
     }, function(e2, t2) {
-      e2 && (b2.value ? b2.value.setOption(e2, O({ notMerge: e2 !== t2 }, P.value)) : F2());
+      e2 && (b2.value ? b2.value.setOption(e2, O({ notMerge: e2 !== t2 }, P2.value)) : F2());
     }, { deep: true }));
   }, { immediate: true }), watch([S2, B], function() {
     I(), F2();
@@ -53554,7 +53554,7 @@ var S = defineComponent({ name: "echarts", props: O(O({ option: Object, theme: {
   var R2 = y$1(b2);
   return function(e2, t2, i2) {
     var a2 = inject("ecLoadingOptions", {}), u = computed(function() {
-      return O(O({}, j$1(a2, {})), null == i2 ? void 0 : i2.value);
+      return O(O({}, j$2(a2, {})), null == i2 ? void 0 : i2.value);
     });
     watchEffect(function() {
       var n2 = e2.value;
@@ -53573,10 +53573,10 @@ var S = defineComponent({ name: "echarts", props: O(O({ option: Object, theme: {
   }(b2, z2, p2), onMounted(function() {
     F2();
   }), onBeforeUnmount(function() {
-    T && p2.value ? p2.value.__dispose = I : I();
+    T$1 && p2.value ? p2.value.__dispose = I : I();
   }), O({ chart: b2, root: p2, setOption: function(e2, n2) {
     t.manualUpdate && (_2.value = e2), b2.value ? b2.value.setOption(e2, n2 || {}) : F2(e2);
-  }, nonEventAttrs: H }, R2);
+  }, nonEventAttrs: H2 }, R2);
 }, render: function() {
   var e2 = O({}, this.nonEventAttrs);
   return e2.ref = "root", e2.class = e2.class ? ["echarts"].concat(e2.class) : "echarts", h("x-vue-echarts", e2);
@@ -60393,9 +60393,6 @@ function unrefElement(elRef) {
   return (_a2 = plain == null ? void 0 : plain.$el) != null ? _a2 : plain;
 }
 const defaultWindow = isClient ? window : void 0;
-isClient ? window.document : void 0;
-isClient ? window.navigator : void 0;
-isClient ? window.location : void 0;
 function useEventListener(...args) {
   let target;
   let events;
@@ -61753,7 +61750,7 @@ if (typeof window < "u") {
   window.addEventListener("testPassive", null, e2), window.removeEventListener("testPassive", null, e2);
 }
 const xe = typeof window < "u" && window.navigator && window.navigator.platform && (/iP(ad|hone|od)/.test(window.navigator.platform) || window.navigator.platform === "MacIntel" && window.navigator.maxTouchPoints > 1);
-let R$1 = [], Q = false, q = 0, Ae = -1, G, U;
+let R$2 = [], Q$1 = false, q$1 = 0, Ae = -1, G$1, U$1;
 const so = (e2) => {
   if (!e2 || e2.nodeType !== Node.ELEMENT_NODE)
     return false;
@@ -61772,38 +61769,38 @@ const so = (e2) => {
   return ao(e2).forEach((u) => {
     so(u) && ro(u, o) && (n2 = true);
   }), n2;
-}, Fe = (e2) => R$1.some(() => io(e2, -q)), ee = (e2) => {
+}, Fe = (e2) => R$2.some(() => io(e2, -q$1)), ee$1 = (e2) => {
   const o = e2 || window.event;
   return Fe(o.target) || o.touches.length > 1 ? true : (o.preventDefault && o.preventDefault(), false);
 }, uo = (e2) => {
-  if (U === void 0) {
+  if (U$1 === void 0) {
     const o = !!e2 && e2.reserveScrollBarGap === true, n2 = window.innerWidth - document.documentElement.clientWidth;
     if (o && n2 > 0) {
       const t = parseInt(getComputedStyle(document.body).getPropertyValue("padding-right"), 10);
-      U = document.body.style.paddingRight, document.body.style.paddingRight = `${t + n2}px`;
+      U$1 = document.body.style.paddingRight, document.body.style.paddingRight = `${t + n2}px`;
     }
   }
-  G === void 0 && (G = document.body.style.overflow, document.body.style.overflow = "hidden");
+  G$1 === void 0 && (G$1 = document.body.style.overflow, document.body.style.overflow = "hidden");
 }, co = () => {
-  U !== void 0 && (document.body.style.paddingRight = U, U = void 0), G !== void 0 && (document.body.style.overflow = G, G = void 0);
-}, fo = (e2) => e2 ? e2.scrollHeight - e2.scrollTop <= e2.clientHeight : false, vo = (e2, o) => (q = e2.targetTouches[0].clientY - Ae, Fe(e2.target) ? false : o && o.scrollTop === 0 && q > 0 || fo(o) && q < 0 ? ee(e2) : (e2.stopPropagation(), true)), po = (e2, o) => {
+  U$1 !== void 0 && (document.body.style.paddingRight = U$1, U$1 = void 0), G$1 !== void 0 && (document.body.style.overflow = G$1, G$1 = void 0);
+}, fo = (e2) => e2 ? e2.scrollHeight - e2.scrollTop <= e2.clientHeight : false, vo = (e2, o) => (q$1 = e2.targetTouches[0].clientY - Ae, Fe(e2.target) ? false : o && o.scrollTop === 0 && q$1 > 0 || fo(o) && q$1 < 0 ? ee$1(e2) : (e2.stopPropagation(), true)), po = (e2, o) => {
   if (!e2) {
     console.error(
       "disableBodyScroll unsuccessful - targetElement must be provided when calling disableBodyScroll on IOS devices."
     );
     return;
   }
-  if (R$1.some((t) => t.targetElement === e2))
+  if (R$2.some((t) => t.targetElement === e2))
     return;
   const n2 = {
     targetElement: e2,
     options: o || {}
   };
-  R$1 = [...R$1, n2], xe ? (e2.ontouchstart = (t) => {
+  R$2 = [...R$2, n2], xe ? (e2.ontouchstart = (t) => {
     t.targetTouches.length === 1 && (Ae = t.targetTouches[0].clientY);
   }, e2.ontouchmove = (t) => {
     t.targetTouches.length === 1 && vo(t, e2);
-  }, Q || (document.addEventListener("touchmove", ee, ce ? { passive: false } : void 0), Q = true)) : uo(o);
+  }, Q$1 || (document.addEventListener("touchmove", ee$1, ce ? { passive: false } : void 0), Q$1 = true)) : uo(o);
 }, mo = (e2) => {
   if (!e2) {
     console.error(
@@ -61811,7 +61808,7 @@ const so = (e2) => {
     );
     return;
   }
-  R$1 = R$1.filter((o) => o.targetElement !== e2), xe ? (e2.ontouchstart = null, e2.ontouchmove = null, Q && R$1.length === 0 && (document.removeEventListener("touchmove", ee, ce ? { passive: false } : void 0), Q = false)) : R$1.length || co();
+  R$2 = R$2.filter((o) => o.targetElement !== e2), xe ? (e2.ontouchstart = null, e2.ontouchmove = null, Q$1 && R$2.length === 0 && (document.removeEventListener("touchmove", ee$1, ce ? { passive: false } : void 0), Q$1 = false)) : R$2.length || co();
 };
 function yo(e2, o) {
   const { lockScrollEl: n2 } = o;
@@ -61877,7 +61874,7 @@ const bo = (e2) => (...o) => {
   e2 && (e2 == null || e2(...o), e2 = null);
 }, F$1 = () => {
 };
-function Z(e2, o, n2) {
+function Z$1(e2, o, n2) {
   return e2 > n2 ? n2 : e2 < o ? o : e2;
 }
 const Ve = (e2) => {
@@ -61964,19 +61961,19 @@ function Mo(e2, o) {
       }), f = new Date().getTime(), v = C2(r == null ? void 0 : r.target);
     },
     onSwipe() {
-      var r, w2, P, p2;
+      var r, w2, P2, p2;
       if (v && c.value && k2.value === e2.swipeToClose) {
         if (k2.value === "up") {
-          const b2 = Z(Math.abs(V.value || 0), 0, ((r = a.value) == null ? void 0 : r.offsetHeight) || 0) - (e2.threshold || 0);
+          const b2 = Z$1(Math.abs(V.value || 0), 0, ((r = a.value) == null ? void 0 : r.offsetHeight) || 0) - (e2.threshold || 0);
           i.value = b2;
         } else if (k2.value === "down") {
-          const b2 = Z(Math.abs(V.value || 0), 0, ((w2 = a.value) == null ? void 0 : w2.offsetHeight) || 0) - (e2.threshold || 0);
+          const b2 = Z$1(Math.abs(V.value || 0), 0, ((w2 = a.value) == null ? void 0 : w2.offsetHeight) || 0) - (e2.threshold || 0);
           i.value = -b2;
         } else if (k2.value === "right") {
-          const b2 = Z(Math.abs(g.value || 0), 0, ((P = a.value) == null ? void 0 : P.offsetWidth) || 0) - (e2.threshold || 0);
+          const b2 = Z$1(Math.abs(g.value || 0), 0, ((P2 = a.value) == null ? void 0 : P2.offsetWidth) || 0) - (e2.threshold || 0);
           i.value = -b2;
         } else if (k2.value === "left") {
-          const b2 = Z(Math.abs(g.value || 0), 0, ((p2 = a.value) == null ? void 0 : p2.offsetWidth) || 0) - (e2.threshold || 0);
+          const b2 = Z$1(Math.abs(g.value || 0), 0, ((p2 = a.value) == null ? void 0 : p2.offsetWidth) || 0) - (e2.threshold || 0);
           i.value = b2;
         }
       }
@@ -61986,13 +61983,13 @@ function Mo(e2, o) {
         c.value = true;
         return;
       }
-      const P = new Date().getTime(), p2 = w2 === e2.swipeToClose, b2 = (() => {
-        var W, X;
+      const P2 = new Date().getTime(), p2 = w2 === e2.swipeToClose, b2 = (() => {
+        var W2, X2;
         if (w2 === "up" || w2 === "down")
-          return Math.abs((V == null ? void 0 : V.value) || 0) > t * (((W = a.value) == null ? void 0 : W.offsetHeight) || 0);
+          return Math.abs((V == null ? void 0 : V.value) || 0) > t * (((W2 = a.value) == null ? void 0 : W2.offsetHeight) || 0);
         if (w2 === "left" || w2 === "right")
-          return Math.abs((g == null ? void 0 : g.value) || 0) > t * (((X = a.value) == null ? void 0 : X.offsetWidth) || 0);
-      })(), x2 = P - f <= u;
+          return Math.abs((g == null ? void 0 : g.value) || 0) > t * (((X2 = a.value) == null ? void 0 : X2.offsetWidth) || 0);
+      })(), x2 = P2 - f <= u;
       if (m2 && v && p2 && (b2 || x2)) {
         i.value = 0, n2.value = false;
         return;
@@ -62024,7 +62021,7 @@ function Mo(e2, o) {
     const w2 = r == null ? void 0 : r.tagName;
     if (!w2 || ["INPUT", "TEXTAREA"].includes(w2))
       return false;
-    const P = (() => {
+    const P2 = (() => {
       switch (e2.swipeToClose) {
         case "up":
           return (r == null ? void 0 : r.scrollTop) + (r == null ? void 0 : r.clientHeight) === (r == null ? void 0 : r.scrollHeight);
@@ -62038,7 +62035,7 @@ function Mo(e2, o) {
           return false;
       }
     })();
-    return r === a.value ? P : P && C2(r == null ? void 0 : r.parentElement);
+    return r === a.value ? P2 : P2 && C2(r == null ? void 0 : r.parentElement);
   }
   watch(
     () => n2.value,
@@ -62098,12 +62095,12 @@ const de = Symbol("vfm"), fe = Symbol("internalVfm"), go = /* @__PURE__ */ defin
       visible: D2,
       contentVisible: r,
       contentListeners: w2,
-      contentTransition: P,
+      contentTransition: P2,
       overlayVisible: p2,
       overlayListeners: b2,
       overlayTransition: x2,
-      enterTransition: W,
-      leaveTransition: X
+      enterTransition: W2,
+      leaveTransition: X2
     } = oo(n2, {
       modelValueLocal: y2,
       async onEntering() {
@@ -62123,7 +62120,7 @@ const de = Symbol("vfm"), fe = Symbol("internalVfm"), go = /* @__PURE__ */ defin
       swipeBannerEl: je,
       bindSwipe: Ye,
       onTouchStartSwipeBanner: me
-    } = Mo(n2, { modelValueLocal: y2 }), ye = toRef(n2, "hideOverlay"), N = computed(() => ({
+    } = Mo(n2, { modelValueLocal: y2 }), ye = toRef(n2, "hideOverlay"), N2 = computed(() => ({
       modalId: n2.modalId,
       hideOverlay: ye,
       overlayVisible: p2,
@@ -62137,18 +62134,18 @@ const de = Symbol("vfm"), fe = Symbol("internalVfm"), go = /* @__PURE__ */ defin
       }
     }));
     onMounted(() => {
-      t.push(N);
+      t.push(N2);
     }), y2.value && he(), watch(y2, (T2) => {
       T2 ? he() : $e();
     });
     async function he() {
-      C2("beforeOpen"), m2(), l2(N), s2(), W();
+      C2("beforeOpen"), m2(), l2(N2), s2(), W2();
     }
     function $e() {
-      C2("beforeClose"), V(), a(N), v(), s2(), X();
+      C2("beforeClose"), V(), a(N2), v(), s2(), X2();
     }
     return onBeforeUnmount(() => {
-      V(), i(N), a(N), v(), s2();
+      V(), i(N2), a(N2), v(), s2();
     }), (T2, S2) => T2.displayDirective !== "if" || unref(D2) ? withDirectives((openBlock(), createElementBlock("div", {
       key: 0,
       ref_key: "vfmRootEl",
@@ -62176,7 +62173,7 @@ const de = Symbol("vfm"), fe = Symbol("internalVfm"), go = /* @__PURE__ */ defin
         ]),
         _: 1
       }, 16)),
-      createVNode(Transition, mergeProps(unref(P), { appear: "" }, toHandlers(unref(w2))), {
+      createVNode(Transition, mergeProps(unref(P2), { appear: "" }, toHandlers(unref(w2))), {
         default: withCtx(() => [
           withDirectives(createBaseVNode("div", mergeProps({
             ref_key: "vfmContentEl",
@@ -62462,7 +62459,7 @@ const l = {
     e2.mousedownState = true;
   }
 };
-function C(e2) {
+function C$1(e2) {
   return new RegExp(e2.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
 }
 const b = {
@@ -62492,7 +62489,7 @@ const b = {
     },
     filterPredicate: {
       type: Function,
-      default: (e2, t) => e2.match(C(t))
+      default: (e2, t) => e2.match(C$1(t))
     }
   }
 }, w = (e2, t) => {
@@ -62500,7 +62497,7 @@ const b = {
   for (const [d, r] of t)
     n2[d] = r;
   return n2;
-}, E = {
+}, E$1 = {
   name: "ModelSelect",
   mixins: [b],
   emits: ["blur", "searchchange", "update:modelValue"],
@@ -62621,7 +62618,7 @@ const b = {
       return typeof e2 == "object" && e2 !== null ? e2.value : e2;
     }
   }
-}, k = /* @__PURE__ */ createBaseVNode("i", { class: "dropdown icon" }, null, -1), D = ["disabled", "tabindex", "id", "name", "value"], j = ["data-vss-custom-attr"], R = ["data-vss-custom-attr", "onClick", "onMouseenter"];
+}, k = /* @__PURE__ */ createBaseVNode("i", { class: "dropdown icon" }, null, -1), D$1 = ["disabled", "tabindex", "id", "name", "value"], j$1 = ["data-vss-custom-attr"], R$1 = ["data-vss-custom-attr", "onClick", "onMouseenter"];
 function F(e2, t, n2, d, r, s2) {
   return openBlock(), createElementBlock("div", {
     class: normalizeClass(["ui fluid search selection dropdown", { "active visible": r.showMenu, error: e2.isError, disabled: e2.isDisabled }]),
@@ -62652,11 +62649,11 @@ function F(e2, t, n2, d, r, s2) {
         }, ["prevent"]), ["enter"])),
         t[8] || (t[8] = withKeys((...i) => s2.deleteTextOrItem && s2.deleteTextOrItem(...i), ["delete"]))
       ]
-    }, null, 40, D),
+    }, null, 40, D$1),
     createBaseVNode("div", {
       class: normalizeClass(["text", s2.textClass]),
       "data-vss-custom-attr": s2.searchTextCustomAttr
-    }, toDisplayString$1(s2.inputText), 11, j),
+    }, toDisplayString$1(s2.inputText), 11, j$1),
     createBaseVNode("div", {
       class: normalizeClass(["menu", s2.menuClass]),
       ref: "menu",
@@ -62672,11 +62669,11 @@ function F(e2, t, n2, d, r, s2) {
         onClick: withModifiers((h2) => s2.selectItem(i), ["stop"]),
         onMousedown: t[9] || (t[9] = (...h2) => s2.mousedownItem && s2.mousedownItem(...h2)),
         onMouseenter: (h2) => s2.pointerSet(o)
-      }, toDisplayString$1(i.text), 43, R))), 128))
+      }, toDisplayString$1(i.text), 43, R$1))), 128))
     ], 38)
   ], 34);
 }
-const y = /* @__PURE__ */ w(E, [["render", F]]);
+const y = /* @__PURE__ */ w(E$1, [["render", F]]);
 const VueSearchSelect = "";
 /*!
   * shared v9.2.2
@@ -65639,7 +65636,7 @@ function createComposer(options = {}, VueI18nLegacy) {
     _pluralRules = rules;
     _context.pluralRules = _pluralRules;
   }
-  function te(key, locale2) {
+  function te2(key, locale2) {
     const targetLocale = isString(locale2) ? locale2 : _locale.value;
     const message = getLocaleMessage(targetLocale);
     return _context.messageResolver(message, key) !== null;
@@ -65799,7 +65796,7 @@ function createComposer(options = {}, VueI18nLegacy) {
     composer.datetimeFormats = datetimeFormats;
     composer.numberFormats = numberFormats;
     composer.rt = rt2;
-    composer.te = te;
+    composer.te = te2;
     composer.tm = tm;
     composer.d = d;
     composer.n = n2;
@@ -66386,7 +66383,7 @@ const messages = {
         },
         "throughput": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Throughput, 1/week"]);
+          return _normalize(["Throughput, 1/7-days"]);
         }
       },
       "series": {
@@ -66656,7 +66653,7 @@ const messages = {
       "config": {
         "search": (ctx) => {
           const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-          return _normalize(["Search ", _interpolate(_list(0)), " weeks ago with bound ", _interpolate(_list(1)), " %"]);
+          return _normalize(["Search ", _interpolate(_list(0)), " 7-days ago with bound ", _interpolate(_list(1)), " %"]);
         }
       },
       "columns": {
@@ -66726,7 +66723,7 @@ const messages = {
       "yAxis": {
         "throughput": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Throughput, 1/week"]);
+          return _normalize(["Throughput, 1/7-days"]);
         },
         "efficiency": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -67045,9 +67042,63 @@ const messages = {
       }
     },
     "app-config": {
-      "period": (ctx) => {
+      "period-type": {
+        "text": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
+          return _normalize(["Analyze period ", _interpolate(_list(0)), " of ", _interpolate(_list(1))]);
+        },
+        "days": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["days"]);
+        },
+        "seven-days": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["seven days"]);
+        },
+        "weeks-mon-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["weeks, from Monday, excluding the current incomplete"]);
+        },
+        "weeks-mon-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["weeks, from Monday, including the current incomplete"]);
+        },
+        "weeks-sun-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["weeks, from Sunday, excluding the current incomplete"]);
+        },
+        "weeks-sun-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["weeks, from Sunday, including the current incomplete"]);
+        },
+        "months-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["months, excluding the current incomplete"]);
+        },
+        "months-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["months, including the current incomplete"]);
+        },
+        "quarters-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["quarters, excluding the current incomplete"]);
+        },
+        "quarters-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["quarters, including the current incomplete"]);
+        },
+        "years-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["years, excluding the current incomplete"]);
+        },
+        "years-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["years, including the current incomplete"]);
+        }
+      },
+      "analyze-size": (ctx) => {
         const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-        return _normalize(["Analysis period ", _interpolate(_list(0)), " weeks"]);
+        return _normalize(["Analyse ", _interpolate(_list(0)), " periods"]);
       },
       "locale": (ctx) => {
         const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
@@ -67234,7 +67285,7 @@ const messages = {
         },
         "throughput": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Проп. сп., 1/нед."]);
+          return _normalize(["Проп. сп., 1/семидн."]);
         }
       },
       "series": {
@@ -67504,7 +67555,7 @@ const messages = {
       "config": {
         "search": (ctx) => {
           const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-          return _normalize(["Искать на ", _interpolate(_list(0)), " недели назад с порогом ", _interpolate(_list(1)), " %"]);
+          return _normalize(["Искать на ", _interpolate(_list(0)), " семидневок назад с порогом ", _interpolate(_list(1)), " %"]);
         }
       },
       "columns": {
@@ -67574,7 +67625,7 @@ const messages = {
       "yAxis": {
         "throughput": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Пропускная способность, 1/нед."]);
+          return _normalize(["Пропускная способность, 1/семидн."]);
         },
         "efficiency": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -67893,9 +67944,63 @@ const messages = {
       }
     },
     "app-config": {
-      "period": (ctx) => {
+      "period-type": {
+        "text": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
+          return _normalize(["Размер периода для анализа ", _interpolate(_list(0)), " ", _interpolate(_list(1))]);
+        },
+        "days": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["дней"]);
+        },
+        "seven-days": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["семидневок"]);
+        },
+        "weeks-mon-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["недель, с понедельника, исключая текущую неполную"]);
+        },
+        "weeks-mon-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["недель, с понедельника, включая текущую неполную"]);
+        },
+        "weeks-sun-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["недель, с воскресенья, исключая текущую неполную"]);
+        },
+        "weeks-sun-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["недель, с воскресенья, включая текущую неполную"]);
+        },
+        "months-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["месяцев, исключая текущий неполный"]);
+        },
+        "months-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["месяцев, включая текущий неполный"]);
+        },
+        "quarters-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["кварталов, исключая текущий неполный"]);
+        },
+        "quarters-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["кварталов, включая текущий неполный"]);
+        },
+        "years-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["лет, исключая текущий неполный"]);
+        },
+        "years-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["лет, включая текущий неполный"]);
+        }
+      },
+      "analyze-size": (ctx) => {
         const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-        return _normalize(["Период для анализа ", _interpolate(_list(0)), " недель"]);
+        return _normalize(["Анализировать ", _interpolate(_list(0)), " периодов"]);
       },
       "locale": (ctx) => {
         const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
@@ -68050,6 +68155,602 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
   ]);
 }
 const LanguageSwitcher = /* @__PURE__ */ _export_sfc$1(_sfc_main$b, [["render", _sfc_render$a]]);
+function T(e2) {
+  return (T = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(e3) {
+    return typeof e3;
+  } : function(e3) {
+    return e3 && "function" == typeof Symbol && e3.constructor === Symbol && e3 !== Symbol.prototype ? "symbol" : typeof e3;
+  })(e2);
+}
+function C(e2) {
+  return function(e3) {
+    if (Array.isArray(e3))
+      return N(e3);
+  }(e2) || function(e3) {
+    if ("undefined" != typeof Symbol && null != e3[Symbol.iterator] || null != e3["@@iterator"])
+      return Array.from(e3);
+  }(e2) || D(e2) || function() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }();
+}
+function D(e2, n2) {
+  if (e2) {
+    if ("string" == typeof e2)
+      return N(e2, n2);
+    var t = Object.prototype.toString.call(e2).slice(8, -1);
+    return "Object" === t && e2.constructor && (t = e2.constructor.name), "Map" === t || "Set" === t ? Array.from(e2) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? N(e2, n2) : void 0;
+  }
+}
+function N(e2, n2) {
+  (null == n2 || n2 > e2.length) && (n2 = e2.length);
+  for (var t = 0, a = new Array(n2); t < n2; t++)
+    a[t] = e2[t];
+  return a;
+}
+function E(e2, n2) {
+  var t = "undefined" != typeof Symbol && e2[Symbol.iterator] || e2["@@iterator"];
+  if (!t) {
+    if (Array.isArray(e2) || (t = D(e2)) || n2 && e2 && "number" == typeof e2.length) {
+      t && (e2 = t);
+      var a = 0, l2 = function() {
+      };
+      return { s: l2, n: function() {
+        return a >= e2.length ? { done: true } : { done: false, value: e2[a++] };
+      }, e: function(e3) {
+        throw e3;
+      }, f: l2 };
+    }
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  var o, u = true, i = false;
+  return { s: function() {
+    t = t.call(e2);
+  }, n: function() {
+    var e3 = t.next();
+    return u = e3.done, e3;
+  }, e: function(e3) {
+    i = true, o = e3;
+  }, f: function() {
+    try {
+      u || null == t.return || t.return();
+    } finally {
+      if (i)
+        throw o;
+    }
+  } };
+}
+var L = { inheritAttrs: false, name: "vue-input", props: { autocomplete: { required: false, type: String }, modelValue: { required: true, type: String }, placeholder: { required: true, type: String }, disabled: { required: true, type: Boolean }, tabindex: { required: true, type: Number }, autofocus: { required: true, type: Boolean }, comboboxUid: { required: true, type: Number } }, emits: ["update:modelValue", "input", "change", "focus", "blur", "escape"], setup: function(a, l2) {
+  var o = ref(null);
+  return onMounted(function() {
+    a.autofocus && o.value.focus();
+  }), onUpdated(function() {
+    a.autofocus && o.value.focus();
+  }), { handleInput: function(e2) {
+    l2.emit("input", e2), l2.emit("update:modelValue", e2.target.value);
+  }, handleChange: function(e2) {
+    l2.emit("change", e2), l2.emit("update:modelValue", e2.target.value);
+  }, handleFocus: function(e2) {
+    l2.emit("focus", e2);
+  }, handleBlur: function(e2) {
+    l2.emit("blur", e2);
+  }, input: o, handleEscape: function(e2) {
+    o.value.blur(), l2.emit("escape", e2);
+  } };
+} }, j = { class: "vue-input" }, $ = ["autocomplete", "modelValue", "placeholder", "disabled", "tabindex", "autofocus", "aria-controls", "aria-labelledby"];
+L.render = function(e2, n2, t, c, d, s2) {
+  return openBlock(), createElementBlock("div", j, [renderSlot(e2.$slots, "prepend"), createBaseVNode("input", { ref: "input", autocomplete: t.autocomplete, modelValue: t.modelValue, placeholder: t.placeholder, disabled: t.disabled, onInput: n2[0] || (n2[0] = function() {
+    return c.handleInput && c.handleInput.apply(c, arguments);
+  }), onChange: n2[1] || (n2[1] = function() {
+    return c.handleChange && c.handleChange.apply(c, arguments);
+  }), onFocus: n2[2] || (n2[2] = function() {
+    return c.handleFocus && c.handleFocus.apply(c, arguments);
+  }), onBlur: n2[3] || (n2[3] = function() {
+    return c.handleBlur && c.handleBlur.apply(c, arguments);
+  }), onKeyup: n2[4] || (n2[4] = withKeys(withModifiers(function() {
+    return c.handleEscape && c.handleEscape.apply(c, arguments);
+  }, ["exact"]), ["esc"])), tabindex: t.tabindex, autofocus: t.autofocus, "aria-autocomplete": "list", "aria-controls": "vs".concat(t.comboboxUid, "-listbox"), "aria-labelledby": "vs".concat(t.comboboxUid, "-combobox") }, null, 40, $), renderSlot(e2.$slots, "append")]);
+}, L.__file = "src/components/input.vue";
+var U = { inheritAttrs: false, name: "vue-tags", props: { modelValue: { required: true, type: Array, validator: function(e2) {
+  return e2.every(function(e3) {
+    return void 0 !== T(e3.key) && void 0 !== e3.label && "boolean" == typeof e3.selected;
+  });
+} }, collapseTags: { type: Boolean } }, emits: ["click"], setup: function(e2, n2) {
+  return { dataAttrs: inject("dataAttrs"), handleClick: function(e3) {
+    n2.emit("click", e3);
+  } };
+} };
+U.render = function(e2, n2, t, i, c, y2) {
+  return openBlock(), createElementBlock("ul", mergeProps({ class: ["vue-tags", { collapsed: t.collapseTags }], onMousedown: n2[0] || (n2[0] = withModifiers(function() {
+  }, ["prevent"])), tabindex: "-1", onClick: n2[1] || (n2[1] = function() {
+    return i.handleClick && i.handleClick.apply(i, arguments);
+  }) }, i.dataAttrs), [(openBlock(true), createElementBlock(Fragment, null, renderList(t.modelValue, function(n3) {
+    return openBlock(), createElementBlock(Fragment, { key: n3.key }, [n3.group ? createCommentVNode("v-if", true) : (openBlock(), createElementBlock("li", { key: 0, class: normalizeClass(["vue-tag", { selected: n3.selected }]) }, [renderSlot(e2.$slots, "default", { option: n3 }, function() {
+      return [createBaseVNode("span", null, toDisplayString$1(n3.label), 1)];
+    })], 2))], 64);
+  }), 128))], 16);
+}, U.__file = "src/components/tags.vue";
+var z = { inheritAttrs: false, name: "vue-dropdown", props: { modelValue: { required: true, type: Array, validator: function(e2) {
+  return e2.every(function(e3) {
+    return void 0 !== T(e3.key) && void 0 !== e3.label && "boolean" == typeof e3.selected;
+  });
+} }, comboboxUid: { required: true, type: Number }, maxHeight: { required: true }, highlightedOriginalIndex: { required: true } }, emits: ["click-item", "mouseenter"], setup: function(e2, n2) {
+  return { dataAttrs: inject("dataAttrs"), handleClickItem: function(e3, t) {
+    t.disabled || n2.emit("click-item", e3, t);
+  }, handleMouseenter: function(e3, t) {
+    n2.emit("mouseenter", e3, t);
+  } };
+} }, P = ["id", "aria-multiselectable", "aria-busy", "aria-disabled"], q = ["onClick", "onMouseenter", "id", "aria-selected", "aria-disabled"];
+z.render = function(e2, n2, t, i, c, y2) {
+  return openBlock(), createElementBlock("ul", mergeProps({ class: "vue-dropdown", style: { maxHeight: t.maxHeight + "px" }, onMousedown: n2[0] || (n2[0] = withModifiers(function() {
+  }, ["prevent"])) }, i.dataAttrs, { role: "listbox", id: "vs".concat(t.comboboxUid, "-listbox"), "aria-multiselectable": i.dataAttrs["data-multiple"], "aria-busy": i.dataAttrs["data-loading"], "aria-disabled": i.dataAttrs["data-disabled"] }), [(openBlock(true), createElementBlock(Fragment, null, renderList(t.modelValue, function(n3, r) {
+    return openBlock(), createElementBlock(Fragment, { key: n3.key }, [n3.visible && false === n3.hidden ? (openBlock(), createElementBlock("li", { key: 0, onClick: function(e3) {
+      return i.handleClickItem(e3, n3);
+    }, class: normalizeClass(["vue-dropdown-item", { selected: n3.selected, disabled: n3.disabled, highlighted: n3.originalIndex === t.highlightedOriginalIndex, group: n3.group }]), onMouseenter: function(e3) {
+      return i.handleMouseenter(e3, n3);
+    }, role: "option", id: "vs".concat(t.comboboxUid, "-option-").concat(r), "aria-selected": !!n3.selected || !!n3.disabled && void 0, "aria-disabled": n3.disabled }, [renderSlot(e2.$slots, "default", { option: n3 }, function() {
+      return [createBaseVNode("span", null, toDisplayString$1(n3.label), 1)];
+    })], 42, q)) : createCommentVNode("v-if", true)], 64);
+  }), 128))], 16, P);
+}, z.__file = "src/components/dropdown.vue";
+var H = function(e2, n2, t) {
+  var a = t.valueBy;
+  return a(e2) === a(n2);
+}, _ = function(e2, n2, t) {
+  var a = t.valueBy;
+  return e2.some(function(e3) {
+    return H(e3, n2, { valueBy: a });
+  });
+}, W = function(e2, n2, t) {
+  var a = t.valueBy;
+  return e2.find(function(e3) {
+    return a(e3) === n2;
+  });
+}, Z = function(e2, n2, t) {
+  var a = t.max, l2 = t.valueBy;
+  return _(e2, n2, { valueBy: l2 }) || e2.length >= a ? e2 : e2.concat(n2);
+}, R = function(e2, n2, t) {
+  var a = t.min, l2 = t.valueBy;
+  return false === _(e2, n2, { valueBy: l2 }) || e2.length <= a ? e2 : e2.filter(function(e3) {
+    return false === H(e3, n2, { valueBy: l2 });
+  });
+}, G = function(e2) {
+  return computed(function() {
+    return "function" == typeof e2.value ? e2.value : "string" == typeof e2.value ? function(n2) {
+      return e2.value.split(".").reduce(function(e3, n3) {
+        return e3[n3];
+      }, n2);
+    } : function(e3) {
+      return e3;
+    };
+  });
+}, Q = function(e2, n2) {
+  var t = computed(function() {
+    return e2.value.reduce(function(e3, n3) {
+      return Object.assign(e3, (t2 = {}, a2 = n3.originalIndex, l3 = n3, a2 in t2 ? Object.defineProperty(t2, a2, { value: l3, enumerable: true, configurable: true, writable: true }) : t2[a2] = l3, t2));
+      var t2, a2, l3;
+    }, {});
+  }), a = function(e3) {
+    var a2 = t.value[e3];
+    return void 0 !== a2 && (false !== l2(a2) && (n2.value = e3, true));
+  }, l2 = function(e3) {
+    return !e3.disabled && !e3.hidden && e3.visible;
+  }, o = computed(function() {
+    return e2.value.some(function(e3) {
+      return l2(e3);
+    });
+  });
+  return watchEffect(function() {
+    if (false === o.value && (n2.value = null), null !== n2.value && e2.value.length <= n2.value) {
+      var t2, u = E(e2.value.reverse());
+      try {
+        for (u.s(); !(t2 = u.n()).done; ) {
+          var i = t2.value;
+          if (a(i.originalIndex))
+            break;
+        }
+      } catch (e3) {
+        u.e(e3);
+      } finally {
+        u.f();
+      }
+    }
+    if (null === n2.value || false === l2(e2.value[n2.value])) {
+      var r, c = E(e2.value);
+      try {
+        for (c.s(); !(r = c.n()).done; ) {
+          var d = r.value;
+          if (a(d.originalIndex))
+            break;
+        }
+      } catch (e3) {
+        c.e(e3);
+      } finally {
+        c.f();
+      }
+    }
+  }), { pointerForward: function() {
+    if (false !== o.value && null !== n2.value)
+      for (var t2 = n2.value + 1, l3 = 0; t2 !== n2.value && l3++ < e2.value.length && (e2.value.length <= t2 && (t2 = 0), !a(t2)); )
+        ++t2;
+  }, pointerBackward: function() {
+    if (false !== o.value && null !== n2.value)
+      for (var t2 = n2.value - 1, l3 = 0; t2 !== n2.value && l3++ < e2.value.length && (t2 < 0 && (t2 = e2.value.length - 1), !a(t2)); )
+        --t2;
+  }, pointerSet: a };
+};
+var Y = defineComponent({ name: "vue-select", inheritAttrs: false, props: { modelValue: { required: true }, emptyModelValue: {}, options: { required: true, type: Array }, labelBy: { type: [String, Function] }, valueBy: { type: [String, Function] }, disabledBy: { default: "disabled", type: [String, Function] }, groupBy: { default: "group", type: [String, Function] }, visibleOptions: { type: Array, default: null }, multiple: { default: false, type: Boolean }, min: { default: 0, type: Number }, max: { default: 1 / 0, type: Number }, searchable: { default: false, type: Boolean }, searchPlaceholder: { default: "Type to search", type: String }, clearOnSelect: { default: false, type: Boolean }, clearOnClose: { default: false, type: Boolean }, taggable: { default: false, type: Boolean }, collapseTags: { default: false, type: Boolean }, autocomplete: { default: "off", type: String }, disabled: { default: false, type: Boolean }, loading: { default: false, type: Boolean }, closeOnSelect: { default: false, type: Boolean }, hideSelected: { default: false, type: Boolean }, placeholder: { default: "Select option", type: String }, tabindex: { default: 0, type: Number }, autofocus: { default: false, type: Boolean }, maxHeight: { default: 300, type: Number }, openDirection: { type: String, validator: function(e2) {
+  return ["top", "bottom"].includes(e2);
+} } }, emits: ["selected", "removed", "update:modelValue", "focus", "blur", "toggle", "opened", "closed", "search:input", "search:change", "search:focus", "search:blur"], setup: function(n2, t) {
+  var a = function(e2) {
+    var n3 = reactive({}), t2 = G(toRef(e2, "labelBy"));
+    watchEffect(function() {
+      return n3.labelBy = t2.value;
+    });
+    var a2 = G(toRef(e2, "valueBy"));
+    watchEffect(function() {
+      return n3.valueBy = a2.value;
+    });
+    var l3 = G(toRef(e2, "disabledBy"));
+    watchEffect(function() {
+      return n3.disabledBy = l3.value;
+    });
+    var o2 = G(toRef(e2, "groupBy"));
+    watchEffect(function() {
+      return n3.groupBy = o2.value;
+    });
+    var u2 = computed(function() {
+      return e2.multiple ? e2.min : Math.min(1, e2.min);
+    });
+    watchEffect(function() {
+      return n3.min = u2.value;
+    });
+    var i2 = computed(function() {
+      return e2.multiple ? e2.max : 1;
+    });
+    return watchEffect(function() {
+      return n3.max = i2.value;
+    }), watchEffect(function() {
+      return n3.options = e2.options;
+    }), n3;
+  }(n2), l2 = computed(function() {
+    var e2;
+    return null !== (e2 = n2.emptyModelValue) && void 0 !== e2 ? e2 : null;
+  }), o = getCurrentInstance(), u = ref(), i = ref(), r = ref(), c = computed(function() {
+    var e2;
+    return null === (e2 = r.value) || void 0 === e2 ? void 0 : e2._.refs.input;
+  }), d = ref(false);
+  watch(function() {
+    return d.value;
+  }, function() {
+    var e2, a2;
+    d.value ? (t.emit("opened"), t.emit("focus"), n2.searchable ? (c.value !== document.activeElement && c.value.focus(), t.emit("search:focus")) : null === (e2 = u.value) || void 0 === e2 || e2.focus()) : (n2.searchable ? (c.value === document.activeElement && c.value.blur(), n2.clearOnClose && D2(), t.emit("search:blur")) : null === (a2 = u.value) || void 0 === a2 || a2.blur(), t.emit("closed"), t.emit("blur")), t.emit("toggle");
+  });
+  var s2 = function() {
+    n2.disabled || (d.value = true);
+  }, v = function(e2) {
+    var n3;
+    (null === (n3 = u.value) || void 0 === n3 ? void 0 : n3.contains(null == e2 ? void 0 : e2.relatedTarget)) ? setTimeout(function() {
+      var e3;
+      null === (e3 = u.value) || void 0 === e3 || e3.focus();
+    }) : d.value = false;
+  };
+  watch(function() {
+    return n2.disabled;
+  }, function() {
+    return v();
+  });
+  var p2 = ref(""), f = computed(function() {
+    return new RegExp(p2.value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+  }), g = computed(function() {
+    return p2.value ? a.options.filter(function(e2) {
+      return f.value.test(a.labelBy(e2));
+    }) : void 0;
+  }), B = ref([]), k2 = computed(function() {
+    return new Set(B.value.map(function(e2) {
+      return a.valueBy(e2);
+    }));
+  }), O2 = function() {
+    if (n2.multiple) {
+      if (false === Array.isArray(n2.modelValue))
+        return false;
+      if (B.value.length !== n2.modelValue.length)
+        return false;
+      if (Object.keys(B.value).some(function(e2) {
+        return B.value[e2] !== W(a.options, n2.modelValue[e2], { valueBy: a.valueBy });
+      }))
+        return false;
+    } else {
+      if (0 === B.value.length && n2.modelValue !== l2.value)
+        return false;
+      if (1 === B.value.length && n2.modelValue === l2.value)
+        return false;
+      if (B.value[0] !== W(a.options, n2.modelValue, { valueBy: a.valueBy }))
+        return false;
+    }
+    return true;
+  }, F2 = function() {
+    if (!O2()) {
+      B.value = [];
+      var e2, t2 = E(n2.multiple ? n2.modelValue : n2.modelValue === l2.value ? [] : [n2.modelValue]);
+      try {
+        for (t2.s(); !(e2 = t2.n()).done; ) {
+          var o2 = e2.value, u2 = W(a.options, o2, { valueBy: a.valueBy });
+          false !== _(a.options, u2, { valueBy: a.valueBy }) && (B.value = Z(B.value, u2, { max: 1 / 0, valueBy: a.valueBy }));
+        }
+      } catch (e3) {
+        t2.e(e3);
+      } finally {
+        t2.f();
+      }
+    }
+  };
+  F2(), watch(function() {
+    return n2.modelValue;
+  }, function() {
+    return F2();
+  }, { deep: true }), watch(function() {
+    return a.options;
+  }, function() {
+    B.value = a.options.filter(function(e2) {
+      return k2.value.has(a.valueBy(e2));
+    });
+  }, { deep: true });
+  var V, S2 = function(e2, n3) {
+    (n3 = n3.originalOption).value.every(function(e3) {
+      var n4 = W(a.options, e3, { valueBy: a.valueBy });
+      return _(B.value, n4, { valueBy: a.valueBy });
+    }) ? n3.value.forEach(function(e3) {
+      var n4 = W(a.options, e3, { valueBy: a.valueBy });
+      B.value = R(B.value, n4, { min: a.min, valueBy: a.valueBy }), t.emit("removed", n4);
+    }) : n3.value.forEach(function(e3) {
+      var n4 = W(a.options, e3, { valueBy: a.valueBy });
+      _(B.value, n4, { valueBy: a.valueBy }) || (B.value = Z(B.value, n4, { max: a.max, valueBy: a.valueBy }), t.emit("selected", n4));
+    });
+  }, A = function(e2, l3) {
+    if (l3 = l3.originalOption, _(B.value, l3, { valueBy: a.valueBy }))
+      B.value = R(B.value, l3, { min: a.min, valueBy: a.valueBy }), t.emit("removed", l3);
+    else {
+      if (!n2.multiple && 1 === B.value.length) {
+        var o2 = B.value[0];
+        B.value = R(B.value, B.value[0], { min: 0, valueBy: a.valueBy }), t.emit("removed", o2);
+      }
+      B.value = Z(B.value, l3, { max: a.max, valueBy: a.valueBy }), t.emit("selected", l3);
+    }
+  }, T2 = function() {
+    if (!O2()) {
+      var e2 = B.value.map(function(e3) {
+        return a.valueBy(e3);
+      });
+      n2.multiple ? t.emit("update:modelValue", e2) : e2.length ? t.emit("update:modelValue", e2[0]) : t.emit("update:modelValue", l2.value);
+    }
+  }, D2 = function() {
+    c.value.value = "", c.value.dispatchEvent(new Event("input")), c.value.dispatchEvent(new Event("change"));
+  }, N2 = computed(function() {
+    var e2, t2;
+    return null !== (t2 = null !== (e2 = n2.visibleOptions) && void 0 !== e2 ? e2 : g.value) && void 0 !== t2 ? t2 : a.options;
+  }), L2 = ref(0), j2 = computed(function() {
+    var e2, t2 = new Set(N2.value.map(function(e3) {
+      return a.valueBy(e3);
+    })), l3 = a.options.map(function(e3, l4) {
+      var o3, u3 = { key: a.valueBy(e3), label: a.labelBy(e3), group: null !== (o3 = a.groupBy(e3)) && void 0 !== o3 && o3, originalIndex: l4, originalOption: e3 };
+      return u3.selected = u3.group ? e3.value.every(function(e4) {
+        return k2.value.has(e4);
+      }) : k2.value.has(a.valueBy(e3)), u3.disabled = u3.group ? a.disabledBy(e3) || e3.value.every(function(e4) {
+        var n3 = W(a.options, e4, { valueBy: a.valueBy });
+        return a.disabledBy(n3);
+      }) : a.disabledBy(e3), u3.visible = u3.group ? e3.value.some(function(e4) {
+        return t2.has(e4);
+      }) : t2.has(a.valueBy(e3)), u3.hidden = !!n2.hideSelected && (u3.group ? e3.value.every(function(e4) {
+        return k2.value.has(e4);
+      }) : k2.value.has(a.valueBy(e3))), u3;
+    }), o2 = E(l3);
+    try {
+      for (o2.s(); !(e2 = o2.n()).done; ) {
+        var u2 = e2.value;
+        false !== u2.group && (u2.disabled && function() {
+          var e3 = new Set(u2.originalOption.value);
+          l3.filter(function(n3) {
+            return e3.has(a.valueBy(n3.originalOption));
+          }).forEach(function(e4) {
+            return e4.disabled = true;
+          });
+        }());
+      }
+    } catch (e3) {
+      o2.e(e3);
+    } finally {
+      o2.f();
+    }
+    return l3;
+  }), $2 = Q(j2, L2), U2 = $2.pointerForward, z2 = $2.pointerBackward, P2 = $2.pointerSet, q2 = "", H2 = /^[\w]$/, Y2 = computed(function() {
+    var e2 = C(a.options.keys());
+    return e2.slice(L2.value).concat(e2.slice(0, L2.value));
+  }), K2 = function() {
+    var e2, n3 = null === (e2 = u.value) || void 0 === e2 ? void 0 : e2.querySelector(".highlighted");
+    if (n3 && i.value) {
+      var t2, a2 = getComputedStyle(n3);
+      for (t2 = 0; n3.offsetTop + parseFloat(a2.height) + parseFloat(a2.paddingTop) + parseFloat(a2.paddingBottom) > i.value.$el.clientHeight + i.value.$el.scrollTop && t2++ < j2.value.length; )
+        i.value.$el.scrollTop = i.value.$el.scrollTop + parseFloat(a2.height) + parseFloat(a2.paddingTop) + parseFloat(a2.paddingBottom);
+      for (t2 = 0; n3.offsetTop < i.value.$el.scrollTop && t2++ < j2.value.length; )
+        i.value.$el.scrollTop = i.value.$el.scrollTop - parseFloat(a2.height) - parseFloat(a2.paddingTop) - parseFloat(a2.paddingBottom);
+    }
+  };
+  watch(function() {
+    return [d.value, a.options, k2.value];
+  }, function(e2, n3) {
+    true !== (null == n3 ? void 0 : n3[0]) && false !== d.value && 0 !== B.value.length && (P2(a.options.findIndex(function(e3) {
+      return k2.value.has(a.valueBy(e3));
+    })), nextTick(K2));
+  }, { deep: true, immediate: true });
+  var J2 = computed(function() {
+    return { "data-is-focusing": d.value, "data-visible-length": j2.value.filter(function(e2) {
+      return e2.visible && false === e2.hidden;
+    }).length, "data-not-selected-length": a.options.length - j2.value.filter(function(e2) {
+      return e2.selected;
+    }).length, "data-selected-length": j2.value.filter(function(e2) {
+      return e2.selected;
+    }).length, "data-addable": j2.value.filter(function(e2) {
+      return e2.selected;
+    }).length < a.max, "data-removable": j2.value.filter(function(e2) {
+      return e2.selected;
+    }).length > a.min, "data-total-length": a.options.length, "data-multiple": n2.multiple, "data-loading": n2.loading, "data-disabled": n2.disabled };
+  });
+  provide("dataAttrs", J2);
+  var X2 = computed(function() {
+    return j2.value.filter(function(e2) {
+      return e2.selected;
+    }).filter(function(e2) {
+      return !e2.group;
+    });
+  }), ee2 = computed(function() {
+    return n2.multiple ? 0 === X2.value.length ? n2.placeholder : 1 === X2.value.length ? "1 option selected" : X2.value.length + " options selected" : 0 === X2.value.length ? n2.placeholder : X2.value[0].label + "";
+  }), ne2 = computed(function() {
+    var e2 = X2.value.map(function(e3) {
+      return e3.originalOption;
+    });
+    return n2.multiple ? e2 : e2[0] || l2.value;
+  }), te2 = ref();
+  return watch(function() {
+    return [n2.openDirection, d.value];
+  }, function() {
+    var e2, t2;
+    te2.value = null !== (t2 = null !== (e2 = n2.openDirection) && void 0 !== e2 ? e2 : function() {
+      if (void 0 === u.value)
+        return;
+      if (void 0 === window)
+        return;
+      return window.innerHeight - u.value.getBoundingClientRect().bottom >= n2.maxHeight ? "bottom" : "top";
+    }()) && void 0 !== t2 ? t2 : "bottom";
+  }, { immediate: true }), { instance: o, isFocusing: d, wrapper: u, dropdown: i, input: r, focus: s2, blur: v, toggle: function() {
+    d.value ? v() : s2();
+  }, searchingInputValue: p2, handleInputForInput: function(e2) {
+    t.emit("search:input", e2);
+  }, handleChangeForInput: function(e2) {
+    t.emit("search:change", e2);
+  }, handleFocusForInput: function(e2) {
+    s2();
+  }, handleBlurForInput: function(e2) {
+    v();
+  }, optionsWithInfo: j2, addOrRemoveOption: function(e2, t2) {
+    n2.disabled || (t2.group && n2.multiple ? S2(e2, t2) : A(e2, t2), T2(), true === n2.closeOnSelect && (d.value = false), true === n2.clearOnSelect && p2.value && D2());
+  }, dataAttrs: J2, innerPlaceholder: ee2, selected: ne2, highlightedOriginalIndex: L2, pointerForward: function() {
+    U2(), nextTick(K2);
+  }, pointerBackward: function() {
+    z2(), nextTick(K2);
+  }, pointerFirst: function() {
+    var e2, n3 = E(a.options.keys());
+    try {
+      for (n3.s(); !(e2 = n3.n()).done; ) {
+        var t2 = e2.value;
+        if (P2(t2))
+          break;
+      }
+    } catch (e3) {
+      n3.e(e3);
+    } finally {
+      n3.f();
+    }
+    nextTick(K2);
+  }, pointerLast: function() {
+    var e2, n3 = E(C(a.options.keys()).reverse());
+    try {
+      for (n3.s(); !(e2 = n3.n()).done; ) {
+        var t2 = e2.value;
+        if (P2(t2))
+          break;
+      }
+    } catch (e3) {
+      n3.e(e3);
+    } finally {
+      n3.f();
+    }
+    nextTick(K2);
+  }, typeAhead: function(e2) {
+    var t2, l3;
+    if (!n2.searchable) {
+      var o2 = false;
+      if (H2.test(e2.key) ? (q2 += e2.key.toLowerCase(), o2 = true) : "Space" === e2.code && (q2 += " "), o2) {
+        var u2, i2 = E(Y2.value);
+        try {
+          for (i2.s(); !(u2 = i2.n()).done; ) {
+            var r2 = u2.value;
+            if (true === (null === (l3 = null === (t2 = a.labelBy(a.options[r2])) || void 0 === t2 ? void 0 : t2.toLowerCase()) || void 0 === l3 ? void 0 : l3.startsWith(q2)) && P2(r2))
+              break;
+          }
+        } catch (e3) {
+          i2.e(e3);
+        } finally {
+          i2.f();
+        }
+        clearTimeout(V), V = setTimeout(function() {
+          q2 = "";
+        }, 500);
+      }
+    }
+  }, pointerSet: P2, direction: te2 };
+}, components: { VInput: L, VTags: U, VDropdown: z } });
+Y.__VERSION__ = "2.10.5";
+var K = ["tabindex", "id", "role", "aria-expanded", "aria-owns", "aria-activedescendant", "aria-busy", "aria-disabled"], J = { class: "vue-select-header" }, X = { key: 0, class: "vue-input" }, ee = ["placeholder", "autocomplete"], ne = ["onClick"], te = createBaseVNode("span", { class: "icon loading" }, [createBaseVNode("div"), createBaseVNode("div"), createBaseVNode("div")], -1), ae = { key: 0, class: "vue-select-input-wrapper" }, le = createBaseVNode("span", { class: "icon loading" }, [createBaseVNode("div"), createBaseVNode("div"), createBaseVNode("div")], -1);
+Y.render = function(e2, n2, t, c, v, y2) {
+  var m2 = resolveComponent("v-tags"), h2 = resolveComponent("v-input"), b2 = resolveComponent("v-dropdown");
+  return openBlock(), createElementBlock("div", mergeProps({ ref: "wrapper", class: ["vue-select", ["direction-".concat(e2.direction)]], tabindex: e2.isFocusing ? -1 : e2.tabindex, onFocus: n2[9] || (n2[9] = function() {
+    return e2.focus && e2.focus.apply(e2, arguments);
+  }), onBlur: n2[10] || (n2[10] = function(n3) {
+    return !e2.searchable && e2.blur(n3);
+  }) }, Object.assign({}, e2.dataAttrs, e2.$attrs), { onKeypress: n2[11] || (n2[11] = withKeys(withModifiers(function() {
+    return null !== e2.highlightedOriginalIndex && e2.addOrRemoveOption(e2.$event, e2.optionsWithInfo[e2.highlightedOriginalIndex]);
+  }, ["prevent", "exact"]), ["enter"])), onKeydown: [n2[12] || (n2[12] = withKeys(withModifiers(function() {
+    return e2.pointerForward && e2.pointerForward.apply(e2, arguments);
+  }, ["prevent", "exact"]), ["down"])), n2[13] || (n2[13] = withKeys(withModifiers(function() {
+    return e2.pointerBackward && e2.pointerBackward.apply(e2, arguments);
+  }, ["prevent", "exact"]), ["up"])), n2[14] || (n2[14] = withKeys(withModifiers(function() {
+    return e2.pointerFirst && e2.pointerFirst.apply(e2, arguments);
+  }, ["prevent", "exact"]), ["home"])), n2[15] || (n2[15] = withKeys(withModifiers(function() {
+    return e2.pointerLast && e2.pointerLast.apply(e2, arguments);
+  }, ["prevent", "exact"]), ["end"])), n2[16] || (n2[16] = function() {
+    return e2.typeAhead && e2.typeAhead.apply(e2, arguments);
+  })], id: "vs".concat(e2.instance.uid, "-combobox"), role: e2.searchable ? "combobox" : null, "aria-expanded": e2.isFocusing, "aria-haspopup": "listbox", "aria-owns": "vs".concat(e2.instance.uid, "-listbox"), "aria-activedescendant": null === e2.highlightedOriginalIndex ? null : "vs".concat(e2.instance.uid, "-option-").concat(e2.highlightedOriginalIndex), "aria-busy": e2.loading, "aria-disabled": e2.disabled }), [createBaseVNode("div", J, [e2.multiple && e2.taggable && 0 === e2.modelValue.length || false === e2.searchable && false === e2.taggable ? (openBlock(), createElementBlock("div", X, [renderSlot(e2.$slots, "label", { selected: e2.selected }, function() {
+    return [createBaseVNode("input", { placeholder: e2.innerPlaceholder, autocomplete: e2.autocomplete, readonly: "", onClick: n2[0] || (n2[0] = function() {
+      return e2.focus && e2.focus.apply(e2, arguments);
+    }) }, null, 8, ee)];
+  })])) : createCommentVNode("v-if", true), e2.multiple && e2.taggable ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createVNode(m2, { modelValue: e2.optionsWithInfo, "collapse-tags": e2.collapseTags, tabindex: "-1", onClick: e2.focus }, { default: withCtx(function(n3) {
+    var t2 = n3.option;
+    return [renderSlot(e2.$slots, "tag", { option: t2.originalOption, remove: function() {
+      return e2.addOrRemoveOption(e2.$event, t2);
+    } }, function() {
+      return [createBaseVNode("span", null, toDisplayString$1(t2.label), 1), createBaseVNode("img", { src: "data:image/svg+xml;base64,PHN2ZyBpZD0iZGVsZXRlIiBkYXRhLW5hbWU9ImRlbGV0ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+PHRpdGxlPmRlbGV0ZTwvdGl0bGU+PHBhdGggZD0iTTI1NiwyNEMzODMuOSwyNCw0ODgsMTI4LjEsNDg4LDI1NlMzODMuOSw0ODgsMjU2LDQ4OCwyNC4wNiwzODMuOSwyNC4wNiwyNTYsMTI4LjEsMjQsMjU2LDI0Wk0wLDI1NkMwLDM5Ny4xNiwxMTQuODQsNTEyLDI1Niw1MTJTNTEyLDM5Ny4xNiw1MTIsMjU2LDM5Ny4xNiwwLDI1NiwwLDAsMTE0Ljg0LDAsMjU2WiIgZmlsbD0iIzViNWI1ZiIvPjxwb2x5Z29uIHBvaW50cz0iMzgyIDE3Mi43MiAzMzkuMjkgMTMwLjAxIDI1NiAyMTMuMjkgMTcyLjcyIDEzMC4wMSAxMzAuMDEgMTcyLjcyIDIxMy4yOSAyNTYgMTMwLjAxIDMzOS4yOCAxNzIuNzIgMzgyIDI1NiAyOTguNzEgMzM5LjI5IDM4MS45OSAzODIgMzM5LjI4IDI5OC43MSAyNTYgMzgyIDE3Mi43MiIgZmlsbD0iIzViNWI1ZiIvPjwvc3ZnPg==", alt: "delete tag", class: "icon delete", onClick: withModifiers(function() {
+        return e2.addOrRemoveOption(e2.$event, t2);
+      }, ["prevent", "stop"]) }, null, 8, ne)];
+    })];
+  }), _: 3 }, 8, ["modelValue", "collapse-tags", "onClick"]), renderSlot(e2.$slots, "toggle", { isFocusing: e2.isFocusing, toggle: e2.toggle }, function() {
+    return [createBaseVNode("span", { class: normalizeClass(["icon arrow-downward", { active: e2.isFocusing }]), onClick: n2[1] || (n2[1] = function() {
+      return e2.toggle && e2.toggle.apply(e2, arguments);
+    }), onMousedown: n2[2] || (n2[2] = withModifiers(function() {
+    }, ["prevent", "stop"])) }, null, 34)];
+  })], 64)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [e2.searchable ? (openBlock(), createBlock(h2, { key: 0, ref: "input", modelValue: e2.searchingInputValue, "onUpdate:modelValue": n2[3] || (n2[3] = function(n3) {
+    return e2.searchingInputValue = n3;
+  }), disabled: e2.disabled, autocomplete: e2.autocomplete, placeholder: e2.isFocusing ? e2.searchPlaceholder : e2.innerPlaceholder, onInput: e2.handleInputForInput, onChange: e2.handleChangeForInput, onFocus: e2.handleFocusForInput, onBlur: e2.handleBlurForInput, onEscape: e2.blur, autofocus: e2.autofocus || e2.taggable && e2.searchable, tabindex: e2.tabindex, comboboxUid: e2.instance.uid }, null, 8, ["modelValue", "disabled", "autocomplete", "placeholder", "onInput", "onChange", "onFocus", "onBlur", "onEscape", "autofocus", "tabindex", "comboboxUid"])) : createCommentVNode("v-if", true), e2.loading ? renderSlot(e2.$slots, "loading", { key: 1 }, function() {
+    return [te];
+  }) : renderSlot(e2.$slots, "toggle", { key: 2, isFocusing: e2.isFocusing, toggle: e2.toggle }, function() {
+    return [createBaseVNode("span", { class: normalizeClass(["icon arrow-downward", { active: e2.isFocusing }]), onClick: n2[4] || (n2[4] = function() {
+      return e2.toggle && e2.toggle.apply(e2, arguments);
+    }), onMousedown: n2[5] || (n2[5] = withModifiers(function() {
+    }, ["prevent", "stop"])) }, null, 34)];
+  })], 64))]), e2.multiple && e2.taggable && e2.searchable ? (openBlock(), createElementBlock("div", ae, [withDirectives(createVNode(h2, { ref: "input", modelValue: e2.searchingInputValue, "onUpdate:modelValue": n2[6] || (n2[6] = function(n3) {
+    return e2.searchingInputValue = n3;
+  }), disabled: e2.disabled, autocomplete: e2.autocomplete, placeholder: e2.isFocusing ? e2.searchPlaceholder : e2.innerPlaceholder, onInput: e2.handleInputForInput, onChange: e2.handleChangeForInput, onFocus: e2.handleFocusForInput, onBlur: e2.handleBlurForInput, onEscape: e2.blur, autofocus: e2.autofocus || e2.taggable && e2.searchable, tabindex: e2.tabindex, comboboxUid: e2.instance.uid }, null, 8, ["modelValue", "disabled", "autocomplete", "placeholder", "onInput", "onChange", "onFocus", "onBlur", "onEscape", "autofocus", "tabindex", "comboboxUid"]), [[vShow, e2.isFocusing]]), e2.loading ? renderSlot(e2.$slots, "loading", { key: 0 }, function() {
+    return [le];
+  }) : createCommentVNode("v-if", true)])) : createCommentVNode("v-if", true), createVNode(b2, { ref: "dropdown", modelValue: e2.optionsWithInfo, "onUpdate:modelValue": n2[7] || (n2[7] = function(n3) {
+    return e2.optionsWithInfo = n3;
+  }), onClickItem: e2.addOrRemoveOption, onMouseenter: n2[8] || (n2[8] = function(n3, t2) {
+    return e2.pointerSet(t2.originalIndex);
+  }), comboboxUid: e2.instance.uid, maxHeight: e2.maxHeight, highlightedOriginalIndex: e2.highlightedOriginalIndex }, { default: withCtx(function(n3) {
+    var t2 = n3.option;
+    return [renderSlot(e2.$slots, "dropdown-item", { option: t2.originalOption }, function() {
+      return [createBaseVNode("span", null, toDisplayString$1(t2.label), 1)];
+    })];
+  }), _: 3 }, 8, ["modelValue", "onClickItem", "comboboxUid", "maxHeight", "highlightedOriginalIndex"])], 16, K);
+}, Y.__file = "src/index.vue";
 const AppConfig_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$a = {
   name: "AppConfig",
@@ -68070,17 +68771,34 @@ const _sfc_main$a = {
       localCycleColumns: this.copyOf(this.conf.cycle),
       localSelectedSwimlanes: this.copyOf(this.conf.swimlanes),
       localShowConfigPanel: this.showConfigPanel,
-      localPeriodLength: this.conf.periodLength,
+      localPeriodType: this.conf.periodType,
+      localPeriodSize: this.conf.periodSize,
+      localAnalyzeLength: this.conf.analyzeLength,
       localIssueSizeField: this.conf.issueSizeField,
       localValueAcquisitionLifecycleField: this.conf.valueAcquisitionLifecycleField,
       localDesiredDeliveryDateField: this.conf.desiredDeliveryDateField,
       localDeadlineDateField: this.conf.deadlineDateField,
       localShelfLifeRatioField: this.conf.shelfLifeRatioField,
-      issueSizeOptions: [{ value: null, text: this.$t("app-config.field.dont-use") }],
-      valueAcquisitionLifecycleOptions: [{ value: null, text: this.$t("app-config.field.dont-use") }],
-      shelfLifeRatioOptions: [{ value: null, text: this.$t("app-config.field.dont-use") }],
-      desiredDeliveryDateOptions: [{ value: null, text: this.$t("app-config.field.dont-use") }],
-      deadlineDateOptions: [{ value: null, text: this.$t("app-config.field.dont-use") }]
+      issueSizeOptions: [{
+        value: null,
+        text: this.$t("app-config.field.dont-use")
+      }],
+      valueAcquisitionLifecycleOptions: [{
+        value: null,
+        text: this.$t("app-config.field.dont-use")
+      }],
+      shelfLifeRatioOptions: [{
+        value: null,
+        text: this.$t("app-config.field.dont-use")
+      }],
+      desiredDeliveryDateOptions: [{
+        value: null,
+        text: this.$t("app-config.field.dont-use")
+      }],
+      deadlineDateOptions: [{
+        value: null,
+        text: this.$t("app-config.field.dont-use")
+      }]
     };
   },
   emits: ["jiraConfigSave", "jiraConfigClose"],
@@ -68089,7 +68807,62 @@ const _sfc_main$a = {
     VueFinalModal: Oo,
     JiraColumnStatus,
     JiraFilters,
-    ModelSelect: y
+    ModelSelect: y,
+    VueSelect: Y
+  },
+  computed: {
+    periodTypeOptions() {
+      return [
+        {
+          value: "days",
+          text: this.$t("app-config.period-type.days")
+        },
+        {
+          value: "seven-days",
+          text: this.$t("app-config.period-type.seven-days")
+        },
+        {
+          value: "weeks-mon-exclude",
+          text: this.$t("app-config.period-type.weeks-mon-exclude")
+        },
+        {
+          value: "weeks-mon-include",
+          text: this.$t("app-config.period-type.weeks-mon-include")
+        },
+        {
+          value: "weeks-sun-exclude",
+          text: this.$t("app-config.period-type.weeks-sun-exclude")
+        },
+        {
+          value: "weeks-sun-include",
+          text: this.$t("app-config.period-type.weeks-sun-include")
+        },
+        {
+          value: "months-exclude",
+          text: this.$t("app-config.period-type.months-exclude")
+        },
+        {
+          value: "months-include",
+          text: this.$t("app-config.period-type.months-include")
+        },
+        {
+          value: "quarters-exclude",
+          text: this.$t("app-config.period-type.quarters-exclude")
+        },
+        {
+          value: "quarters-include",
+          text: this.$t("app-config.period-type.quarters-include")
+        },
+        {
+          value: "years-exclude",
+          text: this.$t("app-config.period-type.years-exclude")
+        },
+        {
+          value: "years-include",
+          text: this.$t("app-config.period-type.years-include")
+        }
+      ];
+    }
   },
   watch: {
     conf: {
@@ -68103,7 +68876,9 @@ const _sfc_main$a = {
         this.copyTo(this.conf.lead, this.localLeadColumns);
         this.copyTo(this.conf.cycle, this.localCycleColumns);
         this.copyTo(this.conf.swimlanes, this.localSelectedSwimlanes);
-        this.localPeriodLength = this.conf.periodLength;
+        this.localPeriodSize = this.conf.periodSize;
+        this.localPeriodType = this.conf.periodType;
+        this.localAnalyzeLength = this.conf.analyzeLength;
         this.localIssueSizeField = this.conf.issueSizeField;
         this.localValueAcquisitionLifecycleField = this.conf.valueAcquisitionLifecycleField;
         this.localDesiredDeliveryDateField = this.conf.desiredDeliveryDateField;
@@ -68128,7 +68903,9 @@ const _sfc_main$a = {
       this.copyTo(this.localLeadColumns, this.conf.lead);
       this.copyTo(this.localCycleColumns, this.conf.cycle);
       this.copyTo(this.localSelectedSwimlanes, this.conf.swimlanes);
-      this.conf.periodLength = this.localPeriodLength;
+      this.conf.periodType = this.localPeriodType;
+      this.conf.periodSize = this.localPeriodSize;
+      this.conf.analyzeLength = this.localAnalyzeLength;
       this.conf.issueSizeField = this.localIssueSizeField;
       this.conf.valueAcquisitionLifecycleField = this.localValueAcquisitionLifecycleField;
       this.conf.desiredDeliveryDateField = this.localDesiredDeliveryDateField;
@@ -68200,12 +68977,7 @@ const _hoisted_4$3 = ["value"];
 const _hoisted_5$1 = ["value"];
 const _hoisted_6$1 = ["value"];
 const _hoisted_7$1 = { class: "app-config-option-box" };
-const _hoisted_8 = /* @__PURE__ */ createBaseVNode("datalist", { id: "defaultNumbers" }, [
-  /* @__PURE__ */ createBaseVNode("option", { value: "13" }),
-  /* @__PURE__ */ createBaseVNode("option", { value: "26" }),
-  /* @__PURE__ */ createBaseVNode("option", { value: "39" }),
-  /* @__PURE__ */ createBaseVNode("option", { value: "52" })
-], -1);
+const _hoisted_8 = { class: "app-config-option-box" };
 const _hoisted_9 = { class: "app-config-filters" };
 const _hoisted_10 = { class: "app-config-issue-size" };
 const _hoisted_11 = { class: "app-config-life-cycle" };
@@ -68219,14 +68991,14 @@ const _hoisted_18 = ["value"];
 function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_language_switcher = resolveComponent("language-switcher");
   const _component_i18n_t = resolveComponent("i18n-t");
+  const _component_model_select = resolveComponent("model-select");
   const _component_jira_filters = resolveComponent("jira-filters");
   const _component_jira_column_status = resolveComponent("jira-column-status");
-  const _component_model_select = resolveComponent("model-select");
   const _component_VueFinalModal = resolveComponent("VueFinalModal");
   return openBlock(), createBlock(_component_VueFinalModal, {
     "content-class": "app-config-dialog",
     modelValue: $data.localShowConfigPanel,
-    "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => $data.localShowConfigPanel = $event),
+    "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => $data.localShowConfigPanel = $event),
     "teleport-to": "body",
     "display-directive": "if",
     "hide-overlay": false,
@@ -68268,21 +69040,45 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
         }, null, 8, _hoisted_6$1)
       ]),
       createBaseVNode("div", _hoisted_7$1, [
-        createVNode(_component_i18n_t, { keypath: "app-config.period" }, {
+        createVNode(_component_i18n_t, { keypath: "app-config.period-type.text" }, {
           default: withCtx(() => [
             withDirectives(createBaseVNode("input", {
-              class: "app-config-period",
+              class: "app-config-period-size",
               type: "number",
-              id: "periodLength",
-              name: "periodLength",
+              id: "analyzeLength",
+              name: "analyzeLength",
+              min: "1",
+              max: "750",
+              "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $data.localPeriodSize = $event)
+            }, null, 512), [
+              [vModelText, $data.localPeriodSize]
+            ]),
+            createVNode(_component_model_select, {
+              class: "app-config-period-type",
+              id: "periodType",
+              name: "periodType",
+              modelValue: $data.localPeriodType,
+              "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $data.localPeriodType = $event),
+              options: $options.periodTypeOptions
+            }, null, 8, ["modelValue", "options"])
+          ]),
+          _: 1
+        })
+      ]),
+      createBaseVNode("div", _hoisted_8, [
+        createVNode(_component_i18n_t, { keypath: "app-config.analyze-size" }, {
+          default: withCtx(() => [
+            withDirectives(createBaseVNode("input", {
+              class: "app-config-analyze",
+              type: "number",
+              id: "analyzeLength",
+              name: "analyzeLength",
               min: "2",
               max: "104",
-              list: "defaultNumbers",
-              "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $data.localPeriodLength = $event)
+              "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $data.localAnalyzeLength = $event)
             }, null, 512), [
-              [vModelText, $data.localPeriodLength]
-            ]),
-            _hoisted_8
+              [vModelText, $data.localAnalyzeLength]
+            ])
           ]),
           _: 1
         })
@@ -68313,7 +69109,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
         createVNode(_component_model_select, {
           options: $data.issueSizeOptions,
           modelValue: $data.localIssueSizeField,
-          "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $data.localIssueSizeField = $event),
+          "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $data.localIssueSizeField = $event),
           id: "issue-size-field",
           name: "issueSizeField"
         }, null, 8, ["options", "modelValue"])
@@ -68323,7 +69119,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
         createVNode(_component_model_select, {
           options: $data.valueAcquisitionLifecycleOptions,
           modelValue: $data.localValueAcquisitionLifecycleField,
-          "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $data.localValueAcquisitionLifecycleField = $event),
+          "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $data.localValueAcquisitionLifecycleField = $event),
           id: "value-acquisition-lifecycle-field",
           name: "valueAcquisitionLifecycleField"
         }, null, 8, ["options", "modelValue"])
@@ -68333,7 +69129,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
         createVNode(_component_model_select, {
           options: $data.shelfLifeRatioOptions,
           modelValue: $data.localShelfLifeRatioField,
-          "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $data.localShelfLifeRatioField = $event),
+          "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $data.localShelfLifeRatioField = $event),
           id: "shelf-life-ratio-field",
           name: "shelfLifeRatioField"
         }, null, 8, ["options", "modelValue"])
@@ -68343,7 +69139,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
         createVNode(_component_model_select, {
           options: $data.desiredDeliveryDateOptions,
           modelValue: $data.localDesiredDeliveryDateField,
-          "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $data.localDesiredDeliveryDateField = $event),
+          "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => $data.localDesiredDeliveryDateField = $event),
           id: "desired-delivery-date-field",
           name: "desired-delivery-dateField"
         }, null, 8, ["options", "modelValue"])
@@ -68353,7 +69149,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
         createVNode(_component_model_select, {
           options: $data.deadlineDateOptions,
           modelValue: $data.localDeadlineDateField,
-          "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $data.localDeadlineDateField = $event),
+          "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => $data.localDeadlineDateField = $event),
           id: "deadline-date-field",
           name: "deadline-dateField"
         }, null, 8, ["options", "modelValue"])
@@ -68363,19 +69159,19 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
           type: "button",
           value: _ctx.$t("app-config.button.apply"),
           class: "app-config-button",
-          onClick: _cache[9] || (_cache[9] = ($event) => $options.onApply())
+          onClick: _cache[11] || (_cache[11] = ($event) => $options.onApply())
         }, null, 8, _hoisted_16),
         createBaseVNode("input", {
           type: "button",
           value: _ctx.$t("app-config.button.save"),
           class: "app-config-button",
-          onClick: _cache[10] || (_cache[10] = ($event) => $options.onSave())
+          onClick: _cache[12] || (_cache[12] = ($event) => $options.onSave())
         }, null, 8, _hoisted_17),
         createBaseVNode("input", {
           type: "button",
           value: _ctx.$t("app-config.button.discard"),
           class: "app-config-button",
-          onClick: _cache[11] || (_cache[11] = ($event) => $options.onDiscard())
+          onClick: _cache[13] || (_cache[13] = ($event) => $options.onDiscard())
         }, null, 8, _hoisted_18)
       ])
     ]),
@@ -68673,11 +69469,12 @@ const KanbanStat = {
   issues: {},
   // Lead time distribution statistics
   leadTimeDistribution: {},
-  kanbanStat: function(columnsCnt, kanbanCFD, weeksInStat, workColumnsIndexes, waitColumnsIndexes, readyColumnsIndexes, leadColumnsIndexes, cycleColumnsIndexes) {
+  kanbanStat: function(columns, kanbanCFD, periodSize, periodType, periodsInStat, workColumnsIndexes, waitColumnsIndexes, readyColumnsIndexes, leadColumnsIndexes, cycleColumnsIndexes) {
     let tmp = {
-      columnsCnt,
+      columnsCnt: columns.length,
+      columns,
       // Count of issues. Replay board.
-      board: new Array(columnsCnt).fill(0),
+      board: new Array(columns.length).fill(0),
       // "Current day" time for history replay
       currDate: null,
       // "Next day" time for history replay
@@ -68701,20 +69498,22 @@ const KanbanStat = {
       nextDayBoardTime: null,
       currentPeriodBoardTime: null,
       nextPeriodBoardTime: null,
-      periodDays: 7,
-      periodStep: 7 * dayShift,
-      today: null
+      periodSize,
+      periodType,
+      periodsInStat,
+      today: null,
+      skipCols: this.calcSkipCols(columns)
     };
     this.periodStat = [];
     this.issuesStat = {};
-    tmp.currentDayBoardTime = null;
-    tmp.nextDayBoardTime = new Date();
-    tmp.nextDayBoardTime.setHours(0, 0, 0, 0);
-    tmp.nextDayBoardTime.setDate(tmp.nextDayBoardTime.getDate() + 1 - tmp.periodDays * weeksInStat);
-    tmp.nextDayBoardTime = tmp.nextDayBoardTime.getTime();
     tmp.today = new Date();
     tmp.today.setHours(0, 0, 0, 0);
     tmp.today = tmp.today.getTime();
+    tmp.currentDayBoardTime = null;
+    this.calcFirstBoardDay(tmp);
+    console.debug("************** Start calc *****************");
+    console.debug("Today : " + new Date(tmp.today).toLocaleDateString());
+    this.logDates(tmp);
     for (const [time, transitions] of Object.entries(kanbanCFD.columnChanges)) {
       while (time >= tmp.nextDayBoardTime) {
         this.tickEventDay(tmp);
@@ -68732,7 +69531,17 @@ const KanbanStat = {
     this.tickPeriod(tmp);
     return this;
   },
+  calcSkipCols(columns) {
+    let res = 0;
+    for (let column of columns) {
+      if (column.isKanPlanColumn) {
+        res++;
+      }
+    }
+    return res;
+  },
   tickEventDay: function(tmp) {
+    this.logDays(tmp);
     if (tmp.periodDayWIP == null) {
       tmp.periodDayWIP = [];
       for (let i = 0; i < tmp.columnsCnt; i++) {
@@ -68740,26 +69549,27 @@ const KanbanStat = {
       }
     }
     if (tmp.currentDayBoardTime == null) {
-      for (const [key, issueStat] of Object.entries(tmp.issues)) {
+      for (const issueStat of Object.values(tmp.issues)) {
         if (!issueStat.periodChecked && tmp.readyColumnsIndexes.includes(issueStat.lastCol)) {
           issueStat.periodChecked = true;
           issueStat.dayChecked = true;
         }
       }
-    }
-    let tWIP = 0;
-    for (let i = 0; i < tmp.board.length; i++) {
-      tmp.periodDayWIP[i].push(tmp.board[i]);
-      if (tmp.leadColumnsIndexes.includes(i)) {
-        tWIP += tmp.board[i];
+    } else {
+      let tWIP = 0;
+      for (let i = 0; i < tmp.board.length; i++) {
+        tmp.periodDayWIP[i].push(tmp.board[i]);
+        if (tmp.leadColumnsIndexes.includes(i)) {
+          tWIP += tmp.board[i];
+        }
       }
-    }
-    for (const issueStat of Object.values(tmp.issues)) {
-      if (!issueStat.periodChecked && !issueStat.dayChecked) {
-        issueStat.wip.push(tWIP);
-        if (tmp.readyColumnsIndexes.includes(issueStat.lastCol)) {
-          issueStat.dayChecked = true;
-          issueStat.readyTime = Number(issueStat.lastAct);
+      for (const issueStat of Object.values(tmp.issues)) {
+        if (!issueStat.periodChecked && !issueStat.dayChecked) {
+          issueStat.wip.push(tWIP);
+          if (tmp.readyColumnsIndexes.includes(issueStat.lastCol)) {
+            issueStat.dayChecked = true;
+            issueStat.readyTime = Number(issueStat.lastAct);
+          }
         }
       }
     }
@@ -68767,14 +69577,82 @@ const KanbanStat = {
     tmp.nextDayBoardTime += dayShift;
     if (tmp.currentPeriodBoardTime === null) {
       tmp.currentPeriodBoardTime = tmp.currentDayBoardTime;
-      tmp.nextPeriodBoardTime = tmp.currentPeriodBoardTime + tmp.periodStep;
-    } else if (tmp.nextDayBoardTime >= tmp.nextPeriodBoardTime) {
+      this.calcNextPeriodBoardTime(tmp);
+    } else if (tmp.nextDayBoardTime > tmp.nextPeriodBoardTime) {
       this.tickPeriod(tmp);
       tmp.currentPeriodBoardTime = tmp.currentDayBoardTime;
-      tmp.nextPeriodBoardTime = tmp.currentPeriodBoardTime + tmp.periodStep;
+      this.calcNextPeriodBoardTime(tmp);
+    }
+  },
+  calcFirstBoardDay(tmp) {
+    switch (tmp.periodType) {
+      case "days":
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).minus({ days: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        break;
+      case "seven-days":
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).minus({ weeks: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        break;
+      case "weeks-mon-exclude":
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("week").minus({ weeks: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        break;
+      case "weeks-mon-include":
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("week").minus({ weeks: tmp.periodSize * tmp.periodsInStat - 1 }).toMillis();
+        break;
+      case "weeks-sun-exclude":
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).endOf("week").minus({ weeks: tmp.periodSize * tmp.periodsInStat + 1 }).toMillis();
+        break;
+      case "weeks-sun-include":
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("week").minus({ weeks: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        break;
+      case "months-exclude":
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("month").minus({ months: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        break;
+      case "months-include":
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("month").minus({ months: tmp.periodSize * tmp.periodsInStat - 1 }).toMillis();
+        break;
+      case "quarters-exclude":
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("quarter").minus({ quarters: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        break;
+      case "quarters-include":
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("quarter").minus({ quarters: tmp.periodSize * tmp.periodsInStat - 1 }).toMillis();
+        break;
+      case "years-exclude":
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("year").minus({ years: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        break;
+      case "years-include":
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("year").minus({ years: tmp.periodSize * tmp.periodsInStat - 1 }).toMillis();
+        break;
+    }
+  },
+  calcNextPeriodBoardTime(tmp) {
+    switch (tmp.periodType) {
+      case "days":
+        tmp.nextPeriodBoardTime = DateTime.fromMillis(tmp.currentPeriodBoardTime).plus({ days: tmp.periodSize }).toMillis();
+        break;
+      case "seven-days":
+      case "weeks-mon-exclude":
+      case "weeks-mon-include":
+      case "weeks-sun-exclude":
+      case "weeks-sun-include":
+        tmp.nextPeriodBoardTime = DateTime.fromMillis(tmp.currentPeriodBoardTime).plus({ weeks: tmp.periodSize }).toMillis();
+        break;
+      case "months-exclude":
+      case "months-include":
+        tmp.nextPeriodBoardTime = DateTime.fromMillis(tmp.currentPeriodBoardTime).plus({ months: tmp.periodSize }).toMillis();
+        break;
+      case "quarters-exclude":
+      case "quarters-include":
+        tmp.nextPeriodBoardTime = DateTime.fromMillis(tmp.currentPeriodBoardTime).plus({ quarters: tmp.periodSize }).toMillis();
+        break;
+      case "years-exclude":
+      case "years-include":
+        tmp.nextPeriodBoardTime = DateTime.fromMillis(tmp.currentPeriodBoardTime).plus({ years: tmp.periodSize }).toMillis();
+        break;
     }
   },
   tickPeriod: function(tmp) {
+    console.debug("Tick period");
+    this.logDays(tmp);
     if (tmp.currentPeriodBoardTime > tmp.today || tmp.periodDayWIP === null || tmp.periodDayWIP === void 0) {
       return;
     }
@@ -68790,6 +69668,7 @@ const KanbanStat = {
     for (let c = 0; c < tmp.columnsCnt; c++) {
       wips.push(calcStat(tmp.periodDayWIP[c]));
     }
+    console.debug("Days: " + totalD.length);
     let totalWips = calcStat(totalD);
     let timesCols = [];
     for (let i = 0; i < tmp.columnsCnt; i++) {
@@ -68858,24 +69737,26 @@ const KanbanStat = {
     tmp.periodDayWIP = null;
   },
   issueLeave(tmp, evTime, transition) {
-    tmp.board[transition.columnFrom] -= 1;
+    let columnFrom = transition.columnFrom + tmp.skipCols;
+    tmp.board[columnFrom] -= 1;
     if (transition.key in tmp.issues) {
       let timeDelta = evTime - tmp.issues[transition.key].lastAct;
-      tmp.issues[transition.key].times[transition.columnFrom] += timeDelta;
+      tmp.issues[transition.key].times[columnFrom] += timeDelta;
       tmp.issues[transition.key].lastAct = evTime;
       tmp.issues[transition.key].lastCol = null;
     }
   },
   issueEnter(tmp, evTime, transition) {
-    tmp.board[transition.columnTo] += 1;
+    let columnTo = transition.columnTo + tmp.skipCols;
+    tmp.board[columnTo] += 1;
     if (transition.key in tmp.issues) {
       tmp.issues[transition.key].lastAct = evTime;
-      tmp.issues[transition.key].lastCol = transition.columnTo;
+      tmp.issues[transition.key].lastCol = columnTo;
     } else {
       tmp.issues[transition.key] = {
         times: new Array(tmp.columnsCnt).fill(0),
         lastAct: evTime,
-        lastCol: transition.columnTo,
+        lastCol: columnTo,
         dayChecked: false,
         periodChecked: false,
         wip: []
@@ -68925,6 +69806,14 @@ const KanbanStat = {
       times: t,
       readyTime: issueStat.readyTime
     };
+  },
+  logDates(tmp) {
+    console.debug("CurrentPeriodBoardTime: " + (tmp.currentPeriodBoardTime === null ? "null" : new Date(tmp.currentPeriodBoardTime).toLocaleDateString()));
+    console.debug("NextPeriodBoardTime: " + (tmp.nextPeriodBoardTime === null ? "null" : new Date(tmp.nextPeriodBoardTime).toLocaleDateString()));
+  },
+  logDays(tmp) {
+    console.debug("CurrentDayBoardTime: " + (tmp.currentDayBoardTime === null ? "null" : new Date(tmp.currentDayBoardTime).toLocaleDateString()));
+    console.debug("NextDayBoardTime: " + new Date(tmp.nextDayBoardTime).toLocaleDateString());
   }
 };
 const _sfc_main$9 = {
@@ -70236,7 +71125,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64);
 }
 const StatByWIPChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$5, [["render", _sfc_render$4]]);
-const ControlChart_vue_vue_type_style_index_0_scoped_1c926ffc_lang = "";
+const ControlChart_vue_vue_type_style_index_0_scoped_d5cefa7a_lang = "";
 const _sfc_main$4 = {
   name: "ControlChart",
   components: {
@@ -70260,7 +71149,7 @@ const _sfc_main$4 = {
         winners: []
       },
       bound: 95,
-      weeks: 2,
+      periods: 2,
       chartData: [],
       seekTime: NaN,
       seekBound: NaN
@@ -70331,7 +71220,7 @@ const _sfc_main$4 = {
         [this.$t("control-chart.row.winners")]
       ];
       let totalWinners = {};
-      this.seekTime = new Date().getTime() - this.weeks * 1e3 * 60 * 60 * 24 * 7;
+      this.seekTime = new Date().getTime() - this.periods * 1e3 * 60 * 60 * 24 * 7;
       for (let i = 0; i < this.issuesView.columns.length; i++) {
         dRows[0].push(this.issuesView.times[i].min.toFixed(1));
         dRows[1].push(this.issuesView.times[i].med.toFixed(1));
@@ -70534,10 +71423,10 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
             type: "number",
             min: "1",
             max: "99",
-            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => _ctx.weeks = $event),
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => _ctx.periods = $event),
             onChange: _cache[1] || (_cache[1] = (...args) => $options.calcData && $options.calcData(...args))
           }, null, 544), [
-            [vModelText, _ctx.weeks]
+            [vModelText, _ctx.periods]
           ]),
           withDirectives(createBaseVNode("input", {
             type: "number",
@@ -70598,7 +71487,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_7)
   ], 64);
 }
-const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-1c926ffc"]]);
+const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-d5cefa7a"]]);
 const LeadTimeDistributionChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$3 = {
   name: "LeadTimeDistributionChart",
@@ -71264,7 +72153,9 @@ const __default__ = {
   methods: {
     makeInitConf: function() {
       return {
-        periodLength: 13,
+        periodSize: 1,
+        periodType: "seven-days",
+        analyzeLength: 13,
         filters: [],
         swimlanes: [],
         work: [],
@@ -71355,8 +72246,14 @@ const __default__ = {
         let conf = await fetch(url).then((res) => res.ok ? res.json() : void 0);
         if (conf !== void 0 && conf.value !== void 0) {
           this.conf = conf.value;
-          if (this.conf.periodLength === void 0) {
-            this.conf.periodLength = 13;
+          if (this.conf.periodSize === void 0) {
+            this.conf.periodSize = 1;
+          }
+          if (this.conf.periodType === void 0) {
+            this.conf.periodType = "seven-days";
+          }
+          if (this.conf.analyzeLength === void 0) {
+            this.conf.analyzeLength = 13;
           }
         }
       } catch (e2) {
@@ -71393,9 +72290,11 @@ const __default__ = {
       this.loading = true;
       try {
         let kanbanStat = KanbanStat.kanbanStat(
-          this.columns.length,
+          this.columns,
           this.kanbanCFD,
-          16,
+          this.conf.periodSize,
+          this.conf.periodType,
+          this.conf.analyzeLength,
           this.selectedColumnIndexes(this.conf.work),
           this.selectedColumnIndexes(this.conf.wait),
           this.selectedColumnIndexes(this.conf.ready),
@@ -71806,12 +72705,11 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
           "cycle-columns": _ctx.conf.cycle,
           "kanban-board-config": _ctx.kanbanBoardConfig,
           columns: _ctx.columns,
-          "period-length": _ctx.conf.periodLength,
           "fields-data": _ctx.fieldsData,
           conf: _ctx.conf,
           onJiraConfigSave: _cache[2] || (_cache[2] = ($event) => _ctx.jiraConfigSave()),
           onJiraConfigClose: _cache[3] || (_cache[3] = ($event) => _ctx.jiraConfigClose())
-        }, null, 8, ["modelValue", "selected-filters", "cycle-columns", "kanban-board-config", "columns", "period-length", "fields-data", "conf"]),
+        }, null, 8, ["modelValue", "selected-filters", "cycle-columns", "kanban-board-config", "columns", "fields-data", "conf"]),
         createVNode(unref(No))
       ], 64);
     };

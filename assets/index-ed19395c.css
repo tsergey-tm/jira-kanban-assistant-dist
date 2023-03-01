@@ -214,7 +214,21 @@
   clear: both;
   padding: 0.3rem 0.5rem;
 }
-.app-config-period {
+.app-config-period-type {
+  width: 30rem !important;
+}
+.ui.selection.dropdown {
+  display: inline-block;
+  padding: 0.2rem;
+}
+.ui.selection.dropdown > .dropdown.icon {
+  padding: 0.2rem;
+}
+.app-config-period-size {
+  width: 10rem;
+  height: 100%;
+}
+.app-config-analyze {
   width: 5rem;
 }
 .app-config-locale {
@@ -266,28 +280,28 @@
   padding: 0.2rem 0;
 }
 
-.ControlChart[data-v-1c926ffc] {
+.ControlChart[data-v-d5cefa7a] {
   height: 50%;
 }
-.control-chart-issues-config[data-v-1c926ffc] {
+.control-chart-issues-config[data-v-d5cefa7a] {
   padding: 0.2rem;
 }
-.control-chart-issues-table[data-v-1c926ffc] {
+.control-chart-issues-table[data-v-d5cefa7a] {
   border-collapse: collapse;
 }
-.control-chart-issues-table-head[data-v-1c926ffc] {
+.control-chart-issues-table-head[data-v-d5cefa7a] {
   text-align: center;
   border: 1px solid rgba(0, 0, 0, 0.25);
   padding: 0.2rem;
   font-weight: bold;
 }
-.control-chart-issues-table-item[data-v-1c926ffc] {
+.control-chart-issues-table-item[data-v-d5cefa7a] {
   text-align: right;
   vertical-align: top;
   border: 1px solid rgba(0, 0, 0, 0.25);
   padding: 0.2rem;
 }
-.control-chart-issues-winners[data-v-1c926ffc] {
+.control-chart-issues-winners[data-v-d5cefa7a] {
   padding: 1rem;
 }
 
