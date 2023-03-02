@@ -181,11 +181,15 @@
 }
 .app-config-option-box {
   margin: 0.1rem 0.5rem;
-  clear: left;
+}
+.app-config-option-dialog {
+  padding: 1rem 2rem;
+  height: var(--100vvh, 100vh);
+  overflow: auto;
 }
 .app-config-option-header {
-  margin: 3rem 2rem 1rem 2rem;
-  clear: left;
+
+  margin: 1rem 2rem;
   alignment: center;
   text-align: center;
   font-size: large;
@@ -211,7 +215,6 @@
   margin: 0.1rem 0.5rem;
 }
 .app-config-buttons {
-  clear: both;
   padding: 0.3rem 0.5rem;
 }
 .app-config-period-type {
@@ -233,7 +236,6 @@
 }
 .app-config-locale {
   margin: 0.1rem 0.5rem;
-  clear: left;
 }
 
 .wips-chart-selector {
@@ -280,28 +282,28 @@
   padding: 0.2rem 0;
 }
 
-.ControlChart[data-v-03182ec1] {
+.ControlChart[data-v-742b3a0d] {
   height: 50%;
 }
-.control-chart-issues-config[data-v-03182ec1] {
+.control-chart-issues-config[data-v-742b3a0d] {
   padding: 0.2rem;
 }
-.control-chart-issues-table[data-v-03182ec1] {
+.control-chart-issues-table[data-v-742b3a0d] {
   border-collapse: collapse;
 }
-.control-chart-issues-table-head[data-v-03182ec1] {
+.control-chart-issues-table-head[data-v-742b3a0d] {
   text-align: center;
   border: 1px solid rgba(0, 0, 0, 0.25);
   padding: 0.2rem;
   font-weight: bold;
 }
-.control-chart-issues-table-item[data-v-03182ec1] {
+.control-chart-issues-table-item[data-v-742b3a0d] {
   text-align: right;
   vertical-align: top;
   border: 1px solid rgba(0, 0, 0, 0.25);
   padding: 0.2rem;
 }
-.control-chart-issues-winners[data-v-03182ec1] {
+.control-chart-issues-winners[data-v-742b3a0d] {
   padding: 1rem;
 }
 

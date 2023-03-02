@@ -59518,14 +59518,14 @@ const _sfc_main$e = {
       };
       if (size2 in this.leadTimeDistribution) {
         if (size2 === "default") {
-          ltd.used = this.leadTimeDistribution.default;
+          ltd.used = this.leadTimeDistribution.default[this.selected];
           ltd.str = '<span class="triage-table-gray">' + this.$t("triage.lead-time-distribution.display.auto", { val: this.formatLTD(ltd.used) }) + "</span>";
         } else {
-          ltd.used = this.leadTimeDistribution[size2];
+          ltd.used = this.leadTimeDistribution[size2][this.selected];
           ltd.str = this.formatLTD(ltd.used);
         }
       } else {
-        ltd.used = this.leadTimeDistribution.total;
+        ltd.used = this.leadTimeDistribution.total[this.selected];
         ltd.str = '<span class="triage-table-gray">' + this.$t("triage.lead-time-distribution.display.auto", { val: this.formatLTD(ltd.used) }) + "</span>";
       }
       return ltd;
@@ -59609,7 +59609,7 @@ const _sfc_main$e = {
           cos.primaryCoS.index = this.calcCoSIndex(cos);
           cos.primaryCoS.str = this.formatCoS(cos.primaryCoS.index);
           let distribution = this.formatDistribution(ltd.used.tail);
-          this.recalcCoSCoord(cos, ltd.used.tail, dates, sdr);
+          this.recalcCoSCoord(cos, ltd.used.tail, dates, sdr.worst);
           r.push({
             i: this.calcWeight(cos, dates),
             issueKey,
@@ -59835,9 +59835,9 @@ const _sfc_main$e = {
       return this.$t(
         "triage.lead-time-distribution.display.value",
         {
-          q50: usedLTD.leadRanges.q50.toFixed(0),
-          q85: usedLTD.leadRanges.q85.toFixed(0),
-          max: usedLTD.leadRanges.max.toFixed(0)
+          q50: usedLTD.ranges.q50.toFixed(0),
+          q85: usedLTD.ranges.q85.toFixed(0),
+          max: usedLTD.ranges.max.toFixed(0)
         }
       );
     },
@@ -59847,19 +59847,19 @@ const _sfc_main$e = {
           return 1;
         }
         let days = date.as("days");
-        if (days < ltd.leadRanges.q50 - 1) {
+        if (days < ltd.ranges.q50 - 1) {
           return 6;
         }
-        if (days < ltd.leadRanges.q50 + 1) {
+        if (days < ltd.ranges.q50 + 1) {
           return 5;
         }
-        if (days < ltd.leadRanges.q85) {
+        if (days < ltd.ranges.q85) {
           return 4;
         }
-        if (days < ltd.leadRanges.max) {
+        if (days < ltd.ranges.max) {
           return 3;
         }
-        if (days < ltd.leadRanges.max * 2) {
+        if (days < ltd.ranges.max * 2) {
           return 2;
         }
         return 1;
@@ -59983,7 +59983,7 @@ const _hoisted_4$5 = {
   key: 1,
   class: "triage-table"
 };
-const _hoisted_5$3 = ["innerHTML"];
+const _hoisted_5$4 = ["innerHTML"];
 const _hoisted_6$3 = ["innerHTML"];
 const _hoisted_7$3 = ["innerHTML"];
 const _hoisted_8$2 = ["innerHTML"];
@@ -59997,7 +59997,7 @@ const _hoisted_15$2 = ["title"];
 const _hoisted_16$2 = ["href"];
 const _hoisted_17$2 = ["innerHTML"];
 const _hoisted_18$1 = ["innerHTML"];
-const _hoisted_19 = ["innerHTML"];
+const _hoisted_19$1 = ["innerHTML"];
 const _hoisted_20 = ["innerHTML"];
 const _hoisted_21 = ["innerHTML"];
 const _hoisted_22 = ["innerHTML"];
@@ -60025,7 +60025,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
             createBaseVNode("th", {
               class: "triage-table-th",
               innerHTML: this.$t("triage.column.issue")
-            }, null, 8, _hoisted_5$3),
+            }, null, 8, _hoisted_5$4),
             createBaseVNode("th", {
               class: "triage-table-th",
               innerHTML: this.$t("triage.column.value-acquisition-lifecycle")
@@ -60044,7 +60044,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
             }, null, 8, _hoisted_9$2),
             createBaseVNode("th", {
               class: "triage-table-th",
-              innerHTML: this.$t("triage.column.lead-time-distribution-ranges")
+              innerHTML: this.$t("triage.column.lead-time-distribution-ranges." + this.selected)
             }, null, 8, _hoisted_10$2),
             createBaseVNode("th", {
               class: "triage-table-th",
@@ -60086,7 +60086,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
               createBaseVNode("td", {
                 class: "triage-table-td",
                 innerHTML: row.ddd
-              }, null, 8, _hoisted_19),
+              }, null, 8, _hoisted_19$1),
               createBaseVNode("td", {
                 class: "triage-table-td",
                 innerHTML: row.size
@@ -60265,7 +60265,7 @@ const _hoisted_1$c = { class: "jira-columns-box" };
 const _hoisted_2$6 = { class: "jira-columns-box-title" };
 const _hoisted_3$6 = { class: "jira-columns-box-table" };
 const _hoisted_4$4 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
-const _hoisted_5$2 = { class: "jira-columns-box-table-header" };
+const _hoisted_5$3 = { class: "jira-columns-box-table-header" };
 const _hoisted_6$2 = { class: "jira-columns-box-table-header" };
 const _hoisted_7$2 = ["onClick"];
 const _hoisted_8$1 = { class: "jira-columns-box-table-header" };
@@ -60286,7 +60286,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
         createBaseVNode("tr", null, [
           _hoisted_4$4,
           (openBlock(true), createElementBlock(Fragment, null, renderList($props.columns, (column) => {
-            return openBlock(), createElementBlock("td", _hoisted_5$2, toDisplayString$1(column.name), 1);
+            return openBlock(), createElementBlock("td", _hoisted_5$3, toDisplayString$1(column.name), 1);
           }), 256))
         ])
       ]),
@@ -66386,7 +66386,7 @@ const messages = {
         },
         "throughput": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Throughput, 1/7-days"]);
+          return _normalize(["Throughput, 1/period"]);
         }
       },
       "series": {
@@ -66560,6 +66560,10 @@ const messages = {
         }
       },
       "yAxis": {
+        "throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Throughput, 1/period"]);
+        },
         "name": {
           "percent": (ctx) => {
             const { normalize: _normalize } = ctx;
@@ -66584,6 +66588,14 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
         }
+      },
+      "series": {
+        "throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Throughput"]);
+          }
+        }
       }
     },
     "lead-time-distributions": {
@@ -66602,9 +66614,15 @@ const messages = {
         }
       },
       "xAxis": {
-        "name": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Lead time, days"]);
+        "name": {
+          "lead": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Lead time, days"]);
+          },
+          "cycle": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Cycle time, days"]);
+          }
         }
       },
       "yAxis": {
@@ -66650,13 +66668,23 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
         }
+      },
+      "tab": {
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead time"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Cycle time"]);
+        }
       }
     },
     "control-chart": {
       "config": {
         "search": (ctx) => {
           const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-          return _normalize(["Search ", _interpolate(_list(0)), " 7-days ago with bound ", _interpolate(_list(1)), " %"]);
+          return _normalize(["Search ", _interpolate(_list(0)), " periods ago with bound ", _interpolate(_list(1)), " %"]);
         }
       },
       "columns": {
@@ -66948,9 +66976,15 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["Issue size"]);
         },
-        "lead-time-distribution-ranges": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Lead time ranges<br>(50%, 85%, 100%), days"]);
+        "lead-time-distribution-ranges": {
+          "lead": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Lead time ranges<br>(50%, 85%, 100%), days"]);
+          },
+          "cycle": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Cycle time ranges<br>(50%, 85%, 100%), days"]);
+          }
         },
         "start-date-range": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -67288,7 +67322,7 @@ const messages = {
         },
         "throughput": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Проп. сп., 1/семидн."]);
+          return _normalize(["Проп. сп., 1/период"]);
         }
       },
       "series": {
@@ -67462,6 +67496,10 @@ const messages = {
         }
       },
       "yAxis": {
+        "throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Проп. спос., 1/период"]);
+        },
         "name": {
           "percent": (ctx) => {
             const { normalize: _normalize } = ctx;
@@ -67486,6 +67524,14 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%81%D1%80%D0%B5%D0%B4%D0%BD%D0%B5%D0%B5-%D0%B2%D1%80%D0%B5%D0%BC%D1%8F-%D0%BF%D0%BE-%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BA%D0%B0%D0%BC"]);
         }
+      },
+      "series": {
+        "throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Пропускная способность"]);
+          }
+        }
       }
     },
     "lead-time-distributions": {
@@ -67504,9 +67550,15 @@ const messages = {
         }
       },
       "xAxis": {
-        "name": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Время поставки, дни"]);
+        "name": {
+          "lead": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Время поставки, дни"]);
+          },
+          "cycle": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Время цикла, дни"]);
+          }
         }
       },
       "yAxis": {
@@ -67552,13 +67604,23 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%B8-%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F"]);
         }
+      },
+      "tab": {
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время поставки"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время цикла"]);
+        }
       }
     },
     "control-chart": {
       "config": {
         "search": (ctx) => {
           const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-          return _normalize(["Искать на ", _interpolate(_list(0)), " семидневок назад с порогом ", _interpolate(_list(1)), " %"]);
+          return _normalize(["Искать на ", _interpolate(_list(0)), " периодов назад с порогом ", _interpolate(_list(1)), " %"]);
         }
       },
       "columns": {
@@ -67628,7 +67690,7 @@ const messages = {
       "yAxis": {
         "throughput": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Пропускная способность, 1/семидн."]);
+          return _normalize(["Пропускная способность, 1/период"]);
         },
         "efficiency": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -67850,9 +67912,15 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["Размер задачи"]);
         },
-        "lead-time-distribution-ranges": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Диапазоны времени поставки<br>(50%, 85%, 100%), дни"]);
+        "lead-time-distribution-ranges": {
+          "lead": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Диапазоны времени поставки<br>(50%, 85%, 100%), дни"]);
+          },
+          "cycle": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Диапазоны времени цикла<br>(50%, 85%, 100%), дни"]);
+          }
         },
         "start-date-range": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -68376,24 +68444,25 @@ const _sfc_main$a = {
     }
   }
 };
-const _hoisted_1$a = { class: "app-config-option-header" };
-const _hoisted_2$5 = { class: "app-config-locale" };
-const _hoisted_3$5 = { class: "app-config-buttons" };
-const _hoisted_4$3 = ["value"];
-const _hoisted_5$1 = ["value"];
+const _hoisted_1$a = { class: "app-config-option-dialog" };
+const _hoisted_2$5 = { class: "app-config-option-header" };
+const _hoisted_3$5 = { class: "app-config-locale" };
+const _hoisted_4$3 = { class: "app-config-buttons" };
+const _hoisted_5$2 = ["value"];
 const _hoisted_6$1 = ["value"];
-const _hoisted_7$1 = { class: "app-config-option-box" };
+const _hoisted_7$1 = ["value"];
 const _hoisted_8 = { class: "app-config-option-box" };
-const _hoisted_9 = { class: "app-config-filters" };
-const _hoisted_10 = { class: "app-config-issue-size" };
-const _hoisted_11 = { class: "app-config-life-cycle" };
-const _hoisted_12 = { class: "app-config-shelf-life-ratio" };
-const _hoisted_13 = { class: "app-config-desired-delivery-date" };
-const _hoisted_14 = { class: "app-config-deadline-date" };
-const _hoisted_15 = { class: "app-config-buttons" };
-const _hoisted_16 = ["value"];
+const _hoisted_9 = { class: "app-config-option-box" };
+const _hoisted_10 = { class: "app-config-filters" };
+const _hoisted_11 = { class: "app-config-issue-size" };
+const _hoisted_12 = { class: "app-config-life-cycle" };
+const _hoisted_13 = { class: "app-config-shelf-life-ratio" };
+const _hoisted_14 = { class: "app-config-desired-delivery-date" };
+const _hoisted_15 = { class: "app-config-deadline-date" };
+const _hoisted_16 = { class: "app-config-buttons" };
 const _hoisted_17 = ["value"];
 const _hoisted_18 = ["value"];
+const _hoisted_19 = ["value"];
 function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_language_switcher = resolveComponent("language-switcher");
   const _component_i18n_t = resolveComponent("i18n-t");
@@ -68416,169 +68485,171 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
     "swipe-to-close": "none"
   }, {
     default: withCtx(() => [
-      createBaseVNode("div", _hoisted_1$a, toDisplayString$1(_ctx.$t("app-config.title")), 1),
-      createBaseVNode("div", _hoisted_2$5, [
-        createVNode(_component_i18n_t, { keypath: "app-config.locale" }, {
-          default: withCtx(() => [
-            createVNode(_component_language_switcher)
-          ]),
-          _: 1
-        })
-      ]),
-      createBaseVNode("div", _hoisted_3$5, [
-        createBaseVNode("input", {
-          type: "button",
-          value: _ctx.$t("app-config.button.apply"),
-          class: "app-config-button",
-          onClick: _cache[0] || (_cache[0] = ($event) => $options.onApply())
-        }, null, 8, _hoisted_4$3),
-        createBaseVNode("input", {
-          type: "button",
-          value: _ctx.$t("app-config.button.save"),
-          class: "app-config-button",
-          onClick: _cache[1] || (_cache[1] = ($event) => $options.onSave())
-        }, null, 8, _hoisted_5$1),
-        createBaseVNode("input", {
-          type: "button",
-          value: _ctx.$t("app-config.button.discard"),
-          class: "app-config-button",
-          onClick: _cache[2] || (_cache[2] = ($event) => $options.onDiscard())
-        }, null, 8, _hoisted_6$1)
-      ]),
-      createBaseVNode("div", _hoisted_7$1, [
-        createVNode(_component_i18n_t, { keypath: "app-config.period-type.text" }, {
-          default: withCtx(() => [
-            withDirectives(createBaseVNode("input", {
-              class: "app-config-period-size",
-              type: "number",
-              id: "analyzeLength",
-              name: "analyzeLength",
-              min: "1",
-              max: "750",
-              "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $data.localPeriodSize = $event)
-            }, null, 512), [
-              [vModelText, $data.localPeriodSize]
+      createBaseVNode("div", _hoisted_1$a, [
+        createBaseVNode("div", _hoisted_2$5, toDisplayString$1(_ctx.$t("app-config.title")), 1),
+        createBaseVNode("div", _hoisted_3$5, [
+          createVNode(_component_i18n_t, { keypath: "app-config.locale" }, {
+            default: withCtx(() => [
+              createVNode(_component_language_switcher)
             ]),
-            createVNode(_component_model_select, {
-              class: "app-config-period-type",
-              id: "periodType",
-              name: "periodType",
-              modelValue: $data.localPeriodType,
-              "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $data.localPeriodType = $event),
-              options: $options.periodTypeOptions
-            }, null, 8, ["modelValue", "options"])
-          ]),
-          _: 1
-        })
-      ]),
-      createBaseVNode("div", _hoisted_8, [
-        createVNode(_component_i18n_t, { keypath: "app-config.analyze-size" }, {
-          default: withCtx(() => [
-            withDirectives(createBaseVNode("input", {
-              class: "app-config-analyze",
-              type: "number",
-              id: "analyzeLength",
-              name: "analyzeLength",
-              min: "2",
-              max: "750",
-              "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $data.localAnalyzeLength = $event)
-            }, null, 512), [
-              [vModelText, $data.localAnalyzeLength]
-            ])
-          ]),
-          _: 1
-        })
-      ]),
-      createBaseVNode("div", _hoisted_9, [
-        createVNode(_component_jira_filters, {
-          title: _ctx.$t("app-config.board.filters"),
-          filters: $props.kanbanBoardConfig.quickFilterConfig.quickFilters,
-          "selected-filters": $data.localSelectedFilters
-        }, null, 8, ["title", "filters", "selected-filters"]),
-        createVNode(_component_jira_filters, {
-          title: _ctx.$t("app-config.board.swimlanes"),
-          filters: $props.kanbanBoardConfig.swimlanesConfig.swimlanes,
-          "selected-filters": $data.localSelectedSwimlanes
-        }, null, 8, ["title", "filters", "selected-filters"]),
-        createVNode(_component_jira_column_status, {
-          title: _ctx.$t("app-config.board.columns"),
-          columns: $props.columns,
-          "work-columns": $data.localWorkColumns,
-          "wait-columns": $data.localWaitColumns,
-          "ready-columns": $data.localReadyColumns,
-          "lead-columns": $data.localLeadColumns,
-          "cycle-columns": $data.localCycleColumns
-        }, null, 8, ["title", "columns", "work-columns", "wait-columns", "ready-columns", "lead-columns", "cycle-columns"])
-      ]),
-      createBaseVNode("div", _hoisted_10, [
-        createTextVNode(toDisplayString$1(_ctx.$t("app-config.field.issue-size")) + " ", 1),
-        createVNode(_component_model_select, {
-          options: $data.issueSizeOptions,
-          modelValue: $data.localIssueSizeField,
-          "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $data.localIssueSizeField = $event),
-          id: "issue-size-field",
-          name: "issueSizeField"
-        }, null, 8, ["options", "modelValue"])
-      ]),
-      createBaseVNode("div", _hoisted_11, [
-        createTextVNode(toDisplayString$1(_ctx.$t("app-config.field.value-acquisition-lifecycle")) + " ", 1),
-        createVNode(_component_model_select, {
-          options: $data.valueAcquisitionLifecycleOptions,
-          modelValue: $data.localValueAcquisitionLifecycleField,
-          "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $data.localValueAcquisitionLifecycleField = $event),
-          id: "value-acquisition-lifecycle-field",
-          name: "valueAcquisitionLifecycleField"
-        }, null, 8, ["options", "modelValue"])
-      ]),
-      createBaseVNode("div", _hoisted_12, [
-        createTextVNode(toDisplayString$1(_ctx.$t("app-config.field.shelf-life-ratio")) + " ", 1),
-        createVNode(_component_model_select, {
-          options: $data.shelfLifeRatioOptions,
-          modelValue: $data.localShelfLifeRatioField,
-          "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $data.localShelfLifeRatioField = $event),
-          id: "shelf-life-ratio-field",
-          name: "shelfLifeRatioField"
-        }, null, 8, ["options", "modelValue"])
-      ]),
-      createBaseVNode("div", _hoisted_13, [
-        createTextVNode(toDisplayString$1(_ctx.$t("app-config.field.desire-delivery-date")) + " ", 1),
-        createVNode(_component_model_select, {
-          options: $data.desiredDeliveryDateOptions,
-          modelValue: $data.localDesiredDeliveryDateField,
-          "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => $data.localDesiredDeliveryDateField = $event),
-          id: "desired-delivery-date-field",
-          name: "desired-delivery-dateField"
-        }, null, 8, ["options", "modelValue"])
-      ]),
-      createBaseVNode("div", _hoisted_14, [
-        createTextVNode(toDisplayString$1(_ctx.$t("app-config.field.deadline-date")) + " ", 1),
-        createVNode(_component_model_select, {
-          options: $data.deadlineDateOptions,
-          modelValue: $data.localDeadlineDateField,
-          "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => $data.localDeadlineDateField = $event),
-          id: "deadline-date-field",
-          name: "deadline-dateField"
-        }, null, 8, ["options", "modelValue"])
-      ]),
-      createBaseVNode("div", _hoisted_15, [
-        createBaseVNode("input", {
-          type: "button",
-          value: _ctx.$t("app-config.button.apply"),
-          class: "app-config-button",
-          onClick: _cache[11] || (_cache[11] = ($event) => $options.onApply())
-        }, null, 8, _hoisted_16),
-        createBaseVNode("input", {
-          type: "button",
-          value: _ctx.$t("app-config.button.save"),
-          class: "app-config-button",
-          onClick: _cache[12] || (_cache[12] = ($event) => $options.onSave())
-        }, null, 8, _hoisted_17),
-        createBaseVNode("input", {
-          type: "button",
-          value: _ctx.$t("app-config.button.discard"),
-          class: "app-config-button",
-          onClick: _cache[13] || (_cache[13] = ($event) => $options.onDiscard())
-        }, null, 8, _hoisted_18)
+            _: 1
+          })
+        ]),
+        createBaseVNode("div", _hoisted_4$3, [
+          createBaseVNode("input", {
+            type: "button",
+            value: _ctx.$t("app-config.button.apply"),
+            class: "app-config-button",
+            onClick: _cache[0] || (_cache[0] = ($event) => $options.onApply())
+          }, null, 8, _hoisted_5$2),
+          createBaseVNode("input", {
+            type: "button",
+            value: _ctx.$t("app-config.button.save"),
+            class: "app-config-button",
+            onClick: _cache[1] || (_cache[1] = ($event) => $options.onSave())
+          }, null, 8, _hoisted_6$1),
+          createBaseVNode("input", {
+            type: "button",
+            value: _ctx.$t("app-config.button.discard"),
+            class: "app-config-button",
+            onClick: _cache[2] || (_cache[2] = ($event) => $options.onDiscard())
+          }, null, 8, _hoisted_7$1)
+        ]),
+        createBaseVNode("div", _hoisted_8, [
+          createVNode(_component_i18n_t, { keypath: "app-config.period-type.text" }, {
+            default: withCtx(() => [
+              withDirectives(createBaseVNode("input", {
+                class: "app-config-period-size",
+                type: "number",
+                id: "analyzeLength",
+                name: "analyzeLength",
+                min: "1",
+                max: "750",
+                "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $data.localPeriodSize = $event)
+              }, null, 512), [
+                [vModelText, $data.localPeriodSize]
+              ]),
+              createVNode(_component_model_select, {
+                class: "app-config-period-type",
+                id: "periodType",
+                name: "periodType",
+                modelValue: $data.localPeriodType,
+                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $data.localPeriodType = $event),
+                options: $options.periodTypeOptions
+              }, null, 8, ["modelValue", "options"])
+            ]),
+            _: 1
+          })
+        ]),
+        createBaseVNode("div", _hoisted_9, [
+          createVNode(_component_i18n_t, { keypath: "app-config.analyze-size" }, {
+            default: withCtx(() => [
+              withDirectives(createBaseVNode("input", {
+                class: "app-config-analyze",
+                type: "number",
+                id: "analyzeLength",
+                name: "analyzeLength",
+                min: "2",
+                max: "750",
+                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $data.localAnalyzeLength = $event)
+              }, null, 512), [
+                [vModelText, $data.localAnalyzeLength]
+              ])
+            ]),
+            _: 1
+          })
+        ]),
+        createBaseVNode("div", _hoisted_10, [
+          createVNode(_component_jira_filters, {
+            title: _ctx.$t("app-config.board.filters"),
+            filters: $props.kanbanBoardConfig.quickFilterConfig.quickFilters,
+            "selected-filters": $data.localSelectedFilters
+          }, null, 8, ["title", "filters", "selected-filters"]),
+          createVNode(_component_jira_filters, {
+            title: _ctx.$t("app-config.board.swimlanes"),
+            filters: $props.kanbanBoardConfig.swimlanesConfig.swimlanes,
+            "selected-filters": $data.localSelectedSwimlanes
+          }, null, 8, ["title", "filters", "selected-filters"]),
+          createVNode(_component_jira_column_status, {
+            title: _ctx.$t("app-config.board.columns"),
+            columns: $props.columns,
+            "work-columns": $data.localWorkColumns,
+            "wait-columns": $data.localWaitColumns,
+            "ready-columns": $data.localReadyColumns,
+            "lead-columns": $data.localLeadColumns,
+            "cycle-columns": $data.localCycleColumns
+          }, null, 8, ["title", "columns", "work-columns", "wait-columns", "ready-columns", "lead-columns", "cycle-columns"])
+        ]),
+        createBaseVNode("div", _hoisted_11, [
+          createTextVNode(toDisplayString$1(_ctx.$t("app-config.field.issue-size")) + " ", 1),
+          createVNode(_component_model_select, {
+            options: $data.issueSizeOptions,
+            modelValue: $data.localIssueSizeField,
+            "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $data.localIssueSizeField = $event),
+            id: "issue-size-field",
+            name: "issueSizeField"
+          }, null, 8, ["options", "modelValue"])
+        ]),
+        createBaseVNode("div", _hoisted_12, [
+          createTextVNode(toDisplayString$1(_ctx.$t("app-config.field.value-acquisition-lifecycle")) + " ", 1),
+          createVNode(_component_model_select, {
+            options: $data.valueAcquisitionLifecycleOptions,
+            modelValue: $data.localValueAcquisitionLifecycleField,
+            "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $data.localValueAcquisitionLifecycleField = $event),
+            id: "value-acquisition-lifecycle-field",
+            name: "valueAcquisitionLifecycleField"
+          }, null, 8, ["options", "modelValue"])
+        ]),
+        createBaseVNode("div", _hoisted_13, [
+          createTextVNode(toDisplayString$1(_ctx.$t("app-config.field.shelf-life-ratio")) + " ", 1),
+          createVNode(_component_model_select, {
+            options: $data.shelfLifeRatioOptions,
+            modelValue: $data.localShelfLifeRatioField,
+            "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $data.localShelfLifeRatioField = $event),
+            id: "shelf-life-ratio-field",
+            name: "shelfLifeRatioField"
+          }, null, 8, ["options", "modelValue"])
+        ]),
+        createBaseVNode("div", _hoisted_14, [
+          createTextVNode(toDisplayString$1(_ctx.$t("app-config.field.desire-delivery-date")) + " ", 1),
+          createVNode(_component_model_select, {
+            options: $data.desiredDeliveryDateOptions,
+            modelValue: $data.localDesiredDeliveryDateField,
+            "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => $data.localDesiredDeliveryDateField = $event),
+            id: "desired-delivery-date-field",
+            name: "desired-delivery-dateField"
+          }, null, 8, ["options", "modelValue"])
+        ]),
+        createBaseVNode("div", _hoisted_15, [
+          createTextVNode(toDisplayString$1(_ctx.$t("app-config.field.deadline-date")) + " ", 1),
+          createVNode(_component_model_select, {
+            options: $data.deadlineDateOptions,
+            modelValue: $data.localDeadlineDateField,
+            "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => $data.localDeadlineDateField = $event),
+            id: "deadline-date-field",
+            name: "deadline-dateField"
+          }, null, 8, ["options", "modelValue"])
+        ]),
+        createBaseVNode("div", _hoisted_16, [
+          createBaseVNode("input", {
+            type: "button",
+            value: _ctx.$t("app-config.button.apply"),
+            class: "app-config-button",
+            onClick: _cache[11] || (_cache[11] = ($event) => $options.onApply())
+          }, null, 8, _hoisted_17),
+          createBaseVNode("input", {
+            type: "button",
+            value: _ctx.$t("app-config.button.save"),
+            class: "app-config-button",
+            onClick: _cache[12] || (_cache[12] = ($event) => $options.onSave())
+          }, null, 8, _hoisted_18),
+          createBaseVNode("input", {
+            type: "button",
+            value: _ctx.$t("app-config.button.discard"),
+            class: "app-config-button",
+            onClick: _cache[13] || (_cache[13] = ($event) => $options.onDiscard())
+          }, null, 8, _hoisted_19)
+        ])
       ])
     ]),
     _: 1
@@ -68873,8 +68944,6 @@ const KanbanStat = {
   // lastCol - index of last column,
   // periodChecked - issue was reach a ready columns
   issues: {},
-  // Lead time distribution statistics
-  leadTimeDistribution: {},
   kanbanStat: function(columns, kanbanCFD, periodSize, periodType, periodsInStat, workColumnsIndexes, waitColumnsIndexes, readyColumnsIndexes, leadColumnsIndexes, cycleColumnsIndexes) {
     let tmp = {
       columnsCnt: columns.length,
@@ -69688,7 +69757,6 @@ const _sfc_main$7 = {
           {
             gridIndex: 1,
             boundaryGap: [0, "100%"],
-            name: this.$t("main.yAxis.throughput"),
             nameLocation: "middle",
             nameGap: "30",
             axisPointer: {
@@ -69743,7 +69811,7 @@ const _sfc_main$7 = {
           {
             gridIndex: 1,
             boundaryGap: [0, "100%"],
-            name: this.$t("main.yAxis.throughput"),
+            name: this.$t("avg-time-by-columns.yAxis.throughput"),
             nameLocation: "middle",
             nameGap: "30",
             axisPointer: {
@@ -69797,7 +69865,7 @@ const _sfc_main$7 = {
         }
       }
       let serThroughput = {
-        name: this.$t("main.series.throughput.name"),
+        name: this.$t("avg-time-by-columns.series.throughput.name"),
         type: "bar",
         xAxisIndex: 1,
         yAxisIndex: 1,
@@ -70615,7 +70683,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64);
 }
 const StatByWIPChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$5, [["render", _sfc_render$4]]);
-const ControlChart_vue_vue_type_style_index_0_scoped_03182ec1_lang = "";
+const ControlChart_vue_vue_type_style_index_0_scoped_742b3a0d_lang = "";
 const _sfc_main$4 = {
   name: "ControlChart",
   components: {
@@ -70626,7 +70694,8 @@ const _sfc_main$4 = {
     issuesStat: Object,
     columns: Array,
     selectedColumns: Array,
-    jiraBase: String
+    jiraBase: String,
+    conf: Object
   },
   data: function() {
     return {
@@ -70710,7 +70779,7 @@ const _sfc_main$4 = {
         [this.$t("control-chart.row.winners")]
       ];
       let totalWinners = {};
-      this.seekTime = new Date().getTime() - this.periods * 1e3 * 60 * 60 * 24 * 7;
+      this.seekTime = this.calcSeekTime();
       for (let i = 0; i < this.issuesView.columns.length; i++) {
         dRows[0].push(this.issuesView.times[i].min.toFixed(1));
         dRows[1].push(this.issuesView.times[i].med.toFixed(1));
@@ -70764,6 +70833,35 @@ const _sfc_main$4 = {
           this.chartData.push([Number(ready), lead, dd[ready][lead].cnt, dd[ready][lead].key]);
         }
       }
+    },
+    calcSeekTime() {
+      switch (this.conf.periodType) {
+        case "days":
+          return DateTime.now().startOf("day").minus({ days: this.conf.periodSize * this.periods }).toMillis();
+        case "seven-days":
+          return DateTime.now().startOf("day").minus({ weeks: this.conf.periodSize * this.periods }).toMillis();
+        case "weeks-mon-exclude":
+          return DateTime.now().startOf("day").startOf("week").minus({ weeks: this.conf.periodSize * this.periods }).toMillis();
+        case "weeks-mon-include":
+          return DateTime.now().startOf("day").startOf("week").minus({ weeks: this.conf.periodSize * this.periods - 1 }).toMillis();
+        case "weeks-sun-exclude":
+          return DateTime.now().startOf("day").endOf("week").minus({ weeks: this.conf.periodSize * this.periods + 1 }).toMillis();
+        case "weeks-sun-include":
+          return DateTime.now().startOf("day").startOf("week").minus({ weeks: this.conf.periodSize * this.periods }).toMillis();
+        case "months-exclude":
+          return DateTime.now().startOf("day").startOf("month").minus({ months: this.conf.periodSize * this.periods }).toMillis();
+        case "months-include":
+          return DateTime.now().startOf("day").startOf("month").minus({ months: this.conf.periodSize * this.periods - 1 }).toMillis();
+        case "quarters-exclude":
+          return DateTime.now().startOf("day").startOf("quarter").minus({ quarters: this.conf.periodSize * this.periods }).toMillis();
+        case "quarters-include":
+          return DateTime.now().startOf("day").startOf("quarter").minus({ quarters: this.conf.periodSize * this.periods - 1 }).toMillis();
+        case "years-exclude":
+          return DateTime.now().startOf("day").startOf("year").minus({ years: this.conf.periodSize * this.periods }).toMillis();
+        case "years-include":
+          return DateTime.now().startOf("day").startOf("year").minus({ years: this.conf.periodSize * this.periods - 1 }).toMillis();
+      }
+      return 0;
     }
   },
   computed: {
@@ -70894,7 +70992,7 @@ const _hoisted_1$4 = { class: "control-chart-issues-config" };
 const _hoisted_2$2 = { class: "control-chart-issues-table" };
 const _hoisted_3$2 = { class: "control-chart-issues-table-head" };
 const _hoisted_4$2 = ["innerHTML"];
-const _hoisted_5 = { class: "control-chart-issues-winners" };
+const _hoisted_5$1 = { class: "control-chart-issues-winners" };
 const _hoisted_6 = ["href"];
 const _hoisted_7 = ["title", "href"];
 function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
@@ -70955,7 +71053,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
         }), 256))
       ])
     ]),
-    createBaseVNode("div", _hoisted_5, [
+    createBaseVNode("div", _hoisted_5$1, [
       (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.issuesView.winners, (winner) => {
         return openBlock(), createElementBlock("div", null, [
           createBaseVNode("a", {
@@ -70977,7 +71075,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_7)
   ], 64);
 }
-const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-03182ec1"]]);
+const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-742b3a0d"]]);
 const LeadTimeDistributionChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$3 = {
   name: "LeadTimeDistributionChart",
@@ -70986,11 +71084,12 @@ const _sfc_main$3 = {
   },
   props: {
     title: String,
-    leadTimeDistribution: Object
+    leadCycleTimeDistribution: Object
   },
   data: function() {
     return {
-      selected: "total"
+      selected: "total",
+      leadCycleSelected: "lead"
     };
   },
   methods: {
@@ -71010,9 +71109,9 @@ const _sfc_main$3 = {
     yAxisMax() {
       var _a2;
       let res = Number.MIN_VALUE;
-      if (((_a2 = this.leadTimeDistribution[this.selected]) == null ? void 0 : _a2.leadRanges) !== void 0) {
-        for (let i = 0; i < this.leadTimeDistribution[this.selected].count.length; i++) {
-          res = Math.max(res, this.leadTimeDistribution[this.selected].count[i]);
+      if (((_a2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _a2.ranges) !== void 0) {
+        for (let i = 0; i < this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count.length; i++) {
+          res = Math.max(res, this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count[i]);
         }
       }
       return res === Number.MIN_VALUE ? NaN : res;
@@ -71052,7 +71151,7 @@ const _sfc_main$3 = {
           top: "bottom"
         },
         xAxis: {
-          name: this.$t("lead-time-distributions.xAxis.name"),
+          name: this.xAxisName,
           nameLocation: "middle",
           nameGap: "30",
           axisPointer: {
@@ -71134,8 +71233,8 @@ const _sfc_main$3 = {
         },
         data: []
       }];
-      if (this.selected === "total" && Object.keys(this.leadTimeDistribution).length > 1) {
-        for (let key of Object.keys(this.leadTimeDistribution)) {
+      if (this.selected === "total" && Object.keys(this.leadCycleTimeDistribution).length > 1) {
+        for (let key of Object.keys(this.leadCycleTimeDistribution)) {
           if (key !== "total") {
             let s2 = {
               name: this.groupName(key),
@@ -71146,10 +71245,10 @@ const _sfc_main$3 = {
               stack: "cnt",
               data: []
             };
-            if (((_a2 = this.leadTimeDistribution[key]) == null ? void 0 : _a2.leadRanges) !== void 0) {
-              for (let i = 0; i < this.leadTimeDistribution[key].count.length; i++) {
-                if (this.leadTimeDistribution[key].count[i]) {
-                  s2.data.push([i, this.leadTimeDistribution[key].count[i].toFixed(0)]);
+            if (key in this.leadCycleTimeDistribution && ((_a2 = this.leadCycleTimeDistribution[key][this.leadCycleSelected]) == null ? void 0 : _a2.ranges) !== void 0) {
+              for (let i = 0; i < this.leadCycleTimeDistribution[key][this.leadCycleSelected].count.length; i++) {
+                if (this.leadCycleTimeDistribution[key][this.leadCycleSelected].count[i]) {
+                  s2.data.push([i, this.leadCycleTimeDistribution[key][this.leadCycleSelected].count[i].toFixed(0)]);
                 }
               }
             }
@@ -71166,10 +71265,10 @@ const _sfc_main$3 = {
           stack: "cnt",
           data: []
         };
-        if (((_b2 = this.leadTimeDistribution[this.selected]) == null ? void 0 : _b2.leadRanges) !== void 0) {
-          for (let i = 0; i < this.leadTimeDistribution[this.selected].count.length; i++) {
-            if (this.leadTimeDistribution[this.selected].count[i]) {
-              s2.data.push([i, this.leadTimeDistribution[this.selected].count[i].toFixed(0)]);
+        if (((_b2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _b2.ranges) !== void 0) {
+          for (let i = 0; i < this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count.length; i++) {
+            if (this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count[i]) {
+              s2.data.push([i, this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count[i].toFixed(0)]);
             }
           }
         }
@@ -71187,13 +71286,13 @@ const _sfc_main$3 = {
         },
         data: []
       };
-      if (((_c2 = this.leadTimeDistribution[this.selected]) == null ? void 0 : _c2.leadRanges) !== void 0) {
+      if (((_c2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _c2.ranges) !== void 0) {
         let totalCnt = 0;
-        for (let i = 0; i < this.leadTimeDistribution[this.selected].count.length; i++) {
-          if (i === 0 || this.leadTimeDistribution[this.selected].count[i] > 0) {
-            totalCnt += this.leadTimeDistribution[this.selected].count[i];
+        for (let i = 0; i < this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count.length; i++) {
+          if (i === 0 || this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count[i] > 0) {
+            totalCnt += this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count[i];
             serCnt[0].data.push([i, totalCnt.toFixed(0)]);
-            serPerc.data.push([i, (this.leadTimeDistribution[this.selected].percentiles[i] * 100).toFixed(2)]);
+            serPerc.data.push([i, (this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].percentiles[i] * 100).toFixed(2)]);
           }
         }
       }
@@ -71202,26 +71301,29 @@ const _sfc_main$3 = {
     },
     ltdText() {
       var _a2;
-      if (((_a2 = this.leadTimeDistribution[this.selected]) == null ? void 0 : _a2.leadRanges) === void 0) {
+      if (((_a2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _a2.ranges) === void 0) {
         return "";
       }
       return this.$t(
         "lead-time-distributions.info",
         {
-          avg: this.leadTimeDistribution[this.selected].leadRanges.avg.toFixed(0),
-          med: this.leadTimeDistribution[this.selected].leadRanges.q50.toFixed(0),
-          tailName: this.leadTimeDistribution[this.selected].tail >= 5.6 ? this.$t("lead-time-distributions.tail.fat") : this.$t("lead-time-distributions.tail.thin"),
-          tailValue: this.leadTimeDistribution[this.selected].tail.toFixed(1)
+          avg: this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].ranges.avg.toFixed(0),
+          med: this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].ranges.q50.toFixed(0),
+          tailName: this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].tail >= 5.6 ? this.$t("lead-time-distributions.tail.fat") : this.$t("lead-time-distributions.tail.thin"),
+          tailValue: this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].tail.toFixed(1)
         }
       );
     },
     groups() {
-      return Object.keys(this.leadTimeDistribution);
+      return Object.keys(this.leadCycleTimeDistribution);
+    },
+    xAxisName() {
+      return this.$t("lead-time-distributions.xAxis.name." + this.leadCycleSelected);
     },
     maxXAxisValue() {
       var _a2;
-      if (((_a2 = this.leadTimeDistribution[this.selected]) == null ? void 0 : _a2.leadRanges) !== void 0) {
-        return Math.ceil((this.leadTimeDistribution[this.selected].count.length + 1) / 10) * 10;
+      if (((_a2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _a2.ranges) !== void 0) {
+        return Math.ceil((this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count.length + 1) / 10) * 10;
       } else {
         return NaN;
       }
@@ -71229,21 +71331,32 @@ const _sfc_main$3 = {
   }
 };
 const _hoisted_1$3 = { class: "ltds-chart-selector" };
-const _hoisted_2$1 = ["onClick"];
-const _hoisted_3$1 = { style: { "height": "90%", "clear": "both" } };
-const _hoisted_4$1 = ["title", "href"];
+const _hoisted_2$1 = { class: "ltds-chart-selector" };
+const _hoisted_3$1 = ["onClick"];
+const _hoisted_4$1 = { style: { "height": "90%", "clear": "both" } };
+const _hoisted_5 = ["title", "href"];
 function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
     createBaseVNode("div", _hoisted_1$3, [
+      createBaseVNode("div", {
+        class: normalizeClass(["ltds-chart-selector-item", { "ltds-chart-selector-item-selected": _ctx.leadCycleSelected === "lead" }]),
+        onClick: _cache[0] || (_cache[0] = ($event) => _ctx.leadCycleSelected = "lead")
+      }, toDisplayString$1(_ctx.$t("lead-time-distributions.tab.lead")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["ltds-chart-selector-item", { "ltds-chart-selector-item-selected": _ctx.leadCycleSelected === "cycle" }]),
+        onClick: _cache[1] || (_cache[1] = ($event) => _ctx.leadCycleSelected = "cycle")
+      }, toDisplayString$1(_ctx.$t("lead-time-distributions.tab.cycle")), 3)
+    ]),
+    createBaseVNode("div", _hoisted_2$1, [
       (openBlock(true), createElementBlock(Fragment, null, renderList($options.groups, (group) => {
         return openBlock(), createElementBlock("div", {
           class: normalizeClass(["ltds-chart-selector-item", { "ltds-chart-selector-item-selected": _ctx.selected === group }]),
           onClick: ($event) => _ctx.selected = group
-        }, toDisplayString$1(this.groupName(group)), 11, _hoisted_2$1);
+        }, toDisplayString$1(this.groupName(group)), 11, _hoisted_3$1);
       }), 256))
     ]),
-    createBaseVNode("div", _hoisted_3$1, [
+    createBaseVNode("div", _hoisted_4$1, [
       createVNode(_component_v_chart, {
         class: "LeadTimeDistributionChart",
         option: $options.option,
@@ -71255,7 +71368,7 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("lead-time-distributions.help.text"),
       href: _ctx.$t("lead-time-distributions.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_4$1)
+    }, " ‽ ", 8, _hoisted_5)
   ], 64);
 }
 const LeadTimeDistributionChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$3, [["render", _sfc_render$2]]);
@@ -71597,7 +71710,7 @@ const __default__ = {
       issuesStat: {},
       issues: [],
       issuesMap: {},
-      leadTimeDistribution: {},
+      leadCycleTimeDistribution: {},
       columns: [],
       fieldsData: {},
       boardAllData: {},
@@ -71672,7 +71785,7 @@ const __default__ = {
       this.kanbanCFD = {};
       this.periodStat.splice(0);
       this.issuesStat = {};
-      this.leadTimeDistribution = {};
+      this.leadCycleTimeDistribution = {};
       this.columns.splice(0);
       this.issues.splice(0);
       this.issuesMap = {};
@@ -71758,7 +71871,7 @@ const __default__ = {
       this.kanbanCFD = {};
       this.periodStat.splice(0);
       this.issuesStat = {};
-      this.leadTimeDistribution = {};
+      this.leadCycleTimeDistribution = {};
       this.issues.splice(0);
       this.issuesMap = {};
       let url = this.jiraBase + "/rest/greenhopper/1.0/rapid/charts/cumulativeflowdiagram.json?rapidViewId=" + this.jiraBoardId;
@@ -71797,9 +71910,6 @@ const __default__ = {
         for (const [key, issueStat] of Object.entries(kanbanStat.issuesStat)) {
           this.issuesStat[key] = issueStat;
         }
-        for (const [key, issueStat] of Object.entries(kanbanStat.leadTimeDistribution)) {
-          this.leadTimeDistribution[key] = issueStat;
-        }
       } catch (err) {
         console.warn(err);
       }
@@ -71809,7 +71919,7 @@ const __default__ = {
       this.loadingMax = loadingMaxSteps;
       this.loadingCurr = 50;
       this.loading = true;
-      this.leadTimeDistribution = { total: this.calcIssuesLTD(Object.values(this.issuesStat)) };
+      this.leadCycleTimeDistribution = { total: this.calcIssuesLCTD(Object.values(this.issuesStat)) };
       await this.loadIssues();
     },
     loadIssues: async function() {
@@ -71898,7 +72008,7 @@ const __default__ = {
         groups[group].push(issueStat);
       }
       for (let [group, issueStats] of Object.entries(groups)) {
-        this.leadTimeDistribution[group] = this.calcIssuesLTD(issueStats);
+        this.leadCycleTimeDistribution[group] = this.calcIssuesLCTD(issueStats);
       }
       this.finishLoading();
     },
@@ -71907,47 +72017,86 @@ const __default__ = {
       this.loadingCurr = loadingMaxSteps;
       this.loading = false;
     },
-    calcIssuesLTD: function(filteredIssuesStats) {
-      let ltd = {
-        count: [0],
-        leadRanges: {
-          q50: NaN,
-          q85: NaN,
-          max: NaN,
-          avg: NaN
+    calcIssuesLCTD: function(filteredIssuesStats) {
+      let lctd = {
+        lead: {
+          count: [0],
+          ranges: {
+            q50: NaN,
+            q85: NaN,
+            max: NaN,
+            avg: NaN
+          },
+          tail: NaN
         },
-        tail: NaN
+        cycle: {
+          count: [0],
+          ranges: {
+            q50: NaN,
+            q85: NaN,
+            max: NaN,
+            avg: NaN
+          },
+          tail: NaN
+        }
       };
-      let cnt = 0;
+      let leadCnt = 0;
+      let cycleCnt = 0;
       let leads = [];
+      let cycles = [];
       for (let issueStat of filteredIssuesStats) {
         let lead = Math.ceil(issueStat.lead);
-        while (lead >= ltd.count.length) {
-          ltd.count.push(0);
+        while (lead >= lctd.lead.count.length) {
+          lctd.lead.count.push(0);
         }
-        ltd.count[lead]++;
-        cnt++;
+        lctd.lead.count[lead]++;
+        leadCnt++;
         leads.push(lead);
+        let cycle = Math.ceil(issueStat.cycle);
+        while (cycle >= lctd.cycle.count.length) {
+          lctd.cycle.count.push(0);
+        }
+        lctd.cycle.count[cycle]++;
+        cycleCnt++;
+        cycles.push(cycle);
       }
-      ltd.percentiles = new Array(ltd.count.length).fill(0);
-      if (cnt > 0) {
+      lctd.lead.percentiles = new Array(lctd.lead.count.length).fill(0);
+      if (leadCnt > 0) {
         let scnt = 0;
-        for (let i = 0; i < ltd.count.length; i++) {
-          scnt += ltd.count[i];
-          ltd.percentiles[i] = scnt / cnt;
+        for (let i = 0; i < lctd.lead.count.length; i++) {
+          scnt += lctd.lead.count[i];
+          lctd.lead.percentiles[i] = scnt / leadCnt;
+        }
+      }
+      lctd.cycle.percentiles = new Array(lctd.cycle.count.length).fill(0);
+      if (cycleCnt > 0) {
+        let scnt = 0;
+        for (let i = 0; i < lctd.cycle.count.length; i++) {
+          scnt += lctd.cycle.count[i];
+          lctd.cycle.percentiles[i] = scnt / cycleCnt;
         }
       }
       if (leads.length > 0) {
         let qq = quantile(leads, [0.5, 0.85, 1, 0.98]);
-        ltd.leadRanges = {
+        lctd.lead.ranges = {
           q50: qq[0],
           q85: qq[1],
           max: qq[2],
           avg: mean(leads)
         };
-        ltd.tail = qq[3] / qq[0];
+        lctd.lead.tail = qq[3] / qq[0];
       }
-      return ltd;
+      if (cycles.length > 0) {
+        let qq = quantile(cycles, [0.5, 0.85, 1, 0.98]);
+        lctd.cycle.ranges = {
+          q50: qq[0],
+          q85: qq[1],
+          max: qq[2],
+          avg: mean(cycles)
+        };
+        lctd.cycle.tail = qq[3] / qq[0];
+      }
+      return lctd;
     },
     jiraConfigSave: async function() {
       await this.saveConfig();
@@ -72133,8 +72282,8 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                 default: withCtx(() => [
                   createVNode(LeadTimeDistributionChart, {
                     title: _ctx.kanbanBoardConfig.name,
-                    "lead-time-distribution": _ctx.leadTimeDistribution
-                  }, null, 8, ["title", "lead-time-distribution"])
+                    "lead-cycle-time-distribution": _ctx.leadCycleTimeDistribution
+                  }, null, 8, ["title", "lead-cycle-time-distribution"])
                 ]),
                 _: 1
               }, 8, ["name"]),
@@ -72148,8 +72297,9 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                     "issues-stat": _ctx.issuesStat,
                     columns: _ctx.columns,
                     "selected-columns": _ctx.selectedColumns,
-                    "jira-base": _ctx.jiraBase
-                  }, null, 8, ["title", "issues-stat", "columns", "selected-columns", "jira-base"])
+                    "jira-base": _ctx.jiraBase,
+                    conf: _ctx.conf
+                  }, null, 8, ["title", "issues-stat", "columns", "selected-columns", "jira-base", "conf"])
                 ]),
                 _: 1
               }, 8, ["name"]),
@@ -72179,7 +72329,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                     columns: _ctx.columns,
                     conf: _ctx.conf,
                     "jira-base": _ctx.jiraBase,
-                    "lead-time-distribution": _ctx.leadTimeDistribution
+                    "lead-time-distribution": _ctx.leadCycleTimeDistribution
                   }, null, 8, ["title", "issues-stat", "issues-map", "columns", "conf", "jira-base", "lead-time-distribution"])
                 ]),
                 _: 1
