@@ -68480,7 +68480,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
               id: "analyzeLength",
               name: "analyzeLength",
               min: "2",
-              max: "104",
+              max: "750",
               "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $data.localAnalyzeLength = $event)
             }, null, 512), [
               [vModelText, $data.localAnalyzeLength]
@@ -68907,8 +68907,7 @@ const KanbanStat = {
       periodSize,
       periodType,
       periodsInStat,
-      today: null,
-      skipCols: this.calcSkipCols(columns)
+      today: null
     };
     this.periodStat = [];
     this.issuesStat = {};
@@ -68917,9 +68916,6 @@ const KanbanStat = {
     tmp.today = tmp.today.getTime();
     tmp.currentDayBoardTime = null;
     this.calcFirstBoardDay(tmp);
-    console.debug("************** Start calc *****************");
-    console.debug("Today : " + new Date(tmp.today).toLocaleDateString());
-    this.logDates(tmp);
     for (const [time, transitions] of Object.entries(kanbanCFD.columnChanges)) {
       while (time >= tmp.nextDayBoardTime) {
         this.tickEventDay(tmp);
@@ -68937,17 +68933,7 @@ const KanbanStat = {
     this.tickPeriod(tmp);
     return this;
   },
-  calcSkipCols(columns) {
-    let res = 0;
-    for (let column of columns) {
-      if (column.isKanPlanColumn) {
-        res++;
-      }
-    }
-    return res;
-  },
   tickEventDay: function(tmp) {
-    this.logDays(tmp);
     if (tmp.periodDayWIP == null) {
       tmp.periodDayWIP = [];
       for (let i = 0; i < tmp.columnsCnt; i++) {
@@ -69057,8 +69043,6 @@ const KanbanStat = {
     }
   },
   tickPeriod: function(tmp) {
-    console.debug("Tick period");
-    this.logDays(tmp);
     if (tmp.currentPeriodBoardTime > tmp.today || tmp.periodDayWIP === null || tmp.periodDayWIP === void 0) {
       return;
     }
@@ -69074,7 +69058,6 @@ const KanbanStat = {
     for (let c = 0; c < tmp.columnsCnt; c++) {
       wips.push(calcStat(tmp.periodDayWIP[c]));
     }
-    console.debug("Days: " + totalD.length);
     let totalWips = calcStat(totalD);
     let timesCols = [];
     for (let i = 0; i < tmp.columnsCnt; i++) {
@@ -69210,14 +69193,6 @@ const KanbanStat = {
       times: t,
       readyTime: issueStat.readyTime
     };
-  },
-  logDates(tmp) {
-    console.debug("CurrentPeriodBoardTime: " + (tmp.currentPeriodBoardTime === null ? "null" : new Date(tmp.currentPeriodBoardTime).toLocaleDateString()));
-    console.debug("NextPeriodBoardTime: " + (tmp.nextPeriodBoardTime === null ? "null" : new Date(tmp.nextPeriodBoardTime).toLocaleDateString()));
-  },
-  logDays(tmp) {
-    console.debug("CurrentDayBoardTime: " + (tmp.currentDayBoardTime === null ? "null" : new Date(tmp.currentDayBoardTime).toLocaleDateString()));
-    console.debug("NextDayBoardTime: " + new Date(tmp.nextDayBoardTime).toLocaleDateString());
   }
 };
 const _sfc_main$9 = {
@@ -69626,6 +69601,26 @@ const _sfc_main$7 = {
   },
   watch: {},
   computed: {
+    xAxisMin() {
+      let res = Number.MAX_VALUE;
+      for (let item of this.periodStat) {
+        res = Math.min(res, item.date);
+      }
+      if (res === Number.MAX_VALUE) {
+        res = NaN;
+      }
+      return res;
+    },
+    xAxisMax() {
+      let res = Number.MIN_VALUE;
+      for (let item of this.periodStat) {
+        res = Math.max(res, item.date);
+      }
+      if (res === Number.MIN_VALUE) {
+        res = NaN;
+      }
+      return res;
+    },
     option() {
       let opts = {
         animation: true,
@@ -69641,6 +69636,13 @@ const _sfc_main$7 = {
             }
           }
         },
+        axisPointer: {
+          link: [
+            {
+              xAxisIndex: "all"
+            }
+          ]
+        },
         tooltip: {
           axisPointer: {
             show: true
@@ -69649,53 +69651,118 @@ const _sfc_main$7 = {
         legend: {
           top: "bottom"
         },
-        xAxis: {
-          axisPointer: {
-            show: true,
-            snap: true,
-            label: {
+        grid: [
+          {
+            top: "10%",
+            height: "68%"
+          },
+          {
+            bottom: "10%",
+            height: "10%"
+          }
+        ],
+        xAxis: [
+          {
+            show: false,
+            boundaryGap: false,
+            gridIndex: 0,
+            axisPointer: {
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if ((value == null ? void 0 : value.value) === void 0) {
+                    return "";
+                  }
+                  return new Date(value.value).toLocaleDateString(
+                    i18n.global.locale.value,
+                    { dateStyle: "short" }
+                  );
+                }
+              }
+            },
+            type: "time",
+            min: this.xAxisMin,
+            max: this.xAxisMax
+          },
+          {
+            gridIndex: 1,
+            boundaryGap: [0, "100%"],
+            name: this.$t("main.yAxis.throughput"),
+            nameLocation: "middle",
+            nameGap: "30",
+            axisPointer: {
+              show: true,
+              triggerTooltip: false,
+              label: {
+                formatter: function(value) {
+                  if ((value == null ? void 0 : value.value) === void 0) {
+                    return "";
+                  }
+                  return new Date(value.value).toLocaleDateString(
+                    i18n.global.locale.value,
+                    { dateStyle: "short" }
+                  );
+                }
+              }
+            },
+            axisLabel: {
+              hideOverlap: true,
               formatter: function(value) {
-                if ((value == null ? void 0 : value.value) === void 0) {
+                if (value === void 0) {
                   return "";
                 }
-                return new Date(value.value).toLocaleDateString(
-                  [],
-                  { dateStyle: "short" }
-                );
+                return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
               }
-            }
-          },
-          type: "time",
-          axisLabel: {
-            hideOverlap: true,
-            formatter: function(value) {
-              if (value === void 0) {
-                return "";
-              }
-              return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
-            }
+            },
+            min: this.xAxisMin,
+            max: this.xAxisMax
           }
-        },
-        yAxis: {
-          name: this.yAxisName(),
-          nameLocation: "middle",
-          nameGap: "30",
-          minInterval: 1,
-          axisPointer: {
-            show: true,
-            triggerTooltip: false
-          },
-          axisLabel: {
-            hideOverlap: true,
-            formatter: function(value) {
-              if (value === void 0) {
-                return "";
+        ],
+        yAxis: [
+          {
+            name: this.yAxisName(),
+            nameLocation: "middle",
+            nameGap: "30",
+            minInterval: 1,
+            axisPointer: {
+              show: true,
+              triggerTooltip: false
+            },
+            axisLabel: {
+              hideOverlap: true,
+              formatter: function(value) {
+                if (value === void 0) {
+                  return "";
+                }
+                return value.toFixed(0);
               }
-              return value.toFixed(0);
-            }
+            },
+            min: 0
           },
-          min: 0
-        },
+          {
+            gridIndex: 1,
+            boundaryGap: [0, "100%"],
+            name: this.$t("main.yAxis.throughput"),
+            nameLocation: "middle",
+            nameGap: "30",
+            axisPointer: {
+              show: true,
+              triggerTooltip: false
+            },
+            axisLabel: {
+              hideOverlap: true,
+              formatter: function(value) {
+                if (value === void 0) {
+                  return "";
+                }
+                return value.toFixed(0);
+              }
+            },
+            min: 0,
+            max: "dataMax"
+          }
+        ],
         series: this.series
       };
       if (this.selected === "perc") {
@@ -69729,6 +69796,25 @@ const _sfc_main$7 = {
           res.push(ser);
         }
       }
+      let serThroughput = {
+        name: this.$t("main.series.throughput.name"),
+        type: "bar",
+        xAxisIndex: 1,
+        yAxisIndex: 1,
+        label: {
+          show: true,
+          position: "top"
+        },
+        barMaxWidth: "10%",
+        itemStyle: {
+          color: "rgba(64,64,255,0.75)"
+        },
+        data: []
+      };
+      for (let item of this.periodStat) {
+        serThroughput.data.push([item.date, item.throughput]);
+      }
+      res.push(serThroughput);
       return res;
     }
   }
@@ -70529,7 +70615,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64);
 }
 const StatByWIPChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$5, [["render", _sfc_render$4]]);
-const ControlChart_vue_vue_type_style_index_0_scoped_d5cefa7a_lang = "";
+const ControlChart_vue_vue_type_style_index_0_scoped_03182ec1_lang = "";
 const _sfc_main$4 = {
   name: "ControlChart",
   components: {
@@ -70891,7 +70977,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_7)
   ], 64);
 }
-const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-d5cefa7a"]]);
+const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-03182ec1"]]);
 const LeadTimeDistributionChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$3 = {
   name: "LeadTimeDistributionChart",
@@ -71887,7 +71973,7 @@ const __default__ = {
           "Content-type": "application/json"
         },
         body: JSON.stringify(this.conf)
-      }).catch((reason) => console.log("Can't save config to board: " + reason));
+      }).catch((reason) => console.warn("Can't save config to board: " + reason));
     },
     recalcColumns: function() {
       let statusToColIndex = {};
