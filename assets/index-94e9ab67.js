@@ -66361,7 +66361,7 @@ const messages = {
           },
           "link": (ctx) => {
             const { normalize: _normalize } = ctx;
-            return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+            return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#configuration"]);
           }
         }
       }
@@ -66432,7 +66432,7 @@ const messages = {
         },
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#main-screen"]);
         }
       }
     },
@@ -66476,7 +66476,7 @@ const messages = {
         },
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#total-wip"]);
         }
       }
     },
@@ -66544,7 +66544,7 @@ const messages = {
         },
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#wips-by-columns"]);
         }
       }
     },
@@ -66586,7 +66586,7 @@ const messages = {
         },
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#average-times-by-columns"]);
         }
       },
       "series": {
@@ -66672,7 +66672,7 @@ const messages = {
         },
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead-time-distributions"]);
         }
       },
       "tab": {
@@ -66748,7 +66748,7 @@ const messages = {
         },
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead-time-distributions"]);
         }
       }
     },
@@ -66800,7 +66800,7 @@ const messages = {
         },
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#analyze-by-wip"]);
         }
       }
     },
@@ -67080,7 +67080,7 @@ const messages = {
         },
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md"]);
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#triage"]);
         }
       }
     },
