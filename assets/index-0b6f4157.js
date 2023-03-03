@@ -66645,9 +66645,15 @@ const messages = {
           return _normalize(["Cumulative sum of completed tasks"]);
         }
       },
-      "info": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Avg lead time: ", _interpolate(_named("avg")), "\nMedian lead time: ", _interpolate(_named("med")), "\nDistribution: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
+      "info": {
+        "lead": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Avg lead time: ", _interpolate(_named("avg")), "\nMedian lead time: ", _interpolate(_named("med")), "\nDistribution: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Avg cycle time: ", _interpolate(_named("avg")), "\nMedian cycle time: ", _interpolate(_named("med")), "\nDistribution: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
+        }
       },
       "tail": {
         "fat": (ctx) => {
@@ -67581,9 +67587,15 @@ const messages = {
           return _normalize(["Накопительная сумма завершенных задач"]);
         }
       },
-      "info": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Среднее время поставки: ", _interpolate(_named("avg")), "\nМедиана времени поставки: ", _interpolate(_named("med")), "\nРаспределение: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
+      "info": {
+        "lead": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Среднее время поставки: ", _interpolate(_named("avg")), "\nМедиана времени поставки: ", _interpolate(_named("med")), "\nРаспределение: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Среднее время цикла: ", _interpolate(_named("avg")), "\nМедиана времени цикла: ", _interpolate(_named("med")), "\nРаспределение: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
+        }
       },
       "tail": {
         "fat": (ctx) => {
@@ -71305,7 +71317,7 @@ const _sfc_main$3 = {
         return "";
       }
       return this.$t(
-        "lead-time-distributions.info",
+        "lead-time-distributions.info." + this.leadCycleSelected,
         {
           avg: this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].ranges.avg.toFixed(0),
           med: this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].ranges.q50.toFixed(0),
