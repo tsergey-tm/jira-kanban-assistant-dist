@@ -113,7 +113,10 @@
 .triage-table-td-cos-0 {
   background-color: rgba(191, 64, 0, 0.1);
 }
-
+.triage-chart {
+  height: 80vh;
+  padding: 0.2rem 0.2rem;
+}
 
 
 .jira-filters-box[data-v-dc5a911c] {

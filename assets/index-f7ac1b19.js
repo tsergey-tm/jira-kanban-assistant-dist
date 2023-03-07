@@ -523,7 +523,7 @@ function trackEffects(dep, debuggerEventExtraInfo) {
     activeEffect.deps.push(dep);
   }
 }
-function trigger$1(target, type, key, newValue, oldValue, oldTarget) {
+function trigger$2(target, type, key, newValue, oldValue, oldTarget) {
   const depsMap = targetMap.get(target);
   if (!depsMap) {
     return;
@@ -713,9 +713,9 @@ function createSetter(shallow = false) {
     const result = Reflect.set(target, key, value, receiver);
     if (target === toRaw(receiver)) {
       if (!hadKey) {
-        trigger$1(target, "add", key, value);
+        trigger$2(target, "add", key, value);
       } else if (hasChanged(value, oldValue)) {
-        trigger$1(target, "set", key, value);
+        trigger$2(target, "set", key, value);
       }
     }
     return result;
@@ -726,7 +726,7 @@ function deleteProperty(target, key) {
   target[key];
   const result = Reflect.deleteProperty(target, key);
   if (result && hadKey) {
-    trigger$1(target, "delete", key, void 0);
+    trigger$2(target, "delete", key, void 0);
   }
   return result;
 }
@@ -819,7 +819,7 @@ function add$1(value) {
   const hadKey = proto2.has.call(target, value);
   if (!hadKey) {
     target.add(value);
-    trigger$1(target, "add", value, value);
+    trigger$2(target, "add", value, value);
   }
   return this;
 }
@@ -835,9 +835,9 @@ function set$2(key, value) {
   const oldValue = get2.call(target, key);
   target.set(key, value);
   if (!hadKey) {
-    trigger$1(target, "add", key, value);
+    trigger$2(target, "add", key, value);
   } else if (hasChanged(value, oldValue)) {
-    trigger$1(target, "set", key, value);
+    trigger$2(target, "set", key, value);
   }
   return this;
 }
@@ -852,7 +852,7 @@ function deleteEntry(key) {
   get2 ? get2.call(target, key) : void 0;
   const result = target.delete(key);
   if (hadKey) {
-    trigger$1(target, "delete", key, void 0);
+    trigger$2(target, "delete", key, void 0);
   }
   return result;
 }
@@ -861,7 +861,7 @@ function clear$2() {
   const hadItems = target.size !== 0;
   const result = target.clear();
   if (hadItems) {
-    trigger$1(target, "clear", void 0, void 0);
+    trigger$2(target, "clear", void 0, void 0);
   }
   return result;
 }
@@ -3907,7 +3907,7 @@ function updateProps$2(instance, rawProps, rawPrevProps, optimized) {
     }
   }
   if (hasAttrsChanged) {
-    trigger$1(instance, "set", "$attrs");
+    trigger$2(instance, "set", "$attrs");
   }
 }
 function setFullProps(instance, rawProps, props, attrs) {
@@ -8353,7 +8353,7 @@ const defaultParserOptions = {
 };
 function baseParse(content, options = {}) {
   const context = createParserContext(content, options);
-  const start2 = getCursor(context);
+  const start2 = getCursor$1(context);
   return createRoot$1(parseChildren(context, 0, []), getSelection(context, start2));
 }
 function createParserContext(content, rawOptions) {
@@ -8517,7 +8517,7 @@ function parseCDATA(context, ancestors) {
   return nodes;
 }
 function parseComment(context) {
-  const start2 = getCursor(context);
+  const start2 = getCursor$1(context);
   let content;
   const match2 = /--(\!)?>/.exec(context.source);
   if (!match2) {
@@ -8566,7 +8566,7 @@ function parseComment(context) {
   };
 }
 function parseBogusComment(context) {
-  const start2 = getCursor(context);
+  const start2 = getCursor$1(context);
   const contentStart = context.source[1] === "?" ? 1 : 2;
   let content;
   const closeIndex = context.source.indexOf(">");
@@ -8641,13 +8641,13 @@ function parseElement(context, ancestors) {
 }
 const isSpecialTemplateDirective = /* @__PURE__ */ makeMap(`if,else,else-if,for,slot`);
 function parseTag(context, type, parent) {
-  const start2 = getCursor(context);
+  const start2 = getCursor$1(context);
   const match2 = /^<\/?([a-z][^\t\r\n\f />]*)/i.exec(context.source);
   const tag = match2[1];
   const ns = context.options.getNamespace(tag, parent);
   advanceBy(context, match2[0].length);
   advanceSpaces(context);
-  const cursor = getCursor(context);
+  const cursor = getCursor$1(context);
   const currentSource = context.source;
   if (context.options.isPreTag(tag)) {
     context.inPre = true;
@@ -8775,7 +8775,7 @@ function parseAttributes(context, type) {
   return props;
 }
 function parseAttribute(context, nameSet) {
-  const start2 = getCursor(context);
+  const start2 = getCursor$1(context);
   const match2 = /^[^\t\r\n\f />][^\t\r\n\f />=]*/.exec(context.source);
   const name = match2[0];
   if (nameSet.has(name)) {
@@ -8902,7 +8902,7 @@ function parseAttribute(context, nameSet) {
   };
 }
 function parseAttributeValue(context) {
-  const start2 = getCursor(context);
+  const start2 = getCursor$1(context);
   let content;
   const quote = context.source[0];
   const isQuoted = quote === `"` || quote === `'`;
@@ -8955,10 +8955,10 @@ function parseInterpolation(context, mode2) {
     );
     return void 0;
   }
-  const start2 = getCursor(context);
+  const start2 = getCursor$1(context);
   advanceBy(context, open.length);
-  const innerStart = getCursor(context);
-  const innerEnd = getCursor(context);
+  const innerStart = getCursor$1(context);
+  const innerEnd = getCursor$1(context);
   const rawContentLength = closeIndex - open.length;
   const rawContent = context.source.slice(0, rawContentLength);
   const preTrimContent = parseTextData(context, rawContentLength, mode2);
@@ -8992,7 +8992,7 @@ function parseText(context, mode2) {
       endIndex = index;
     }
   }
-  const start2 = getCursor(context);
+  const start2 = getCursor$1(context);
   const content = parseTextData(context, endIndex, mode2);
   return {
     type: 2,
@@ -9013,12 +9013,12 @@ function parseTextData(context, length, mode2) {
     );
   }
 }
-function getCursor(context) {
+function getCursor$1(context) {
   const { column, line, offset: offset2 } = context;
   return { column, line, offset: offset2 };
 }
 function getSelection(context, start2, end2) {
-  end2 = end2 || getCursor(context);
+  end2 = end2 || getCursor$1(context);
   return {
     start: start2,
     end: end2,
@@ -9045,7 +9045,7 @@ function advanceSpaces(context) {
 function getNewPosition(context, start2, numberOfCharacters) {
   return advancePositionWithClone(start2, context.originalSource.slice(start2.offset, numberOfCharacters), numberOfCharacters);
 }
-function emitError(context, code2, offset2, loc = getCursor(context)) {
+function emitError(context, code2, offset2, loc = getCursor$1(context)) {
   if (offset2) {
     loc.offset += offset2;
     loc.column += offset2;
@@ -13091,6 +13091,9 @@ var stop = function(e2) {
   e2.stopPropagation();
   e2.cancelBubble = true;
 };
+function isMiddleOrRightButtonOnMouseUpDown(e2) {
+  return e2.which === 2 || e2.which === 3;
+}
 var GestureMgr = function() {
   function GestureMgr2() {
     this._track = [];
@@ -21857,7 +21860,7 @@ var RectShape = function() {
   return RectShape2;
 }();
 var subPixelOptimizeOutputShape$1 = {};
-var Rect = function(_super) {
+var Rect$1 = function(_super) {
   __extends(Rect2, _super);
   function Rect2(opts) {
     return _super.call(this, opts) || this;
@@ -21895,8 +21898,8 @@ var Rect = function(_super) {
   };
   return Rect2;
 }(Path$1);
-Rect.prototype.type = "rect";
-const Rect$1 = Rect;
+Rect$1.prototype.type = "rect";
+const Rect$2 = Rect$1;
 var DEFAULT_RICH_TEXT_COLOR = {
   fill: "#000"
 };
@@ -22259,7 +22262,7 @@ var ZRText = function(_super) {
     var rectEl;
     var imgEl;
     if (isPlainOrGradientBg || style2.lineHeight || textBorderWidth && textBorderColor) {
-      rectEl = this._getOrCreateChild(Rect$1);
+      rectEl = this._getOrCreateChild(Rect$2);
       rectEl.useStyle(rectEl.createStyle());
       rectEl.style.fill = null;
       var rectShape = rectEl.shape;
@@ -24563,7 +24566,7 @@ function transformDirection(direction, transform3, invert2) {
 function isNotGroup(el) {
   return !el.isGroup;
 }
-function isPath(el) {
+function isPath$1(el) {
   return el.shape != null;
 }
 function groupTransition(g1, g2, animatableModel) {
@@ -24585,7 +24588,7 @@ function groupTransition(g1, g2, animatableModel) {
       y: el.y,
       rotation: el.rotation
     };
-    if (isPath(el)) {
+    if (isPath$1(el)) {
       obj.shape = extend({}, el.shape);
     }
     return obj;
@@ -24741,7 +24744,7 @@ registerShape("sector", Sector$1);
 registerShape("ring", Ring$1);
 registerShape("polygon", Polygon$1);
 registerShape("polyline", Polyline$1);
-registerShape("rect", Rect$1);
+registerShape("rect", Rect$2);
 registerShape("line", Line$3);
 registerShape("bezierCurve", BezierCurve$1);
 registerShape("arc", Arc$1);
@@ -24764,7 +24767,7 @@ const graphic = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   Polygon: Polygon$1,
   Polyline: Polyline$1,
   RadialGradient: RadialGradient$1,
-  Rect: Rect$1,
+  Rect: Rect$2,
   Ring: Ring$1,
   Sector: Sector$1,
   Text: ZRText$1,
@@ -26217,7 +26220,7 @@ function copyLayoutParams(target, source) {
   });
   return target;
 }
-var inner$e = makeInner();
+var inner$f = makeInner();
 var ComponentModel = (
   /** @class */
   function(_super) {
@@ -26254,7 +26257,7 @@ var ComponentModel = (
       if (!isExtendedClass(ctor)) {
         return ctor.defaultOption;
       }
-      var fields = inner$e(this);
+      var fields = inner$f(this);
       if (!fields.defaultOption) {
         var optList = [];
         var clz = ctor;
@@ -30106,7 +30109,7 @@ function formatTooltipArrayValue(value, series, dataIndex, tooltipDims, colorStr
     blocks
   };
 }
-var inner$d = makeInner();
+var inner$e = makeInner();
 function getSelectionKey(data, dataIndex) {
   return data.getName(dataIndex) || data.getId(dataIndex);
 }
@@ -30130,12 +30133,12 @@ var SeriesModel = (
         model: this
       };
       this.mergeDefaultAndTheme(option, ecModel);
-      var sourceManager = inner$d(this).sourceManager = new SourceManager(this);
+      var sourceManager = inner$e(this).sourceManager = new SourceManager(this);
       sourceManager.prepareSource();
       var data = this.getInitialData(option, ecModel);
       wrapData(data, this);
       this.dataTask.context.data = data;
-      inner$d(this).dataBeforeProcessed = data;
+      inner$e(this).dataBeforeProcessed = data;
       autoSeriesName(this);
       this._initSelectedMapFromData(data);
     };
@@ -30161,14 +30164,14 @@ var SeriesModel = (
       if (layoutMode) {
         mergeLayoutParam(this.option, newSeriesOption, layoutMode);
       }
-      var sourceManager = inner$d(this).sourceManager;
+      var sourceManager = inner$e(this).sourceManager;
       sourceManager.dirty();
       sourceManager.prepareSource();
       var data = this.getInitialData(newSeriesOption, ecModel);
       wrapData(data, this);
       this.dataTask.dirty();
       this.dataTask.context.data = data;
-      inner$d(this).dataBeforeProcessed = data;
+      inner$e(this).dataBeforeProcessed = data;
       autoSeriesName(this);
       this._initSelectedMapFromData(data);
     };
@@ -30195,7 +30198,7 @@ var SeriesModel = (
         var data = task.context.data;
         return dataType == null ? data : data.getLinkedData(dataType);
       } else {
-        return inner$d(this).data;
+        return inner$e(this).data;
       }
     };
     SeriesModel2.prototype.getAllData = function() {
@@ -30213,7 +30216,7 @@ var SeriesModel = (
           context.data = data;
         }
       }
-      inner$d(this).data = data;
+      inner$e(this).data = data;
     };
     SeriesModel2.prototype.getEncode = function() {
       var encode = this.get("encode", true);
@@ -30222,13 +30225,13 @@ var SeriesModel = (
       }
     };
     SeriesModel2.prototype.getSourceManager = function() {
-      return inner$d(this).sourceManager;
+      return inner$e(this).sourceManager;
     };
     SeriesModel2.prototype.getSource = function() {
       return this.getSourceManager().getSource();
     };
     SeriesModel2.prototype.getRawData = function() {
-      return inner$d(this).dataBeforeProcessed;
+      return inner$e(this).dataBeforeProcessed;
     };
     SeriesModel2.prototype.getColorBy = function() {
       var colorBy = this.get("colorBy");
@@ -30511,7 +30514,7 @@ function createRenderPlanner() {
     return !!(originalLarge !== large || originalProgressive !== progressive) && "reset";
   };
 }
-var inner$c = makeInner();
+var inner$d = makeInner();
 var renderPlanner = createRenderPlanner();
 var ChartView = (
   /** @class */
@@ -30563,7 +30566,7 @@ var ChartView = (
       traverseElements(this.group, cb);
     };
     ChartView2.markUpdateMethod = function(payload, methodName) {
-      inner$c(payload).updateMethod = methodName;
+      inner$d(payload).updateMethod = methodName;
     };
     ChartView2.protoInitialize = function() {
       var proto2 = ChartView2.prototype;
@@ -30602,7 +30605,7 @@ function renderTaskReset(context) {
   var payload = context.payload;
   var progressiveRender = seriesModel.pipelineContext.progressiveRender;
   var view = context.view;
-  var updateMethod = payload && inner$c(payload).updateMethod;
+  var updateMethod = payload && inner$d(payload).updateMethod;
   var methodName = progressiveRender ? "incrementalPrepareRender" : updateMethod && view[updateMethod] ? updateMethod : "render";
   if (methodName !== "render") {
     view[methodName](seriesModel, ecModel, api, payload);
@@ -30706,7 +30709,7 @@ function clear$1(obj, fnAttr) {
     obj[fnAttr] = fn[ORIGIN_METHOD];
   }
 }
-var inner$b = makeInner();
+var inner$c = makeInner();
 var defaultStyleMappers = {
   itemStyle: makeStyleMapper(ITEM_STYLE_KEY_MAP, true),
   lineStyle: makeStyleMapper(LINE_STYLE_KEY_MAP, true)
@@ -30825,7 +30828,7 @@ var dataColorPaletteTask = {
         colorScope = {};
         paletteScopeGroupByType.set(key, colorScope);
       }
-      inner$b(seriesModel).scope = colorScope;
+      inner$c(seriesModel).scope = colorScope;
     });
     ecModel.eachSeries(function(seriesModel) {
       if (seriesModel.isColorBySeries() || ecModel.isSeriesFiltered(seriesModel)) {
@@ -30834,7 +30837,7 @@ var dataColorPaletteTask = {
       var dataAll = seriesModel.getRawData();
       var idxMap = {};
       var data = seriesModel.getData();
-      var colorScope = inner$b(seriesModel).scope;
+      var colorScope = inner$c(seriesModel).scope;
       var stylePath = seriesModel.visualStyleAccessPath || "itemStyle";
       var colorKey = getDefaultColorKey(seriesModel, stylePath);
       data.each(function(idx) {
@@ -30872,7 +30875,7 @@ function defaultLoading(api, opts) {
     zlevel: 0
   });
   var group = new Group$3();
-  var mask = new Rect$1({
+  var mask = new Rect$2({
     style: {
       fill: opts.maskColor
     },
@@ -30892,7 +30895,7 @@ function defaultLoading(api, opts) {
     zlevel: opts.zlevel,
     z: 10001
   });
-  var labelRect = new Rect$1({
+  var labelRect = new Rect$2({
     style: {
       fill: "none"
     },
@@ -31843,9 +31846,9 @@ var Arrow = Path$1.extend({
 });
 var symbolCtors = {
   line: Line$3,
-  rect: Rect$1,
-  roundRect: Rect$1,
-  square: Rect$1,
+  rect: Rect$2,
+  roundRect: Rect$2,
+  square: Rect$2,
   circle: Circle$1,
   diamond: Diamond,
   pin: Pin,
@@ -33301,7 +33304,7 @@ var ECharts = (
           return zr_1.painter.toDataURL();
         } else {
           if (opts.connectedBackgroundColor) {
-            zr_1.add(new Rect$1({
+            zr_1.add(new Rect$2({
               shape: {
                 x: 0,
                 y: 0,
@@ -34804,7 +34807,7 @@ var SeriesDimensionDefine = (
   }()
 );
 const SeriesDimensionDefine$1 = SeriesDimensionDefine;
-var inner$a = makeInner();
+var inner$b = makeInner();
 var dimTypeShort = {
   float: "f",
   int: "i",
@@ -34932,7 +34935,7 @@ function createDimNameMap(dimsDef) {
   return dataDimNameMap;
 }
 function ensureSourceDimNameMap(source) {
-  var innerSource = inner$a(source);
+  var innerSource = inner$b(source);
   return innerSource.dimNameMap || (innerSource.dimNameMap = createDimNameMap(source.dimensionsDefine));
 }
 function shouldOmitUnusedDimensions(dimCount) {
@@ -36535,6 +36538,30 @@ function getSeriesStackId(seriesModel) {
 function getAxisKey(axis) {
   return axis.dim + axis.index;
 }
+function getLayoutOnAxis(opt) {
+  var params = [];
+  var baseAxis = opt.axis;
+  var axisKey = "axis0";
+  if (baseAxis.type !== "category") {
+    return;
+  }
+  var bandWidth = baseAxis.getBandWidth();
+  for (var i = 0; i < opt.count || 0; i++) {
+    params.push(defaults({
+      bandWidth,
+      axisKey,
+      stackId: STACK_PREFIX + i
+    }, opt));
+  }
+  var widthAndOffsets = doCalBarWidthAndOffset(params);
+  var result = [];
+  for (var i = 0; i < opt.count; i++) {
+    var item = widthAndOffsets[axisKey][STACK_PREFIX + i];
+    item.offsetCenter = item.offset + item.width / 2;
+    result.push(item);
+  }
+  return result;
+}
 function prepareLayoutBarSeries(seriesType2, ecModel) {
   var seriesModels = [];
   ecModel.eachSeriesByType(seriesType2, function(seriesModel) {
@@ -37763,7 +37790,7 @@ function use(ext) {
   }
   ext.install(extensionRegisters);
 }
-var inner$9 = makeInner();
+var inner$a = makeInner();
 function createAxisLabels(axis) {
   return axis.type === "category" ? makeCategoryLabels(axis) : makeRealNumberLabels(axis);
 }
@@ -37846,7 +37873,7 @@ function makeRealNumberLabels(axis) {
   };
 }
 function getListCache(axis, prop) {
-  return inner$9(axis)[prop] || (inner$9(axis)[prop] = []);
+  return inner$a(axis)[prop] || (inner$a(axis)[prop] = []);
 }
 function listCacheGet(cache2, key) {
   for (var i = 0; i < cache2.length; i++) {
@@ -37863,8 +37890,8 @@ function listCacheSet(cache2, key, value) {
   return value;
 }
 function makeAutoCategoryInterval(axis) {
-  var result = inner$9(axis).autoInterval;
-  return result != null ? result : inner$9(axis).autoInterval = axis.calculateCategoryInterval();
+  var result = inner$a(axis).autoInterval;
+  return result != null ? result : inner$a(axis).autoInterval = axis.calculateCategoryInterval();
 }
 function calculateCategoryInterval(axis) {
   var params = fetchAutoCategoryIntervalCalculationParams(axis);
@@ -37902,7 +37929,7 @@ function calculateCategoryInterval(axis) {
   isNaN(dw) && (dw = Infinity);
   isNaN(dh) && (dh = Infinity);
   var interval = Math.max(0, Math.floor(Math.min(dw, dh)));
-  var cache2 = inner$9(axis.model);
+  var cache2 = inner$a(axis.model);
   var axisExtent = axis.getExtent();
   var lastAutoInterval = cache2.lastAutoInterval;
   var lastTickCount = cache2.lastTickCount;
@@ -39115,7 +39142,7 @@ var CanvasPainter = function() {
   return CanvasPainter2;
 }();
 const CanvasPainter$1 = CanvasPainter;
-function install$h(registers) {
+function install$l(registers) {
   registers.registerPainter("canvas", CanvasPainter$1);
 }
 var LineSeriesModel = (
@@ -40119,7 +40146,7 @@ function createGridClipPath(cartesian, hasAnimation, seriesModel, done, during) 
   height += lineWidth;
   x2 = Math.floor(x2);
   width = Math.round(width);
-  var clipPath = new Rect$1({
+  var clipPath = new Rect$2({
     shape: {
       x: x2,
       y: y2,
@@ -41272,7 +41299,7 @@ function dataSample(seriesType2) {
     }
   };
 }
-function install$g(registers) {
+function install$k(registers) {
   registers.registerChartView(LineView$1);
   registers.registerSeriesModel(LineSeries);
   registers.registerLayout(pointsLayout("line", true));
@@ -42035,7 +42062,7 @@ var clip = {
 };
 var elementCreator = {
   cartesian2d: function(seriesModel, data, newIndex, layout2, isHorizontal, animationModel, axisModel, isUpdate, roundCap) {
-    var rect = new Rect$1({
+    var rect = new Rect$2({
       shape: extend({}, layout2),
       z2: 1
     });
@@ -42364,7 +42391,7 @@ function createBackgroundShape(isHorizontalOrRadial, layout2, coord) {
   }
 }
 function createBackgroundEl(coord, isHorizontalOrRadial, layout2) {
-  var ElementClz = coord.type === "polar" ? Sector$1 : Rect$1;
+  var ElementClz = coord.type === "polar" ? Sector$1 : Rect$2;
   return new ElementClz({
     shape: createBackgroundShape(isHorizontalOrRadial, layout2, coord),
     silent: true,
@@ -42372,7 +42399,7 @@ function createBackgroundEl(coord, isHorizontalOrRadial, layout2) {
   });
 }
 const BarView$1 = BarView;
-function install$f(registers) {
+function install$j(registers) {
   registers.registerChartView(BarView$1);
   registers.registerSeriesModel(BarSeries);
   registers.registerLayout(registers.PRIORITY.VISUAL.LAYOUT, curry$1(layout$2, "bar"));
@@ -44454,7 +44481,7 @@ var AxisView = (
   }(ComponentView$1)
 );
 const AxisView$1 = AxisView;
-var inner$8 = makeInner();
+var inner$9 = makeInner();
 function rectCoordAxisBuildSplitArea(axisView, axisGroup, axisModel, gridModel) {
   var axis = axisModel.axis;
   if (axis.scale.isBlank()) {
@@ -44472,7 +44499,7 @@ function rectCoordAxisBuildSplitArea(axisView, axisGroup, axisModel, gridModel) 
     return;
   }
   var areaColorsLen = areaColors.length;
-  var lastSplitAreaColors = inner$8(axisView).splitAreaColors;
+  var lastSplitAreaColors = inner$9(axisView).splitAreaColors;
   var newSplitAreaColors = createHashMap();
   var colorIndex = 0;
   if (lastSplitAreaColors) {
@@ -44508,7 +44535,7 @@ function rectCoordAxisBuildSplitArea(axisView, axisGroup, axisModel, gridModel) 
     }
     var tickValue = ticksCoords[i - 1].tickValue;
     tickValue != null && newSplitAreaColors.set(tickValue, colorIndex);
-    axisGroup.add(new Rect$1({
+    axisGroup.add(new Rect$2({
       anid: tickValue != null ? "area_" + tickValue : null,
       shape: {
         x: x2,
@@ -44524,10 +44551,10 @@ function rectCoordAxisBuildSplitArea(axisView, axisGroup, axisModel, gridModel) 
     }));
     colorIndex = (colorIndex + 1) % areaColorsLen;
   }
-  inner$8(axisView).splitAreaColors = newSplitAreaColors;
+  inner$9(axisView).splitAreaColors = newSplitAreaColors;
 }
 function rectCoordAxisHandleRemove(axisView) {
-  inner$8(axisView).splitAreaColors = null;
+  inner$9(axisView).splitAreaColors = null;
 }
 var axisBuilderAttrs = ["axisLine", "axisTickLabel", "axisName"];
 var selfBuilderAttrs = ["splitArea", "splitLine", "minorSplitLine"];
@@ -44720,7 +44747,7 @@ var GridView = (
     GridView2.prototype.render = function(gridModel, ecModel) {
       this.group.removeAll();
       if (gridModel.get("show")) {
-        this.group.add(new Rect$1({
+        this.group.add(new Rect$2({
           shape: gridModel.coordinateSystem.getRect(),
           style: defaults({
             fill: gridModel.get("backgroundColor")
@@ -44739,7 +44766,7 @@ var extraOption = {
   // gridId: '',
   offset: 0
 };
-function install$e(registers) {
+function install$i(registers) {
   registers.registerComponentView(GridView);
   registers.registerComponentModel(GridModel$1);
   registers.registerCoordinateSystem("cartesian2d", Grid$1);
@@ -44753,8 +44780,8 @@ function install$e(registers) {
     }
   });
 }
-function install$d(registers) {
-  use(install$e);
+function install$h(registers) {
+  use(install$i);
   registers.registerSeriesModel(ScatterSeriesModel$1);
   registers.registerChartView(ScatterView$1);
   registers.registerLayout(pointsLayout("scatter"));
@@ -44771,6 +44798,9 @@ function release(zr, resourceKey, userKey) {
     store[resourceKey] = null;
   }
 }
+function isTaken(zr, resourceKey) {
+  return !!getStore(zr)[resourceKey];
+}
 function getStore(zr) {
   return zr[ATTR] || (zr[ATTR] = {});
 }
@@ -44779,6 +44809,169 @@ registerAction({
   event: "globalCursorTaken",
   update: "update"
 }, noop$1);
+var RoamController = (
+  /** @class */
+  function(_super) {
+    __extends(RoamController2, _super);
+    function RoamController2(zr) {
+      var _this = _super.call(this) || this;
+      _this._zr = zr;
+      var mousedownHandler = bind$1(_this._mousedownHandler, _this);
+      var mousemoveHandler = bind$1(_this._mousemoveHandler, _this);
+      var mouseupHandler = bind$1(_this._mouseupHandler, _this);
+      var mousewheelHandler = bind$1(_this._mousewheelHandler, _this);
+      var pinchHandler = bind$1(_this._pinchHandler, _this);
+      _this.enable = function(controlType, opt) {
+        this.disable();
+        this._opt = defaults(clone$4(opt) || {}, {
+          zoomOnMouseWheel: true,
+          moveOnMouseMove: true,
+          // By default, wheel do not trigger move.
+          moveOnMouseWheel: false,
+          preventDefaultMouseMove: true
+        });
+        if (controlType == null) {
+          controlType = true;
+        }
+        if (controlType === true || controlType === "move" || controlType === "pan") {
+          zr.on("mousedown", mousedownHandler);
+          zr.on("mousemove", mousemoveHandler);
+          zr.on("mouseup", mouseupHandler);
+        }
+        if (controlType === true || controlType === "scale" || controlType === "zoom") {
+          zr.on("mousewheel", mousewheelHandler);
+          zr.on("pinch", pinchHandler);
+        }
+      };
+      _this.disable = function() {
+        zr.off("mousedown", mousedownHandler);
+        zr.off("mousemove", mousemoveHandler);
+        zr.off("mouseup", mouseupHandler);
+        zr.off("mousewheel", mousewheelHandler);
+        zr.off("pinch", pinchHandler);
+      };
+      return _this;
+    }
+    RoamController2.prototype.isDragging = function() {
+      return this._dragging;
+    };
+    RoamController2.prototype.isPinching = function() {
+      return this._pinching;
+    };
+    RoamController2.prototype.setPointerChecker = function(pointerChecker) {
+      this.pointerChecker = pointerChecker;
+    };
+    RoamController2.prototype.dispose = function() {
+      this.disable();
+    };
+    RoamController2.prototype._mousedownHandler = function(e2) {
+      if (isMiddleOrRightButtonOnMouseUpDown(e2)) {
+        return;
+      }
+      var el = e2.target;
+      while (el) {
+        if (el.draggable) {
+          return;
+        }
+        el = el.__hostTarget || el.parent;
+      }
+      var x2 = e2.offsetX;
+      var y2 = e2.offsetY;
+      if (this.pointerChecker && this.pointerChecker(e2, x2, y2)) {
+        this._x = x2;
+        this._y = y2;
+        this._dragging = true;
+      }
+    };
+    RoamController2.prototype._mousemoveHandler = function(e2) {
+      if (!this._dragging || !isAvailableBehavior("moveOnMouseMove", e2, this._opt) || e2.gestureEvent === "pinch" || isTaken(this._zr, "globalPan")) {
+        return;
+      }
+      var x2 = e2.offsetX;
+      var y2 = e2.offsetY;
+      var oldX = this._x;
+      var oldY = this._y;
+      var dx = x2 - oldX;
+      var dy = y2 - oldY;
+      this._x = x2;
+      this._y = y2;
+      this._opt.preventDefaultMouseMove && stop(e2.event);
+      trigger$1(this, "pan", "moveOnMouseMove", e2, {
+        dx,
+        dy,
+        oldX,
+        oldY,
+        newX: x2,
+        newY: y2,
+        isAvailableBehavior: null
+      });
+    };
+    RoamController2.prototype._mouseupHandler = function(e2) {
+      if (!isMiddleOrRightButtonOnMouseUpDown(e2)) {
+        this._dragging = false;
+      }
+    };
+    RoamController2.prototype._mousewheelHandler = function(e2) {
+      var shouldZoom = isAvailableBehavior("zoomOnMouseWheel", e2, this._opt);
+      var shouldMove = isAvailableBehavior("moveOnMouseWheel", e2, this._opt);
+      var wheelDelta = e2.wheelDelta;
+      var absWheelDeltaDelta = Math.abs(wheelDelta);
+      var originX = e2.offsetX;
+      var originY = e2.offsetY;
+      if (wheelDelta === 0 || !shouldZoom && !shouldMove) {
+        return;
+      }
+      if (shouldZoom) {
+        var factor = absWheelDeltaDelta > 3 ? 1.4 : absWheelDeltaDelta > 1 ? 1.2 : 1.1;
+        var scale2 = wheelDelta > 0 ? factor : 1 / factor;
+        checkPointerAndTrigger(this, "zoom", "zoomOnMouseWheel", e2, {
+          scale: scale2,
+          originX,
+          originY,
+          isAvailableBehavior: null
+        });
+      }
+      if (shouldMove) {
+        var absDelta = Math.abs(wheelDelta);
+        var scrollDelta = (wheelDelta > 0 ? 1 : -1) * (absDelta > 3 ? 0.4 : absDelta > 1 ? 0.15 : 0.05);
+        checkPointerAndTrigger(this, "scrollMove", "moveOnMouseWheel", e2, {
+          scrollDelta,
+          originX,
+          originY,
+          isAvailableBehavior: null
+        });
+      }
+    };
+    RoamController2.prototype._pinchHandler = function(e2) {
+      if (isTaken(this._zr, "globalPan")) {
+        return;
+      }
+      var scale2 = e2.pinchScale > 1 ? 1.1 : 1 / 1.1;
+      checkPointerAndTrigger(this, "zoom", null, e2, {
+        scale: scale2,
+        originX: e2.pinchX,
+        originY: e2.pinchY,
+        isAvailableBehavior: null
+      });
+    };
+    return RoamController2;
+  }(Eventful$1)
+);
+function checkPointerAndTrigger(controller, eventName, behaviorToCheck, e2, contollerEvent) {
+  if (controller.pointerChecker && controller.pointerChecker(e2, contollerEvent.originX, contollerEvent.originY)) {
+    stop(e2.event);
+    trigger$1(controller, eventName, behaviorToCheck, e2, contollerEvent);
+  }
+}
+function trigger$1(controller, eventName, behaviorToCheck, e2, contollerEvent) {
+  contollerEvent.isAvailableBehavior = bind$1(isAvailableBehavior, null, behaviorToCheck, e2);
+  controller.trigger(eventName, contollerEvent);
+}
+function isAvailableBehavior(behaviorToCheck, e2, settings) {
+  var setting = settings[behaviorToCheck];
+  return !behaviorToCheck || setting && (!isString$3(setting) || e2.event[setting + "Key"]);
+}
+const RoamController$1 = RoamController;
 var IRRELEVANT_EXCLUDES = {
   "axisPointer": 1,
   "tooltip": 1,
@@ -45459,13 +45652,13 @@ var BrushController = (
       var newCovers = this._covers = [];
       var controller = this;
       var creatingCover = this._creatingCover;
-      new DataDiffer$1(oldCovers, coverConfigList, oldGetKey, getKey).add(addOrUpdate).update(addOrUpdate).remove(remove2).execute();
+      new DataDiffer$1(oldCovers, coverConfigList, oldGetKey, getKey2).add(addOrUpdate).update(addOrUpdate).remove(remove2).execute();
       return this;
-      function getKey(brushOption, index) {
+      function getKey2(brushOption, index) {
         return (brushOption.id != null ? brushOption.id : tmpIdPrefix + index) + "-" + brushOption.brushType;
       }
       function oldGetKey(cover, index) {
-        return getKey(cover.__brushOption, index);
+        return getKey2(cover.__brushOption, index);
       }
       function addOrUpdate(newIndex, oldIndex) {
         var newBrushInternal = coverConfigList[newIndex];
@@ -45498,7 +45691,7 @@ var BrushController = (
 function createCover(controller, brushOption) {
   var cover = coverRenderers[brushOption.brushType].createCover(controller, brushOption);
   cover.__brushOption = brushOption;
-  updateZ(cover, brushOption);
+  updateZ$1(cover, brushOption);
   controller.group.add(cover);
   return cover;
 }
@@ -45506,7 +45699,7 @@ function endCreating(controller, creatingCover) {
   var coverRenderer = getCoverRenderer(creatingCover);
   if (coverRenderer.endCreating) {
     coverRenderer.endCreating(controller, creatingCover);
-    updateZ(creatingCover, creatingCover.__brushOption);
+    updateZ$1(creatingCover, creatingCover.__brushOption);
   }
   return creatingCover;
 }
@@ -45514,7 +45707,7 @@ function updateCoverShape(controller, cover) {
   var brushOption = cover.__brushOption;
   getCoverRenderer(cover).updateCoverShape(controller, cover, brushOption.range, brushOption);
 }
-function updateZ(cover, brushOption) {
+function updateZ$1(cover, brushOption) {
   var z2 = brushOption.z;
   z2 == null && (z2 = COVER_Z);
   cover.traverse(function(el) {
@@ -45593,7 +45786,7 @@ function getTrackEnds(track2) {
 }
 function createBaseRectCover(rectRangeConverter, controller, brushOption, edgeNameSequences) {
   var cover = new Group$3();
-  cover.add(new Rect$1({
+  cover.add(new Rect$2({
     name: "main",
     style: makeStyle(brushOption),
     silent: true,
@@ -45605,7 +45798,7 @@ function createBaseRectCover(rectRangeConverter, controller, brushOption, edgeNa
     })
   }));
   each$8(edgeNameSequences, function(nameSequence) {
-    cover.add(new Rect$1({
+    cover.add(new Rect$2({
       name: nameSequence.join(""),
       style: {
         opacity: 0
@@ -46433,13 +46626,1393 @@ var boxplotTransform = {
     }];
   }
 };
-function install$c(registers) {
+function install$g(registers) {
   registers.registerSeriesModel(BoxplotSeriesModel$1);
   registers.registerChartView(BoxplotView$1);
   registers.registerLayout(boxplotLayout);
   registers.registerTransform(boxplotTransform);
 }
-var inner$7 = makeInner();
+var STYLE_VISUAL_TYPE = {
+  color: "fill",
+  borderColor: "stroke"
+};
+var NON_STYLE_VISUAL_PROPS = {
+  symbol: 1,
+  symbolSize: 1,
+  symbolKeepAspect: 1,
+  legendIcon: 1,
+  visualMeta: 1,
+  liftZ: 1,
+  decal: 1
+};
+var customInnerStore = makeInner();
+var CustomSeriesModel = (
+  /** @class */
+  function(_super) {
+    __extends(CustomSeriesModel2, _super);
+    function CustomSeriesModel2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = CustomSeriesModel2.type;
+      return _this;
+    }
+    CustomSeriesModel2.prototype.optionUpdated = function() {
+      this.currentZLevel = this.get("zlevel", true);
+      this.currentZ = this.get("z", true);
+    };
+    CustomSeriesModel2.prototype.getInitialData = function(option, ecModel) {
+      return createSeriesData(null, this);
+    };
+    CustomSeriesModel2.prototype.getDataParams = function(dataIndex, dataType, el) {
+      var params = _super.prototype.getDataParams.call(this, dataIndex, dataType);
+      el && (params.info = customInnerStore(el).info);
+      return params;
+    };
+    CustomSeriesModel2.type = "series.custom";
+    CustomSeriesModel2.dependencies = ["grid", "polar", "geo", "singleAxis", "calendar"];
+    CustomSeriesModel2.defaultOption = {
+      coordinateSystem: "cartesian2d",
+      // zlevel: 0,
+      z: 2,
+      legendHoverLink: true,
+      // Custom series will not clip by default.
+      // Some case will use custom series to draw label
+      // For example https://echarts.apache.org/examples/en/editor.html?c=custom-gantt-flight
+      clip: false
+      // Cartesian coordinate system
+      // xAxisIndex: 0,
+      // yAxisIndex: 0,
+      // Polar coordinate system
+      // polarIndex: 0,
+      // Geo coordinate system
+      // geoIndex: 0,
+    };
+    return CustomSeriesModel2;
+  }(SeriesModel$1)
+);
+const CustomSeriesModel$1 = CustomSeriesModel;
+function dataToCoordSize$3(dataSize, dataItem) {
+  dataItem = dataItem || [0, 0];
+  return map$1(["x", "y"], function(dim, dimIdx) {
+    var axis = this.getAxis(dim);
+    var val = dataItem[dimIdx];
+    var halfSize = dataSize[dimIdx] / 2;
+    return axis.type === "category" ? axis.getBandWidth() : Math.abs(axis.dataToCoord(val - halfSize) - axis.dataToCoord(val + halfSize));
+  }, this);
+}
+function cartesianPrepareCustom(coordSys) {
+  var rect = coordSys.master.getRect();
+  return {
+    coordSys: {
+      // The name exposed to user is always 'cartesian2d' but not 'grid'.
+      type: "cartesian2d",
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height
+    },
+    api: {
+      coord: function(data) {
+        return coordSys.dataToPoint(data);
+      },
+      size: bind$1(dataToCoordSize$3, coordSys)
+    }
+  };
+}
+function dataToCoordSize$2(dataSize, dataItem) {
+  dataItem = dataItem || [0, 0];
+  return map$1([0, 1], function(dimIdx) {
+    var val = dataItem[dimIdx];
+    var halfSize = dataSize[dimIdx] / 2;
+    var p1 = [];
+    var p2 = [];
+    p1[dimIdx] = val - halfSize;
+    p2[dimIdx] = val + halfSize;
+    p1[1 - dimIdx] = p2[1 - dimIdx] = dataItem[1 - dimIdx];
+    return Math.abs(this.dataToPoint(p1)[dimIdx] - this.dataToPoint(p2)[dimIdx]);
+  }, this);
+}
+function geoPrepareCustom(coordSys) {
+  var rect = coordSys.getBoundingRect();
+  return {
+    coordSys: {
+      type: "geo",
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height,
+      zoom: coordSys.getZoom()
+    },
+    api: {
+      coord: function(data) {
+        return coordSys.dataToPoint(data);
+      },
+      size: bind$1(dataToCoordSize$2, coordSys)
+    }
+  };
+}
+function dataToCoordSize$1(dataSize, dataItem) {
+  var axis = this.getAxis();
+  var val = dataItem instanceof Array ? dataItem[0] : dataItem;
+  var halfSize = (dataSize instanceof Array ? dataSize[0] : dataSize) / 2;
+  return axis.type === "category" ? axis.getBandWidth() : Math.abs(axis.dataToCoord(val - halfSize) - axis.dataToCoord(val + halfSize));
+}
+function singlePrepareCustom(coordSys) {
+  var rect = coordSys.getRect();
+  return {
+    coordSys: {
+      type: "singleAxis",
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height
+    },
+    api: {
+      coord: function(val) {
+        return coordSys.dataToPoint(val);
+      },
+      size: bind$1(dataToCoordSize$1, coordSys)
+    }
+  };
+}
+function dataToCoordSize(dataSize, dataItem) {
+  dataItem = dataItem || [0, 0];
+  return map$1(["Radius", "Angle"], function(dim, dimIdx) {
+    var getterName = "get" + dim + "Axis";
+    var axis = this[getterName]();
+    var val = dataItem[dimIdx];
+    var halfSize = dataSize[dimIdx] / 2;
+    var result = axis.type === "category" ? axis.getBandWidth() : Math.abs(axis.dataToCoord(val - halfSize) - axis.dataToCoord(val + halfSize));
+    if (dim === "Angle") {
+      result = result * Math.PI / 180;
+    }
+    return result;
+  }, this);
+}
+function polarPrepareCustom(coordSys) {
+  var radiusAxis = coordSys.getRadiusAxis();
+  var angleAxis = coordSys.getAngleAxis();
+  var radius = radiusAxis.getExtent();
+  radius[0] > radius[1] && radius.reverse();
+  return {
+    coordSys: {
+      type: "polar",
+      cx: coordSys.cx,
+      cy: coordSys.cy,
+      r: radius[1],
+      r0: radius[0]
+    },
+    api: {
+      coord: function(data) {
+        var radius2 = radiusAxis.dataToRadius(data[0]);
+        var angle = angleAxis.dataToAngle(data[1]);
+        var coord = coordSys.coordToPoint([radius2, angle]);
+        coord.push(radius2, angle * Math.PI / 180);
+        return coord;
+      },
+      size: bind$1(dataToCoordSize, coordSys)
+    }
+  };
+}
+function calendarPrepareCustom(coordSys) {
+  var rect = coordSys.getRect();
+  var rangeInfo = coordSys.getRangeInfo();
+  return {
+    coordSys: {
+      type: "calendar",
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height,
+      cellWidth: coordSys.getCellWidth(),
+      cellHeight: coordSys.getCellHeight(),
+      rangeInfo: {
+        start: rangeInfo.start,
+        end: rangeInfo.end,
+        weeks: rangeInfo.weeks,
+        dayCount: rangeInfo.allDay
+      }
+    },
+    api: {
+      coord: function(data, clamp2) {
+        return coordSys.dataToPoint(data, clamp2);
+      }
+    }
+  };
+}
+function isEC4CompatibleStyle(style2, elType, hasOwnTextContentOption, hasOwnTextConfig) {
+  return style2 && (style2.legacy || style2.legacy !== false && !hasOwnTextContentOption && !hasOwnTextConfig && elType !== "tspan" && (elType === "text" || hasOwn$1(style2, "text")));
+}
+function convertFromEC4CompatibleStyle(hostStyle, elType, isNormal) {
+  var srcStyle = hostStyle;
+  var textConfig;
+  var textContent;
+  var textContentStyle;
+  if (elType === "text") {
+    textContentStyle = srcStyle;
+  } else {
+    textContentStyle = {};
+    hasOwn$1(srcStyle, "text") && (textContentStyle.text = srcStyle.text);
+    hasOwn$1(srcStyle, "rich") && (textContentStyle.rich = srcStyle.rich);
+    hasOwn$1(srcStyle, "textFill") && (textContentStyle.fill = srcStyle.textFill);
+    hasOwn$1(srcStyle, "textStroke") && (textContentStyle.stroke = srcStyle.textStroke);
+    hasOwn$1(srcStyle, "fontFamily") && (textContentStyle.fontFamily = srcStyle.fontFamily);
+    hasOwn$1(srcStyle, "fontSize") && (textContentStyle.fontSize = srcStyle.fontSize);
+    hasOwn$1(srcStyle, "fontStyle") && (textContentStyle.fontStyle = srcStyle.fontStyle);
+    hasOwn$1(srcStyle, "fontWeight") && (textContentStyle.fontWeight = srcStyle.fontWeight);
+    textContent = {
+      type: "text",
+      style: textContentStyle,
+      // ec4 does not support rectText trigger.
+      // And when text position is different in normal and emphasis
+      // => hover text trigger emphasis;
+      // => text position changed, leave mouse pointer immediately;
+      // That might cause incorrect state.
+      silent: true
+    };
+    textConfig = {};
+    var hasOwnPos = hasOwn$1(srcStyle, "textPosition");
+    if (isNormal) {
+      textConfig.position = hasOwnPos ? srcStyle.textPosition : "inside";
+    } else {
+      hasOwnPos && (textConfig.position = srcStyle.textPosition);
+    }
+    hasOwn$1(srcStyle, "textPosition") && (textConfig.position = srcStyle.textPosition);
+    hasOwn$1(srcStyle, "textOffset") && (textConfig.offset = srcStyle.textOffset);
+    hasOwn$1(srcStyle, "textRotation") && (textConfig.rotation = srcStyle.textRotation);
+    hasOwn$1(srcStyle, "textDistance") && (textConfig.distance = srcStyle.textDistance);
+  }
+  convertEC4CompatibleRichItem(textContentStyle, hostStyle);
+  each$8(textContentStyle.rich, function(richItem) {
+    convertEC4CompatibleRichItem(richItem, richItem);
+  });
+  return {
+    textConfig,
+    textContent
+  };
+}
+function convertEC4CompatibleRichItem(out2, richItem) {
+  if (!richItem) {
+    return;
+  }
+  richItem.font = richItem.textFont || richItem.font;
+  hasOwn$1(richItem, "textStrokeWidth") && (out2.lineWidth = richItem.textStrokeWidth);
+  hasOwn$1(richItem, "textAlign") && (out2.align = richItem.textAlign);
+  hasOwn$1(richItem, "textVerticalAlign") && (out2.verticalAlign = richItem.textVerticalAlign);
+  hasOwn$1(richItem, "textLineHeight") && (out2.lineHeight = richItem.textLineHeight);
+  hasOwn$1(richItem, "textWidth") && (out2.width = richItem.textWidth);
+  hasOwn$1(richItem, "textHeight") && (out2.height = richItem.textHeight);
+  hasOwn$1(richItem, "textBackgroundColor") && (out2.backgroundColor = richItem.textBackgroundColor);
+  hasOwn$1(richItem, "textPadding") && (out2.padding = richItem.textPadding);
+  hasOwn$1(richItem, "textBorderColor") && (out2.borderColor = richItem.textBorderColor);
+  hasOwn$1(richItem, "textBorderWidth") && (out2.borderWidth = richItem.textBorderWidth);
+  hasOwn$1(richItem, "textBorderRadius") && (out2.borderRadius = richItem.textBorderRadius);
+  hasOwn$1(richItem, "textBoxShadowColor") && (out2.shadowColor = richItem.textBoxShadowColor);
+  hasOwn$1(richItem, "textBoxShadowBlur") && (out2.shadowBlur = richItem.textBoxShadowBlur);
+  hasOwn$1(richItem, "textBoxShadowOffsetX") && (out2.shadowOffsetX = richItem.textBoxShadowOffsetX);
+  hasOwn$1(richItem, "textBoxShadowOffsetY") && (out2.shadowOffsetY = richItem.textBoxShadowOffsetY);
+}
+function convertToEC4StyleForCustomSerise(itemStl, txStl, txCfg) {
+  var out2 = itemStl;
+  out2.textPosition = out2.textPosition || txCfg.position || "inside";
+  txCfg.offset != null && (out2.textOffset = txCfg.offset);
+  txCfg.rotation != null && (out2.textRotation = txCfg.rotation);
+  txCfg.distance != null && (out2.textDistance = txCfg.distance);
+  var isInside = out2.textPosition.indexOf("inside") >= 0;
+  var hostFill = itemStl.fill || "#000";
+  convertToEC4RichItem(out2, txStl);
+  var textFillNotSet = out2.textFill == null;
+  if (isInside) {
+    if (textFillNotSet) {
+      out2.textFill = txCfg.insideFill || "#fff";
+      !out2.textStroke && txCfg.insideStroke && (out2.textStroke = txCfg.insideStroke);
+      !out2.textStroke && (out2.textStroke = hostFill);
+      out2.textStrokeWidth == null && (out2.textStrokeWidth = 2);
+    }
+  } else {
+    if (textFillNotSet) {
+      out2.textFill = itemStl.fill || txCfg.outsideFill || "#000";
+    }
+    !out2.textStroke && txCfg.outsideStroke && (out2.textStroke = txCfg.outsideStroke);
+  }
+  out2.text = txStl.text;
+  out2.rich = txStl.rich;
+  each$8(txStl.rich, function(richItem) {
+    convertToEC4RichItem(richItem, richItem);
+  });
+  return out2;
+}
+function convertToEC4RichItem(out2, richItem) {
+  if (!richItem) {
+    return;
+  }
+  hasOwn$1(richItem, "fill") && (out2.textFill = richItem.fill);
+  hasOwn$1(richItem, "stroke") && (out2.textStroke = richItem.fill);
+  hasOwn$1(richItem, "lineWidth") && (out2.textStrokeWidth = richItem.lineWidth);
+  hasOwn$1(richItem, "font") && (out2.font = richItem.font);
+  hasOwn$1(richItem, "fontStyle") && (out2.fontStyle = richItem.fontStyle);
+  hasOwn$1(richItem, "fontWeight") && (out2.fontWeight = richItem.fontWeight);
+  hasOwn$1(richItem, "fontSize") && (out2.fontSize = richItem.fontSize);
+  hasOwn$1(richItem, "fontFamily") && (out2.fontFamily = richItem.fontFamily);
+  hasOwn$1(richItem, "align") && (out2.textAlign = richItem.align);
+  hasOwn$1(richItem, "verticalAlign") && (out2.textVerticalAlign = richItem.verticalAlign);
+  hasOwn$1(richItem, "lineHeight") && (out2.textLineHeight = richItem.lineHeight);
+  hasOwn$1(richItem, "width") && (out2.textWidth = richItem.width);
+  hasOwn$1(richItem, "height") && (out2.textHeight = richItem.height);
+  hasOwn$1(richItem, "backgroundColor") && (out2.textBackgroundColor = richItem.backgroundColor);
+  hasOwn$1(richItem, "padding") && (out2.textPadding = richItem.padding);
+  hasOwn$1(richItem, "borderColor") && (out2.textBorderColor = richItem.borderColor);
+  hasOwn$1(richItem, "borderWidth") && (out2.textBorderWidth = richItem.borderWidth);
+  hasOwn$1(richItem, "borderRadius") && (out2.textBorderRadius = richItem.borderRadius);
+  hasOwn$1(richItem, "shadowColor") && (out2.textBoxShadowColor = richItem.shadowColor);
+  hasOwn$1(richItem, "shadowBlur") && (out2.textBoxShadowBlur = richItem.shadowBlur);
+  hasOwn$1(richItem, "shadowOffsetX") && (out2.textBoxShadowOffsetX = richItem.shadowOffsetX);
+  hasOwn$1(richItem, "shadowOffsetY") && (out2.textBoxShadowOffsetY = richItem.shadowOffsetY);
+  hasOwn$1(richItem, "textShadowColor") && (out2.textShadowColor = richItem.textShadowColor);
+  hasOwn$1(richItem, "textShadowBlur") && (out2.textShadowBlur = richItem.textShadowBlur);
+  hasOwn$1(richItem, "textShadowOffsetX") && (out2.textShadowOffsetX = richItem.textShadowOffsetX);
+  hasOwn$1(richItem, "textShadowOffsetY") && (out2.textShadowOffsetY = richItem.textShadowOffsetY);
+}
+var LEGACY_TRANSFORM_PROPS_MAP = {
+  position: ["x", "y"],
+  scale: ["scaleX", "scaleY"],
+  origin: ["originX", "originY"]
+};
+var LEGACY_TRANSFORM_PROPS = keys(LEGACY_TRANSFORM_PROPS_MAP);
+reduce(TRANSFORMABLE_PROPS, function(obj, key) {
+  obj[key] = 1;
+  return obj;
+}, {});
+TRANSFORMABLE_PROPS.join(", ");
+var ELEMENT_ANIMATABLE_PROPS = ["", "style", "shape", "extra"];
+var transitionInnerStore = makeInner();
+function getElementAnimationConfig(animationType, el, elOption, parentModel, dataIndex) {
+  var animationProp = animationType + "Animation";
+  var config = getAnimationConfig(animationType, parentModel, dataIndex) || {};
+  var userDuring = transitionInnerStore(el).userDuring;
+  if (config.duration > 0) {
+    config.during = userDuring ? bind$1(duringCall, {
+      el,
+      userDuring
+    }) : null;
+    config.setToFinal = true;
+    config.scope = animationType;
+  }
+  extend(config, elOption[animationProp]);
+  return config;
+}
+function applyUpdateTransition(el, elOption, animatableModel, opts) {
+  opts = opts || {};
+  var dataIndex = opts.dataIndex, isInit = opts.isInit, clearStyle = opts.clearStyle;
+  var hasAnimation = animatableModel.isAnimationEnabled();
+  var store = transitionInnerStore(el);
+  var styleOpt = elOption.style;
+  store.userDuring = elOption.during;
+  var transFromProps = {};
+  var propsToSet = {};
+  prepareTransformAllPropsFinal(el, elOption, propsToSet);
+  prepareShapeOrExtraAllPropsFinal("shape", elOption, propsToSet);
+  prepareShapeOrExtraAllPropsFinal("extra", elOption, propsToSet);
+  if (!isInit && hasAnimation) {
+    prepareTransformTransitionFrom(el, elOption, transFromProps);
+    prepareShapeOrExtraTransitionFrom("shape", el, elOption, transFromProps);
+    prepareShapeOrExtraTransitionFrom("extra", el, elOption, transFromProps);
+    prepareStyleTransitionFrom(el, elOption, styleOpt, transFromProps);
+  }
+  propsToSet.style = styleOpt;
+  applyPropsDirectly(el, propsToSet, clearStyle);
+  applyMiscProps(el, elOption);
+  if (hasAnimation) {
+    if (isInit) {
+      var enterFromProps_1 = {};
+      each$8(ELEMENT_ANIMATABLE_PROPS, function(propName) {
+        var prop = propName ? elOption[propName] : elOption;
+        if (prop && prop.enterFrom) {
+          if (propName) {
+            enterFromProps_1[propName] = enterFromProps_1[propName] || {};
+          }
+          extend(propName ? enterFromProps_1[propName] : enterFromProps_1, prop.enterFrom);
+        }
+      });
+      var config = getElementAnimationConfig("enter", el, elOption, animatableModel, dataIndex);
+      if (config.duration > 0) {
+        el.animateFrom(enterFromProps_1, config);
+      }
+    } else {
+      applyPropsTransition(el, elOption, dataIndex || 0, animatableModel, transFromProps);
+    }
+  }
+  updateLeaveTo(el, elOption);
+  styleOpt ? el.dirty() : el.markRedraw();
+}
+function updateLeaveTo(el, elOption) {
+  var leaveToProps = transitionInnerStore(el).leaveToProps;
+  for (var i = 0; i < ELEMENT_ANIMATABLE_PROPS.length; i++) {
+    var propName = ELEMENT_ANIMATABLE_PROPS[i];
+    var prop = propName ? elOption[propName] : elOption;
+    if (prop && prop.leaveTo) {
+      if (!leaveToProps) {
+        leaveToProps = transitionInnerStore(el).leaveToProps = {};
+      }
+      if (propName) {
+        leaveToProps[propName] = leaveToProps[propName] || {};
+      }
+      extend(propName ? leaveToProps[propName] : leaveToProps, prop.leaveTo);
+    }
+  }
+}
+function applyLeaveTransition(el, elOption, animatableModel, onRemove) {
+  if (el) {
+    var parent_1 = el.parent;
+    var leaveToProps = transitionInnerStore(el).leaveToProps;
+    if (leaveToProps) {
+      var config = getElementAnimationConfig("update", el, elOption, animatableModel, 0);
+      config.done = function() {
+        parent_1.remove(el);
+        onRemove && onRemove();
+      };
+      el.animateTo(leaveToProps, config);
+    } else {
+      parent_1.remove(el);
+      onRemove && onRemove();
+    }
+  }
+}
+function isTransitionAll(transition) {
+  return transition === "all";
+}
+function applyPropsDirectly(el, allPropsFinal, clearStyle) {
+  var styleOpt = allPropsFinal.style;
+  if (!el.isGroup && styleOpt) {
+    if (clearStyle) {
+      el.useStyle({});
+      var animators = el.animators;
+      for (var i = 0; i < animators.length; i++) {
+        var animator = animators[i];
+        if (animator.targetName === "style") {
+          animator.changeTarget(el.style);
+        }
+      }
+    }
+    el.setStyle(styleOpt);
+  }
+  if (allPropsFinal) {
+    allPropsFinal.style = null;
+    allPropsFinal && el.attr(allPropsFinal);
+    allPropsFinal.style = styleOpt;
+  }
+}
+function applyPropsTransition(el, elOption, dataIndex, model, transFromProps) {
+  if (transFromProps) {
+    var config = getElementAnimationConfig("update", el, elOption, model, dataIndex);
+    if (config.duration > 0) {
+      el.animateFrom(transFromProps, config);
+    }
+  }
+}
+function applyMiscProps(el, elOption) {
+  hasOwn$1(elOption, "silent") && (el.silent = elOption.silent);
+  hasOwn$1(elOption, "ignore") && (el.ignore = elOption.ignore);
+  if (el instanceof Displayable$1) {
+    hasOwn$1(elOption, "invisible") && (el.invisible = elOption.invisible);
+  }
+  if (el instanceof Path$1) {
+    hasOwn$1(elOption, "autoBatch") && (el.autoBatch = elOption.autoBatch);
+  }
+}
+var tmpDuringScope = {};
+var transitionDuringAPI = {
+  // Usually other props do not need to be changed in animation during.
+  setTransform: function(key, val) {
+    tmpDuringScope.el[key] = val;
+    return this;
+  },
+  getTransform: function(key) {
+    return tmpDuringScope.el[key];
+  },
+  setShape: function(key, val) {
+    var el = tmpDuringScope.el;
+    var shape = el.shape || (el.shape = {});
+    shape[key] = val;
+    el.dirtyShape && el.dirtyShape();
+    return this;
+  },
+  getShape: function(key) {
+    var shape = tmpDuringScope.el.shape;
+    if (shape) {
+      return shape[key];
+    }
+  },
+  setStyle: function(key, val) {
+    var el = tmpDuringScope.el;
+    var style2 = el.style;
+    if (style2) {
+      style2[key] = val;
+      el.dirtyStyle && el.dirtyStyle();
+    }
+    return this;
+  },
+  getStyle: function(key) {
+    var style2 = tmpDuringScope.el.style;
+    if (style2) {
+      return style2[key];
+    }
+  },
+  setExtra: function(key, val) {
+    var extra = tmpDuringScope.el.extra || (tmpDuringScope.el.extra = {});
+    extra[key] = val;
+    return this;
+  },
+  getExtra: function(key) {
+    var extra = tmpDuringScope.el.extra;
+    if (extra) {
+      return extra[key];
+    }
+  }
+};
+function duringCall() {
+  var scope = this;
+  var el = scope.el;
+  if (!el) {
+    return;
+  }
+  var latestUserDuring = transitionInnerStore(el).userDuring;
+  var scopeUserDuring = scope.userDuring;
+  if (latestUserDuring !== scopeUserDuring) {
+    scope.el = scope.userDuring = null;
+    return;
+  }
+  tmpDuringScope.el = el;
+  scopeUserDuring(transitionDuringAPI);
+}
+function prepareShapeOrExtraTransitionFrom(mainAttr, fromEl, elOption, transFromProps) {
+  var attrOpt = elOption[mainAttr];
+  if (!attrOpt) {
+    return;
+  }
+  var elPropsInAttr = fromEl[mainAttr];
+  var transFromPropsInAttr;
+  if (elPropsInAttr) {
+    var transition = elOption.transition;
+    var attrTransition = attrOpt.transition;
+    if (attrTransition) {
+      !transFromPropsInAttr && (transFromPropsInAttr = transFromProps[mainAttr] = {});
+      if (isTransitionAll(attrTransition)) {
+        extend(transFromPropsInAttr, elPropsInAttr);
+      } else {
+        var transitionKeys = normalizeToArray(attrTransition);
+        for (var i = 0; i < transitionKeys.length; i++) {
+          var key = transitionKeys[i];
+          var elVal = elPropsInAttr[key];
+          transFromPropsInAttr[key] = elVal;
+        }
+      }
+    } else if (isTransitionAll(transition) || indexOf(transition, mainAttr) >= 0) {
+      !transFromPropsInAttr && (transFromPropsInAttr = transFromProps[mainAttr] = {});
+      var elPropsInAttrKeys = keys(elPropsInAttr);
+      for (var i = 0; i < elPropsInAttrKeys.length; i++) {
+        var key = elPropsInAttrKeys[i];
+        var elVal = elPropsInAttr[key];
+        if (isNonStyleTransitionEnabled(attrOpt[key], elVal)) {
+          transFromPropsInAttr[key] = elVal;
+        }
+      }
+    }
+  }
+}
+function prepareShapeOrExtraAllPropsFinal(mainAttr, elOption, allProps) {
+  var attrOpt = elOption[mainAttr];
+  if (!attrOpt) {
+    return;
+  }
+  var allPropsInAttr = allProps[mainAttr] = {};
+  var keysInAttr = keys(attrOpt);
+  for (var i = 0; i < keysInAttr.length; i++) {
+    var key = keysInAttr[i];
+    allPropsInAttr[key] = cloneValue(attrOpt[key]);
+  }
+}
+function prepareTransformTransitionFrom(el, elOption, transFromProps) {
+  var transition = elOption.transition;
+  var transitionKeys = isTransitionAll(transition) ? TRANSFORMABLE_PROPS : normalizeToArray(transition || []);
+  for (var i = 0; i < transitionKeys.length; i++) {
+    var key = transitionKeys[i];
+    if (key === "style" || key === "shape" || key === "extra") {
+      continue;
+    }
+    var elVal = el[key];
+    transFromProps[key] = elVal;
+  }
+}
+function prepareTransformAllPropsFinal(el, elOption, allProps) {
+  for (var i = 0; i < LEGACY_TRANSFORM_PROPS.length; i++) {
+    var legacyName = LEGACY_TRANSFORM_PROPS[i];
+    var xyName = LEGACY_TRANSFORM_PROPS_MAP[legacyName];
+    var legacyArr = elOption[legacyName];
+    if (legacyArr) {
+      allProps[xyName[0]] = legacyArr[0];
+      allProps[xyName[1]] = legacyArr[1];
+    }
+  }
+  for (var i = 0; i < TRANSFORMABLE_PROPS.length; i++) {
+    var key = TRANSFORMABLE_PROPS[i];
+    if (elOption[key] != null) {
+      allProps[key] = elOption[key];
+    }
+  }
+}
+function prepareStyleTransitionFrom(fromEl, elOption, styleOpt, transFromProps) {
+  if (!styleOpt) {
+    return;
+  }
+  var fromElStyle = fromEl.style;
+  var transFromStyleProps;
+  if (fromElStyle) {
+    var styleTransition = styleOpt.transition;
+    var elTransition = elOption.transition;
+    if (styleTransition && !isTransitionAll(styleTransition)) {
+      var transitionKeys = normalizeToArray(styleTransition);
+      !transFromStyleProps && (transFromStyleProps = transFromProps.style = {});
+      for (var i = 0; i < transitionKeys.length; i++) {
+        var key = transitionKeys[i];
+        var elVal = fromElStyle[key];
+        transFromStyleProps[key] = elVal;
+      }
+    } else if (fromEl.getAnimationStyleProps && (isTransitionAll(elTransition) || isTransitionAll(styleTransition) || indexOf(elTransition, "style") >= 0)) {
+      var animationProps = fromEl.getAnimationStyleProps();
+      var animationStyleProps = animationProps ? animationProps.style : null;
+      if (animationStyleProps) {
+        !transFromStyleProps && (transFromStyleProps = transFromProps.style = {});
+        var styleKeys = keys(styleOpt);
+        for (var i = 0; i < styleKeys.length; i++) {
+          var key = styleKeys[i];
+          if (animationStyleProps[key]) {
+            var elVal = fromElStyle[key];
+            transFromStyleProps[key] = elVal;
+          }
+        }
+      }
+    }
+  }
+}
+function isNonStyleTransitionEnabled(optVal, elVal) {
+  return !isArrayLike(optVal) ? optVal != null && isFinite(optVal) : optVal !== elVal;
+}
+var getStateToRestore = makeInner();
+var KEYFRAME_EXCLUDE_KEYS = ["percent", "easing", "shape", "style", "extra"];
+function stopPreviousKeyframeAnimationAndRestore(el) {
+  el.stopAnimation("keyframe");
+  el.attr(getStateToRestore(el));
+}
+function applyKeyframeAnimation(el, animationOpts, animatableModel) {
+  if (!animatableModel.isAnimationEnabled() || !animationOpts) {
+    return;
+  }
+  if (isArray$1(animationOpts)) {
+    each$8(animationOpts, function(singleAnimationOpts) {
+      applyKeyframeAnimation(el, singleAnimationOpts, animatableModel);
+    });
+    return;
+  }
+  var keyframes = animationOpts.keyframes;
+  var duration = animationOpts.duration;
+  if (animatableModel && duration == null) {
+    var config = getAnimationConfig("enter", animatableModel, 0);
+    duration = config && config.duration;
+  }
+  if (!keyframes || !duration) {
+    return;
+  }
+  var stateToRestore = getStateToRestore(el);
+  each$8(ELEMENT_ANIMATABLE_PROPS, function(targetPropName) {
+    if (targetPropName && !el[targetPropName]) {
+      return;
+    }
+    var animator;
+    keyframes.sort(function(a, b2) {
+      return a.percent - b2.percent;
+    });
+    each$8(keyframes, function(kf) {
+      var animators = el.animators;
+      var kfValues = targetPropName ? kf[targetPropName] : kf;
+      if (!kfValues) {
+        return;
+      }
+      var propKeys = keys(kfValues);
+      if (!targetPropName) {
+        propKeys = filter(propKeys, function(key) {
+          return indexOf(KEYFRAME_EXCLUDE_KEYS, key) < 0;
+        });
+      }
+      if (!propKeys.length) {
+        return;
+      }
+      if (!animator) {
+        animator = el.animate(targetPropName, animationOpts.loop, true);
+        animator.scope = "keyframe";
+      }
+      for (var i = 0; i < animators.length; i++) {
+        if (animators[i] !== animator && animators[i].targetName === animator.targetName) {
+          animators[i].stopTracks(propKeys);
+        }
+      }
+      targetPropName && (stateToRestore[targetPropName] = stateToRestore[targetPropName] || {});
+      var savedTarget = targetPropName ? stateToRestore[targetPropName] : stateToRestore;
+      each$8(propKeys, function(key) {
+        savedTarget[key] = ((targetPropName ? el[targetPropName] : el) || {})[key];
+      });
+      animator.whenWithKeys(duration * kf.percent, kfValues, propKeys, kf.easing);
+    });
+    if (!animator) {
+      return;
+    }
+    animator.delay(animationOpts.delay || 0).duration(duration).start(animationOpts.easing);
+  });
+}
+var EMPHASIS = "emphasis";
+var NORMAL = "normal";
+var BLUR = "blur";
+var SELECT = "select";
+var STATES = [NORMAL, EMPHASIS, BLUR, SELECT];
+var PATH_ITEM_STYLE = {
+  normal: ["itemStyle"],
+  emphasis: [EMPHASIS, "itemStyle"],
+  blur: [BLUR, "itemStyle"],
+  select: [SELECT, "itemStyle"]
+};
+var PATH_LABEL = {
+  normal: ["label"],
+  emphasis: [EMPHASIS, "label"],
+  blur: [BLUR, "label"],
+  select: [SELECT, "label"]
+};
+var DEFAULT_TRANSITION = ["x", "y"];
+var GROUP_DIFF_PREFIX = "e\0\0";
+var attachedTxInfoTmp = {
+  normal: {},
+  emphasis: {},
+  blur: {},
+  select: {}
+};
+var prepareCustoms = {
+  cartesian2d: cartesianPrepareCustom,
+  geo: geoPrepareCustom,
+  single: singlePrepareCustom,
+  polar: polarPrepareCustom,
+  calendar: calendarPrepareCustom
+};
+function isPath(el) {
+  return el instanceof Path$1;
+}
+function isDisplayable(el) {
+  return el instanceof Displayable$1;
+}
+function copyElement(sourceEl, targetEl) {
+  targetEl.copyTransform(sourceEl);
+  if (isDisplayable(targetEl) && isDisplayable(sourceEl)) {
+    targetEl.setStyle(sourceEl.style);
+    targetEl.z = sourceEl.z;
+    targetEl.z2 = sourceEl.z2;
+    targetEl.zlevel = sourceEl.zlevel;
+    targetEl.invisible = sourceEl.invisible;
+    targetEl.ignore = sourceEl.ignore;
+    if (isPath(targetEl) && isPath(sourceEl)) {
+      targetEl.setShape(sourceEl.shape);
+    }
+  }
+}
+var CustomChartView = (
+  /** @class */
+  function(_super) {
+    __extends(CustomChartView2, _super);
+    function CustomChartView2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = CustomChartView2.type;
+      return _this;
+    }
+    CustomChartView2.prototype.render = function(customSeries, ecModel, api, payload) {
+      this._progressiveEls = null;
+      var oldData = this._data;
+      var data = customSeries.getData();
+      var group = this.group;
+      var renderItem = makeRenderItem(customSeries, data, ecModel, api);
+      if (!oldData) {
+        group.removeAll();
+      }
+      data.diff(oldData).add(function(newIdx) {
+        createOrUpdateItem(api, null, newIdx, renderItem(newIdx, payload), customSeries, group, data);
+      }).remove(function(oldIdx) {
+        var el = oldData.getItemGraphicEl(oldIdx);
+        el && applyLeaveTransition(el, customInnerStore(el).option, customSeries);
+      }).update(function(newIdx, oldIdx) {
+        var oldEl = oldData.getItemGraphicEl(oldIdx);
+        createOrUpdateItem(api, oldEl, newIdx, renderItem(newIdx, payload), customSeries, group, data);
+      }).execute();
+      var clipPath = customSeries.get("clip", true) ? createClipPath(customSeries.coordinateSystem, false, customSeries) : null;
+      if (clipPath) {
+        group.setClipPath(clipPath);
+      } else {
+        group.removeClipPath();
+      }
+      this._data = data;
+    };
+    CustomChartView2.prototype.incrementalPrepareRender = function(customSeries, ecModel, api) {
+      this.group.removeAll();
+      this._data = null;
+    };
+    CustomChartView2.prototype.incrementalRender = function(params, customSeries, ecModel, api, payload) {
+      var data = customSeries.getData();
+      var renderItem = makeRenderItem(customSeries, data, ecModel, api);
+      var progressiveEls = this._progressiveEls = [];
+      function setIncrementalAndHoverLayer(el2) {
+        if (!el2.isGroup) {
+          el2.incremental = true;
+          el2.ensureState("emphasis").hoverLayer = true;
+        }
+      }
+      for (var idx = params.start; idx < params.end; idx++) {
+        var el = createOrUpdateItem(null, null, idx, renderItem(idx, payload), customSeries, this.group, data);
+        if (el) {
+          el.traverse(setIncrementalAndHoverLayer);
+          progressiveEls.push(el);
+        }
+      }
+    };
+    CustomChartView2.prototype.eachRendered = function(cb) {
+      traverseElements(this._progressiveEls || this.group, cb);
+    };
+    CustomChartView2.prototype.filterForExposedEvent = function(eventType, query, targetEl, packedEvent) {
+      var elementName = query.element;
+      if (elementName == null || targetEl.name === elementName) {
+        return true;
+      }
+      while ((targetEl = targetEl.__hostTarget || targetEl.parent) && targetEl !== this.group) {
+        if (targetEl.name === elementName) {
+          return true;
+        }
+      }
+      return false;
+    };
+    CustomChartView2.type = "custom";
+    return CustomChartView2;
+  }(ChartView$1)
+);
+const CustomChartView$1 = CustomChartView;
+function createEl(elOption) {
+  var graphicType = elOption.type;
+  var el;
+  if (graphicType === "path") {
+    var shape = elOption.shape;
+    var pathRect = shape.width != null && shape.height != null ? {
+      x: shape.x || 0,
+      y: shape.y || 0,
+      width: shape.width,
+      height: shape.height
+    } : null;
+    var pathData = getPathData(shape);
+    el = makePath(pathData, null, pathRect, shape.layout || "center");
+    customInnerStore(el).customPathData = pathData;
+  } else if (graphicType === "image") {
+    el = new ZRImage$1({});
+    customInnerStore(el).customImagePath = elOption.style.image;
+  } else if (graphicType === "text") {
+    el = new ZRText$1({});
+  } else if (graphicType === "group") {
+    el = new Group$3();
+  } else if (graphicType === "compoundPath") {
+    throw new Error('"compoundPath" is not supported yet.');
+  } else {
+    var Clz = getShapeClass(graphicType);
+    if (!Clz) {
+      var errMsg = "";
+      throwError(errMsg);
+    }
+    el = new Clz();
+  }
+  customInnerStore(el).customGraphicType = graphicType;
+  el.name = elOption.name;
+  el.z2EmphasisLift = 1;
+  el.z2SelectLift = 1;
+  return el;
+}
+function updateElNormal(api, el, dataIndex, elOption, attachedTxInfo, seriesModel, isInit) {
+  stopPreviousKeyframeAnimationAndRestore(el);
+  var txCfgOpt = attachedTxInfo && attachedTxInfo.normal.cfg;
+  if (txCfgOpt) {
+    el.setTextConfig(txCfgOpt);
+  }
+  if (elOption && elOption.transition == null) {
+    elOption.transition = DEFAULT_TRANSITION;
+  }
+  var styleOpt = elOption && elOption.style;
+  if (styleOpt) {
+    if (el.type === "text") {
+      var textOptionStyle = styleOpt;
+      hasOwn$1(textOptionStyle, "textFill") && (textOptionStyle.fill = textOptionStyle.textFill);
+      hasOwn$1(textOptionStyle, "textStroke") && (textOptionStyle.stroke = textOptionStyle.textStroke);
+    }
+    var decalPattern = void 0;
+    var decalObj = isPath(el) ? styleOpt.decal : null;
+    if (api && decalObj) {
+      decalObj.dirty = true;
+      decalPattern = createOrUpdatePatternFromDecal(decalObj, api);
+    }
+    styleOpt.__decalPattern = decalPattern;
+  }
+  if (isDisplayable(el)) {
+    if (styleOpt) {
+      var decalPattern = styleOpt.__decalPattern;
+      if (decalPattern) {
+        styleOpt.decal = decalPattern;
+      }
+    }
+  }
+  applyUpdateTransition(el, elOption, seriesModel, {
+    dataIndex,
+    isInit,
+    clearStyle: true
+  });
+  applyKeyframeAnimation(el, elOption.keyframeAnimation, seriesModel);
+}
+function updateElOnState(state, el, elStateOpt, styleOpt, attachedTxInfo) {
+  var elDisplayable = el.isGroup ? null : el;
+  var txCfgOpt = attachedTxInfo && attachedTxInfo[state].cfg;
+  if (elDisplayable) {
+    var stateObj = elDisplayable.ensureState(state);
+    if (styleOpt === false) {
+      var existingEmphasisState = elDisplayable.getState(state);
+      if (existingEmphasisState) {
+        existingEmphasisState.style = null;
+      }
+    } else {
+      stateObj.style = styleOpt || null;
+    }
+    if (txCfgOpt) {
+      stateObj.textConfig = txCfgOpt;
+    }
+    setDefaultStateProxy(elDisplayable);
+  }
+}
+function updateZ(el, elOption, seriesModel) {
+  if (el.isGroup) {
+    return;
+  }
+  var elDisplayable = el;
+  var currentZ = seriesModel.currentZ;
+  var currentZLevel = seriesModel.currentZLevel;
+  elDisplayable.z = currentZ;
+  elDisplayable.zlevel = currentZLevel;
+  var optZ2 = elOption.z2;
+  optZ2 != null && (elDisplayable.z2 = optZ2 || 0);
+  for (var i = 0; i < STATES.length; i++) {
+    updateZForEachState(elDisplayable, elOption, STATES[i]);
+  }
+}
+function updateZForEachState(elDisplayable, elOption, state) {
+  var isNormal = state === NORMAL;
+  var elStateOpt = isNormal ? elOption : retrieveStateOption(elOption, state);
+  var optZ2 = elStateOpt ? elStateOpt.z2 : null;
+  var stateObj;
+  if (optZ2 != null) {
+    stateObj = isNormal ? elDisplayable : elDisplayable.ensureState(state);
+    stateObj.z2 = optZ2 || 0;
+  }
+}
+function makeRenderItem(customSeries, data, ecModel, api) {
+  var renderItem = customSeries.get("renderItem");
+  var coordSys = customSeries.coordinateSystem;
+  var prepareResult2 = {};
+  if (coordSys) {
+    prepareResult2 = coordSys.prepareCustoms ? coordSys.prepareCustoms(coordSys) : prepareCustoms[coordSys.type](coordSys);
+  }
+  var userAPI = defaults({
+    getWidth: api.getWidth,
+    getHeight: api.getHeight,
+    getZr: api.getZr,
+    getDevicePixelRatio: api.getDevicePixelRatio,
+    value,
+    style: style2,
+    ordinalRawValue,
+    styleEmphasis,
+    visual,
+    barLayout,
+    currentSeriesIndices,
+    font
+  }, prepareResult2.api || {});
+  var userParams = {
+    // The life cycle of context: current round of rendering.
+    // The global life cycle is probably not necessary, because
+    // user can store global status by themselves.
+    context: {},
+    seriesId: customSeries.id,
+    seriesName: customSeries.name,
+    seriesIndex: customSeries.seriesIndex,
+    coordSys: prepareResult2.coordSys,
+    dataInsideLength: data.count(),
+    encode: wrapEncodeDef(customSeries.getData())
+  };
+  var currDataIndexInside;
+  var currItemModel;
+  var currItemStyleModels = {};
+  var currLabelModels = {};
+  var seriesItemStyleModels = {};
+  var seriesLabelModels = {};
+  for (var i = 0; i < STATES.length; i++) {
+    var stateName = STATES[i];
+    seriesItemStyleModels[stateName] = customSeries.getModel(PATH_ITEM_STYLE[stateName]);
+    seriesLabelModels[stateName] = customSeries.getModel(PATH_LABEL[stateName]);
+  }
+  function getItemModel(dataIndexInside) {
+    return dataIndexInside === currDataIndexInside ? currItemModel || (currItemModel = data.getItemModel(dataIndexInside)) : data.getItemModel(dataIndexInside);
+  }
+  function getItemStyleModel(dataIndexInside, state) {
+    return !data.hasItemOption ? seriesItemStyleModels[state] : dataIndexInside === currDataIndexInside ? currItemStyleModels[state] || (currItemStyleModels[state] = getItemModel(dataIndexInside).getModel(PATH_ITEM_STYLE[state])) : getItemModel(dataIndexInside).getModel(PATH_ITEM_STYLE[state]);
+  }
+  function getLabelModel(dataIndexInside, state) {
+    return !data.hasItemOption ? seriesLabelModels[state] : dataIndexInside === currDataIndexInside ? currLabelModels[state] || (currLabelModels[state] = getItemModel(dataIndexInside).getModel(PATH_LABEL[state])) : getItemModel(dataIndexInside).getModel(PATH_LABEL[state]);
+  }
+  return function(dataIndexInside, payload) {
+    currDataIndexInside = dataIndexInside;
+    currItemModel = null;
+    currItemStyleModels = {};
+    currLabelModels = {};
+    return renderItem && renderItem(defaults({
+      dataIndexInside,
+      dataIndex: data.getRawIndex(dataIndexInside),
+      // Can be used for optimization when zoom or roam.
+      actionType: payload ? payload.type : null
+    }, userParams), userAPI);
+  };
+  function value(dim, dataIndexInside) {
+    dataIndexInside == null && (dataIndexInside = currDataIndexInside);
+    return data.getStore().get(data.getDimensionIndex(dim || 0), dataIndexInside);
+  }
+  function ordinalRawValue(dim, dataIndexInside) {
+    dataIndexInside == null && (dataIndexInside = currDataIndexInside);
+    dim = dim || 0;
+    var dimInfo = data.getDimensionInfo(dim);
+    if (!dimInfo) {
+      var dimIndex = data.getDimensionIndex(dim);
+      return dimIndex >= 0 ? data.getStore().get(dimIndex, dataIndexInside) : void 0;
+    }
+    var val = data.get(dimInfo.name, dataIndexInside);
+    var ordinalMeta = dimInfo && dimInfo.ordinalMeta;
+    return ordinalMeta ? ordinalMeta.categories[val] : val;
+  }
+  function style2(userProps, dataIndexInside) {
+    dataIndexInside == null && (dataIndexInside = currDataIndexInside);
+    var style3 = data.getItemVisual(dataIndexInside, "style");
+    var visualColor = style3 && style3.fill;
+    var opacity = style3 && style3.opacity;
+    var itemStyle = getItemStyleModel(dataIndexInside, NORMAL).getItemStyle();
+    visualColor != null && (itemStyle.fill = visualColor);
+    opacity != null && (itemStyle.opacity = opacity);
+    var opt = {
+      inheritColor: isString$3(visualColor) ? visualColor : "#000"
+    };
+    var labelModel = getLabelModel(dataIndexInside, NORMAL);
+    var textStyle = createTextStyle(labelModel, null, opt, false, true);
+    textStyle.text = labelModel.getShallow("show") ? retrieve2(customSeries.getFormattedLabel(dataIndexInside, NORMAL), getDefaultLabel(data, dataIndexInside)) : null;
+    var textConfig = createTextConfig(labelModel, opt, false);
+    preFetchFromExtra(userProps, itemStyle);
+    itemStyle = convertToEC4StyleForCustomSerise(itemStyle, textStyle, textConfig);
+    userProps && applyUserPropsAfter(itemStyle, userProps);
+    itemStyle.legacy = true;
+    return itemStyle;
+  }
+  function styleEmphasis(userProps, dataIndexInside) {
+    dataIndexInside == null && (dataIndexInside = currDataIndexInside);
+    var itemStyle = getItemStyleModel(dataIndexInside, EMPHASIS).getItemStyle();
+    var labelModel = getLabelModel(dataIndexInside, EMPHASIS);
+    var textStyle = createTextStyle(labelModel, null, null, true, true);
+    textStyle.text = labelModel.getShallow("show") ? retrieve3(customSeries.getFormattedLabel(dataIndexInside, EMPHASIS), customSeries.getFormattedLabel(dataIndexInside, NORMAL), getDefaultLabel(data, dataIndexInside)) : null;
+    var textConfig = createTextConfig(labelModel, null, true);
+    preFetchFromExtra(userProps, itemStyle);
+    itemStyle = convertToEC4StyleForCustomSerise(itemStyle, textStyle, textConfig);
+    userProps && applyUserPropsAfter(itemStyle, userProps);
+    itemStyle.legacy = true;
+    return itemStyle;
+  }
+  function applyUserPropsAfter(itemStyle, extra) {
+    for (var key in extra) {
+      if (hasOwn$1(extra, key)) {
+        itemStyle[key] = extra[key];
+      }
+    }
+  }
+  function preFetchFromExtra(extra, itemStyle) {
+    if (extra) {
+      extra.textFill && (itemStyle.textFill = extra.textFill);
+      extra.textPosition && (itemStyle.textPosition = extra.textPosition);
+    }
+  }
+  function visual(visualType, dataIndexInside) {
+    dataIndexInside == null && (dataIndexInside = currDataIndexInside);
+    if (hasOwn$1(STYLE_VISUAL_TYPE, visualType)) {
+      var style_1 = data.getItemVisual(dataIndexInside, "style");
+      return style_1 ? style_1[STYLE_VISUAL_TYPE[visualType]] : null;
+    }
+    if (hasOwn$1(NON_STYLE_VISUAL_PROPS, visualType)) {
+      return data.getItemVisual(dataIndexInside, visualType);
+    }
+  }
+  function barLayout(opt) {
+    if (coordSys.type === "cartesian2d") {
+      var baseAxis = coordSys.getBaseAxis();
+      return getLayoutOnAxis(defaults({
+        axis: baseAxis
+      }, opt));
+    }
+  }
+  function currentSeriesIndices() {
+    return ecModel.getCurrentSeriesIndices();
+  }
+  function font(opt) {
+    return getFont(opt, ecModel);
+  }
+}
+function wrapEncodeDef(data) {
+  var encodeDef = {};
+  each$8(data.dimensions, function(dimName) {
+    var dimInfo = data.getDimensionInfo(dimName);
+    if (!dimInfo.isExtraCoord) {
+      var coordDim = dimInfo.coordDim;
+      var dataDims = encodeDef[coordDim] = encodeDef[coordDim] || [];
+      dataDims[dimInfo.coordDimIndex] = data.getDimensionIndex(dimName);
+    }
+  });
+  return encodeDef;
+}
+function createOrUpdateItem(api, existsEl, dataIndex, elOption, seriesModel, group, data) {
+  if (!elOption) {
+    group.remove(existsEl);
+    return;
+  }
+  var el = doCreateOrUpdateEl(api, existsEl, dataIndex, elOption, seriesModel, group);
+  el && data.setItemGraphicEl(dataIndex, el);
+  el && toggleHoverEmphasis(el, elOption.focus, elOption.blurScope, elOption.emphasisDisabled);
+  return el;
+}
+function doCreateOrUpdateEl(api, existsEl, dataIndex, elOption, seriesModel, group) {
+  var toBeReplacedIdx = -1;
+  var oldEl = existsEl;
+  if (existsEl && doesElNeedRecreate(existsEl, elOption, seriesModel)) {
+    toBeReplacedIdx = indexOf(group.childrenRef(), existsEl);
+    existsEl = null;
+  }
+  var isInit = !existsEl;
+  var el = existsEl;
+  if (!el) {
+    el = createEl(elOption);
+    if (oldEl) {
+      copyElement(oldEl, el);
+    }
+  } else {
+    el.clearStates();
+  }
+  if (elOption.morph === false) {
+    el.disableMorphing = true;
+  } else if (el.disableMorphing) {
+    el.disableMorphing = false;
+  }
+  attachedTxInfoTmp.normal.cfg = attachedTxInfoTmp.normal.conOpt = attachedTxInfoTmp.emphasis.cfg = attachedTxInfoTmp.emphasis.conOpt = attachedTxInfoTmp.blur.cfg = attachedTxInfoTmp.blur.conOpt = attachedTxInfoTmp.select.cfg = attachedTxInfoTmp.select.conOpt = null;
+  attachedTxInfoTmp.isLegacy = false;
+  doCreateOrUpdateAttachedTx(el, dataIndex, elOption, seriesModel, isInit, attachedTxInfoTmp);
+  doCreateOrUpdateClipPath(el, dataIndex, elOption, seriesModel, isInit);
+  updateElNormal(api, el, dataIndex, elOption, attachedTxInfoTmp, seriesModel, isInit);
+  hasOwn$1(elOption, "info") && (customInnerStore(el).info = elOption.info);
+  for (var i = 0; i < STATES.length; i++) {
+    var stateName = STATES[i];
+    if (stateName !== NORMAL) {
+      var otherStateOpt = retrieveStateOption(elOption, stateName);
+      var otherStyleOpt = retrieveStyleOptionOnState(elOption, otherStateOpt, stateName);
+      updateElOnState(stateName, el, otherStateOpt, otherStyleOpt, attachedTxInfoTmp);
+    }
+  }
+  updateZ(el, elOption, seriesModel);
+  if (elOption.type === "group") {
+    mergeChildren(api, el, dataIndex, elOption, seriesModel);
+  }
+  if (toBeReplacedIdx >= 0) {
+    group.replaceAt(el, toBeReplacedIdx);
+  } else {
+    group.add(el);
+  }
+  return el;
+}
+function doesElNeedRecreate(el, elOption, seriesModel) {
+  var elInner = customInnerStore(el);
+  var elOptionType = elOption.type;
+  var elOptionShape = elOption.shape;
+  var elOptionStyle = elOption.style;
+  return (
+    // Always create new if universal transition is enabled.
+    // Because we do transition after render. It needs to know what old element is. Replacement will loose it.
+    seriesModel.isUniversalTransitionEnabled() || elOptionType != null && elOptionType !== elInner.customGraphicType || elOptionType === "path" && hasOwnPathData(elOptionShape) && getPathData(elOptionShape) !== elInner.customPathData || elOptionType === "image" && hasOwn$1(elOptionStyle, "image") && elOptionStyle.image !== elInner.customImagePath
+  );
+}
+function doCreateOrUpdateClipPath(el, dataIndex, elOption, seriesModel, isInit) {
+  var clipPathOpt = elOption.clipPath;
+  if (clipPathOpt === false) {
+    if (el && el.getClipPath()) {
+      el.removeClipPath();
+    }
+  } else if (clipPathOpt) {
+    var clipPath = el.getClipPath();
+    if (clipPath && doesElNeedRecreate(clipPath, clipPathOpt, seriesModel)) {
+      clipPath = null;
+    }
+    if (!clipPath) {
+      clipPath = createEl(clipPathOpt);
+      el.setClipPath(clipPath);
+    }
+    updateElNormal(null, clipPath, dataIndex, clipPathOpt, null, seriesModel, isInit);
+  }
+}
+function doCreateOrUpdateAttachedTx(el, dataIndex, elOption, seriesModel, isInit, attachedTxInfo) {
+  if (el.isGroup) {
+    return;
+  }
+  processTxInfo(elOption, null, attachedTxInfo);
+  processTxInfo(elOption, EMPHASIS, attachedTxInfo);
+  var txConOptNormal = attachedTxInfo.normal.conOpt;
+  var txConOptEmphasis = attachedTxInfo.emphasis.conOpt;
+  var txConOptBlur = attachedTxInfo.blur.conOpt;
+  var txConOptSelect = attachedTxInfo.select.conOpt;
+  if (txConOptNormal != null || txConOptEmphasis != null || txConOptSelect != null || txConOptBlur != null) {
+    var textContent = el.getTextContent();
+    if (txConOptNormal === false) {
+      textContent && el.removeTextContent();
+    } else {
+      txConOptNormal = attachedTxInfo.normal.conOpt = txConOptNormal || {
+        type: "text"
+      };
+      if (!textContent) {
+        textContent = createEl(txConOptNormal);
+        el.setTextContent(textContent);
+      } else {
+        textContent.clearStates();
+      }
+      updateElNormal(null, textContent, dataIndex, txConOptNormal, null, seriesModel, isInit);
+      var txConStlOptNormal = txConOptNormal && txConOptNormal.style;
+      for (var i = 0; i < STATES.length; i++) {
+        var stateName = STATES[i];
+        if (stateName !== NORMAL) {
+          var txConOptOtherState = attachedTxInfo[stateName].conOpt;
+          updateElOnState(stateName, textContent, txConOptOtherState, retrieveStyleOptionOnState(txConOptNormal, txConOptOtherState, stateName), null);
+        }
+      }
+      txConStlOptNormal ? textContent.dirty() : textContent.markRedraw();
+    }
+  }
+}
+function processTxInfo(elOption, state, attachedTxInfo) {
+  var stateOpt = !state ? elOption : retrieveStateOption(elOption, state);
+  var styleOpt = !state ? elOption.style : retrieveStyleOptionOnState(elOption, stateOpt, EMPHASIS);
+  var elType = elOption.type;
+  var txCfg = stateOpt ? stateOpt.textConfig : null;
+  var txConOptNormal = elOption.textContent;
+  var txConOpt = !txConOptNormal ? null : !state ? txConOptNormal : retrieveStateOption(txConOptNormal, state);
+  if (styleOpt && // Because emphasis style has little info to detect legacy,
+  // if normal is legacy, emphasis is trade as legacy.
+  (attachedTxInfo.isLegacy || isEC4CompatibleStyle(styleOpt, elType, !!txCfg, !!txConOpt))) {
+    attachedTxInfo.isLegacy = true;
+    var convertResult = convertFromEC4CompatibleStyle(styleOpt, elType, !state);
+    if (!txCfg && convertResult.textConfig) {
+      txCfg = convertResult.textConfig;
+    }
+    if (!txConOpt && convertResult.textContent) {
+      txConOpt = convertResult.textContent;
+    }
+  }
+  if (!state && txConOpt) {
+    var txConOptNormal_1 = txConOpt;
+    !txConOptNormal_1.type && (txConOptNormal_1.type = "text");
+  }
+  var info = !state ? attachedTxInfo.normal : attachedTxInfo[state];
+  info.cfg = txCfg;
+  info.conOpt = txConOpt;
+}
+function retrieveStateOption(elOption, state) {
+  return !state ? elOption : elOption ? elOption[state] : null;
+}
+function retrieveStyleOptionOnState(stateOptionNormal, stateOption, state) {
+  var style2 = stateOption && stateOption.style;
+  if (style2 == null && state === EMPHASIS && stateOptionNormal) {
+    style2 = stateOptionNormal.styleEmphasis;
+  }
+  return style2;
+}
+function mergeChildren(api, el, dataIndex, elOption, seriesModel) {
+  var newChildren = elOption.children;
+  var newLen = newChildren ? newChildren.length : 0;
+  var mergeChildren2 = elOption.$mergeChildren;
+  var byName = mergeChildren2 === "byName" || elOption.diffChildrenByName;
+  var notMerge = mergeChildren2 === false;
+  if (!newLen && !byName && !notMerge) {
+    return;
+  }
+  if (byName) {
+    diffGroupChildren({
+      api,
+      oldChildren: el.children() || [],
+      newChildren: newChildren || [],
+      dataIndex,
+      seriesModel,
+      group: el
+    });
+    return;
+  }
+  notMerge && el.removeAll();
+  var index = 0;
+  for (; index < newLen; index++) {
+    var newChild = newChildren[index];
+    var oldChild = el.childAt(index);
+    if (newChild) {
+      if (newChild.ignore == null) {
+        newChild.ignore = false;
+      }
+      doCreateOrUpdateEl(api, oldChild, dataIndex, newChild, seriesModel, el);
+    } else {
+      oldChild.ignore = true;
+    }
+  }
+  for (var i = el.childCount() - 1; i >= index; i--) {
+    var child = el.childAt(i);
+    removeChildFromGroup(el, child, seriesModel);
+  }
+}
+function removeChildFromGroup(group, child, seriesModel) {
+  child && applyLeaveTransition(child, customInnerStore(group).option, seriesModel);
+}
+function diffGroupChildren(context) {
+  new DataDiffer$1(context.oldChildren, context.newChildren, getKey, getKey, context).add(processAddUpdate).update(processAddUpdate).remove(processRemove).execute();
+}
+function getKey(item, idx) {
+  var name = item && item.name;
+  return name != null ? name : GROUP_DIFF_PREFIX + idx;
+}
+function processAddUpdate(newIndex, oldIndex) {
+  var context = this.context;
+  var childOption = newIndex != null ? context.newChildren[newIndex] : null;
+  var child = oldIndex != null ? context.oldChildren[oldIndex] : null;
+  doCreateOrUpdateEl(context.api, child, context.dataIndex, childOption, context.seriesModel, context.group);
+}
+function processRemove(oldIndex) {
+  var context = this.context;
+  var child = context.oldChildren[oldIndex];
+  child && applyLeaveTransition(child, customInnerStore(child).option, context.seriesModel);
+}
+function getPathData(shape) {
+  return shape && (shape.pathData || shape.d);
+}
+function hasOwnPathData(shape) {
+  return shape && (hasOwn$1(shape, "pathData") || hasOwn$1(shape, "d"));
+}
+function install$f(registers) {
+  registers.registerChartView(CustomChartView$1);
+  registers.registerSeriesModel(CustomSeriesModel$1);
+}
+var inner$8 = makeInner();
 var clone$2 = clone$4;
 var bind = bind$1;
 var BaseAxisPointer = (
@@ -46523,19 +48096,19 @@ var BaseAxisPointer = (
     BaseAxisPointer2.prototype.createPointerEl = function(group, elOption, axisModel, axisPointerModel) {
       var pointerOption = elOption.pointer;
       if (pointerOption) {
-        var pointerEl = inner$7(group).pointerEl = new graphic[pointerOption.type](clone$2(elOption.pointer));
+        var pointerEl = inner$8(group).pointerEl = new graphic[pointerOption.type](clone$2(elOption.pointer));
         group.add(pointerEl);
       }
     };
     BaseAxisPointer2.prototype.createLabelEl = function(group, elOption, axisModel, axisPointerModel) {
       if (elOption.label) {
-        var labelEl = inner$7(group).labelEl = new ZRText$1(clone$2(elOption.label));
+        var labelEl = inner$8(group).labelEl = new ZRText$1(clone$2(elOption.label));
         group.add(labelEl);
         updateLabelShowHide(labelEl, axisPointerModel);
       }
     };
     BaseAxisPointer2.prototype.updatePointerEl = function(group, elOption, updateProps2) {
-      var pointerEl = inner$7(group).pointerEl;
+      var pointerEl = inner$8(group).pointerEl;
       if (pointerEl && elOption.pointer) {
         pointerEl.setStyle(elOption.pointer.style);
         updateProps2(pointerEl, {
@@ -46544,7 +48117,7 @@ var BaseAxisPointer = (
       }
     };
     BaseAxisPointer2.prototype.updateLabelEl = function(group, elOption, updateProps2, axisPointerModel) {
-      var labelEl = inner$7(group).labelEl;
+      var labelEl = inner$8(group).labelEl;
       if (labelEl) {
         labelEl.setStyle(elOption.label.style);
         updateProps2(labelEl, {
@@ -46611,7 +48184,7 @@ var BaseAxisPointer = (
       this._payloadInfo = trans;
       handle.stopAnimation();
       handle.attr(getHandleTransProps(trans));
-      inner$7(handle).lastProp = null;
+      inner$8(handle).lastProp = null;
       this._doDispatchAxisPointer();
     };
     BaseAxisPointer2.prototype._doDispatchAxisPointer = function() {
@@ -46675,8 +48248,8 @@ var BaseAxisPointer = (
   }()
 );
 function updateProps(animationModel, moveAnimation, el, props) {
-  if (!propsEqual(inner$7(el).lastProp, props)) {
-    inner$7(el).lastProp = props;
+  if (!propsEqual(inner$8(el).lastProp, props)) {
+    inner$8(el).lastProp = props;
     moveAnimation ? updateProps$1(el, props, animationModel) : (el.stopAnimation(), el.attr(props));
   }
 }
@@ -47007,30 +48580,30 @@ var AxisPointerModel = (
   }(ComponentModel$1)
 );
 const AxisPointerModel$1 = AxisPointerModel;
-var inner$6 = makeInner();
+var inner$7 = makeInner();
 var each$4 = each$8;
 function register(key, api, handler) {
   if (env$1.node) {
     return;
   }
   var zr = api.getZr();
-  inner$6(zr).records || (inner$6(zr).records = {});
+  inner$7(zr).records || (inner$7(zr).records = {});
   initGlobalListeners(zr, api);
-  var record = inner$6(zr).records[key] || (inner$6(zr).records[key] = {});
+  var record = inner$7(zr).records[key] || (inner$7(zr).records[key] = {});
   record.handler = handler;
 }
 function initGlobalListeners(zr, api) {
-  if (inner$6(zr).initialized) {
+  if (inner$7(zr).initialized) {
     return;
   }
-  inner$6(zr).initialized = true;
+  inner$7(zr).initialized = true;
   useHandler("click", curry$1(doEnter, "click"));
   useHandler("mousemove", curry$1(doEnter, "mousemove"));
   useHandler("globalout", onLeave);
   function useHandler(eventType, cb) {
     zr.on(eventType, function(e2) {
       var dis = makeDispatchAction$1(api);
-      each$4(inner$6(zr).records, function(record) {
+      each$4(inner$7(zr).records, function(record) {
         record && cb(record, e2, dis.dispatchAction);
       });
       dispatchTooltipFinally(dis.pendings, api);
@@ -47051,28 +48624,28 @@ function dispatchTooltipFinally(pendings, api) {
     api.dispatchAction(actuallyPayload);
   }
 }
-function onLeave(record, e2, dispatchAction) {
-  record.handler("leave", null, dispatchAction);
+function onLeave(record, e2, dispatchAction2) {
+  record.handler("leave", null, dispatchAction2);
 }
-function doEnter(currTrigger, record, e2, dispatchAction) {
-  record.handler(currTrigger, e2, dispatchAction);
+function doEnter(currTrigger, record, e2, dispatchAction2) {
+  record.handler(currTrigger, e2, dispatchAction2);
 }
 function makeDispatchAction$1(api) {
   var pendings = {
     showTip: [],
     hideTip: []
   };
-  var dispatchAction = function(payload) {
+  var dispatchAction2 = function(payload) {
     var pendingList = pendings[payload.type];
     if (pendingList) {
       pendingList.push(payload);
     } else {
-      payload.dispatchAction = dispatchAction;
+      payload.dispatchAction = dispatchAction2;
       api.dispatchAction(payload);
     }
   };
   return {
-    dispatchAction,
+    dispatchAction: dispatchAction2,
     pendings
   };
 }
@@ -47081,9 +48654,9 @@ function unregister(key, api) {
     return;
   }
   var zr = api.getZr();
-  var record = (inner$6(zr).records || {})[key];
+  var record = (inner$7(zr).records || {})[key];
   if (record) {
-    inner$6(zr).records[key] = null;
+    inner$7(zr).records[key] = null;
   }
 }
 var AxisPointerView = (
@@ -47098,9 +48671,9 @@ var AxisPointerView = (
     AxisPointerView2.prototype.render = function(globalAxisPointerModel, ecModel, api) {
       var globalTooltipModel = ecModel.getComponent("tooltip");
       var triggerOn = globalAxisPointerModel.get("triggerOn") || globalTooltipModel && globalTooltipModel.get("triggerOn") || "mousemove|click";
-      register("axisPointer", api, function(currTrigger, e2, dispatchAction) {
+      register("axisPointer", api, function(currTrigger, e2, dispatchAction2) {
         if (triggerOn !== "none" && (currTrigger === "leave" || triggerOn.indexOf(currTrigger) >= 0)) {
-          dispatchAction({
+          dispatchAction2({
             type: "updateAxisPointer",
             currTrigger,
             x: e2 && e2.offsetX,
@@ -47167,12 +48740,12 @@ function findPointFromSeries(finder, ecModel) {
     el
   };
 }
-var inner$5 = makeInner();
+var inner$6 = makeInner();
 function axisTrigger(payload, ecModel, api) {
   var currTrigger = payload.currTrigger;
   var point = [payload.x, payload.y];
   var finder = payload;
-  var dispatchAction = payload.dispatchAction || bind$1(api.dispatchAction, api);
+  var dispatchAction2 = payload.dispatchAction || bind$1(api.dispatchAction, api);
   var coordSysAxesInfo = ecModel.getComponent("axisPointer").coordSysAxesInfo;
   if (!coordSysAxesInfo) {
     return;
@@ -47231,8 +48804,8 @@ function axisTrigger(payload, ecModel, api) {
     processOnAxis(axesInfo[tarKey], val, updaters, true, outputPayload);
   });
   updateModelActually(showValueMap, axesInfo, outputPayload);
-  dispatchTooltipActually(dataByCoordSys, point, payload, dispatchAction);
-  dispatchHighDownActually(axesInfo, dispatchAction, api);
+  dispatchTooltipActually(dataByCoordSys, point, payload, dispatchAction2);
+  dispatchHighDownActually(axesInfo, dispatchAction2, api);
   return outputPayload;
 }
 function processOnAxis(axisInfo, newValue, updaters, noSnap, outputFinder) {
@@ -47376,15 +48949,15 @@ function updateModelActually(showValueMap, axesInfo, outputPayload) {
     });
   });
 }
-function dispatchTooltipActually(dataByCoordSys, point, payload, dispatchAction) {
+function dispatchTooltipActually(dataByCoordSys, point, payload, dispatchAction2) {
   if (illegalPoint(point) || !dataByCoordSys.list.length) {
-    dispatchAction({
+    dispatchAction2({
       type: "hideTip"
     });
     return;
   }
   var sampleItem = ((dataByCoordSys.list[0].dataByAxis[0] || {}).seriesDataIndices || [])[0] || {};
-  dispatchAction({
+  dispatchAction2({
     type: "showTip",
     escapeConnect: true,
     x: point[0],
@@ -47397,11 +48970,11 @@ function dispatchTooltipActually(dataByCoordSys, point, payload, dispatchAction)
     dataByCoordSys: dataByCoordSys.list
   });
 }
-function dispatchHighDownActually(axesInfo, dispatchAction, api) {
+function dispatchHighDownActually(axesInfo, dispatchAction2, api) {
   var zr = api.getZr();
   var highDownKey = "axisPointerLastHighlights";
-  var lastHighlights = inner$5(zr)[highDownKey] || {};
-  var newHighlights = inner$5(zr)[highDownKey] = {};
+  var lastHighlights = inner$6(zr)[highDownKey] || {};
+  var newHighlights = inner$6(zr)[highDownKey] = {};
   each$8(axesInfo, function(axisInfo, key) {
     var option = axisInfo.axisPointerModel.option;
     option.status === "show" && each$8(option.seriesDataIndices, function(batchItem) {
@@ -47452,7 +49025,7 @@ function makeMapperParam(axisInfo) {
 function illegalPoint(point) {
   return !point || point[0] == null || isNaN(point[0]) || point[1] == null || isNaN(point[1]);
 }
-function install$b(registers) {
+function install$e(registers) {
   AxisView$1.registerAxisPointerClass("CartesianAxisPointer", CartesianAxisPointer$1);
   registers.registerComponentModel(AxisPointerModel$1);
   registers.registerComponentView(AxisPointerView$1);
@@ -47474,9 +49047,9 @@ function install$b(registers) {
     update: ":updateAxisPointer"
   }, axisTrigger);
 }
-function install$a(registers) {
+function install$d(registers) {
+  use(install$i);
   use(install$e);
-  use(install$b);
 }
 var DATA_ZOOM_AXIS_DIMENSIONS = ["x", "y", "radius", "angle", "single"];
 var SERIES_COORDS = ["cartesian2d", "polar", "singleAxis"];
@@ -47531,6 +49104,35 @@ function findEffectedDataZooms(ecModel, payload) {
     });
   }
   return effectedModels;
+}
+function collectReferCoordSysModelInfo(dataZoomModel) {
+  var ecModel = dataZoomModel.ecModel;
+  var coordSysInfoWrap = {
+    infoList: [],
+    infoMap: createHashMap()
+  };
+  dataZoomModel.eachTargetAxis(function(axisDim, axisIndex) {
+    var axisModel = ecModel.getComponent(getAxisMainType(axisDim), axisIndex);
+    if (!axisModel) {
+      return;
+    }
+    var coordSysModel = axisModel.getCoordSysModel();
+    if (!coordSysModel) {
+      return;
+    }
+    var coordSysUid = coordSysModel.uid;
+    var coordSysInfo = coordSysInfoWrap.infoMap.get(coordSysUid);
+    if (!coordSysInfo) {
+      coordSysInfo = {
+        model: coordSysModel,
+        axisModels: []
+      };
+      coordSysInfoWrap.infoList.push(coordSysInfo);
+      coordSysInfoWrap.infoMap.set(coordSysUid, coordSysInfo);
+    }
+    coordSysInfo.axisModels.push(axisModel);
+  });
+  return coordSysInfoWrap;
 }
 var DataZoomAxisInfo = (
   /** @class */
@@ -48149,7 +49751,7 @@ function installCommon(registers) {
     return "slider";
   });
 }
-function install$9(registers) {
+function install$c(registers) {
   registers.registerComponentModel(SelectZoomModel);
   registers.registerComponentView(SelectZoomView);
   installCommon(registers);
@@ -48248,7 +49850,7 @@ function makeBackground(rect, componentModel) {
   var padding = normalizeCssArray(componentModel.get("padding"));
   var style2 = componentModel.getItemStyle(["color", "opacity"]);
   style2.fill = componentModel.get("backgroundColor");
-  rect = new Rect$1({
+  rect = new Rect$2({
     shape: {
       x: rect.x - padding[3],
       y: rect.y - padding[0],
@@ -49070,7 +50672,7 @@ registerAction({
 });
 const DataView$1 = DataView;
 var each$2 = each$8;
-var inner$4 = makeInner();
+var inner$5 = makeInner();
 function push(ecModel, newSnapshot) {
   var storedSnapshots = getStoreSnapshots(ecModel);
   each$2(newSnapshot, function(batchItem, dataZoomId) {
@@ -49116,13 +50718,13 @@ function pop(ecModel) {
   return snapshot;
 }
 function clear(ecModel) {
-  inner$4(ecModel).snapshots = null;
+  inner$5(ecModel).snapshots = null;
 }
 function count(ecModel) {
   return getStoreSnapshots(ecModel).length;
 }
 function getStoreSnapshots(ecModel) {
-  var store = inner$4(ecModel);
+  var store = inner$5(ecModel);
   if (!store.snapshots) {
     store.snapshots = [{}];
   }
@@ -49610,7 +51212,7 @@ registerInternalOptionCreator("dataZoom", function(ecModel) {
   return dzOptions;
 });
 const DataZoom = DataZoomFeature;
-function install$8(registers) {
+function install$b(registers) {
   registers.registerComponentModel(ToolboxModel$1);
   registers.registerComponentView(ToolboxView$1);
   registerFeature("saveAsImage", SaveAsImage$1);
@@ -49618,7 +51220,7 @@ function install$8(registers) {
   registerFeature("dataView", DataView$1);
   registerFeature("dataZoom", DataZoom);
   registerFeature("restore", Restore);
-  use(install$9);
+  use(install$c);
 }
 var TooltipModel = (
   /** @class */
@@ -50157,7 +51759,7 @@ function makeStyleCoord(out2, zr, zrX, zrY) {
   out2[3] = out2[1] / zr.getHeight();
 }
 const TooltipRichContent$1 = TooltipRichContent;
-var proxyRect = new Rect$1({
+var proxyRect = new Rect$2({
   shape: {
     x: -1,
     y: -1,
@@ -50207,12 +51809,12 @@ var TooltipView = (
     TooltipView2.prototype._initGlobalListener = function() {
       var tooltipModel = this._tooltipModel;
       var triggerOn = tooltipModel.get("triggerOn");
-      register("itemTooltip", this._api, bind$1(function(currTrigger, e2, dispatchAction) {
+      register("itemTooltip", this._api, bind$1(function(currTrigger, e2, dispatchAction2) {
         if (triggerOn !== "none") {
           if (triggerOn.indexOf(currTrigger) >= 0) {
-            this._tryShow(e2, dispatchAction);
+            this._tryShow(e2, dispatchAction2);
           } else if (currTrigger === "leave") {
-            this._hide(dispatchAction);
+            this._hide(dispatchAction2);
           }
         }
       }, this));
@@ -50238,7 +51840,7 @@ var TooltipView = (
       if (payload.from === this.uid || env$1.node || !api.getDom()) {
         return;
       }
-      var dispatchAction = makeDispatchAction(payload, api);
+      var dispatchAction2 = makeDispatchAction(payload, api);
       this._ticket = "";
       var dataByCoordSys = payload.dataByCoordSys;
       var cmptRef = findComponentReference(payload, ecModel, api);
@@ -50253,7 +51855,7 @@ var TooltipView = (
           // When manully trigger, the mouse is not on the el, so we'd better to
           // position tooltip on the bottom of the el and display arrow is possible.
           positionDefault: "bottom"
-        }, dispatchAction);
+        }, dispatchAction2);
       } else if (payload.tooltip && payload.x != null && payload.y != null) {
         var el = proxyRect;
         el.x = payload.x;
@@ -50267,7 +51869,7 @@ var TooltipView = (
           offsetX: payload.x,
           offsetY: payload.y,
           target: el
-        }, dispatchAction);
+        }, dispatchAction2);
       } else if (dataByCoordSys) {
         this._tryShow({
           offsetX: payload.x,
@@ -50275,7 +51877,7 @@ var TooltipView = (
           position: payload.position,
           dataByCoordSys,
           tooltipOption: payload.tooltipOption
-        }, dispatchAction);
+        }, dispatchAction2);
       } else if (payload.seriesIndex != null) {
         if (this._manuallyAxisShowTip(tooltipModel, ecModel, api, payload)) {
           return;
@@ -50292,7 +51894,7 @@ var TooltipView = (
             // When manully trigger, the mouse is not on the el, so we'd better to
             // position tooltip on the bottom of the el and display arrow is possible.
             positionDefault: "bottom"
-          }, dispatchAction);
+          }, dispatchAction2);
         }
       } else if (payload.x != null && payload.y != null) {
         api.dispatchAction({
@@ -50305,7 +51907,7 @@ var TooltipView = (
           offsetY: payload.y,
           position: payload.position,
           target: api.getZr().findHover(payload.x, payload.y).target
-        }, dispatchAction);
+        }, dispatchAction2);
       }
     };
     TooltipView2.prototype.manuallyHideTip = function(tooltipModel, ecModel, api, payload) {
@@ -50342,7 +51944,7 @@ var TooltipView = (
       });
       return true;
     };
-    TooltipView2.prototype._tryShow = function(e2, dispatchAction) {
+    TooltipView2.prototype._tryShow = function(e2, dispatchAction2) {
       var el = e2.target;
       var tooltipModel = this._tooltipModel;
       if (!tooltipModel) {
@@ -50368,15 +51970,15 @@ var TooltipView = (
           }
         }, true);
         if (seriesDispatcher_1) {
-          this._showSeriesItemTooltip(e2, seriesDispatcher_1, dispatchAction);
+          this._showSeriesItemTooltip(e2, seriesDispatcher_1, dispatchAction2);
         } else if (cmptDispatcher_1) {
-          this._showComponentItemTooltip(e2, cmptDispatcher_1, dispatchAction);
+          this._showComponentItemTooltip(e2, cmptDispatcher_1, dispatchAction2);
         } else {
-          this._hide(dispatchAction);
+          this._hide(dispatchAction2);
         }
       } else {
         this._lastDataByCoordSys = null;
-        this._hide(dispatchAction);
+        this._hide(dispatchAction2);
       }
     };
     TooltipView2.prototype._showOrMove = function(tooltipModel, cb) {
@@ -50460,7 +52062,7 @@ var TooltipView = (
         }
       });
     };
-    TooltipView2.prototype._showSeriesItemTooltip = function(e2, dispatcher, dispatchAction) {
+    TooltipView2.prototype._showSeriesItemTooltip = function(e2, dispatcher, dispatchAction2) {
       var ecModel = this._ecModel;
       var ecData = getECData(dispatcher);
       var seriesIndex = ecData.seriesIndex;
@@ -50492,7 +52094,7 @@ var TooltipView = (
       this._showOrMove(tooltipModel, function() {
         this._showTooltipContent(tooltipModel, markupText, params, asyncTicket, e2.offsetX, e2.offsetY, e2.position, e2.target, markupStyleCreator);
       });
-      dispatchAction({
+      dispatchAction2({
         type: "showTip",
         dataIndexInside: dataIndex,
         dataIndex: data.getRawIndex(dataIndex),
@@ -50500,7 +52102,7 @@ var TooltipView = (
         from: this.uid
       });
     };
-    TooltipView2.prototype._showComponentItemTooltip = function(e2, el, dispatchAction) {
+    TooltipView2.prototype._showComponentItemTooltip = function(e2, el, dispatchAction2) {
       var ecData = getECData(el);
       var tooltipConfig = ecData.tooltipConfig;
       var tooltipOpt = tooltipConfig.option || {};
@@ -50531,7 +52133,7 @@ var TooltipView = (
         var formatterParams = clone$4(subTooltipModel.get("formatterParams") || {});
         this._showTooltipContent(subTooltipModel, defaultHtml, formatterParams, asyncTicket, e2.offsetX, e2.offsetY, e2.position, el, markupStyleCreator);
       });
-      dispatchAction({
+      dispatchAction2({
         type: "showTip",
         from: this.uid
       });
@@ -50667,9 +52269,9 @@ var TooltipView = (
       this._cbParamsList = cbParamsList;
       return !!contentNotChanged;
     };
-    TooltipView2.prototype._hide = function(dispatchAction) {
+    TooltipView2.prototype._hide = function(dispatchAction2) {
       this._lastDataByCoordSys = null;
-      dispatchAction({
+      dispatchAction2({
         type: "hideTip",
         from: this.uid
       });
@@ -50813,8 +52415,8 @@ function findComponentReference(payload, ecModel, api) {
   }
 }
 const TooltipView$1 = TooltipView;
-function install$7(registers) {
-  use(install$b);
+function install$a(registers) {
+  use(install$e);
   registers.registerComponentModel(TooltipModel$1);
   registers.registerComponentView(TooltipView$1);
   registers.registerAction({
@@ -50976,7 +52578,7 @@ var TitleView = (
       var padding = layoutRect.margin;
       var style2 = titleModel.getItemStyle(["color", "opacity"]);
       style2.fill = titleModel.get("backgroundColor");
-      var rect = new Rect$1({
+      var rect = new Rect$2({
         shape: {
           x: groupRect.x - padding[3],
           y: groupRect.y - padding[0],
@@ -50994,7 +52596,7 @@ var TitleView = (
     return TitleView2;
   }(ComponentView$1)
 );
-function install$6(registers) {
+function install$9(registers) {
   registers.registerComponentModel(TitleModel);
   registers.registerComponentView(TitleView);
 }
@@ -51013,7 +52615,7 @@ function checkMarkerInSeries(seriesOpts, markerType) {
 function fillLabel(opt) {
   defaultEmphasis(opt, "label", ["show"]);
 }
-var inner$3 = makeInner();
+var inner$4 = makeInner();
 var MarkerModel = (
   /** @class */
   function(_super) {
@@ -51043,9 +52645,9 @@ var MarkerModel = (
       if (!createdBySelf) {
         ecModel.eachSeries(function(seriesModel) {
           var markerOpt = seriesModel.get(this.mainType, true);
-          var markerModel = inner$3(seriesModel)[componentType];
+          var markerModel = inner$4(seriesModel)[componentType];
           if (!markerOpt || !markerOpt.data) {
-            inner$3(seriesModel)[componentType] = null;
+            inner$4(seriesModel)[componentType] = null;
             return;
           }
           if (!markerModel) {
@@ -51072,7 +52674,7 @@ var MarkerModel = (
           } else {
             markerModel._mergeOption(markerOpt, ecModel, true);
           }
-          inner$3(seriesModel)[componentType] = markerModel;
+          inner$4(seriesModel)[componentType] = markerModel;
         }, this);
       }
     };
@@ -51097,7 +52699,7 @@ var MarkerModel = (
       this._data = data;
     };
     MarkerModel2.getMarkerModelFromSeries = function(seriesModel, componentType) {
-      return inner$3(seriesModel)[componentType];
+      return inner$4(seriesModel)[componentType];
     };
     MarkerModel2.type = "marker";
     MarkerModel2.dependencies = ["series", "grid", "polar", "geo"];
@@ -51260,7 +52862,7 @@ function numCalculate(data, valueDataDim, type) {
     return data.getDataExtent(valueDataDim)[type === "max" ? 1 : 0];
   }
 }
-var inner$2 = makeInner();
+var inner$3 = makeInner();
 var MarkerView = (
   /** @class */
   function(_super) {
@@ -51277,18 +52879,18 @@ var MarkerView = (
       var _this = this;
       var markerGroupMap = this.markerGroupMap;
       markerGroupMap.each(function(item) {
-        inner$2(item).keep = false;
+        inner$3(item).keep = false;
       });
       ecModel.eachSeries(function(seriesModel) {
         var markerModel2 = MarkerModel$1.getMarkerModelFromSeries(seriesModel, _this.type);
         markerModel2 && _this.renderSeries(seriesModel, markerModel2, ecModel, api);
       });
       markerGroupMap.each(function(item) {
-        !inner$2(item).keep && _this.group.remove(item.group);
+        !inner$3(item).keep && _this.group.remove(item.group);
       });
     };
     MarkerView2.prototype.markKeep = function(drawGroup) {
-      inner$2(drawGroup).keep = true;
+      inner$3(drawGroup).keep = true;
     };
     MarkerView2.prototype.toggleBlurSeries = function(seriesModelList, isBlur) {
       var _this = this;
@@ -51439,7 +53041,7 @@ function createData(coordSys, seriesModel, mpModel) {
   return mpData;
 }
 const MarkPointView$1 = MarkPointView;
-function install$5(registers) {
+function install$8(registers) {
   registers.registerComponentModel(MarkPointModel$1);
   registers.registerComponentView(MarkPointView$1);
   registers.registerPreprocessor(function(opt) {
@@ -51494,7 +53096,7 @@ var MarkLineModel = (
   }(MarkerModel$1)
 );
 const MarkLineModel$1 = MarkLineModel;
-var inner$1 = makeInner();
+var inner$2 = makeInner();
 var markLineTransform = function(seriesModel, coordSys, mlModel, item) {
   var data = seriesModel.getData();
   var itemArray;
@@ -51613,8 +53215,8 @@ var MarkLineView = (
         var mlModel = MarkerModel$1.getMarkerModelFromSeries(seriesModel, "markLine");
         if (mlModel) {
           var mlData_1 = mlModel.getData();
-          var fromData_1 = inner$1(mlModel).from;
-          var toData_1 = inner$1(mlModel).to;
+          var fromData_1 = inner$2(mlModel).from;
+          var toData_1 = inner$2(mlModel).to;
           fromData_1.each(function(idx) {
             updateSingleMarkerEndLayout(fromData_1, idx, true, seriesModel, api);
             updateSingleMarkerEndLayout(toData_1, idx, false, seriesModel, api);
@@ -51637,8 +53239,8 @@ var MarkLineView = (
       var fromData = mlData.from;
       var toData = mlData.to;
       var lineData = mlData.line;
-      inner$1(mlModel).from = fromData;
-      inner$1(mlModel).to = toData;
+      inner$2(mlModel).from = fromData;
+      inner$2(mlModel).to = toData;
       mlModel.setData(lineData);
       var symbolType = mlModel.get("symbol");
       var symbolSize = mlModel.get("symbolSize");
@@ -51754,7 +53356,7 @@ function createList$1(coordSys, seriesModel, mlModel) {
   };
 }
 const MarkLineView$1 = MarkLineView;
-function install$4(registers) {
+function install$7(registers) {
   registers.registerComponentModel(MarkLineModel$1);
   registers.registerComponentView(MarkLineView$1);
   registers.registerPreprocessor(function(opt) {
@@ -51806,7 +53408,7 @@ var MarkAreaModel = (
   }(MarkerModel$1)
 );
 const MarkAreaModel$1 = MarkAreaModel;
-var inner = makeInner();
+var inner$1 = makeInner();
 var markAreaTransform = function(seriesModel, coordSys, maModel, item) {
   var item0 = item[0];
   var item1 = item[1];
@@ -51979,7 +53581,7 @@ var MarkAreaView = (
         }
         areaData.setItemVisual(idx, "style", style2);
       });
-      areaData.diff(inner(polygonGroup).data).add(function(idx) {
+      areaData.diff(inner$1(polygonGroup).data).add(function(idx) {
         var layout2 = areaData.getItemLayout(idx);
         if (!layout2.allClipped) {
           var polygon = new Polygon$1({
@@ -51991,7 +53593,7 @@ var MarkAreaView = (
           polygonGroup.group.add(polygon);
         }
       }).update(function(newIdx, oldIdx) {
-        var polygon = inner(polygonGroup).data.getItemGraphicEl(oldIdx);
+        var polygon = inner$1(polygonGroup).data.getItemGraphicEl(oldIdx);
         var layout2 = areaData.getItemLayout(newIdx);
         if (!layout2.allClipped) {
           if (polygon) {
@@ -52013,7 +53615,7 @@ var MarkAreaView = (
           polygonGroup.group.remove(polygon);
         }
       }).remove(function(idx) {
-        var polygon = inner(polygonGroup).data.getItemGraphicEl(idx);
+        var polygon = inner$1(polygonGroup).data.getItemGraphicEl(idx);
         polygonGroup.group.remove(polygon);
       }).execute();
       areaData.eachItemGraphicEl(function(polygon, idx) {
@@ -52030,7 +53632,7 @@ var MarkAreaView = (
         toggleHoverEmphasis(polygon, null, null, itemModel.get(["emphasis", "disabled"]));
         getECData(polygon).dataModel = maModel;
       });
-      inner(polygonGroup).data = areaData;
+      inner$1(polygonGroup).data = areaData;
       polygonGroup.group.silent = maModel.get("silent") || seriesModel.get("silent");
     };
     MarkAreaView2.type = "markArea";
@@ -52080,7 +53682,7 @@ function createList(coordSys, seriesModel, maModel) {
   return areaData;
 }
 const MarkAreaView$1 = MarkAreaView;
-function install$3(registers) {
+function install$6(registers) {
   registers.registerComponentModel(MarkAreaModel$1);
   registers.registerComponentView(MarkAreaView$1);
   registers.registerPreprocessor(function(opt) {
@@ -52549,7 +54151,7 @@ var LegendView = (
           verticalAlign: "middle"
         })
       }));
-      var hitRect = new Rect$1({
+      var hitRect = new Rect$2({
         shape: itemGroup.getBoundingRect(),
         invisible: true
       });
@@ -52778,7 +54380,7 @@ function installLegendAction(registers) {
   registers.registerAction("legendSelect", "legendselected", curry$1(legendSelectActionHandler, "select"));
   registers.registerAction("legendUnSelect", "legendunselected", curry$1(legendSelectActionHandler, "unSelect"));
 }
-function install$2(registers) {
+function install$5(registers) {
   registers.registerComponentModel(LegendModel$1);
   registers.registerComponentView(LegendView$1);
   registers.registerProcessor(registers.PRIORITY.PROCESSOR.SERIES_FILTER, legendFilter);
@@ -52988,7 +54590,7 @@ var ScrollableLegendView = (
         };
         clipShape[wh] = Math.max(maxSize[wh] - controllerRect[wh] - pageButtonGap, 0);
         clipShape[hw] = mainRect[hw];
-        containerGroup.setClipPath(new Rect$1({
+        containerGroup.setClipPath(new Rect$2({
           shape: clipShape
         }));
         containerGroup.__rectSize = clipShape[wh];
@@ -53157,11 +54759,1112 @@ function installScrollableLegendAction(registers) {
     });
   });
 }
-function install$1(registers) {
-  use(install$2);
+function install$4(registers) {
+  use(install$5);
   registers.registerComponentModel(ScrollableLegendModel$1);
   registers.registerComponentView(ScrollableLegendView$1);
   installScrollableLegendAction(registers);
+}
+function install$3(registers) {
+  use(install$5);
+  use(install$4);
+}
+var InsideZoomModel = (
+  /** @class */
+  function(_super) {
+    __extends(InsideZoomModel2, _super);
+    function InsideZoomModel2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = InsideZoomModel2.type;
+      return _this;
+    }
+    InsideZoomModel2.type = "dataZoom.inside";
+    InsideZoomModel2.defaultOption = inheritDefaultOption(DataZoomModel$1.defaultOption, {
+      disabled: false,
+      zoomLock: false,
+      zoomOnMouseWheel: true,
+      moveOnMouseMove: true,
+      moveOnMouseWheel: false,
+      preventDefaultMouseMove: true
+    });
+    return InsideZoomModel2;
+  }(DataZoomModel$1)
+);
+const InsideZoomModel$1 = InsideZoomModel;
+var inner = makeInner();
+function setViewInfoToCoordSysRecord(api, dataZoomModel, getRange) {
+  inner(api).coordSysRecordMap.each(function(coordSysRecord) {
+    var dzInfo = coordSysRecord.dataZoomInfoMap.get(dataZoomModel.uid);
+    if (dzInfo) {
+      dzInfo.getRange = getRange;
+    }
+  });
+}
+function disposeCoordSysRecordIfNeeded(api, dataZoomModel) {
+  var coordSysRecordMap = inner(api).coordSysRecordMap;
+  var coordSysKeyArr = coordSysRecordMap.keys();
+  for (var i = 0; i < coordSysKeyArr.length; i++) {
+    var coordSysKey = coordSysKeyArr[i];
+    var coordSysRecord = coordSysRecordMap.get(coordSysKey);
+    var dataZoomInfoMap = coordSysRecord.dataZoomInfoMap;
+    if (dataZoomInfoMap) {
+      var dzUid = dataZoomModel.uid;
+      var dzInfo = dataZoomInfoMap.get(dzUid);
+      if (dzInfo) {
+        dataZoomInfoMap.removeKey(dzUid);
+        if (!dataZoomInfoMap.keys().length) {
+          disposeCoordSysRecord(coordSysRecordMap, coordSysRecord);
+        }
+      }
+    }
+  }
+}
+function disposeCoordSysRecord(coordSysRecordMap, coordSysRecord) {
+  if (coordSysRecord) {
+    coordSysRecordMap.removeKey(coordSysRecord.model.uid);
+    var controller = coordSysRecord.controller;
+    controller && controller.dispose();
+  }
+}
+function createCoordSysRecord(api, coordSysModel) {
+  var coordSysRecord = {
+    model: coordSysModel,
+    containsPoint: curry$1(containsPoint, coordSysModel),
+    dispatchAction: curry$1(dispatchAction, api),
+    dataZoomInfoMap: null,
+    controller: null
+  };
+  var controller = coordSysRecord.controller = new RoamController$1(api.getZr());
+  each$8(["pan", "zoom", "scrollMove"], function(eventName) {
+    controller.on(eventName, function(event) {
+      var batch = [];
+      coordSysRecord.dataZoomInfoMap.each(function(dzInfo) {
+        if (!event.isAvailableBehavior(dzInfo.model.option)) {
+          return;
+        }
+        var method = (dzInfo.getRange || {})[eventName];
+        var range = method && method(dzInfo.dzReferCoordSysInfo, coordSysRecord.model.mainType, coordSysRecord.controller, event);
+        !dzInfo.model.get("disabled", true) && range && batch.push({
+          dataZoomId: dzInfo.model.id,
+          start: range[0],
+          end: range[1]
+        });
+      });
+      batch.length && coordSysRecord.dispatchAction(batch);
+    });
+  });
+  return coordSysRecord;
+}
+function dispatchAction(api, batch) {
+  if (!api.isDisposed()) {
+    api.dispatchAction({
+      type: "dataZoom",
+      animation: {
+        easing: "cubicOut",
+        duration: 100
+      },
+      batch
+    });
+  }
+}
+function containsPoint(coordSysModel, e2, x2, y2) {
+  return coordSysModel.coordinateSystem.containPoint([x2, y2]);
+}
+function mergeControllerParams(dataZoomInfoMap) {
+  var controlType;
+  var prefix = "type_";
+  var typePriority = {
+    "type_true": 2,
+    "type_move": 1,
+    "type_false": 0,
+    "type_undefined": -1
+  };
+  var preventDefaultMouseMove = true;
+  dataZoomInfoMap.each(function(dataZoomInfo) {
+    var dataZoomModel = dataZoomInfo.model;
+    var oneType = dataZoomModel.get("disabled", true) ? false : dataZoomModel.get("zoomLock", true) ? "move" : true;
+    if (typePriority[prefix + oneType] > typePriority[prefix + controlType]) {
+      controlType = oneType;
+    }
+    preventDefaultMouseMove = preventDefaultMouseMove && dataZoomModel.get("preventDefaultMouseMove", true);
+  });
+  return {
+    controlType,
+    opt: {
+      // RoamController will enable all of these functionalities,
+      // and the final behavior is determined by its event listener
+      // provided by each inside zoom.
+      zoomOnMouseWheel: true,
+      moveOnMouseMove: true,
+      moveOnMouseWheel: true,
+      preventDefaultMouseMove: !!preventDefaultMouseMove
+    }
+  };
+}
+function installDataZoomRoamProcessor(registers) {
+  registers.registerProcessor(registers.PRIORITY.PROCESSOR.FILTER, function(ecModel, api) {
+    var apiInner = inner(api);
+    var coordSysRecordMap = apiInner.coordSysRecordMap || (apiInner.coordSysRecordMap = createHashMap());
+    coordSysRecordMap.each(function(coordSysRecord) {
+      coordSysRecord.dataZoomInfoMap = null;
+    });
+    ecModel.eachComponent({
+      mainType: "dataZoom",
+      subType: "inside"
+    }, function(dataZoomModel) {
+      var dzReferCoordSysWrap = collectReferCoordSysModelInfo(dataZoomModel);
+      each$8(dzReferCoordSysWrap.infoList, function(dzCoordSysInfo) {
+        var coordSysUid = dzCoordSysInfo.model.uid;
+        var coordSysRecord = coordSysRecordMap.get(coordSysUid) || coordSysRecordMap.set(coordSysUid, createCoordSysRecord(api, dzCoordSysInfo.model));
+        var dataZoomInfoMap = coordSysRecord.dataZoomInfoMap || (coordSysRecord.dataZoomInfoMap = createHashMap());
+        dataZoomInfoMap.set(dataZoomModel.uid, {
+          dzReferCoordSysInfo: dzCoordSysInfo,
+          model: dataZoomModel,
+          getRange: null
+        });
+      });
+    });
+    coordSysRecordMap.each(function(coordSysRecord) {
+      var controller = coordSysRecord.controller;
+      var firstDzInfo;
+      var dataZoomInfoMap = coordSysRecord.dataZoomInfoMap;
+      if (dataZoomInfoMap) {
+        var firstDzKey = dataZoomInfoMap.keys()[0];
+        if (firstDzKey != null) {
+          firstDzInfo = dataZoomInfoMap.get(firstDzKey);
+        }
+      }
+      if (!firstDzInfo) {
+        disposeCoordSysRecord(coordSysRecordMap, coordSysRecord);
+        return;
+      }
+      var controllerParams = mergeControllerParams(dataZoomInfoMap);
+      controller.enable(controllerParams.controlType, controllerParams.opt);
+      controller.setPointerChecker(coordSysRecord.containsPoint);
+      createOrUpdate(coordSysRecord, "dispatchAction", firstDzInfo.model.get("throttle", true), "fixRate");
+    });
+  });
+}
+var InsideZoomView = (
+  /** @class */
+  function(_super) {
+    __extends(InsideZoomView2, _super);
+    function InsideZoomView2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = "dataZoom.inside";
+      return _this;
+    }
+    InsideZoomView2.prototype.render = function(dataZoomModel, ecModel, api) {
+      _super.prototype.render.apply(this, arguments);
+      if (dataZoomModel.noTarget()) {
+        this._clear();
+        return;
+      }
+      this.range = dataZoomModel.getPercentRange();
+      setViewInfoToCoordSysRecord(api, dataZoomModel, {
+        pan: bind$1(getRangeHandlers.pan, this),
+        zoom: bind$1(getRangeHandlers.zoom, this),
+        scrollMove: bind$1(getRangeHandlers.scrollMove, this)
+      });
+    };
+    InsideZoomView2.prototype.dispose = function() {
+      this._clear();
+      _super.prototype.dispose.apply(this, arguments);
+    };
+    InsideZoomView2.prototype._clear = function() {
+      disposeCoordSysRecordIfNeeded(this.api, this.dataZoomModel);
+      this.range = null;
+    };
+    InsideZoomView2.type = "dataZoom.inside";
+    return InsideZoomView2;
+  }(DataZoomView$1)
+);
+var getRangeHandlers = {
+  zoom: function(coordSysInfo, coordSysMainType, controller, e2) {
+    var lastRange = this.range;
+    var range = lastRange.slice();
+    var axisModel = coordSysInfo.axisModels[0];
+    if (!axisModel) {
+      return;
+    }
+    var directionInfo = getDirectionInfo[coordSysMainType](null, [e2.originX, e2.originY], axisModel, controller, coordSysInfo);
+    var percentPoint = (directionInfo.signal > 0 ? directionInfo.pixelStart + directionInfo.pixelLength - directionInfo.pixel : directionInfo.pixel - directionInfo.pixelStart) / directionInfo.pixelLength * (range[1] - range[0]) + range[0];
+    var scale2 = Math.max(1 / e2.scale, 0);
+    range[0] = (range[0] - percentPoint) * scale2 + percentPoint;
+    range[1] = (range[1] - percentPoint) * scale2 + percentPoint;
+    var minMaxSpan = this.dataZoomModel.findRepresentativeAxisProxy().getMinMaxSpan();
+    sliderMove(0, range, [0, 100], 0, minMaxSpan.minSpan, minMaxSpan.maxSpan);
+    this.range = range;
+    if (lastRange[0] !== range[0] || lastRange[1] !== range[1]) {
+      return range;
+    }
+  },
+  pan: makeMover(function(range, axisModel, coordSysInfo, coordSysMainType, controller, e2) {
+    var directionInfo = getDirectionInfo[coordSysMainType]([e2.oldX, e2.oldY], [e2.newX, e2.newY], axisModel, controller, coordSysInfo);
+    return directionInfo.signal * (range[1] - range[0]) * directionInfo.pixel / directionInfo.pixelLength;
+  }),
+  scrollMove: makeMover(function(range, axisModel, coordSysInfo, coordSysMainType, controller, e2) {
+    var directionInfo = getDirectionInfo[coordSysMainType]([0, 0], [e2.scrollDelta, e2.scrollDelta], axisModel, controller, coordSysInfo);
+    return directionInfo.signal * (range[1] - range[0]) * e2.scrollDelta;
+  })
+};
+function makeMover(getPercentDelta) {
+  return function(coordSysInfo, coordSysMainType, controller, e2) {
+    var lastRange = this.range;
+    var range = lastRange.slice();
+    var axisModel = coordSysInfo.axisModels[0];
+    if (!axisModel) {
+      return;
+    }
+    var percentDelta = getPercentDelta(range, axisModel, coordSysInfo, coordSysMainType, controller, e2);
+    sliderMove(percentDelta, range, [0, 100], "all");
+    this.range = range;
+    if (lastRange[0] !== range[0] || lastRange[1] !== range[1]) {
+      return range;
+    }
+  };
+}
+var getDirectionInfo = {
+  grid: function(oldPoint, newPoint, axisModel, controller, coordSysInfo) {
+    var axis = axisModel.axis;
+    var ret = {};
+    var rect = coordSysInfo.model.coordinateSystem.getRect();
+    oldPoint = oldPoint || [0, 0];
+    if (axis.dim === "x") {
+      ret.pixel = newPoint[0] - oldPoint[0];
+      ret.pixelLength = rect.width;
+      ret.pixelStart = rect.x;
+      ret.signal = axis.inverse ? 1 : -1;
+    } else {
+      ret.pixel = newPoint[1] - oldPoint[1];
+      ret.pixelLength = rect.height;
+      ret.pixelStart = rect.y;
+      ret.signal = axis.inverse ? -1 : 1;
+    }
+    return ret;
+  },
+  polar: function(oldPoint, newPoint, axisModel, controller, coordSysInfo) {
+    var axis = axisModel.axis;
+    var ret = {};
+    var polar = coordSysInfo.model.coordinateSystem;
+    var radiusExtent = polar.getRadiusAxis().getExtent();
+    var angleExtent = polar.getAngleAxis().getExtent();
+    oldPoint = oldPoint ? polar.pointToCoord(oldPoint) : [0, 0];
+    newPoint = polar.pointToCoord(newPoint);
+    if (axisModel.mainType === "radiusAxis") {
+      ret.pixel = newPoint[0] - oldPoint[0];
+      ret.pixelLength = radiusExtent[1] - radiusExtent[0];
+      ret.pixelStart = radiusExtent[0];
+      ret.signal = axis.inverse ? 1 : -1;
+    } else {
+      ret.pixel = newPoint[1] - oldPoint[1];
+      ret.pixelLength = angleExtent[1] - angleExtent[0];
+      ret.pixelStart = angleExtent[0];
+      ret.signal = axis.inverse ? -1 : 1;
+    }
+    return ret;
+  },
+  singleAxis: function(oldPoint, newPoint, axisModel, controller, coordSysInfo) {
+    var axis = axisModel.axis;
+    var rect = coordSysInfo.model.coordinateSystem.getRect();
+    var ret = {};
+    oldPoint = oldPoint || [0, 0];
+    if (axis.orient === "horizontal") {
+      ret.pixel = newPoint[0] - oldPoint[0];
+      ret.pixelLength = rect.width;
+      ret.pixelStart = rect.x;
+      ret.signal = axis.inverse ? 1 : -1;
+    } else {
+      ret.pixel = newPoint[1] - oldPoint[1];
+      ret.pixelLength = rect.height;
+      ret.pixelStart = rect.y;
+      ret.signal = axis.inverse ? -1 : 1;
+    }
+    return ret;
+  }
+};
+const InsideZoomView$1 = InsideZoomView;
+function install$2(registers) {
+  installCommon(registers);
+  registers.registerComponentModel(InsideZoomModel$1);
+  registers.registerComponentView(InsideZoomView$1);
+  installDataZoomRoamProcessor(registers);
+}
+var SliderZoomModel = (
+  /** @class */
+  function(_super) {
+    __extends(SliderZoomModel2, _super);
+    function SliderZoomModel2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = SliderZoomModel2.type;
+      return _this;
+    }
+    SliderZoomModel2.type = "dataZoom.slider";
+    SliderZoomModel2.layoutMode = "box";
+    SliderZoomModel2.defaultOption = inheritDefaultOption(DataZoomModel$1.defaultOption, {
+      show: true,
+      // deault value can only be drived in view stage.
+      right: "ph",
+      top: "ph",
+      width: "ph",
+      height: "ph",
+      left: null,
+      bottom: null,
+      borderColor: "#d2dbee",
+      borderRadius: 3,
+      backgroundColor: "rgba(47,69,84,0)",
+      // dataBackgroundColor: '#ddd',
+      dataBackground: {
+        lineStyle: {
+          color: "#d2dbee",
+          width: 0.5
+        },
+        areaStyle: {
+          color: "#d2dbee",
+          opacity: 0.2
+        }
+      },
+      selectedDataBackground: {
+        lineStyle: {
+          color: "#8fb0f7",
+          width: 0.5
+        },
+        areaStyle: {
+          color: "#8fb0f7",
+          opacity: 0.2
+        }
+      },
+      // Color of selected window.
+      fillerColor: "rgba(135,175,274,0.2)",
+      handleIcon: "path://M-9.35,34.56V42m0-40V9.5m-2,0h4a2,2,0,0,1,2,2v21a2,2,0,0,1-2,2h-4a2,2,0,0,1-2-2v-21A2,2,0,0,1-11.35,9.5Z",
+      // Percent of the slider height
+      handleSize: "100%",
+      handleStyle: {
+        color: "#fff",
+        borderColor: "#ACB8D1"
+      },
+      moveHandleSize: 7,
+      moveHandleIcon: "path://M-320.9-50L-320.9-50c18.1,0,27.1,9,27.1,27.1V85.7c0,18.1-9,27.1-27.1,27.1l0,0c-18.1,0-27.1-9-27.1-27.1V-22.9C-348-41-339-50-320.9-50z M-212.3-50L-212.3-50c18.1,0,27.1,9,27.1,27.1V85.7c0,18.1-9,27.1-27.1,27.1l0,0c-18.1,0-27.1-9-27.1-27.1V-22.9C-239.4-41-230.4-50-212.3-50z M-103.7-50L-103.7-50c18.1,0,27.1,9,27.1,27.1V85.7c0,18.1-9,27.1-27.1,27.1l0,0c-18.1,0-27.1-9-27.1-27.1V-22.9C-130.9-41-121.8-50-103.7-50z",
+      moveHandleStyle: {
+        color: "#D2DBEE",
+        opacity: 0.7
+      },
+      showDetail: true,
+      showDataShadow: "auto",
+      realtime: true,
+      zoomLock: false,
+      textStyle: {
+        color: "#6E7079"
+      },
+      brushSelect: true,
+      brushStyle: {
+        color: "rgba(135,175,274,0.15)"
+      },
+      emphasis: {
+        handleStyle: {
+          borderColor: "#8FB0F7"
+        },
+        moveHandleStyle: {
+          color: "#8FB0F7"
+        }
+      }
+    });
+    return SliderZoomModel2;
+  }(DataZoomModel$1)
+);
+const SliderZoomModel$1 = SliderZoomModel;
+var Rect = Rect$2;
+var DEFAULT_LOCATION_EDGE_GAP = 7;
+var DEFAULT_FRAME_BORDER_WIDTH = 1;
+var DEFAULT_FILLER_SIZE = 30;
+var DEFAULT_MOVE_HANDLE_SIZE = 7;
+var HORIZONTAL = "horizontal";
+var VERTICAL = "vertical";
+var LABEL_GAP = 5;
+var SHOW_DATA_SHADOW_SERIES_TYPE = ["line", "bar", "candlestick", "scatter"];
+var REALTIME_ANIMATION_CONFIG = {
+  easing: "cubicOut",
+  duration: 100,
+  delay: 0
+};
+var SliderZoomView = (
+  /** @class */
+  function(_super) {
+    __extends(SliderZoomView2, _super);
+    function SliderZoomView2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = SliderZoomView2.type;
+      _this._displayables = {};
+      return _this;
+    }
+    SliderZoomView2.prototype.init = function(ecModel, api) {
+      this.api = api;
+      this._onBrush = bind$1(this._onBrush, this);
+      this._onBrushEnd = bind$1(this._onBrushEnd, this);
+    };
+    SliderZoomView2.prototype.render = function(dataZoomModel, ecModel, api, payload) {
+      _super.prototype.render.apply(this, arguments);
+      createOrUpdate(this, "_dispatchZoomAction", dataZoomModel.get("throttle"), "fixRate");
+      this._orient = dataZoomModel.getOrient();
+      if (dataZoomModel.get("show") === false) {
+        this.group.removeAll();
+        return;
+      }
+      if (dataZoomModel.noTarget()) {
+        this._clear();
+        this.group.removeAll();
+        return;
+      }
+      if (!payload || payload.type !== "dataZoom" || payload.from !== this.uid) {
+        this._buildView();
+      }
+      this._updateView();
+    };
+    SliderZoomView2.prototype.dispose = function() {
+      this._clear();
+      _super.prototype.dispose.apply(this, arguments);
+    };
+    SliderZoomView2.prototype._clear = function() {
+      clear$1(this, "_dispatchZoomAction");
+      var zr = this.api.getZr();
+      zr.off("mousemove", this._onBrush);
+      zr.off("mouseup", this._onBrushEnd);
+    };
+    SliderZoomView2.prototype._buildView = function() {
+      var thisGroup = this.group;
+      thisGroup.removeAll();
+      this._brushing = false;
+      this._displayables.brushRect = null;
+      this._resetLocation();
+      this._resetInterval();
+      var barGroup = this._displayables.sliderGroup = new Group$3();
+      this._renderBackground();
+      this._renderHandle();
+      this._renderDataShadow();
+      thisGroup.add(barGroup);
+      this._positionGroup();
+    };
+    SliderZoomView2.prototype._resetLocation = function() {
+      var dataZoomModel = this.dataZoomModel;
+      var api = this.api;
+      var showMoveHandle = dataZoomModel.get("brushSelect");
+      var moveHandleSize = showMoveHandle ? DEFAULT_MOVE_HANDLE_SIZE : 0;
+      var coordRect = this._findCoordRect();
+      var ecSize = {
+        width: api.getWidth(),
+        height: api.getHeight()
+      };
+      var positionInfo = this._orient === HORIZONTAL ? {
+        // Why using 'right', because right should be used in vertical,
+        // and it is better to be consistent for dealing with position param merge.
+        right: ecSize.width - coordRect.x - coordRect.width,
+        top: ecSize.height - DEFAULT_FILLER_SIZE - DEFAULT_LOCATION_EDGE_GAP - moveHandleSize,
+        width: coordRect.width,
+        height: DEFAULT_FILLER_SIZE
+      } : {
+        right: DEFAULT_LOCATION_EDGE_GAP,
+        top: coordRect.y,
+        width: DEFAULT_FILLER_SIZE,
+        height: coordRect.height
+      };
+      var layoutParams = getLayoutParams(dataZoomModel.option);
+      each$8(["right", "top", "width", "height"], function(name) {
+        if (layoutParams[name] === "ph") {
+          layoutParams[name] = positionInfo[name];
+        }
+      });
+      var layoutRect = getLayoutRect(layoutParams, ecSize);
+      this._location = {
+        x: layoutRect.x,
+        y: layoutRect.y
+      };
+      this._size = [layoutRect.width, layoutRect.height];
+      this._orient === VERTICAL && this._size.reverse();
+    };
+    SliderZoomView2.prototype._positionGroup = function() {
+      var thisGroup = this.group;
+      var location = this._location;
+      var orient = this._orient;
+      var targetAxisModel = this.dataZoomModel.getFirstTargetAxisModel();
+      var inverse = targetAxisModel && targetAxisModel.get("inverse");
+      var sliderGroup = this._displayables.sliderGroup;
+      var otherAxisInverse = (this._dataShadowInfo || {}).otherAxisInverse;
+      sliderGroup.attr(orient === HORIZONTAL && !inverse ? {
+        scaleY: otherAxisInverse ? 1 : -1,
+        scaleX: 1
+      } : orient === HORIZONTAL && inverse ? {
+        scaleY: otherAxisInverse ? 1 : -1,
+        scaleX: -1
+      } : orient === VERTICAL && !inverse ? {
+        scaleY: otherAxisInverse ? -1 : 1,
+        scaleX: 1,
+        rotation: Math.PI / 2
+      } : {
+        scaleY: otherAxisInverse ? -1 : 1,
+        scaleX: -1,
+        rotation: Math.PI / 2
+      });
+      var rect = thisGroup.getBoundingRect([sliderGroup]);
+      thisGroup.x = location.x - rect.x;
+      thisGroup.y = location.y - rect.y;
+      thisGroup.markRedraw();
+    };
+    SliderZoomView2.prototype._getViewExtent = function() {
+      return [0, this._size[0]];
+    };
+    SliderZoomView2.prototype._renderBackground = function() {
+      var dataZoomModel = this.dataZoomModel;
+      var size2 = this._size;
+      var barGroup = this._displayables.sliderGroup;
+      var brushSelect = dataZoomModel.get("brushSelect");
+      barGroup.add(new Rect({
+        silent: true,
+        shape: {
+          x: 0,
+          y: 0,
+          width: size2[0],
+          height: size2[1]
+        },
+        style: {
+          fill: dataZoomModel.get("backgroundColor")
+        },
+        z2: -40
+      }));
+      var clickPanel = new Rect({
+        shape: {
+          x: 0,
+          y: 0,
+          width: size2[0],
+          height: size2[1]
+        },
+        style: {
+          fill: "transparent"
+        },
+        z2: 0,
+        onclick: bind$1(this._onClickPanel, this)
+      });
+      var zr = this.api.getZr();
+      if (brushSelect) {
+        clickPanel.on("mousedown", this._onBrushStart, this);
+        clickPanel.cursor = "crosshair";
+        zr.on("mousemove", this._onBrush);
+        zr.on("mouseup", this._onBrushEnd);
+      } else {
+        zr.off("mousemove", this._onBrush);
+        zr.off("mouseup", this._onBrushEnd);
+      }
+      barGroup.add(clickPanel);
+    };
+    SliderZoomView2.prototype._renderDataShadow = function() {
+      var info = this._dataShadowInfo = this._prepareDataShadowInfo();
+      this._displayables.dataShadowSegs = [];
+      if (!info) {
+        return;
+      }
+      var size2 = this._size;
+      var oldSize = this._shadowSize || [];
+      var seriesModel = info.series;
+      var data = seriesModel.getRawData();
+      var candlestickDim = seriesModel.getShadowDim && seriesModel.getShadowDim();
+      var otherDim = candlestickDim && data.getDimensionInfo(candlestickDim) ? seriesModel.getShadowDim() : info.otherDim;
+      if (otherDim == null) {
+        return;
+      }
+      var polygonPts = this._shadowPolygonPts;
+      var polylinePts = this._shadowPolylinePts;
+      if (data !== this._shadowData || otherDim !== this._shadowDim || size2[0] !== oldSize[0] || size2[1] !== oldSize[1]) {
+        var otherDataExtent_1 = data.getDataExtent(otherDim);
+        var otherOffset = (otherDataExtent_1[1] - otherDataExtent_1[0]) * 0.3;
+        otherDataExtent_1 = [otherDataExtent_1[0] - otherOffset, otherDataExtent_1[1] + otherOffset];
+        var otherShadowExtent_1 = [0, size2[1]];
+        var thisShadowExtent = [0, size2[0]];
+        var areaPoints_1 = [[size2[0], 0], [0, 0]];
+        var linePoints_1 = [];
+        var step_1 = thisShadowExtent[1] / (data.count() - 1);
+        var thisCoord_1 = 0;
+        var stride_1 = Math.round(data.count() / size2[0]);
+        var lastIsEmpty_1;
+        data.each([otherDim], function(value, index) {
+          if (stride_1 > 0 && index % stride_1) {
+            thisCoord_1 += step_1;
+            return;
+          }
+          var isEmpty = value == null || isNaN(value) || value === "";
+          var otherCoord = isEmpty ? 0 : linearMap(value, otherDataExtent_1, otherShadowExtent_1, true);
+          if (isEmpty && !lastIsEmpty_1 && index) {
+            areaPoints_1.push([areaPoints_1[areaPoints_1.length - 1][0], 0]);
+            linePoints_1.push([linePoints_1[linePoints_1.length - 1][0], 0]);
+          } else if (!isEmpty && lastIsEmpty_1) {
+            areaPoints_1.push([thisCoord_1, 0]);
+            linePoints_1.push([thisCoord_1, 0]);
+          }
+          areaPoints_1.push([thisCoord_1, otherCoord]);
+          linePoints_1.push([thisCoord_1, otherCoord]);
+          thisCoord_1 += step_1;
+          lastIsEmpty_1 = isEmpty;
+        });
+        polygonPts = this._shadowPolygonPts = areaPoints_1;
+        polylinePts = this._shadowPolylinePts = linePoints_1;
+      }
+      this._shadowData = data;
+      this._shadowDim = otherDim;
+      this._shadowSize = [size2[0], size2[1]];
+      var dataZoomModel = this.dataZoomModel;
+      function createDataShadowGroup(isSelectedArea) {
+        var model = dataZoomModel.getModel(isSelectedArea ? "selectedDataBackground" : "dataBackground");
+        var group2 = new Group$3();
+        var polygon = new Polygon$1({
+          shape: {
+            points: polygonPts
+          },
+          segmentIgnoreThreshold: 1,
+          style: model.getModel("areaStyle").getAreaStyle(),
+          silent: true,
+          z2: -20
+        });
+        var polyline = new Polyline$1({
+          shape: {
+            points: polylinePts
+          },
+          segmentIgnoreThreshold: 1,
+          style: model.getModel("lineStyle").getLineStyle(),
+          silent: true,
+          z2: -19
+        });
+        group2.add(polygon);
+        group2.add(polyline);
+        return group2;
+      }
+      for (var i = 0; i < 3; i++) {
+        var group = createDataShadowGroup(i === 1);
+        this._displayables.sliderGroup.add(group);
+        this._displayables.dataShadowSegs.push(group);
+      }
+    };
+    SliderZoomView2.prototype._prepareDataShadowInfo = function() {
+      var dataZoomModel = this.dataZoomModel;
+      var showDataShadow = dataZoomModel.get("showDataShadow");
+      if (showDataShadow === false) {
+        return;
+      }
+      var result;
+      var ecModel = this.ecModel;
+      dataZoomModel.eachTargetAxis(function(axisDim, axisIndex) {
+        var seriesModels = dataZoomModel.getAxisProxy(axisDim, axisIndex).getTargetSeriesModels();
+        each$8(seriesModels, function(seriesModel) {
+          if (result) {
+            return;
+          }
+          if (showDataShadow !== true && indexOf(SHOW_DATA_SHADOW_SERIES_TYPE, seriesModel.get("type")) < 0) {
+            return;
+          }
+          var thisAxis = ecModel.getComponent(getAxisMainType(axisDim), axisIndex).axis;
+          var otherDim = getOtherDim(axisDim);
+          var otherAxisInverse;
+          var coordSys = seriesModel.coordinateSystem;
+          if (otherDim != null && coordSys.getOtherAxis) {
+            otherAxisInverse = coordSys.getOtherAxis(thisAxis).inverse;
+          }
+          otherDim = seriesModel.getData().mapDimension(otherDim);
+          result = {
+            thisAxis,
+            series: seriesModel,
+            thisDim: axisDim,
+            otherDim,
+            otherAxisInverse
+          };
+        }, this);
+      }, this);
+      return result;
+    };
+    SliderZoomView2.prototype._renderHandle = function() {
+      var thisGroup = this.group;
+      var displayables = this._displayables;
+      var handles = displayables.handles = [null, null];
+      var handleLabels = displayables.handleLabels = [null, null];
+      var sliderGroup = this._displayables.sliderGroup;
+      var size2 = this._size;
+      var dataZoomModel = this.dataZoomModel;
+      var api = this.api;
+      var borderRadius = dataZoomModel.get("borderRadius") || 0;
+      var brushSelect = dataZoomModel.get("brushSelect");
+      var filler = displayables.filler = new Rect({
+        silent: brushSelect,
+        style: {
+          fill: dataZoomModel.get("fillerColor")
+        },
+        textConfig: {
+          position: "inside"
+        }
+      });
+      sliderGroup.add(filler);
+      sliderGroup.add(new Rect({
+        silent: true,
+        subPixelOptimize: true,
+        shape: {
+          x: 0,
+          y: 0,
+          width: size2[0],
+          height: size2[1],
+          r: borderRadius
+        },
+        style: {
+          // deprecated option
+          stroke: dataZoomModel.get("dataBackgroundColor") || dataZoomModel.get("borderColor"),
+          lineWidth: DEFAULT_FRAME_BORDER_WIDTH,
+          fill: "rgba(0,0,0,0)"
+        }
+      }));
+      each$8([0, 1], function(handleIndex) {
+        var iconStr = dataZoomModel.get("handleIcon");
+        if (!symbolBuildProxies[iconStr] && iconStr.indexOf("path://") < 0 && iconStr.indexOf("image://") < 0) {
+          iconStr = "path://" + iconStr;
+        }
+        var path = createSymbol$1(iconStr, -1, 0, 2, 2, null, true);
+        path.attr({
+          cursor: getCursor(this._orient),
+          draggable: true,
+          drift: bind$1(this._onDragMove, this, handleIndex),
+          ondragend: bind$1(this._onDragEnd, this),
+          onmouseover: bind$1(this._showDataInfo, this, true),
+          onmouseout: bind$1(this._showDataInfo, this, false),
+          z2: 5
+        });
+        var bRect = path.getBoundingRect();
+        var handleSize = dataZoomModel.get("handleSize");
+        this._handleHeight = parsePercent(handleSize, this._size[1]);
+        this._handleWidth = bRect.width / bRect.height * this._handleHeight;
+        path.setStyle(dataZoomModel.getModel("handleStyle").getItemStyle());
+        path.style.strokeNoScale = true;
+        path.rectHover = true;
+        path.ensureState("emphasis").style = dataZoomModel.getModel(["emphasis", "handleStyle"]).getItemStyle();
+        enableHoverEmphasis(path);
+        var handleColor = dataZoomModel.get("handleColor");
+        if (handleColor != null) {
+          path.style.fill = handleColor;
+        }
+        sliderGroup.add(handles[handleIndex] = path);
+        var textStyleModel = dataZoomModel.getModel("textStyle");
+        thisGroup.add(handleLabels[handleIndex] = new ZRText$1({
+          silent: true,
+          invisible: true,
+          style: createTextStyle(textStyleModel, {
+            x: 0,
+            y: 0,
+            text: "",
+            verticalAlign: "middle",
+            align: "center",
+            fill: textStyleModel.getTextColor(),
+            font: textStyleModel.getFont()
+          }),
+          z2: 10
+        }));
+      }, this);
+      var actualMoveZone = filler;
+      if (brushSelect) {
+        var moveHandleHeight = parsePercent(dataZoomModel.get("moveHandleSize"), size2[1]);
+        var moveHandle_1 = displayables.moveHandle = new Rect$2({
+          style: dataZoomModel.getModel("moveHandleStyle").getItemStyle(),
+          silent: true,
+          shape: {
+            r: [0, 0, 2, 2],
+            y: size2[1] - 0.5,
+            height: moveHandleHeight
+          }
+        });
+        var iconSize = moveHandleHeight * 0.8;
+        var moveHandleIcon = displayables.moveHandleIcon = createSymbol$1(dataZoomModel.get("moveHandleIcon"), -iconSize / 2, -iconSize / 2, iconSize, iconSize, "#fff", true);
+        moveHandleIcon.silent = true;
+        moveHandleIcon.y = size2[1] + moveHandleHeight / 2 - 0.5;
+        moveHandle_1.ensureState("emphasis").style = dataZoomModel.getModel(["emphasis", "moveHandleStyle"]).getItemStyle();
+        var moveZoneExpandSize = Math.min(size2[1] / 2, Math.max(moveHandleHeight, 10));
+        actualMoveZone = displayables.moveZone = new Rect$2({
+          invisible: true,
+          shape: {
+            y: size2[1] - moveZoneExpandSize,
+            height: moveHandleHeight + moveZoneExpandSize
+          }
+        });
+        actualMoveZone.on("mouseover", function() {
+          api.enterEmphasis(moveHandle_1);
+        }).on("mouseout", function() {
+          api.leaveEmphasis(moveHandle_1);
+        });
+        sliderGroup.add(moveHandle_1);
+        sliderGroup.add(moveHandleIcon);
+        sliderGroup.add(actualMoveZone);
+      }
+      actualMoveZone.attr({
+        draggable: true,
+        cursor: getCursor(this._orient),
+        drift: bind$1(this._onDragMove, this, "all"),
+        ondragstart: bind$1(this._showDataInfo, this, true),
+        ondragend: bind$1(this._onDragEnd, this),
+        onmouseover: bind$1(this._showDataInfo, this, true),
+        onmouseout: bind$1(this._showDataInfo, this, false)
+      });
+    };
+    SliderZoomView2.prototype._resetInterval = function() {
+      var range = this._range = this.dataZoomModel.getPercentRange();
+      var viewExtent = this._getViewExtent();
+      this._handleEnds = [linearMap(range[0], [0, 100], viewExtent, true), linearMap(range[1], [0, 100], viewExtent, true)];
+    };
+    SliderZoomView2.prototype._updateInterval = function(handleIndex, delta) {
+      var dataZoomModel = this.dataZoomModel;
+      var handleEnds = this._handleEnds;
+      var viewExtend = this._getViewExtent();
+      var minMaxSpan = dataZoomModel.findRepresentativeAxisProxy().getMinMaxSpan();
+      var percentExtent = [0, 100];
+      sliderMove(delta, handleEnds, viewExtend, dataZoomModel.get("zoomLock") ? "all" : handleIndex, minMaxSpan.minSpan != null ? linearMap(minMaxSpan.minSpan, percentExtent, viewExtend, true) : null, minMaxSpan.maxSpan != null ? linearMap(minMaxSpan.maxSpan, percentExtent, viewExtend, true) : null);
+      var lastRange = this._range;
+      var range = this._range = asc$1([linearMap(handleEnds[0], viewExtend, percentExtent, true), linearMap(handleEnds[1], viewExtend, percentExtent, true)]);
+      return !lastRange || lastRange[0] !== range[0] || lastRange[1] !== range[1];
+    };
+    SliderZoomView2.prototype._updateView = function(nonRealtime) {
+      var displaybles = this._displayables;
+      var handleEnds = this._handleEnds;
+      var handleInterval = asc$1(handleEnds.slice());
+      var size2 = this._size;
+      each$8([0, 1], function(handleIndex) {
+        var handle = displaybles.handles[handleIndex];
+        var handleHeight = this._handleHeight;
+        handle.attr({
+          scaleX: handleHeight / 2,
+          scaleY: handleHeight / 2,
+          // This is a trick, by adding an extra tiny offset to let the default handle's end point align to the drag window.
+          // NOTE: It may affect some custom shapes a bit. But we prefer to have better result by default.
+          x: handleEnds[handleIndex] + (handleIndex ? -1 : 1),
+          y: size2[1] / 2 - handleHeight / 2
+        });
+      }, this);
+      displaybles.filler.setShape({
+        x: handleInterval[0],
+        y: 0,
+        width: handleInterval[1] - handleInterval[0],
+        height: size2[1]
+      });
+      var viewExtent = {
+        x: handleInterval[0],
+        width: handleInterval[1] - handleInterval[0]
+      };
+      if (displaybles.moveHandle) {
+        displaybles.moveHandle.setShape(viewExtent);
+        displaybles.moveZone.setShape(viewExtent);
+        displaybles.moveZone.getBoundingRect();
+        displaybles.moveHandleIcon && displaybles.moveHandleIcon.attr("x", viewExtent.x + viewExtent.width / 2);
+      }
+      var dataShadowSegs = displaybles.dataShadowSegs;
+      var segIntervals = [0, handleInterval[0], handleInterval[1], size2[0]];
+      for (var i = 0; i < dataShadowSegs.length; i++) {
+        var segGroup = dataShadowSegs[i];
+        var clipPath = segGroup.getClipPath();
+        if (!clipPath) {
+          clipPath = new Rect$2();
+          segGroup.setClipPath(clipPath);
+        }
+        clipPath.setShape({
+          x: segIntervals[i],
+          y: 0,
+          width: segIntervals[i + 1] - segIntervals[i],
+          height: size2[1]
+        });
+      }
+      this._updateDataInfo(nonRealtime);
+    };
+    SliderZoomView2.prototype._updateDataInfo = function(nonRealtime) {
+      var dataZoomModel = this.dataZoomModel;
+      var displaybles = this._displayables;
+      var handleLabels = displaybles.handleLabels;
+      var orient = this._orient;
+      var labelTexts = ["", ""];
+      if (dataZoomModel.get("showDetail")) {
+        var axisProxy = dataZoomModel.findRepresentativeAxisProxy();
+        if (axisProxy) {
+          var axis = axisProxy.getAxisModel().axis;
+          var range = this._range;
+          var dataInterval = nonRealtime ? axisProxy.calculateDataWindow({
+            start: range[0],
+            end: range[1]
+          }).valueWindow : axisProxy.getDataValueWindow();
+          labelTexts = [this._formatLabel(dataInterval[0], axis), this._formatLabel(dataInterval[1], axis)];
+        }
+      }
+      var orderedHandleEnds = asc$1(this._handleEnds.slice());
+      setLabel.call(this, 0);
+      setLabel.call(this, 1);
+      function setLabel(handleIndex) {
+        var barTransform = getTransform$1(displaybles.handles[handleIndex].parent, this.group);
+        var direction = transformDirection(handleIndex === 0 ? "right" : "left", barTransform);
+        var offset2 = this._handleWidth / 2 + LABEL_GAP;
+        var textPoint = applyTransform([orderedHandleEnds[handleIndex] + (handleIndex === 0 ? -offset2 : offset2), this._size[1] / 2], barTransform);
+        handleLabels[handleIndex].setStyle({
+          x: textPoint[0],
+          y: textPoint[1],
+          verticalAlign: orient === HORIZONTAL ? "middle" : direction,
+          align: orient === HORIZONTAL ? direction : "center",
+          text: labelTexts[handleIndex]
+        });
+      }
+    };
+    SliderZoomView2.prototype._formatLabel = function(value, axis) {
+      var dataZoomModel = this.dataZoomModel;
+      var labelFormatter = dataZoomModel.get("labelFormatter");
+      var labelPrecision = dataZoomModel.get("labelPrecision");
+      if (labelPrecision == null || labelPrecision === "auto") {
+        labelPrecision = axis.getPixelPrecision();
+      }
+      var valueStr = value == null || isNaN(value) ? "" : axis.type === "category" || axis.type === "time" ? axis.scale.getLabel({
+        value: Math.round(value)
+      }) : value.toFixed(Math.min(labelPrecision, 20));
+      return isFunction$1(labelFormatter) ? labelFormatter(value, valueStr) : isString$3(labelFormatter) ? labelFormatter.replace("{value}", valueStr) : valueStr;
+    };
+    SliderZoomView2.prototype._showDataInfo = function(showOrHide) {
+      showOrHide = this._dragging || showOrHide;
+      var displayables = this._displayables;
+      var handleLabels = displayables.handleLabels;
+      handleLabels[0].attr("invisible", !showOrHide);
+      handleLabels[1].attr("invisible", !showOrHide);
+      displayables.moveHandle && this.api[showOrHide ? "enterEmphasis" : "leaveEmphasis"](displayables.moveHandle, 1);
+    };
+    SliderZoomView2.prototype._onDragMove = function(handleIndex, dx, dy, event) {
+      this._dragging = true;
+      stop(event.event);
+      var barTransform = this._displayables.sliderGroup.getLocalTransform();
+      var vertex = applyTransform([dx, dy], barTransform, true);
+      var changed = this._updateInterval(handleIndex, vertex[0]);
+      var realtime = this.dataZoomModel.get("realtime");
+      this._updateView(!realtime);
+      changed && realtime && this._dispatchZoomAction(true);
+    };
+    SliderZoomView2.prototype._onDragEnd = function() {
+      this._dragging = false;
+      this._showDataInfo(false);
+      var realtime = this.dataZoomModel.get("realtime");
+      !realtime && this._dispatchZoomAction(false);
+    };
+    SliderZoomView2.prototype._onClickPanel = function(e2) {
+      var size2 = this._size;
+      var localPoint = this._displayables.sliderGroup.transformCoordToLocal(e2.offsetX, e2.offsetY);
+      if (localPoint[0] < 0 || localPoint[0] > size2[0] || localPoint[1] < 0 || localPoint[1] > size2[1]) {
+        return;
+      }
+      var handleEnds = this._handleEnds;
+      var center2 = (handleEnds[0] + handleEnds[1]) / 2;
+      var changed = this._updateInterval("all", localPoint[0] - center2);
+      this._updateView();
+      changed && this._dispatchZoomAction(false);
+    };
+    SliderZoomView2.prototype._onBrushStart = function(e2) {
+      var x2 = e2.offsetX;
+      var y2 = e2.offsetY;
+      this._brushStart = new Point$1(x2, y2);
+      this._brushing = true;
+      this._brushStartTime = +new Date();
+    };
+    SliderZoomView2.prototype._onBrushEnd = function(e2) {
+      if (!this._brushing) {
+        return;
+      }
+      var brushRect = this._displayables.brushRect;
+      this._brushing = false;
+      if (!brushRect) {
+        return;
+      }
+      brushRect.attr("ignore", true);
+      var brushShape = brushRect.shape;
+      var brushEndTime = +new Date();
+      if (brushEndTime - this._brushStartTime < 200 && Math.abs(brushShape.width) < 5) {
+        return;
+      }
+      var viewExtend = this._getViewExtent();
+      var percentExtent = [0, 100];
+      this._range = asc$1([linearMap(brushShape.x, viewExtend, percentExtent, true), linearMap(brushShape.x + brushShape.width, viewExtend, percentExtent, true)]);
+      this._handleEnds = [brushShape.x, brushShape.x + brushShape.width];
+      this._updateView();
+      this._dispatchZoomAction(false);
+    };
+    SliderZoomView2.prototype._onBrush = function(e2) {
+      if (this._brushing) {
+        stop(e2.event);
+        this._updateBrushRect(e2.offsetX, e2.offsetY);
+      }
+    };
+    SliderZoomView2.prototype._updateBrushRect = function(mouseX, mouseY) {
+      var displayables = this._displayables;
+      var dataZoomModel = this.dataZoomModel;
+      var brushRect = displayables.brushRect;
+      if (!brushRect) {
+        brushRect = displayables.brushRect = new Rect({
+          silent: true,
+          style: dataZoomModel.getModel("brushStyle").getItemStyle()
+        });
+        displayables.sliderGroup.add(brushRect);
+      }
+      brushRect.attr("ignore", false);
+      var brushStart = this._brushStart;
+      var sliderGroup = this._displayables.sliderGroup;
+      var endPoint = sliderGroup.transformCoordToLocal(mouseX, mouseY);
+      var startPoint = sliderGroup.transformCoordToLocal(brushStart.x, brushStart.y);
+      var size2 = this._size;
+      endPoint[0] = Math.max(Math.min(size2[0], endPoint[0]), 0);
+      brushRect.setShape({
+        x: startPoint[0],
+        y: 0,
+        width: endPoint[0] - startPoint[0],
+        height: size2[1]
+      });
+    };
+    SliderZoomView2.prototype._dispatchZoomAction = function(realtime) {
+      var range = this._range;
+      this.api.dispatchAction({
+        type: "dataZoom",
+        from: this.uid,
+        dataZoomId: this.dataZoomModel.id,
+        animation: realtime ? REALTIME_ANIMATION_CONFIG : null,
+        start: range[0],
+        end: range[1]
+      });
+    };
+    SliderZoomView2.prototype._findCoordRect = function() {
+      var rect;
+      var coordSysInfoList = collectReferCoordSysModelInfo(this.dataZoomModel).infoList;
+      if (!rect && coordSysInfoList.length) {
+        var coordSys = coordSysInfoList[0].model.coordinateSystem;
+        rect = coordSys.getRect && coordSys.getRect();
+      }
+      if (!rect) {
+        var width = this.api.getWidth();
+        var height = this.api.getHeight();
+        rect = {
+          x: width * 0.2,
+          y: height * 0.2,
+          width: width * 0.6,
+          height: height * 0.6
+        };
+      }
+      return rect;
+    };
+    SliderZoomView2.type = "dataZoom.slider";
+    return SliderZoomView2;
+  }(DataZoomView$1)
+);
+function getOtherDim(thisDim) {
+  var map2 = {
+    x: "y",
+    y: "x",
+    radius: "angle",
+    angle: "radius"
+  };
+  return map2[thisDim];
+}
+function getCursor(orient) {
+  return orient === "vertical" ? "ns-resize" : "ew-resize";
+}
+const SliderZoomView$1 = SliderZoomView;
+function install$1(registers) {
+  registers.registerComponentModel(SliderZoomModel$1);
+  registers.registerComponentView(SliderZoomView$1);
+  installCommon(registers);
 }
 function install(registers) {
   use(install$2);
@@ -59368,6 +62071,5598 @@ function friendlyDateTime(dateTimeish) {
     );
   }
 }
+/*!
+  * shared v9.2.2
+  * (c) 2022 kazuya kawaguchi
+  * Released under the MIT License.
+  */
+const inBrowser = typeof window !== "undefined";
+const hasSymbol = typeof Symbol === "function" && typeof Symbol.toStringTag === "symbol";
+const makeSymbol = (name) => hasSymbol ? Symbol(name) : name;
+const generateFormatCacheKey = (locale, key, source) => friendlyJSONstringify({ l: locale, k: key, s: source });
+const friendlyJSONstringify = (json) => JSON.stringify(json).replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029").replace(/\u0027/g, "\\u0027");
+const isNumber = (val) => typeof val === "number" && isFinite(val);
+const isDate = (val) => toTypeString(val) === "[object Date]";
+const isRegExp = (val) => toTypeString(val) === "[object RegExp]";
+const isEmptyObject = (val) => isPlainObject(val) && Object.keys(val).length === 0;
+function warn(msg, err) {
+  if (typeof console !== "undefined") {
+    console.warn(`[intlify] ` + msg);
+    if (err) {
+      console.warn(err.stack);
+    }
+  }
+}
+const assign = Object.assign;
+let _globalThis;
+const getGlobalThis = () => {
+  return _globalThis || (_globalThis = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : {});
+};
+function escapeHtml(rawText) {
+  return rawText.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+}
+const hasOwnProperty = Object.prototype.hasOwnProperty;
+function hasOwn(obj, key) {
+  return hasOwnProperty.call(obj, key);
+}
+const isArray = Array.isArray;
+const isFunction = (val) => typeof val === "function";
+const isString$1 = (val) => typeof val === "string";
+const isBoolean = (val) => typeof val === "boolean";
+const isObject = (val) => (
+  // eslint-disable-line
+  val !== null && typeof val === "object"
+);
+const objectToString = Object.prototype.toString;
+const toTypeString = (value) => objectToString.call(value);
+const isPlainObject = (val) => toTypeString(val) === "[object Object]";
+const toDisplayString = (val) => {
+  return val == null ? "" : isArray(val) || isPlainObject(val) && val.toString === objectToString ? JSON.stringify(val, null, 2) : String(val);
+};
+/*!
+  * message-compiler v9.2.2
+  * (c) 2022 kazuya kawaguchi
+  * Released under the MIT License.
+  */
+const CompileErrorCodes = {
+  // tokenizer error codes
+  EXPECTED_TOKEN: 1,
+  INVALID_TOKEN_IN_PLACEHOLDER: 2,
+  UNTERMINATED_SINGLE_QUOTE_IN_PLACEHOLDER: 3,
+  UNKNOWN_ESCAPE_SEQUENCE: 4,
+  INVALID_UNICODE_ESCAPE_SEQUENCE: 5,
+  UNBALANCED_CLOSING_BRACE: 6,
+  UNTERMINATED_CLOSING_BRACE: 7,
+  EMPTY_PLACEHOLDER: 8,
+  NOT_ALLOW_NEST_PLACEHOLDER: 9,
+  INVALID_LINKED_FORMAT: 10,
+  // parser error codes
+  MUST_HAVE_MESSAGES_IN_PLURAL: 11,
+  UNEXPECTED_EMPTY_LINKED_MODIFIER: 12,
+  UNEXPECTED_EMPTY_LINKED_KEY: 13,
+  UNEXPECTED_LEXICAL_ANALYSIS: 14,
+  // Special value for higher-order compilers to pick up the last code
+  // to avoid collision of error codes. This should always be kept as the last
+  // item.
+  __EXTEND_POINT__: 15
+};
+function createCompileError(code2, loc, options = {}) {
+  const { domain, messages: messages2, args } = options;
+  const msg = code2;
+  const error = new SyntaxError(String(msg));
+  error.code = code2;
+  if (loc) {
+    error.location = loc;
+  }
+  error.domain = domain;
+  return error;
+}
+function defaultOnError(error) {
+  throw error;
+}
+function createPosition(line, column, offset2) {
+  return { line, column, offset: offset2 };
+}
+function createLocation(start2, end2, source) {
+  const loc = { start: start2, end: end2 };
+  if (source != null) {
+    loc.source = source;
+  }
+  return loc;
+}
+const CHAR_SP = " ";
+const CHAR_CR = "\r";
+const CHAR_LF = "\n";
+const CHAR_LS = String.fromCharCode(8232);
+const CHAR_PS = String.fromCharCode(8233);
+function createScanner(str) {
+  const _buf = str;
+  let _index = 0;
+  let _line = 1;
+  let _column = 1;
+  let _peekOffset = 0;
+  const isCRLF = (index2) => _buf[index2] === CHAR_CR && _buf[index2 + 1] === CHAR_LF;
+  const isLF = (index2) => _buf[index2] === CHAR_LF;
+  const isPS = (index2) => _buf[index2] === CHAR_PS;
+  const isLS = (index2) => _buf[index2] === CHAR_LS;
+  const isLineEnd = (index2) => isCRLF(index2) || isLF(index2) || isPS(index2) || isLS(index2);
+  const index = () => _index;
+  const line = () => _line;
+  const column = () => _column;
+  const peekOffset = () => _peekOffset;
+  const charAt = (offset2) => isCRLF(offset2) || isPS(offset2) || isLS(offset2) ? CHAR_LF : _buf[offset2];
+  const currentChar = () => charAt(_index);
+  const currentPeek = () => charAt(_index + _peekOffset);
+  function next() {
+    _peekOffset = 0;
+    if (isLineEnd(_index)) {
+      _line++;
+      _column = 0;
+    }
+    if (isCRLF(_index)) {
+      _index++;
+    }
+    _index++;
+    _column++;
+    return _buf[_index];
+  }
+  function peek() {
+    if (isCRLF(_index + _peekOffset)) {
+      _peekOffset++;
+    }
+    _peekOffset++;
+    return _buf[_index + _peekOffset];
+  }
+  function reset() {
+    _index = 0;
+    _line = 1;
+    _column = 1;
+    _peekOffset = 0;
+  }
+  function resetPeek(offset2 = 0) {
+    _peekOffset = offset2;
+  }
+  function skipToPeek() {
+    const target = _index + _peekOffset;
+    while (target !== _index) {
+      next();
+    }
+    _peekOffset = 0;
+  }
+  return {
+    index,
+    line,
+    column,
+    peekOffset,
+    charAt,
+    currentChar,
+    currentPeek,
+    next,
+    peek,
+    reset,
+    resetPeek,
+    skipToPeek
+  };
+}
+const EOF = void 0;
+const LITERAL_DELIMITER = "'";
+const ERROR_DOMAIN$1 = "tokenizer";
+function createTokenizer(source, options = {}) {
+  const location = options.location !== false;
+  const _scnr = createScanner(source);
+  const currentOffset = () => _scnr.index();
+  const currentPosition = () => createPosition(_scnr.line(), _scnr.column(), _scnr.index());
+  const _initLoc = currentPosition();
+  const _initOffset = currentOffset();
+  const _context = {
+    currentType: 14,
+    offset: _initOffset,
+    startLoc: _initLoc,
+    endLoc: _initLoc,
+    lastType: 14,
+    lastOffset: _initOffset,
+    lastStartLoc: _initLoc,
+    lastEndLoc: _initLoc,
+    braceNest: 0,
+    inLinked: false,
+    text: ""
+  };
+  const context = () => _context;
+  const { onError } = options;
+  function emitError2(code2, pos, offset2, ...args) {
+    const ctx = context();
+    pos.column += offset2;
+    pos.offset += offset2;
+    if (onError) {
+      const loc = createLocation(ctx.startLoc, pos);
+      const err = createCompileError(code2, loc, {
+        domain: ERROR_DOMAIN$1,
+        args
+      });
+      onError(err);
+    }
+  }
+  function getToken(context2, type, value) {
+    context2.endLoc = currentPosition();
+    context2.currentType = type;
+    const token = { type };
+    if (location) {
+      token.loc = createLocation(context2.startLoc, context2.endLoc);
+    }
+    if (value != null) {
+      token.value = value;
+    }
+    return token;
+  }
+  const getEndToken = (context2) => getToken(
+    context2,
+    14
+    /* EOF */
+  );
+  function eat(scnr, ch) {
+    if (scnr.currentChar() === ch) {
+      scnr.next();
+      return ch;
+    } else {
+      emitError2(CompileErrorCodes.EXPECTED_TOKEN, currentPosition(), 0, ch);
+      return "";
+    }
+  }
+  function peekSpaces(scnr) {
+    let buf = "";
+    while (scnr.currentPeek() === CHAR_SP || scnr.currentPeek() === CHAR_LF) {
+      buf += scnr.currentPeek();
+      scnr.peek();
+    }
+    return buf;
+  }
+  function skipSpaces(scnr) {
+    const buf = peekSpaces(scnr);
+    scnr.skipToPeek();
+    return buf;
+  }
+  function isIdentifierStart(ch) {
+    if (ch === EOF) {
+      return false;
+    }
+    const cc = ch.charCodeAt(0);
+    return cc >= 97 && cc <= 122 || // a-z
+    cc >= 65 && cc <= 90 || // A-Z
+    cc === 95;
+  }
+  function isNumberStart(ch) {
+    if (ch === EOF) {
+      return false;
+    }
+    const cc = ch.charCodeAt(0);
+    return cc >= 48 && cc <= 57;
+  }
+  function isNamedIdentifierStart(scnr, context2) {
+    const { currentType } = context2;
+    if (currentType !== 2) {
+      return false;
+    }
+    peekSpaces(scnr);
+    const ret = isIdentifierStart(scnr.currentPeek());
+    scnr.resetPeek();
+    return ret;
+  }
+  function isListIdentifierStart(scnr, context2) {
+    const { currentType } = context2;
+    if (currentType !== 2) {
+      return false;
+    }
+    peekSpaces(scnr);
+    const ch = scnr.currentPeek() === "-" ? scnr.peek() : scnr.currentPeek();
+    const ret = isNumberStart(ch);
+    scnr.resetPeek();
+    return ret;
+  }
+  function isLiteralStart(scnr, context2) {
+    const { currentType } = context2;
+    if (currentType !== 2) {
+      return false;
+    }
+    peekSpaces(scnr);
+    const ret = scnr.currentPeek() === LITERAL_DELIMITER;
+    scnr.resetPeek();
+    return ret;
+  }
+  function isLinkedDotStart(scnr, context2) {
+    const { currentType } = context2;
+    if (currentType !== 8) {
+      return false;
+    }
+    peekSpaces(scnr);
+    const ret = scnr.currentPeek() === ".";
+    scnr.resetPeek();
+    return ret;
+  }
+  function isLinkedModifierStart(scnr, context2) {
+    const { currentType } = context2;
+    if (currentType !== 9) {
+      return false;
+    }
+    peekSpaces(scnr);
+    const ret = isIdentifierStart(scnr.currentPeek());
+    scnr.resetPeek();
+    return ret;
+  }
+  function isLinkedDelimiterStart(scnr, context2) {
+    const { currentType } = context2;
+    if (!(currentType === 8 || currentType === 12)) {
+      return false;
+    }
+    peekSpaces(scnr);
+    const ret = scnr.currentPeek() === ":";
+    scnr.resetPeek();
+    return ret;
+  }
+  function isLinkedReferStart(scnr, context2) {
+    const { currentType } = context2;
+    if (currentType !== 10) {
+      return false;
+    }
+    const fn = () => {
+      const ch = scnr.currentPeek();
+      if (ch === "{") {
+        return isIdentifierStart(scnr.peek());
+      } else if (ch === "@" || ch === "%" || ch === "|" || ch === ":" || ch === "." || ch === CHAR_SP || !ch) {
+        return false;
+      } else if (ch === CHAR_LF) {
+        scnr.peek();
+        return fn();
+      } else {
+        return isIdentifierStart(ch);
+      }
+    };
+    const ret = fn();
+    scnr.resetPeek();
+    return ret;
+  }
+  function isPluralStart(scnr) {
+    peekSpaces(scnr);
+    const ret = scnr.currentPeek() === "|";
+    scnr.resetPeek();
+    return ret;
+  }
+  function detectModuloStart(scnr) {
+    const spaces = peekSpaces(scnr);
+    const ret = scnr.currentPeek() === "%" && scnr.peek() === "{";
+    scnr.resetPeek();
+    return {
+      isModulo: ret,
+      hasSpace: spaces.length > 0
+    };
+  }
+  function isTextStart(scnr, reset = true) {
+    const fn = (hasSpace = false, prev = "", detectModulo = false) => {
+      const ch = scnr.currentPeek();
+      if (ch === "{") {
+        return prev === "%" ? false : hasSpace;
+      } else if (ch === "@" || !ch) {
+        return prev === "%" ? true : hasSpace;
+      } else if (ch === "%") {
+        scnr.peek();
+        return fn(hasSpace, "%", true);
+      } else if (ch === "|") {
+        return prev === "%" || detectModulo ? true : !(prev === CHAR_SP || prev === CHAR_LF);
+      } else if (ch === CHAR_SP) {
+        scnr.peek();
+        return fn(true, CHAR_SP, detectModulo);
+      } else if (ch === CHAR_LF) {
+        scnr.peek();
+        return fn(true, CHAR_LF, detectModulo);
+      } else {
+        return true;
+      }
+    };
+    const ret = fn();
+    reset && scnr.resetPeek();
+    return ret;
+  }
+  function takeChar(scnr, fn) {
+    const ch = scnr.currentChar();
+    if (ch === EOF) {
+      return EOF;
+    }
+    if (fn(ch)) {
+      scnr.next();
+      return ch;
+    }
+    return null;
+  }
+  function takeIdentifierChar(scnr) {
+    const closure = (ch) => {
+      const cc = ch.charCodeAt(0);
+      return cc >= 97 && cc <= 122 || // a-z
+      cc >= 65 && cc <= 90 || // A-Z
+      cc >= 48 && cc <= 57 || // 0-9
+      cc === 95 || // _
+      cc === 36;
+    };
+    return takeChar(scnr, closure);
+  }
+  function takeDigit(scnr) {
+    const closure = (ch) => {
+      const cc = ch.charCodeAt(0);
+      return cc >= 48 && cc <= 57;
+    };
+    return takeChar(scnr, closure);
+  }
+  function takeHexDigit(scnr) {
+    const closure = (ch) => {
+      const cc = ch.charCodeAt(0);
+      return cc >= 48 && cc <= 57 || // 0-9
+      cc >= 65 && cc <= 70 || // A-F
+      cc >= 97 && cc <= 102;
+    };
+    return takeChar(scnr, closure);
+  }
+  function getDigits(scnr) {
+    let ch = "";
+    let num = "";
+    while (ch = takeDigit(scnr)) {
+      num += ch;
+    }
+    return num;
+  }
+  function readModulo(scnr) {
+    skipSpaces(scnr);
+    const ch = scnr.currentChar();
+    if (ch !== "%") {
+      emitError2(CompileErrorCodes.EXPECTED_TOKEN, currentPosition(), 0, ch);
+    }
+    scnr.next();
+    return "%";
+  }
+  function readText(scnr) {
+    let buf = "";
+    while (true) {
+      const ch = scnr.currentChar();
+      if (ch === "{" || ch === "}" || ch === "@" || ch === "|" || !ch) {
+        break;
+      } else if (ch === "%") {
+        if (isTextStart(scnr)) {
+          buf += ch;
+          scnr.next();
+        } else {
+          break;
+        }
+      } else if (ch === CHAR_SP || ch === CHAR_LF) {
+        if (isTextStart(scnr)) {
+          buf += ch;
+          scnr.next();
+        } else if (isPluralStart(scnr)) {
+          break;
+        } else {
+          buf += ch;
+          scnr.next();
+        }
+      } else {
+        buf += ch;
+        scnr.next();
+      }
+    }
+    return buf;
+  }
+  function readNamedIdentifier(scnr) {
+    skipSpaces(scnr);
+    let ch = "";
+    let name = "";
+    while (ch = takeIdentifierChar(scnr)) {
+      name += ch;
+    }
+    if (scnr.currentChar() === EOF) {
+      emitError2(CompileErrorCodes.UNTERMINATED_CLOSING_BRACE, currentPosition(), 0);
+    }
+    return name;
+  }
+  function readListIdentifier(scnr) {
+    skipSpaces(scnr);
+    let value = "";
+    if (scnr.currentChar() === "-") {
+      scnr.next();
+      value += `-${getDigits(scnr)}`;
+    } else {
+      value += getDigits(scnr);
+    }
+    if (scnr.currentChar() === EOF) {
+      emitError2(CompileErrorCodes.UNTERMINATED_CLOSING_BRACE, currentPosition(), 0);
+    }
+    return value;
+  }
+  function readLiteral(scnr) {
+    skipSpaces(scnr);
+    eat(scnr, `'`);
+    let ch = "";
+    let literal = "";
+    const fn = (x2) => x2 !== LITERAL_DELIMITER && x2 !== CHAR_LF;
+    while (ch = takeChar(scnr, fn)) {
+      if (ch === "\\") {
+        literal += readEscapeSequence(scnr);
+      } else {
+        literal += ch;
+      }
+    }
+    const current = scnr.currentChar();
+    if (current === CHAR_LF || current === EOF) {
+      emitError2(CompileErrorCodes.UNTERMINATED_SINGLE_QUOTE_IN_PLACEHOLDER, currentPosition(), 0);
+      if (current === CHAR_LF) {
+        scnr.next();
+        eat(scnr, `'`);
+      }
+      return literal;
+    }
+    eat(scnr, `'`);
+    return literal;
+  }
+  function readEscapeSequence(scnr) {
+    const ch = scnr.currentChar();
+    switch (ch) {
+      case "\\":
+      case `'`:
+        scnr.next();
+        return `\\${ch}`;
+      case "u":
+        return readUnicodeEscapeSequence(scnr, ch, 4);
+      case "U":
+        return readUnicodeEscapeSequence(scnr, ch, 6);
+      default:
+        emitError2(CompileErrorCodes.UNKNOWN_ESCAPE_SEQUENCE, currentPosition(), 0, ch);
+        return "";
+    }
+  }
+  function readUnicodeEscapeSequence(scnr, unicode, digits) {
+    eat(scnr, unicode);
+    let sequence = "";
+    for (let i = 0; i < digits; i++) {
+      const ch = takeHexDigit(scnr);
+      if (!ch) {
+        emitError2(CompileErrorCodes.INVALID_UNICODE_ESCAPE_SEQUENCE, currentPosition(), 0, `\\${unicode}${sequence}${scnr.currentChar()}`);
+        break;
+      }
+      sequence += ch;
+    }
+    return `\\${unicode}${sequence}`;
+  }
+  function readInvalidIdentifier(scnr) {
+    skipSpaces(scnr);
+    let ch = "";
+    let identifiers = "";
+    const closure = (ch2) => ch2 !== "{" && ch2 !== "}" && ch2 !== CHAR_SP && ch2 !== CHAR_LF;
+    while (ch = takeChar(scnr, closure)) {
+      identifiers += ch;
+    }
+    return identifiers;
+  }
+  function readLinkedModifier(scnr) {
+    let ch = "";
+    let name = "";
+    while (ch = takeIdentifierChar(scnr)) {
+      name += ch;
+    }
+    return name;
+  }
+  function readLinkedRefer(scnr) {
+    const fn = (detect2 = false, buf) => {
+      const ch = scnr.currentChar();
+      if (ch === "{" || ch === "%" || ch === "@" || ch === "|" || !ch) {
+        return buf;
+      } else if (ch === CHAR_SP) {
+        return buf;
+      } else if (ch === CHAR_LF) {
+        buf += ch;
+        scnr.next();
+        return fn(detect2, buf);
+      } else {
+        buf += ch;
+        scnr.next();
+        return fn(true, buf);
+      }
+    };
+    return fn(false, "");
+  }
+  function readPlural(scnr) {
+    skipSpaces(scnr);
+    const plural = eat(
+      scnr,
+      "|"
+      /* Pipe */
+    );
+    skipSpaces(scnr);
+    return plural;
+  }
+  function readTokenInPlaceholder(scnr, context2) {
+    let token = null;
+    const ch = scnr.currentChar();
+    switch (ch) {
+      case "{":
+        if (context2.braceNest >= 1) {
+          emitError2(CompileErrorCodes.NOT_ALLOW_NEST_PLACEHOLDER, currentPosition(), 0);
+        }
+        scnr.next();
+        token = getToken(
+          context2,
+          2,
+          "{"
+          /* BraceLeft */
+        );
+        skipSpaces(scnr);
+        context2.braceNest++;
+        return token;
+      case "}":
+        if (context2.braceNest > 0 && context2.currentType === 2) {
+          emitError2(CompileErrorCodes.EMPTY_PLACEHOLDER, currentPosition(), 0);
+        }
+        scnr.next();
+        token = getToken(
+          context2,
+          3,
+          "}"
+          /* BraceRight */
+        );
+        context2.braceNest--;
+        context2.braceNest > 0 && skipSpaces(scnr);
+        if (context2.inLinked && context2.braceNest === 0) {
+          context2.inLinked = false;
+        }
+        return token;
+      case "@":
+        if (context2.braceNest > 0) {
+          emitError2(CompileErrorCodes.UNTERMINATED_CLOSING_BRACE, currentPosition(), 0);
+        }
+        token = readTokenInLinked(scnr, context2) || getEndToken(context2);
+        context2.braceNest = 0;
+        return token;
+      default:
+        let validNamedIdentifier = true;
+        let validListIdentifier = true;
+        let validLiteral = true;
+        if (isPluralStart(scnr)) {
+          if (context2.braceNest > 0) {
+            emitError2(CompileErrorCodes.UNTERMINATED_CLOSING_BRACE, currentPosition(), 0);
+          }
+          token = getToken(context2, 1, readPlural(scnr));
+          context2.braceNest = 0;
+          context2.inLinked = false;
+          return token;
+        }
+        if (context2.braceNest > 0 && (context2.currentType === 5 || context2.currentType === 6 || context2.currentType === 7)) {
+          emitError2(CompileErrorCodes.UNTERMINATED_CLOSING_BRACE, currentPosition(), 0);
+          context2.braceNest = 0;
+          return readToken(scnr, context2);
+        }
+        if (validNamedIdentifier = isNamedIdentifierStart(scnr, context2)) {
+          token = getToken(context2, 5, readNamedIdentifier(scnr));
+          skipSpaces(scnr);
+          return token;
+        }
+        if (validListIdentifier = isListIdentifierStart(scnr, context2)) {
+          token = getToken(context2, 6, readListIdentifier(scnr));
+          skipSpaces(scnr);
+          return token;
+        }
+        if (validLiteral = isLiteralStart(scnr, context2)) {
+          token = getToken(context2, 7, readLiteral(scnr));
+          skipSpaces(scnr);
+          return token;
+        }
+        if (!validNamedIdentifier && !validListIdentifier && !validLiteral) {
+          token = getToken(context2, 13, readInvalidIdentifier(scnr));
+          emitError2(CompileErrorCodes.INVALID_TOKEN_IN_PLACEHOLDER, currentPosition(), 0, token.value);
+          skipSpaces(scnr);
+          return token;
+        }
+        break;
+    }
+    return token;
+  }
+  function readTokenInLinked(scnr, context2) {
+    const { currentType } = context2;
+    let token = null;
+    const ch = scnr.currentChar();
+    if ((currentType === 8 || currentType === 9 || currentType === 12 || currentType === 10) && (ch === CHAR_LF || ch === CHAR_SP)) {
+      emitError2(CompileErrorCodes.INVALID_LINKED_FORMAT, currentPosition(), 0);
+    }
+    switch (ch) {
+      case "@":
+        scnr.next();
+        token = getToken(
+          context2,
+          8,
+          "@"
+          /* LinkedAlias */
+        );
+        context2.inLinked = true;
+        return token;
+      case ".":
+        skipSpaces(scnr);
+        scnr.next();
+        return getToken(
+          context2,
+          9,
+          "."
+          /* LinkedDot */
+        );
+      case ":":
+        skipSpaces(scnr);
+        scnr.next();
+        return getToken(
+          context2,
+          10,
+          ":"
+          /* LinkedDelimiter */
+        );
+      default:
+        if (isPluralStart(scnr)) {
+          token = getToken(context2, 1, readPlural(scnr));
+          context2.braceNest = 0;
+          context2.inLinked = false;
+          return token;
+        }
+        if (isLinkedDotStart(scnr, context2) || isLinkedDelimiterStart(scnr, context2)) {
+          skipSpaces(scnr);
+          return readTokenInLinked(scnr, context2);
+        }
+        if (isLinkedModifierStart(scnr, context2)) {
+          skipSpaces(scnr);
+          return getToken(context2, 12, readLinkedModifier(scnr));
+        }
+        if (isLinkedReferStart(scnr, context2)) {
+          skipSpaces(scnr);
+          if (ch === "{") {
+            return readTokenInPlaceholder(scnr, context2) || token;
+          } else {
+            return getToken(context2, 11, readLinkedRefer(scnr));
+          }
+        }
+        if (currentType === 8) {
+          emitError2(CompileErrorCodes.INVALID_LINKED_FORMAT, currentPosition(), 0);
+        }
+        context2.braceNest = 0;
+        context2.inLinked = false;
+        return readToken(scnr, context2);
+    }
+  }
+  function readToken(scnr, context2) {
+    let token = {
+      type: 14
+      /* EOF */
+    };
+    if (context2.braceNest > 0) {
+      return readTokenInPlaceholder(scnr, context2) || getEndToken(context2);
+    }
+    if (context2.inLinked) {
+      return readTokenInLinked(scnr, context2) || getEndToken(context2);
+    }
+    const ch = scnr.currentChar();
+    switch (ch) {
+      case "{":
+        return readTokenInPlaceholder(scnr, context2) || getEndToken(context2);
+      case "}":
+        emitError2(CompileErrorCodes.UNBALANCED_CLOSING_BRACE, currentPosition(), 0);
+        scnr.next();
+        return getToken(
+          context2,
+          3,
+          "}"
+          /* BraceRight */
+        );
+      case "@":
+        return readTokenInLinked(scnr, context2) || getEndToken(context2);
+      default:
+        if (isPluralStart(scnr)) {
+          token = getToken(context2, 1, readPlural(scnr));
+          context2.braceNest = 0;
+          context2.inLinked = false;
+          return token;
+        }
+        const { isModulo, hasSpace } = detectModuloStart(scnr);
+        if (isModulo) {
+          return hasSpace ? getToken(context2, 0, readText(scnr)) : getToken(context2, 4, readModulo(scnr));
+        }
+        if (isTextStart(scnr)) {
+          return getToken(context2, 0, readText(scnr));
+        }
+        break;
+    }
+    return token;
+  }
+  function nextToken() {
+    const { currentType, offset: offset2, startLoc, endLoc } = _context;
+    _context.lastType = currentType;
+    _context.lastOffset = offset2;
+    _context.lastStartLoc = startLoc;
+    _context.lastEndLoc = endLoc;
+    _context.offset = currentOffset();
+    _context.startLoc = currentPosition();
+    if (_scnr.currentChar() === EOF) {
+      return getToken(
+        _context,
+        14
+        /* EOF */
+      );
+    }
+    return readToken(_scnr, _context);
+  }
+  return {
+    nextToken,
+    currentOffset,
+    currentPosition,
+    context
+  };
+}
+const ERROR_DOMAIN = "parser";
+const KNOWN_ESCAPES = /(?:\\\\|\\'|\\u([0-9a-fA-F]{4})|\\U([0-9a-fA-F]{6}))/g;
+function fromEscapeSequence(match2, codePoint4, codePoint6) {
+  switch (match2) {
+    case `\\\\`:
+      return `\\`;
+    case `\\'`:
+      return `'`;
+    default: {
+      const codePoint = parseInt(codePoint4 || codePoint6, 16);
+      if (codePoint <= 55295 || codePoint >= 57344) {
+        return String.fromCodePoint(codePoint);
+      }
+      return "�";
+    }
+  }
+}
+function createParser(options = {}) {
+  const location = options.location !== false;
+  const { onError } = options;
+  function emitError2(tokenzer, code2, start2, offset2, ...args) {
+    const end2 = tokenzer.currentPosition();
+    end2.offset += offset2;
+    end2.column += offset2;
+    if (onError) {
+      const loc = createLocation(start2, end2);
+      const err = createCompileError(code2, loc, {
+        domain: ERROR_DOMAIN,
+        args
+      });
+      onError(err);
+    }
+  }
+  function startNode(type, offset2, loc) {
+    const node = {
+      type,
+      start: offset2,
+      end: offset2
+    };
+    if (location) {
+      node.loc = { start: loc, end: loc };
+    }
+    return node;
+  }
+  function endNode(node, offset2, pos, type) {
+    node.end = offset2;
+    if (type) {
+      node.type = type;
+    }
+    if (location && node.loc) {
+      node.loc.end = pos;
+    }
+  }
+  function parseText2(tokenizer, value) {
+    const context = tokenizer.context();
+    const node = startNode(3, context.offset, context.startLoc);
+    node.value = value;
+    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
+    return node;
+  }
+  function parseList(tokenizer, index) {
+    const context = tokenizer.context();
+    const { lastOffset: offset2, lastStartLoc: loc } = context;
+    const node = startNode(5, offset2, loc);
+    node.index = parseInt(index, 10);
+    tokenizer.nextToken();
+    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
+    return node;
+  }
+  function parseNamed(tokenizer, key) {
+    const context = tokenizer.context();
+    const { lastOffset: offset2, lastStartLoc: loc } = context;
+    const node = startNode(4, offset2, loc);
+    node.key = key;
+    tokenizer.nextToken();
+    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
+    return node;
+  }
+  function parseLiteral(tokenizer, value) {
+    const context = tokenizer.context();
+    const { lastOffset: offset2, lastStartLoc: loc } = context;
+    const node = startNode(9, offset2, loc);
+    node.value = value.replace(KNOWN_ESCAPES, fromEscapeSequence);
+    tokenizer.nextToken();
+    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
+    return node;
+  }
+  function parseLinkedModifier(tokenizer) {
+    const token = tokenizer.nextToken();
+    const context = tokenizer.context();
+    const { lastOffset: offset2, lastStartLoc: loc } = context;
+    const node = startNode(8, offset2, loc);
+    if (token.type !== 12) {
+      emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_EMPTY_LINKED_MODIFIER, context.lastStartLoc, 0);
+      node.value = "";
+      endNode(node, offset2, loc);
+      return {
+        nextConsumeToken: token,
+        node
+      };
+    }
+    if (token.value == null) {
+      emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
+    }
+    node.value = token.value || "";
+    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
+    return {
+      node
+    };
+  }
+  function parseLinkedKey(tokenizer, value) {
+    const context = tokenizer.context();
+    const node = startNode(7, context.offset, context.startLoc);
+    node.value = value;
+    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
+    return node;
+  }
+  function parseLinked(tokenizer) {
+    const context = tokenizer.context();
+    const linkedNode = startNode(6, context.offset, context.startLoc);
+    let token = tokenizer.nextToken();
+    if (token.type === 9) {
+      const parsed = parseLinkedModifier(tokenizer);
+      linkedNode.modifier = parsed.node;
+      token = parsed.nextConsumeToken || tokenizer.nextToken();
+    }
+    if (token.type !== 10) {
+      emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
+    }
+    token = tokenizer.nextToken();
+    if (token.type === 2) {
+      token = tokenizer.nextToken();
+    }
+    switch (token.type) {
+      case 11:
+        if (token.value == null) {
+          emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
+        }
+        linkedNode.key = parseLinkedKey(tokenizer, token.value || "");
+        break;
+      case 5:
+        if (token.value == null) {
+          emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
+        }
+        linkedNode.key = parseNamed(tokenizer, token.value || "");
+        break;
+      case 6:
+        if (token.value == null) {
+          emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
+        }
+        linkedNode.key = parseList(tokenizer, token.value || "");
+        break;
+      case 7:
+        if (token.value == null) {
+          emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
+        }
+        linkedNode.key = parseLiteral(tokenizer, token.value || "");
+        break;
+      default:
+        emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_EMPTY_LINKED_KEY, context.lastStartLoc, 0);
+        const nextContext = tokenizer.context();
+        const emptyLinkedKeyNode = startNode(7, nextContext.offset, nextContext.startLoc);
+        emptyLinkedKeyNode.value = "";
+        endNode(emptyLinkedKeyNode, nextContext.offset, nextContext.startLoc);
+        linkedNode.key = emptyLinkedKeyNode;
+        endNode(linkedNode, nextContext.offset, nextContext.startLoc);
+        return {
+          nextConsumeToken: token,
+          node: linkedNode
+        };
+    }
+    endNode(linkedNode, tokenizer.currentOffset(), tokenizer.currentPosition());
+    return {
+      node: linkedNode
+    };
+  }
+  function parseMessage(tokenizer) {
+    const context = tokenizer.context();
+    const startOffset = context.currentType === 1 ? tokenizer.currentOffset() : context.offset;
+    const startLoc = context.currentType === 1 ? context.endLoc : context.startLoc;
+    const node = startNode(2, startOffset, startLoc);
+    node.items = [];
+    let nextToken = null;
+    do {
+      const token = nextToken || tokenizer.nextToken();
+      nextToken = null;
+      switch (token.type) {
+        case 0:
+          if (token.value == null) {
+            emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
+          }
+          node.items.push(parseText2(tokenizer, token.value || ""));
+          break;
+        case 6:
+          if (token.value == null) {
+            emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
+          }
+          node.items.push(parseList(tokenizer, token.value || ""));
+          break;
+        case 5:
+          if (token.value == null) {
+            emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
+          }
+          node.items.push(parseNamed(tokenizer, token.value || ""));
+          break;
+        case 7:
+          if (token.value == null) {
+            emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
+          }
+          node.items.push(parseLiteral(tokenizer, token.value || ""));
+          break;
+        case 8:
+          const parsed = parseLinked(tokenizer);
+          node.items.push(parsed.node);
+          nextToken = parsed.nextConsumeToken || null;
+          break;
+      }
+    } while (context.currentType !== 14 && context.currentType !== 1);
+    const endOffset = context.currentType === 1 ? context.lastOffset : tokenizer.currentOffset();
+    const endLoc = context.currentType === 1 ? context.lastEndLoc : tokenizer.currentPosition();
+    endNode(node, endOffset, endLoc);
+    return node;
+  }
+  function parsePlural(tokenizer, offset2, loc, msgNode) {
+    const context = tokenizer.context();
+    let hasEmptyMessage = msgNode.items.length === 0;
+    const node = startNode(1, offset2, loc);
+    node.cases = [];
+    node.cases.push(msgNode);
+    do {
+      const msg = parseMessage(tokenizer);
+      if (!hasEmptyMessage) {
+        hasEmptyMessage = msg.items.length === 0;
+      }
+      node.cases.push(msg);
+    } while (context.currentType !== 14);
+    if (hasEmptyMessage) {
+      emitError2(tokenizer, CompileErrorCodes.MUST_HAVE_MESSAGES_IN_PLURAL, loc, 0);
+    }
+    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
+    return node;
+  }
+  function parseResource(tokenizer) {
+    const context = tokenizer.context();
+    const { offset: offset2, startLoc } = context;
+    const msgNode = parseMessage(tokenizer);
+    if (context.currentType === 14) {
+      return msgNode;
+    } else {
+      return parsePlural(tokenizer, offset2, startLoc, msgNode);
+    }
+  }
+  function parse2(source) {
+    const tokenizer = createTokenizer(source, assign({}, options));
+    const context = tokenizer.context();
+    const node = startNode(0, context.offset, context.startLoc);
+    if (location && node.loc) {
+      node.loc.source = source;
+    }
+    node.body = parseResource(tokenizer);
+    if (context.currentType !== 14) {
+      emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, source[context.offset] || "");
+    }
+    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
+    return node;
+  }
+  return { parse: parse2 };
+}
+function getTokenCaption(token) {
+  if (token.type === 14) {
+    return "EOF";
+  }
+  const name = (token.value || "").replace(/\r?\n/gu, "\\n");
+  return name.length > 10 ? name.slice(0, 9) + "…" : name;
+}
+function createTransformer(ast, options = {}) {
+  const _context = {
+    ast,
+    helpers: /* @__PURE__ */ new Set()
+  };
+  const context = () => _context;
+  const helper = (name) => {
+    _context.helpers.add(name);
+    return name;
+  };
+  return { context, helper };
+}
+function traverseNodes(nodes, transformer) {
+  for (let i = 0; i < nodes.length; i++) {
+    traverseNode(nodes[i], transformer);
+  }
+}
+function traverseNode(node, transformer) {
+  switch (node.type) {
+    case 1:
+      traverseNodes(node.cases, transformer);
+      transformer.helper(
+        "plural"
+        /* PLURAL */
+      );
+      break;
+    case 2:
+      traverseNodes(node.items, transformer);
+      break;
+    case 6:
+      const linked = node;
+      traverseNode(linked.key, transformer);
+      transformer.helper(
+        "linked"
+        /* LINKED */
+      );
+      transformer.helper(
+        "type"
+        /* TYPE */
+      );
+      break;
+    case 5:
+      transformer.helper(
+        "interpolate"
+        /* INTERPOLATE */
+      );
+      transformer.helper(
+        "list"
+        /* LIST */
+      );
+      break;
+    case 4:
+      transformer.helper(
+        "interpolate"
+        /* INTERPOLATE */
+      );
+      transformer.helper(
+        "named"
+        /* NAMED */
+      );
+      break;
+  }
+}
+function transform2(ast, options = {}) {
+  const transformer = createTransformer(ast);
+  transformer.helper(
+    "normalize"
+    /* NORMALIZE */
+  );
+  ast.body && traverseNode(ast.body, transformer);
+  const context = transformer.context();
+  ast.helpers = Array.from(context.helpers);
+}
+function createCodeGenerator(ast, options) {
+  const { sourceMap, filename, breakLineCode, needIndent: _needIndent } = options;
+  const _context = {
+    source: ast.loc.source,
+    filename,
+    code: "",
+    column: 1,
+    line: 1,
+    offset: 0,
+    map: void 0,
+    breakLineCode,
+    needIndent: _needIndent,
+    indentLevel: 0
+  };
+  const context = () => _context;
+  function push2(code2, node) {
+    _context.code += code2;
+  }
+  function _newline(n2, withBreakLine = true) {
+    const _breakLineCode = withBreakLine ? breakLineCode : "";
+    push2(_needIndent ? _breakLineCode + `  `.repeat(n2) : _breakLineCode);
+  }
+  function indent(withNewLine = true) {
+    const level = ++_context.indentLevel;
+    withNewLine && _newline(level);
+  }
+  function deindent(withNewLine = true) {
+    const level = --_context.indentLevel;
+    withNewLine && _newline(level);
+  }
+  function newline() {
+    _newline(_context.indentLevel);
+  }
+  const helper = (key) => `_${key}`;
+  const needIndent = () => _context.needIndent;
+  return {
+    context,
+    push: push2,
+    indent,
+    deindent,
+    newline,
+    helper,
+    needIndent
+  };
+}
+function generateLinkedNode(generator, node) {
+  const { helper } = generator;
+  generator.push(`${helper(
+    "linked"
+    /* LINKED */
+  )}(`);
+  generateNode(generator, node.key);
+  if (node.modifier) {
+    generator.push(`, `);
+    generateNode(generator, node.modifier);
+    generator.push(`, _type`);
+  } else {
+    generator.push(`, undefined, _type`);
+  }
+  generator.push(`)`);
+}
+function generateMessageNode(generator, node) {
+  const { helper, needIndent } = generator;
+  generator.push(`${helper(
+    "normalize"
+    /* NORMALIZE */
+  )}([`);
+  generator.indent(needIndent());
+  const length = node.items.length;
+  for (let i = 0; i < length; i++) {
+    generateNode(generator, node.items[i]);
+    if (i === length - 1) {
+      break;
+    }
+    generator.push(", ");
+  }
+  generator.deindent(needIndent());
+  generator.push("])");
+}
+function generatePluralNode(generator, node) {
+  const { helper, needIndent } = generator;
+  if (node.cases.length > 1) {
+    generator.push(`${helper(
+      "plural"
+      /* PLURAL */
+    )}([`);
+    generator.indent(needIndent());
+    const length = node.cases.length;
+    for (let i = 0; i < length; i++) {
+      generateNode(generator, node.cases[i]);
+      if (i === length - 1) {
+        break;
+      }
+      generator.push(", ");
+    }
+    generator.deindent(needIndent());
+    generator.push(`])`);
+  }
+}
+function generateResource(generator, node) {
+  if (node.body) {
+    generateNode(generator, node.body);
+  } else {
+    generator.push("null");
+  }
+}
+function generateNode(generator, node) {
+  const { helper } = generator;
+  switch (node.type) {
+    case 0:
+      generateResource(generator, node);
+      break;
+    case 1:
+      generatePluralNode(generator, node);
+      break;
+    case 2:
+      generateMessageNode(generator, node);
+      break;
+    case 6:
+      generateLinkedNode(generator, node);
+      break;
+    case 8:
+      generator.push(JSON.stringify(node.value), node);
+      break;
+    case 7:
+      generator.push(JSON.stringify(node.value), node);
+      break;
+    case 5:
+      generator.push(`${helper(
+        "interpolate"
+        /* INTERPOLATE */
+      )}(${helper(
+        "list"
+        /* LIST */
+      )}(${node.index}))`, node);
+      break;
+    case 4:
+      generator.push(`${helper(
+        "interpolate"
+        /* INTERPOLATE */
+      )}(${helper(
+        "named"
+        /* NAMED */
+      )}(${JSON.stringify(node.key)}))`, node);
+      break;
+    case 9:
+      generator.push(JSON.stringify(node.value), node);
+      break;
+    case 3:
+      generator.push(JSON.stringify(node.value), node);
+      break;
+  }
+}
+const generate = (ast, options = {}) => {
+  const mode2 = isString$1(options.mode) ? options.mode : "normal";
+  const filename = isString$1(options.filename) ? options.filename : "message.intl";
+  const sourceMap = !!options.sourceMap;
+  const breakLineCode = options.breakLineCode != null ? options.breakLineCode : mode2 === "arrow" ? ";" : "\n";
+  const needIndent = options.needIndent ? options.needIndent : mode2 !== "arrow";
+  const helpers = ast.helpers || [];
+  const generator = createCodeGenerator(ast, {
+    mode: mode2,
+    filename,
+    sourceMap,
+    breakLineCode,
+    needIndent
+  });
+  generator.push(mode2 === "normal" ? `function __msg__ (ctx) {` : `(ctx) => {`);
+  generator.indent(needIndent);
+  if (helpers.length > 0) {
+    generator.push(`const { ${helpers.map((s2) => `${s2}: _${s2}`).join(", ")} } = ctx`);
+    generator.newline();
+  }
+  generator.push(`return `);
+  generateNode(generator, ast);
+  generator.deindent(needIndent);
+  generator.push(`}`);
+  const { code: code2, map: map2 } = generator.context();
+  return {
+    ast,
+    code: code2,
+    map: map2 ? map2.toJSON() : void 0
+    // eslint-disable-line @typescript-eslint/no-explicit-any
+  };
+};
+function baseCompile(source, options = {}) {
+  const assignedOptions = assign({}, options);
+  const parser = createParser(assignedOptions);
+  const ast = parser.parse(source);
+  transform2(ast, assignedOptions);
+  return generate(ast, assignedOptions);
+}
+/*!
+  * devtools-if v9.2.2
+  * (c) 2022 kazuya kawaguchi
+  * Released under the MIT License.
+  */
+const IntlifyDevToolsHooks = {
+  I18nInit: "i18n:init",
+  FunctionTranslate: "function:translate"
+};
+/*!
+  * core-base v9.2.2
+  * (c) 2022 kazuya kawaguchi
+  * Released under the MIT License.
+  */
+const pathStateMachine = [];
+pathStateMachine[
+  0
+  /* BEFORE_PATH */
+] = {
+  [
+    "w"
+    /* WORKSPACE */
+  ]: [
+    0
+    /* BEFORE_PATH */
+  ],
+  [
+    "i"
+    /* IDENT */
+  ]: [
+    3,
+    0
+    /* APPEND */
+  ],
+  [
+    "["
+    /* LEFT_BRACKET */
+  ]: [
+    4
+    /* IN_SUB_PATH */
+  ],
+  [
+    "o"
+    /* END_OF_FAIL */
+  ]: [
+    7
+    /* AFTER_PATH */
+  ]
+};
+pathStateMachine[
+  1
+  /* IN_PATH */
+] = {
+  [
+    "w"
+    /* WORKSPACE */
+  ]: [
+    1
+    /* IN_PATH */
+  ],
+  [
+    "."
+    /* DOT */
+  ]: [
+    2
+    /* BEFORE_IDENT */
+  ],
+  [
+    "["
+    /* LEFT_BRACKET */
+  ]: [
+    4
+    /* IN_SUB_PATH */
+  ],
+  [
+    "o"
+    /* END_OF_FAIL */
+  ]: [
+    7
+    /* AFTER_PATH */
+  ]
+};
+pathStateMachine[
+  2
+  /* BEFORE_IDENT */
+] = {
+  [
+    "w"
+    /* WORKSPACE */
+  ]: [
+    2
+    /* BEFORE_IDENT */
+  ],
+  [
+    "i"
+    /* IDENT */
+  ]: [
+    3,
+    0
+    /* APPEND */
+  ],
+  [
+    "0"
+    /* ZERO */
+  ]: [
+    3,
+    0
+    /* APPEND */
+  ]
+};
+pathStateMachine[
+  3
+  /* IN_IDENT */
+] = {
+  [
+    "i"
+    /* IDENT */
+  ]: [
+    3,
+    0
+    /* APPEND */
+  ],
+  [
+    "0"
+    /* ZERO */
+  ]: [
+    3,
+    0
+    /* APPEND */
+  ],
+  [
+    "w"
+    /* WORKSPACE */
+  ]: [
+    1,
+    1
+    /* PUSH */
+  ],
+  [
+    "."
+    /* DOT */
+  ]: [
+    2,
+    1
+    /* PUSH */
+  ],
+  [
+    "["
+    /* LEFT_BRACKET */
+  ]: [
+    4,
+    1
+    /* PUSH */
+  ],
+  [
+    "o"
+    /* END_OF_FAIL */
+  ]: [
+    7,
+    1
+    /* PUSH */
+  ]
+};
+pathStateMachine[
+  4
+  /* IN_SUB_PATH */
+] = {
+  [
+    "'"
+    /* SINGLE_QUOTE */
+  ]: [
+    5,
+    0
+    /* APPEND */
+  ],
+  [
+    '"'
+    /* DOUBLE_QUOTE */
+  ]: [
+    6,
+    0
+    /* APPEND */
+  ],
+  [
+    "["
+    /* LEFT_BRACKET */
+  ]: [
+    4,
+    2
+    /* INC_SUB_PATH_DEPTH */
+  ],
+  [
+    "]"
+    /* RIGHT_BRACKET */
+  ]: [
+    1,
+    3
+    /* PUSH_SUB_PATH */
+  ],
+  [
+    "o"
+    /* END_OF_FAIL */
+  ]: 8,
+  [
+    "l"
+    /* ELSE */
+  ]: [
+    4,
+    0
+    /* APPEND */
+  ]
+};
+pathStateMachine[
+  5
+  /* IN_SINGLE_QUOTE */
+] = {
+  [
+    "'"
+    /* SINGLE_QUOTE */
+  ]: [
+    4,
+    0
+    /* APPEND */
+  ],
+  [
+    "o"
+    /* END_OF_FAIL */
+  ]: 8,
+  [
+    "l"
+    /* ELSE */
+  ]: [
+    5,
+    0
+    /* APPEND */
+  ]
+};
+pathStateMachine[
+  6
+  /* IN_DOUBLE_QUOTE */
+] = {
+  [
+    '"'
+    /* DOUBLE_QUOTE */
+  ]: [
+    4,
+    0
+    /* APPEND */
+  ],
+  [
+    "o"
+    /* END_OF_FAIL */
+  ]: 8,
+  [
+    "l"
+    /* ELSE */
+  ]: [
+    6,
+    0
+    /* APPEND */
+  ]
+};
+const literalValueRE = /^\s?(?:true|false|-?[\d.]+|'[^']*'|"[^"]*")\s?$/;
+function isLiteral(exp) {
+  return literalValueRE.test(exp);
+}
+function stripQuotes(str) {
+  const a = str.charCodeAt(0);
+  const b2 = str.charCodeAt(str.length - 1);
+  return a === b2 && (a === 34 || a === 39) ? str.slice(1, -1) : str;
+}
+function getPathCharType(ch) {
+  if (ch === void 0 || ch === null) {
+    return "o";
+  }
+  const code2 = ch.charCodeAt(0);
+  switch (code2) {
+    case 91:
+    case 93:
+    case 46:
+    case 34:
+    case 39:
+      return ch;
+    case 95:
+    case 36:
+    case 45:
+      return "i";
+    case 9:
+    case 10:
+    case 13:
+    case 160:
+    case 65279:
+    case 8232:
+    case 8233:
+      return "w";
+  }
+  return "i";
+}
+function formatSubPath(path) {
+  const trimmed = path.trim();
+  if (path.charAt(0) === "0" && isNaN(parseInt(path))) {
+    return false;
+  }
+  return isLiteral(trimmed) ? stripQuotes(trimmed) : "*" + trimmed;
+}
+function parse(path) {
+  const keys2 = [];
+  let index = -1;
+  let mode2 = 0;
+  let subPathDepth = 0;
+  let c;
+  let key;
+  let newChar;
+  let type;
+  let transition;
+  let action;
+  let typeMap;
+  const actions2 = [];
+  actions2[
+    0
+    /* APPEND */
+  ] = () => {
+    if (key === void 0) {
+      key = newChar;
+    } else {
+      key += newChar;
+    }
+  };
+  actions2[
+    1
+    /* PUSH */
+  ] = () => {
+    if (key !== void 0) {
+      keys2.push(key);
+      key = void 0;
+    }
+  };
+  actions2[
+    2
+    /* INC_SUB_PATH_DEPTH */
+  ] = () => {
+    actions2[
+      0
+      /* APPEND */
+    ]();
+    subPathDepth++;
+  };
+  actions2[
+    3
+    /* PUSH_SUB_PATH */
+  ] = () => {
+    if (subPathDepth > 0) {
+      subPathDepth--;
+      mode2 = 4;
+      actions2[
+        0
+        /* APPEND */
+      ]();
+    } else {
+      subPathDepth = 0;
+      if (key === void 0) {
+        return false;
+      }
+      key = formatSubPath(key);
+      if (key === false) {
+        return false;
+      } else {
+        actions2[
+          1
+          /* PUSH */
+        ]();
+      }
+    }
+  };
+  function maybeUnescapeQuote() {
+    const nextChar = path[index + 1];
+    if (mode2 === 5 && nextChar === "'" || mode2 === 6 && nextChar === '"') {
+      index++;
+      newChar = "\\" + nextChar;
+      actions2[
+        0
+        /* APPEND */
+      ]();
+      return true;
+    }
+  }
+  while (mode2 !== null) {
+    index++;
+    c = path[index];
+    if (c === "\\" && maybeUnescapeQuote()) {
+      continue;
+    }
+    type = getPathCharType(c);
+    typeMap = pathStateMachine[mode2];
+    transition = typeMap[type] || typeMap[
+      "l"
+      /* ELSE */
+    ] || 8;
+    if (transition === 8) {
+      return;
+    }
+    mode2 = transition[0];
+    if (transition[1] !== void 0) {
+      action = actions2[transition[1]];
+      if (action) {
+        newChar = c;
+        if (action() === false) {
+          return;
+        }
+      }
+    }
+    if (mode2 === 7) {
+      return keys2;
+    }
+  }
+}
+const cache = /* @__PURE__ */ new Map();
+function resolveWithKeyValue(obj, path) {
+  return isObject(obj) ? obj[path] : null;
+}
+function resolveValue(obj, path) {
+  if (!isObject(obj)) {
+    return null;
+  }
+  let hit = cache.get(path);
+  if (!hit) {
+    hit = parse(path);
+    if (hit) {
+      cache.set(path, hit);
+    }
+  }
+  if (!hit) {
+    return null;
+  }
+  const len2 = hit.length;
+  let last2 = obj;
+  let i = 0;
+  while (i < len2) {
+    const val = last2[hit[i]];
+    if (val === void 0) {
+      return null;
+    }
+    last2 = val;
+    i++;
+  }
+  return last2;
+}
+const DEFAULT_MODIFIER = (str) => str;
+const DEFAULT_MESSAGE = (ctx) => "";
+const DEFAULT_MESSAGE_DATA_TYPE = "text";
+const DEFAULT_NORMALIZE = (values) => values.length === 0 ? "" : values.join("");
+const DEFAULT_INTERPOLATE = toDisplayString;
+function pluralDefault(choice, choicesLength) {
+  choice = Math.abs(choice);
+  if (choicesLength === 2) {
+    return choice ? choice > 1 ? 1 : 0 : 1;
+  }
+  return choice ? Math.min(choice, 2) : 0;
+}
+function getPluralIndex(options) {
+  const index = isNumber(options.pluralIndex) ? options.pluralIndex : -1;
+  return options.named && (isNumber(options.named.count) || isNumber(options.named.n)) ? isNumber(options.named.count) ? options.named.count : isNumber(options.named.n) ? options.named.n : index : index;
+}
+function normalizeNamed(pluralIndex, props) {
+  if (!props.count) {
+    props.count = pluralIndex;
+  }
+  if (!props.n) {
+    props.n = pluralIndex;
+  }
+}
+function createMessageContext(options = {}) {
+  const locale = options.locale;
+  const pluralIndex = getPluralIndex(options);
+  const pluralRule = isObject(options.pluralRules) && isString$1(locale) && isFunction(options.pluralRules[locale]) ? options.pluralRules[locale] : pluralDefault;
+  const orgPluralRule = isObject(options.pluralRules) && isString$1(locale) && isFunction(options.pluralRules[locale]) ? pluralDefault : void 0;
+  const plural = (messages2) => {
+    return messages2[pluralRule(pluralIndex, messages2.length, orgPluralRule)];
+  };
+  const _list = options.list || [];
+  const list = (index) => _list[index];
+  const _named = options.named || {};
+  isNumber(options.pluralIndex) && normalizeNamed(pluralIndex, _named);
+  const named = (key) => _named[key];
+  function message(key) {
+    const msg = isFunction(options.messages) ? options.messages(key) : isObject(options.messages) ? options.messages[key] : false;
+    return !msg ? options.parent ? options.parent.message(key) : DEFAULT_MESSAGE : msg;
+  }
+  const _modifier = (name) => options.modifiers ? options.modifiers[name] : DEFAULT_MODIFIER;
+  const normalize2 = isPlainObject(options.processor) && isFunction(options.processor.normalize) ? options.processor.normalize : DEFAULT_NORMALIZE;
+  const interpolate = isPlainObject(options.processor) && isFunction(options.processor.interpolate) ? options.processor.interpolate : DEFAULT_INTERPOLATE;
+  const type = isPlainObject(options.processor) && isString$1(options.processor.type) ? options.processor.type : DEFAULT_MESSAGE_DATA_TYPE;
+  const linked = (key, ...args) => {
+    const [arg1, arg2] = args;
+    let type2 = "text";
+    let modifier = "";
+    if (args.length === 1) {
+      if (isObject(arg1)) {
+        modifier = arg1.modifier || modifier;
+        type2 = arg1.type || type2;
+      } else if (isString$1(arg1)) {
+        modifier = arg1 || modifier;
+      }
+    } else if (args.length === 2) {
+      if (isString$1(arg1)) {
+        modifier = arg1 || modifier;
+      }
+      if (isString$1(arg2)) {
+        type2 = arg2 || type2;
+      }
+    }
+    let msg = message(key)(ctx);
+    if (type2 === "vnode" && isArray(msg) && modifier) {
+      msg = msg[0];
+    }
+    return modifier ? _modifier(modifier)(msg, type2) : msg;
+  };
+  const ctx = {
+    [
+      "list"
+      /* LIST */
+    ]: list,
+    [
+      "named"
+      /* NAMED */
+    ]: named,
+    [
+      "plural"
+      /* PLURAL */
+    ]: plural,
+    [
+      "linked"
+      /* LINKED */
+    ]: linked,
+    [
+      "message"
+      /* MESSAGE */
+    ]: message,
+    [
+      "type"
+      /* TYPE */
+    ]: type,
+    [
+      "interpolate"
+      /* INTERPOLATE */
+    ]: interpolate,
+    [
+      "normalize"
+      /* NORMALIZE */
+    ]: normalize2
+  };
+  return ctx;
+}
+let devtools = null;
+function setDevToolsHook(hook) {
+  devtools = hook;
+}
+function initI18nDevTools(i18n2, version2, meta) {
+  devtools && devtools.emit(IntlifyDevToolsHooks.I18nInit, {
+    timestamp: Date.now(),
+    i18n: i18n2,
+    version: version2,
+    meta
+  });
+}
+const translateDevTools = /* @__PURE__ */ createDevToolsHook(IntlifyDevToolsHooks.FunctionTranslate);
+function createDevToolsHook(hook) {
+  return (payloads) => devtools && devtools.emit(hook, payloads);
+}
+const CoreWarnCodes = {
+  NOT_FOUND_KEY: 1,
+  FALLBACK_TO_TRANSLATE: 2,
+  CANNOT_FORMAT_NUMBER: 3,
+  FALLBACK_TO_NUMBER_FORMAT: 4,
+  CANNOT_FORMAT_DATE: 5,
+  FALLBACK_TO_DATE_FORMAT: 6,
+  __EXTEND_POINT__: 7
+};
+function fallbackWithSimple(ctx, fallback, start2) {
+  return [.../* @__PURE__ */ new Set([
+    start2,
+    ...isArray(fallback) ? fallback : isObject(fallback) ? Object.keys(fallback) : isString$1(fallback) ? [fallback] : [start2]
+  ])];
+}
+function fallbackWithLocaleChain(ctx, fallback, start2) {
+  const startLocale = isString$1(start2) ? start2 : DEFAULT_LOCALE;
+  const context = ctx;
+  if (!context.__localeChainCache) {
+    context.__localeChainCache = /* @__PURE__ */ new Map();
+  }
+  let chain = context.__localeChainCache.get(startLocale);
+  if (!chain) {
+    chain = [];
+    let block = [start2];
+    while (isArray(block)) {
+      block = appendBlockToChain(chain, block, fallback);
+    }
+    const defaults2 = isArray(fallback) || !isPlainObject(fallback) ? fallback : fallback["default"] ? fallback["default"] : null;
+    block = isString$1(defaults2) ? [defaults2] : defaults2;
+    if (isArray(block)) {
+      appendBlockToChain(chain, block, false);
+    }
+    context.__localeChainCache.set(startLocale, chain);
+  }
+  return chain;
+}
+function appendBlockToChain(chain, block, blocks) {
+  let follow = true;
+  for (let i = 0; i < block.length && isBoolean(follow); i++) {
+    const locale = block[i];
+    if (isString$1(locale)) {
+      follow = appendLocaleToChain(chain, block[i], blocks);
+    }
+  }
+  return follow;
+}
+function appendLocaleToChain(chain, locale, blocks) {
+  let follow;
+  const tokens = locale.split("-");
+  do {
+    const target = tokens.join("-");
+    follow = appendItemToChain(chain, target, blocks);
+    tokens.splice(-1, 1);
+  } while (tokens.length && follow === true);
+  return follow;
+}
+function appendItemToChain(chain, target, blocks) {
+  let follow = false;
+  if (!chain.includes(target)) {
+    follow = true;
+    if (target) {
+      follow = target[target.length - 1] !== "!";
+      const locale = target.replace(/!/g, "");
+      chain.push(locale);
+      if ((isArray(blocks) || isPlainObject(blocks)) && blocks[locale]) {
+        follow = blocks[locale];
+      }
+    }
+  }
+  return follow;
+}
+const VERSION$1 = "9.2.2";
+const NOT_REOSLVED = -1;
+const DEFAULT_LOCALE = "en-US";
+const MISSING_RESOLVE_VALUE = "";
+const capitalize = (str) => `${str.charAt(0).toLocaleUpperCase()}${str.substr(1)}`;
+function getDefaultLinkedModifiers() {
+  return {
+    upper: (val, type) => {
+      return type === "text" && isString$1(val) ? val.toUpperCase() : type === "vnode" && isObject(val) && "__v_isVNode" in val ? val.children.toUpperCase() : val;
+    },
+    lower: (val, type) => {
+      return type === "text" && isString$1(val) ? val.toLowerCase() : type === "vnode" && isObject(val) && "__v_isVNode" in val ? val.children.toLowerCase() : val;
+    },
+    capitalize: (val, type) => {
+      return type === "text" && isString$1(val) ? capitalize(val) : type === "vnode" && isObject(val) && "__v_isVNode" in val ? capitalize(val.children) : val;
+    }
+  };
+}
+let _compiler;
+function registerMessageCompiler(compiler) {
+  _compiler = compiler;
+}
+let _resolver;
+function registerMessageResolver(resolver) {
+  _resolver = resolver;
+}
+let _fallbacker;
+function registerLocaleFallbacker(fallbacker) {
+  _fallbacker = fallbacker;
+}
+let _additionalMeta = null;
+const setAdditionalMeta = (meta) => {
+  _additionalMeta = meta;
+};
+const getAdditionalMeta = () => _additionalMeta;
+let _fallbackContext = null;
+const setFallbackContext = (context) => {
+  _fallbackContext = context;
+};
+const getFallbackContext = () => _fallbackContext;
+let _cid = 0;
+function createCoreContext(options = {}) {
+  const version2 = isString$1(options.version) ? options.version : VERSION$1;
+  const locale = isString$1(options.locale) ? options.locale : DEFAULT_LOCALE;
+  const fallbackLocale = isArray(options.fallbackLocale) || isPlainObject(options.fallbackLocale) || isString$1(options.fallbackLocale) || options.fallbackLocale === false ? options.fallbackLocale : locale;
+  const messages2 = isPlainObject(options.messages) ? options.messages : { [locale]: {} };
+  const datetimeFormats = isPlainObject(options.datetimeFormats) ? options.datetimeFormats : { [locale]: {} };
+  const numberFormats = isPlainObject(options.numberFormats) ? options.numberFormats : { [locale]: {} };
+  const modifiers = assign({}, options.modifiers || {}, getDefaultLinkedModifiers());
+  const pluralRules = options.pluralRules || {};
+  const missing = isFunction(options.missing) ? options.missing : null;
+  const missingWarn = isBoolean(options.missingWarn) || isRegExp(options.missingWarn) ? options.missingWarn : true;
+  const fallbackWarn = isBoolean(options.fallbackWarn) || isRegExp(options.fallbackWarn) ? options.fallbackWarn : true;
+  const fallbackFormat = !!options.fallbackFormat;
+  const unresolving = !!options.unresolving;
+  const postTranslation = isFunction(options.postTranslation) ? options.postTranslation : null;
+  const processor = isPlainObject(options.processor) ? options.processor : null;
+  const warnHtmlMessage = isBoolean(options.warnHtmlMessage) ? options.warnHtmlMessage : true;
+  const escapeParameter = !!options.escapeParameter;
+  const messageCompiler = isFunction(options.messageCompiler) ? options.messageCompiler : _compiler;
+  const messageResolver = isFunction(options.messageResolver) ? options.messageResolver : _resolver || resolveWithKeyValue;
+  const localeFallbacker = isFunction(options.localeFallbacker) ? options.localeFallbacker : _fallbacker || fallbackWithSimple;
+  const fallbackContext = isObject(options.fallbackContext) ? options.fallbackContext : void 0;
+  const onWarn = isFunction(options.onWarn) ? options.onWarn : warn;
+  const internalOptions = options;
+  const __datetimeFormatters = isObject(internalOptions.__datetimeFormatters) ? internalOptions.__datetimeFormatters : /* @__PURE__ */ new Map();
+  const __numberFormatters = isObject(internalOptions.__numberFormatters) ? internalOptions.__numberFormatters : /* @__PURE__ */ new Map();
+  const __meta = isObject(internalOptions.__meta) ? internalOptions.__meta : {};
+  _cid++;
+  const context = {
+    version: version2,
+    cid: _cid,
+    locale,
+    fallbackLocale,
+    messages: messages2,
+    modifiers,
+    pluralRules,
+    missing,
+    missingWarn,
+    fallbackWarn,
+    fallbackFormat,
+    unresolving,
+    postTranslation,
+    processor,
+    warnHtmlMessage,
+    escapeParameter,
+    messageCompiler,
+    messageResolver,
+    localeFallbacker,
+    fallbackContext,
+    onWarn,
+    __meta
+  };
+  {
+    context.datetimeFormats = datetimeFormats;
+    context.numberFormats = numberFormats;
+    context.__datetimeFormatters = __datetimeFormatters;
+    context.__numberFormatters = __numberFormatters;
+  }
+  if (__INTLIFY_PROD_DEVTOOLS__) {
+    initI18nDevTools(context, version2, __meta);
+  }
+  return context;
+}
+function handleMissing(context, key, locale, missingWarn, type) {
+  const { missing, onWarn } = context;
+  if (missing !== null) {
+    const ret = missing(context, locale, key, type);
+    return isString$1(ret) ? ret : key;
+  } else {
+    return key;
+  }
+}
+function updateFallbackLocale(ctx, locale, fallback) {
+  const context = ctx;
+  context.__localeChainCache = /* @__PURE__ */ new Map();
+  ctx.localeFallbacker(ctx, fallback, locale);
+}
+const defaultOnCacheKey = (source) => source;
+let compileCache = /* @__PURE__ */ Object.create(null);
+function compileToFunction(source, options = {}) {
+  {
+    const onCacheKey = options.onCacheKey || defaultOnCacheKey;
+    const key = onCacheKey(source);
+    const cached = compileCache[key];
+    if (cached) {
+      return cached;
+    }
+    let occurred = false;
+    const onError = options.onError || defaultOnError;
+    options.onError = (err) => {
+      occurred = true;
+      onError(err);
+    };
+    const { code: code2 } = baseCompile(source, options);
+    const msg = new Function(`return ${code2}`)();
+    return !occurred ? compileCache[key] = msg : msg;
+  }
+}
+let code$1 = CompileErrorCodes.__EXTEND_POINT__;
+const inc$1 = () => ++code$1;
+const CoreErrorCodes = {
+  INVALID_ARGUMENT: code$1,
+  INVALID_DATE_ARGUMENT: inc$1(),
+  INVALID_ISO_DATE_ARGUMENT: inc$1(),
+  __EXTEND_POINT__: inc$1()
+  // 18
+};
+function createCoreError(code2) {
+  return createCompileError(code2, null, void 0);
+}
+const NOOP_MESSAGE_FUNCTION = () => "";
+const isMessageFunction = (val) => isFunction(val);
+function translate(context, ...args) {
+  const { fallbackFormat, postTranslation, unresolving, messageCompiler, fallbackLocale, messages: messages2 } = context;
+  const [key, options] = parseTranslateArgs(...args);
+  const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn;
+  const fallbackWarn = isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn;
+  const escapeParameter = isBoolean(options.escapeParameter) ? options.escapeParameter : context.escapeParameter;
+  const resolvedMessage = !!options.resolvedMessage;
+  const defaultMsgOrKey = isString$1(options.default) || isBoolean(options.default) ? !isBoolean(options.default) ? options.default : !messageCompiler ? () => key : key : fallbackFormat ? !messageCompiler ? () => key : key : "";
+  const enableDefaultMsg = fallbackFormat || defaultMsgOrKey !== "";
+  const locale = isString$1(options.locale) ? options.locale : context.locale;
+  escapeParameter && escapeParams(options);
+  let [formatScope, targetLocale, message] = !resolvedMessage ? resolveMessageFormat(context, key, locale, fallbackLocale, fallbackWarn, missingWarn) : [
+    key,
+    locale,
+    messages2[locale] || {}
+  ];
+  let format2 = formatScope;
+  let cacheBaseKey = key;
+  if (!resolvedMessage && !(isString$1(format2) || isMessageFunction(format2))) {
+    if (enableDefaultMsg) {
+      format2 = defaultMsgOrKey;
+      cacheBaseKey = format2;
+    }
+  }
+  if (!resolvedMessage && (!(isString$1(format2) || isMessageFunction(format2)) || !isString$1(targetLocale))) {
+    return unresolving ? NOT_REOSLVED : key;
+  }
+  let occurred = false;
+  const errorDetector = () => {
+    occurred = true;
+  };
+  const msg = !isMessageFunction(format2) ? compileMessageFormat(context, key, targetLocale, format2, cacheBaseKey, errorDetector) : format2;
+  if (occurred) {
+    return format2;
+  }
+  const ctxOptions = getMessageContextOptions(context, targetLocale, message, options);
+  const msgContext = createMessageContext(ctxOptions);
+  const messaged = evaluateMessage(context, msg, msgContext);
+  const ret = postTranslation ? postTranslation(messaged, key) : messaged;
+  if (__INTLIFY_PROD_DEVTOOLS__) {
+    const payloads = {
+      timestamp: Date.now(),
+      key: isString$1(key) ? key : isMessageFunction(format2) ? format2.key : "",
+      locale: targetLocale || (isMessageFunction(format2) ? format2.locale : ""),
+      format: isString$1(format2) ? format2 : isMessageFunction(format2) ? format2.source : "",
+      message: ret
+    };
+    payloads.meta = assign({}, context.__meta, getAdditionalMeta() || {});
+    translateDevTools(payloads);
+  }
+  return ret;
+}
+function escapeParams(options) {
+  if (isArray(options.list)) {
+    options.list = options.list.map((item) => isString$1(item) ? escapeHtml(item) : item);
+  } else if (isObject(options.named)) {
+    Object.keys(options.named).forEach((key) => {
+      if (isString$1(options.named[key])) {
+        options.named[key] = escapeHtml(options.named[key]);
+      }
+    });
+  }
+}
+function resolveMessageFormat(context, key, locale, fallbackLocale, fallbackWarn, missingWarn) {
+  const { messages: messages2, onWarn, messageResolver: resolveValue2, localeFallbacker } = context;
+  const locales = localeFallbacker(context, fallbackLocale, locale);
+  let message = {};
+  let targetLocale;
+  let format2 = null;
+  const type = "translate";
+  for (let i = 0; i < locales.length; i++) {
+    targetLocale = locales[i];
+    message = messages2[targetLocale] || {};
+    if ((format2 = resolveValue2(message, key)) === null) {
+      format2 = message[key];
+    }
+    if (isString$1(format2) || isFunction(format2))
+      break;
+    const missingRet = handleMissing(
+      context,
+      // eslint-disable-line @typescript-eslint/no-explicit-any
+      key,
+      targetLocale,
+      missingWarn,
+      type
+    );
+    if (missingRet !== key) {
+      format2 = missingRet;
+    }
+  }
+  return [format2, targetLocale, message];
+}
+function compileMessageFormat(context, key, targetLocale, format2, cacheBaseKey, errorDetector) {
+  const { messageCompiler, warnHtmlMessage } = context;
+  if (isMessageFunction(format2)) {
+    const msg2 = format2;
+    msg2.locale = msg2.locale || targetLocale;
+    msg2.key = msg2.key || key;
+    return msg2;
+  }
+  if (messageCompiler == null) {
+    const msg2 = () => format2;
+    msg2.locale = targetLocale;
+    msg2.key = key;
+    return msg2;
+  }
+  const msg = messageCompiler(format2, getCompileOptions(context, targetLocale, cacheBaseKey, format2, warnHtmlMessage, errorDetector));
+  msg.locale = targetLocale;
+  msg.key = key;
+  msg.source = format2;
+  return msg;
+}
+function evaluateMessage(context, msg, msgCtx) {
+  const messaged = msg(msgCtx);
+  return messaged;
+}
+function parseTranslateArgs(...args) {
+  const [arg1, arg2, arg3] = args;
+  const options = {};
+  if (!isString$1(arg1) && !isNumber(arg1) && !isMessageFunction(arg1)) {
+    throw createCoreError(CoreErrorCodes.INVALID_ARGUMENT);
+  }
+  const key = isNumber(arg1) ? String(arg1) : isMessageFunction(arg1) ? arg1 : arg1;
+  if (isNumber(arg2)) {
+    options.plural = arg2;
+  } else if (isString$1(arg2)) {
+    options.default = arg2;
+  } else if (isPlainObject(arg2) && !isEmptyObject(arg2)) {
+    options.named = arg2;
+  } else if (isArray(arg2)) {
+    options.list = arg2;
+  }
+  if (isNumber(arg3)) {
+    options.plural = arg3;
+  } else if (isString$1(arg3)) {
+    options.default = arg3;
+  } else if (isPlainObject(arg3)) {
+    assign(options, arg3);
+  }
+  return [key, options];
+}
+function getCompileOptions(context, locale, key, source, warnHtmlMessage, errorDetector) {
+  return {
+    warnHtmlMessage,
+    onError: (err) => {
+      errorDetector && errorDetector(err);
+      {
+        throw err;
+      }
+    },
+    onCacheKey: (source2) => generateFormatCacheKey(locale, key, source2)
+  };
+}
+function getMessageContextOptions(context, locale, message, options) {
+  const { modifiers, pluralRules, messageResolver: resolveValue2, fallbackLocale, fallbackWarn, missingWarn, fallbackContext } = context;
+  const resolveMessage = (key) => {
+    let val = resolveValue2(message, key);
+    if (val == null && fallbackContext) {
+      const [, , message2] = resolveMessageFormat(fallbackContext, key, locale, fallbackLocale, fallbackWarn, missingWarn);
+      val = resolveValue2(message2, key);
+    }
+    if (isString$1(val)) {
+      let occurred = false;
+      const errorDetector = () => {
+        occurred = true;
+      };
+      const msg = compileMessageFormat(context, key, locale, val, key, errorDetector);
+      return !occurred ? msg : NOOP_MESSAGE_FUNCTION;
+    } else if (isMessageFunction(val)) {
+      return val;
+    } else {
+      return NOOP_MESSAGE_FUNCTION;
+    }
+  };
+  const ctxOptions = {
+    locale,
+    modifiers,
+    pluralRules,
+    messages: resolveMessage
+  };
+  if (context.processor) {
+    ctxOptions.processor = context.processor;
+  }
+  if (options.list) {
+    ctxOptions.list = options.list;
+  }
+  if (options.named) {
+    ctxOptions.named = options.named;
+  }
+  if (isNumber(options.plural)) {
+    ctxOptions.pluralIndex = options.plural;
+  }
+  return ctxOptions;
+}
+function datetime(context, ...args) {
+  const { datetimeFormats, unresolving, fallbackLocale, onWarn, localeFallbacker } = context;
+  const { __datetimeFormatters } = context;
+  const [key, value, options, overrides] = parseDateTimeArgs(...args);
+  const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn;
+  isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn;
+  const part = !!options.part;
+  const locale = isString$1(options.locale) ? options.locale : context.locale;
+  const locales = localeFallbacker(
+    context,
+    // eslint-disable-line @typescript-eslint/no-explicit-any
+    fallbackLocale,
+    locale
+  );
+  if (!isString$1(key) || key === "") {
+    return new Intl.DateTimeFormat(locale, overrides).format(value);
+  }
+  let datetimeFormat = {};
+  let targetLocale;
+  let format2 = null;
+  const type = "datetime format";
+  for (let i = 0; i < locales.length; i++) {
+    targetLocale = locales[i];
+    datetimeFormat = datetimeFormats[targetLocale] || {};
+    format2 = datetimeFormat[key];
+    if (isPlainObject(format2))
+      break;
+    handleMissing(context, key, targetLocale, missingWarn, type);
+  }
+  if (!isPlainObject(format2) || !isString$1(targetLocale)) {
+    return unresolving ? NOT_REOSLVED : key;
+  }
+  let id = `${targetLocale}__${key}`;
+  if (!isEmptyObject(overrides)) {
+    id = `${id}__${JSON.stringify(overrides)}`;
+  }
+  let formatter = __datetimeFormatters.get(id);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat(targetLocale, assign({}, format2, overrides));
+    __datetimeFormatters.set(id, formatter);
+  }
+  return !part ? formatter.format(value) : formatter.formatToParts(value);
+}
+const DATETIME_FORMAT_OPTIONS_KEYS = [
+  "localeMatcher",
+  "weekday",
+  "era",
+  "year",
+  "month",
+  "day",
+  "hour",
+  "minute",
+  "second",
+  "timeZoneName",
+  "formatMatcher",
+  "hour12",
+  "timeZone",
+  "dateStyle",
+  "timeStyle",
+  "calendar",
+  "dayPeriod",
+  "numberingSystem",
+  "hourCycle",
+  "fractionalSecondDigits"
+];
+function parseDateTimeArgs(...args) {
+  const [arg1, arg2, arg3, arg4] = args;
+  const options = {};
+  let overrides = {};
+  let value;
+  if (isString$1(arg1)) {
+    const matches2 = arg1.match(/(\d{4}-\d{2}-\d{2})(T|\s)?(.*)/);
+    if (!matches2) {
+      throw createCoreError(CoreErrorCodes.INVALID_ISO_DATE_ARGUMENT);
+    }
+    const dateTime = matches2[3] ? matches2[3].trim().startsWith("T") ? `${matches2[1].trim()}${matches2[3].trim()}` : `${matches2[1].trim()}T${matches2[3].trim()}` : matches2[1].trim();
+    value = new Date(dateTime);
+    try {
+      value.toISOString();
+    } catch (e2) {
+      throw createCoreError(CoreErrorCodes.INVALID_ISO_DATE_ARGUMENT);
+    }
+  } else if (isDate(arg1)) {
+    if (isNaN(arg1.getTime())) {
+      throw createCoreError(CoreErrorCodes.INVALID_DATE_ARGUMENT);
+    }
+    value = arg1;
+  } else if (isNumber(arg1)) {
+    value = arg1;
+  } else {
+    throw createCoreError(CoreErrorCodes.INVALID_ARGUMENT);
+  }
+  if (isString$1(arg2)) {
+    options.key = arg2;
+  } else if (isPlainObject(arg2)) {
+    Object.keys(arg2).forEach((key) => {
+      if (DATETIME_FORMAT_OPTIONS_KEYS.includes(key)) {
+        overrides[key] = arg2[key];
+      } else {
+        options[key] = arg2[key];
+      }
+    });
+  }
+  if (isString$1(arg3)) {
+    options.locale = arg3;
+  } else if (isPlainObject(arg3)) {
+    overrides = arg3;
+  }
+  if (isPlainObject(arg4)) {
+    overrides = arg4;
+  }
+  return [options.key || "", value, options, overrides];
+}
+function clearDateTimeFormat(ctx, locale, format2) {
+  const context = ctx;
+  for (const key in format2) {
+    const id = `${locale}__${key}`;
+    if (!context.__datetimeFormatters.has(id)) {
+      continue;
+    }
+    context.__datetimeFormatters.delete(id);
+  }
+}
+function number(context, ...args) {
+  const { numberFormats, unresolving, fallbackLocale, onWarn, localeFallbacker } = context;
+  const { __numberFormatters } = context;
+  const [key, value, options, overrides] = parseNumberArgs(...args);
+  const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn;
+  isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn;
+  const part = !!options.part;
+  const locale = isString$1(options.locale) ? options.locale : context.locale;
+  const locales = localeFallbacker(
+    context,
+    // eslint-disable-line @typescript-eslint/no-explicit-any
+    fallbackLocale,
+    locale
+  );
+  if (!isString$1(key) || key === "") {
+    return new Intl.NumberFormat(locale, overrides).format(value);
+  }
+  let numberFormat = {};
+  let targetLocale;
+  let format2 = null;
+  const type = "number format";
+  for (let i = 0; i < locales.length; i++) {
+    targetLocale = locales[i];
+    numberFormat = numberFormats[targetLocale] || {};
+    format2 = numberFormat[key];
+    if (isPlainObject(format2))
+      break;
+    handleMissing(context, key, targetLocale, missingWarn, type);
+  }
+  if (!isPlainObject(format2) || !isString$1(targetLocale)) {
+    return unresolving ? NOT_REOSLVED : key;
+  }
+  let id = `${targetLocale}__${key}`;
+  if (!isEmptyObject(overrides)) {
+    id = `${id}__${JSON.stringify(overrides)}`;
+  }
+  let formatter = __numberFormatters.get(id);
+  if (!formatter) {
+    formatter = new Intl.NumberFormat(targetLocale, assign({}, format2, overrides));
+    __numberFormatters.set(id, formatter);
+  }
+  return !part ? formatter.format(value) : formatter.formatToParts(value);
+}
+const NUMBER_FORMAT_OPTIONS_KEYS = [
+  "localeMatcher",
+  "style",
+  "currency",
+  "currencyDisplay",
+  "currencySign",
+  "useGrouping",
+  "minimumIntegerDigits",
+  "minimumFractionDigits",
+  "maximumFractionDigits",
+  "minimumSignificantDigits",
+  "maximumSignificantDigits",
+  "compactDisplay",
+  "notation",
+  "signDisplay",
+  "unit",
+  "unitDisplay",
+  "roundingMode",
+  "roundingPriority",
+  "roundingIncrement",
+  "trailingZeroDisplay"
+];
+function parseNumberArgs(...args) {
+  const [arg1, arg2, arg3, arg4] = args;
+  const options = {};
+  let overrides = {};
+  if (!isNumber(arg1)) {
+    throw createCoreError(CoreErrorCodes.INVALID_ARGUMENT);
+  }
+  const value = arg1;
+  if (isString$1(arg2)) {
+    options.key = arg2;
+  } else if (isPlainObject(arg2)) {
+    Object.keys(arg2).forEach((key) => {
+      if (NUMBER_FORMAT_OPTIONS_KEYS.includes(key)) {
+        overrides[key] = arg2[key];
+      } else {
+        options[key] = arg2[key];
+      }
+    });
+  }
+  if (isString$1(arg3)) {
+    options.locale = arg3;
+  } else if (isPlainObject(arg3)) {
+    overrides = arg3;
+  }
+  if (isPlainObject(arg4)) {
+    overrides = arg4;
+  }
+  return [options.key || "", value, options, overrides];
+}
+function clearNumberFormat(ctx, locale, format2) {
+  const context = ctx;
+  for (const key in format2) {
+    const id = `${locale}__${key}`;
+    if (!context.__numberFormatters.has(id)) {
+      continue;
+    }
+    context.__numberFormatters.delete(id);
+  }
+}
+{
+  if (typeof __INTLIFY_PROD_DEVTOOLS__ !== "boolean") {
+    getGlobalThis().__INTLIFY_PROD_DEVTOOLS__ = false;
+  }
+}
+/*!
+  * vue-i18n v9.2.2
+  * (c) 2022 kazuya kawaguchi
+  * Released under the MIT License.
+  */
+const VERSION = "9.2.2";
+function initFeatureFlags() {
+  if (typeof __INTLIFY_PROD_DEVTOOLS__ !== "boolean") {
+    getGlobalThis().__INTLIFY_PROD_DEVTOOLS__ = false;
+  }
+}
+CoreWarnCodes.__EXTEND_POINT__;
+let code = CompileErrorCodes.__EXTEND_POINT__;
+const inc = () => ++code;
+const I18nErrorCodes = {
+  // composer module errors
+  UNEXPECTED_RETURN_TYPE: code,
+  // legacy module errors
+  INVALID_ARGUMENT: inc(),
+  // i18n module errors
+  MUST_BE_CALL_SETUP_TOP: inc(),
+  NOT_INSLALLED: inc(),
+  NOT_AVAILABLE_IN_LEGACY_MODE: inc(),
+  // directive module errors
+  REQUIRED_VALUE: inc(),
+  INVALID_VALUE: inc(),
+  // vue-devtools errors
+  CANNOT_SETUP_VUE_DEVTOOLS_PLUGIN: inc(),
+  NOT_INSLALLED_WITH_PROVIDE: inc(),
+  // unexpected error
+  UNEXPECTED_ERROR: inc(),
+  // not compatible legacy vue-i18n constructor
+  NOT_COMPATIBLE_LEGACY_VUE_I18N: inc(),
+  // bridge support vue 2.x only
+  BRIDGE_SUPPORT_VUE_2_ONLY: inc(),
+  // need to define `i18n` option in `allowComposition: true` and `useScope: 'local' at `useI18n``
+  MUST_DEFINE_I18N_OPTION_IN_ALLOW_COMPOSITION: inc(),
+  // Not available Compostion API in Legacy API mode. Please make sure that the legacy API mode is working properly
+  NOT_AVAILABLE_COMPOSITION_IN_LEGACY: inc(),
+  // for enhancement
+  __EXTEND_POINT__: inc()
+  // 29
+};
+function createI18nError(code2, ...args) {
+  return createCompileError(code2, null, void 0);
+}
+const TransrateVNodeSymbol = /* @__PURE__ */ makeSymbol("__transrateVNode");
+const DatetimePartsSymbol = /* @__PURE__ */ makeSymbol("__datetimeParts");
+const NumberPartsSymbol = /* @__PURE__ */ makeSymbol("__numberParts");
+const SetPluralRulesSymbol = makeSymbol("__setPluralRules");
+makeSymbol("__intlifyMeta");
+const InejctWithOption = /* @__PURE__ */ makeSymbol("__injectWithOption");
+function handleFlatJson(obj) {
+  if (!isObject(obj)) {
+    return obj;
+  }
+  for (const key in obj) {
+    if (!hasOwn(obj, key)) {
+      continue;
+    }
+    if (!key.includes(".")) {
+      if (isObject(obj[key])) {
+        handleFlatJson(obj[key]);
+      }
+    } else {
+      const subKeys = key.split(".");
+      const lastIndex = subKeys.length - 1;
+      let currentObj = obj;
+      for (let i = 0; i < lastIndex; i++) {
+        if (!(subKeys[i] in currentObj)) {
+          currentObj[subKeys[i]] = {};
+        }
+        currentObj = currentObj[subKeys[i]];
+      }
+      currentObj[subKeys[lastIndex]] = obj[key];
+      delete obj[key];
+      if (isObject(currentObj[subKeys[lastIndex]])) {
+        handleFlatJson(currentObj[subKeys[lastIndex]]);
+      }
+    }
+  }
+  return obj;
+}
+function getLocaleMessages(locale, options) {
+  const { messages: messages2, __i18n, messageResolver, flatJson } = options;
+  const ret = isPlainObject(messages2) ? messages2 : isArray(__i18n) ? {} : { [locale]: {} };
+  if (isArray(__i18n)) {
+    __i18n.forEach((custom) => {
+      if ("locale" in custom && "resource" in custom) {
+        const { locale: locale2, resource } = custom;
+        if (locale2) {
+          ret[locale2] = ret[locale2] || {};
+          deepCopy(resource, ret[locale2]);
+        } else {
+          deepCopy(resource, ret);
+        }
+      } else {
+        isString$1(custom) && deepCopy(JSON.parse(custom), ret);
+      }
+    });
+  }
+  if (messageResolver == null && flatJson) {
+    for (const key in ret) {
+      if (hasOwn(ret, key)) {
+        handleFlatJson(ret[key]);
+      }
+    }
+  }
+  return ret;
+}
+const isNotObjectOrIsArray = (val) => !isObject(val) || isArray(val);
+function deepCopy(src, des) {
+  if (isNotObjectOrIsArray(src) || isNotObjectOrIsArray(des)) {
+    throw createI18nError(I18nErrorCodes.INVALID_VALUE);
+  }
+  for (const key in src) {
+    if (hasOwn(src, key)) {
+      if (isNotObjectOrIsArray(src[key]) || isNotObjectOrIsArray(des[key])) {
+        des[key] = src[key];
+      } else {
+        deepCopy(src[key], des[key]);
+      }
+    }
+  }
+}
+function getComponentOptions(instance) {
+  return instance.type;
+}
+function adjustI18nResources(global2, options, componentOptions) {
+  let messages2 = isObject(options.messages) ? options.messages : {};
+  if ("__i18nGlobal" in componentOptions) {
+    messages2 = getLocaleMessages(global2.locale.value, {
+      messages: messages2,
+      __i18n: componentOptions.__i18nGlobal
+    });
+  }
+  const locales = Object.keys(messages2);
+  if (locales.length) {
+    locales.forEach((locale) => {
+      global2.mergeLocaleMessage(locale, messages2[locale]);
+    });
+  }
+  {
+    if (isObject(options.datetimeFormats)) {
+      const locales2 = Object.keys(options.datetimeFormats);
+      if (locales2.length) {
+        locales2.forEach((locale) => {
+          global2.mergeDateTimeFormat(locale, options.datetimeFormats[locale]);
+        });
+      }
+    }
+    if (isObject(options.numberFormats)) {
+      const locales2 = Object.keys(options.numberFormats);
+      if (locales2.length) {
+        locales2.forEach((locale) => {
+          global2.mergeNumberFormat(locale, options.numberFormats[locale]);
+        });
+      }
+    }
+  }
+}
+function createTextNode(key) {
+  return createVNode(Text, null, key, 0);
+}
+const DEVTOOLS_META = "__INTLIFY_META__";
+let composerID = 0;
+function defineCoreMissingHandler(missing) {
+  return (ctx, locale, key, type) => {
+    return missing(locale, key, getCurrentInstance() || void 0, type);
+  };
+}
+const getMetaInfo = () => {
+  const instance = getCurrentInstance();
+  let meta = null;
+  return instance && (meta = getComponentOptions(instance)[DEVTOOLS_META]) ? { [DEVTOOLS_META]: meta } : null;
+};
+function createComposer(options = {}, VueI18nLegacy) {
+  const { __root } = options;
+  const _isGlobal = __root === void 0;
+  let _inheritLocale = isBoolean(options.inheritLocale) ? options.inheritLocale : true;
+  const _locale = ref(
+    // prettier-ignore
+    __root && _inheritLocale ? __root.locale.value : isString$1(options.locale) ? options.locale : DEFAULT_LOCALE
+  );
+  const _fallbackLocale = ref(
+    // prettier-ignore
+    __root && _inheritLocale ? __root.fallbackLocale.value : isString$1(options.fallbackLocale) || isArray(options.fallbackLocale) || isPlainObject(options.fallbackLocale) || options.fallbackLocale === false ? options.fallbackLocale : _locale.value
+  );
+  const _messages = ref(getLocaleMessages(_locale.value, options));
+  const _datetimeFormats = ref(isPlainObject(options.datetimeFormats) ? options.datetimeFormats : { [_locale.value]: {} });
+  const _numberFormats = ref(isPlainObject(options.numberFormats) ? options.numberFormats : { [_locale.value]: {} });
+  let _missingWarn = __root ? __root.missingWarn : isBoolean(options.missingWarn) || isRegExp(options.missingWarn) ? options.missingWarn : true;
+  let _fallbackWarn = __root ? __root.fallbackWarn : isBoolean(options.fallbackWarn) || isRegExp(options.fallbackWarn) ? options.fallbackWarn : true;
+  let _fallbackRoot = __root ? __root.fallbackRoot : isBoolean(options.fallbackRoot) ? options.fallbackRoot : true;
+  let _fallbackFormat = !!options.fallbackFormat;
+  let _missing = isFunction(options.missing) ? options.missing : null;
+  let _runtimeMissing = isFunction(options.missing) ? defineCoreMissingHandler(options.missing) : null;
+  let _postTranslation = isFunction(options.postTranslation) ? options.postTranslation : null;
+  let _warnHtmlMessage = __root ? __root.warnHtmlMessage : isBoolean(options.warnHtmlMessage) ? options.warnHtmlMessage : true;
+  let _escapeParameter = !!options.escapeParameter;
+  const _modifiers = __root ? __root.modifiers : isPlainObject(options.modifiers) ? options.modifiers : {};
+  let _pluralRules = options.pluralRules || __root && __root.pluralRules;
+  let _context;
+  const getCoreContext = () => {
+    _isGlobal && setFallbackContext(null);
+    const ctxOptions = {
+      version: VERSION,
+      locale: _locale.value,
+      fallbackLocale: _fallbackLocale.value,
+      messages: _messages.value,
+      modifiers: _modifiers,
+      pluralRules: _pluralRules,
+      missing: _runtimeMissing === null ? void 0 : _runtimeMissing,
+      missingWarn: _missingWarn,
+      fallbackWarn: _fallbackWarn,
+      fallbackFormat: _fallbackFormat,
+      unresolving: true,
+      postTranslation: _postTranslation === null ? void 0 : _postTranslation,
+      warnHtmlMessage: _warnHtmlMessage,
+      escapeParameter: _escapeParameter,
+      messageResolver: options.messageResolver,
+      __meta: { framework: "vue" }
+    };
+    {
+      ctxOptions.datetimeFormats = _datetimeFormats.value;
+      ctxOptions.numberFormats = _numberFormats.value;
+      ctxOptions.__datetimeFormatters = isPlainObject(_context) ? _context.__datetimeFormatters : void 0;
+      ctxOptions.__numberFormatters = isPlainObject(_context) ? _context.__numberFormatters : void 0;
+    }
+    const ctx = createCoreContext(ctxOptions);
+    _isGlobal && setFallbackContext(ctx);
+    return ctx;
+  };
+  _context = getCoreContext();
+  updateFallbackLocale(_context, _locale.value, _fallbackLocale.value);
+  function trackReactivityValues() {
+    return [
+      _locale.value,
+      _fallbackLocale.value,
+      _messages.value,
+      _datetimeFormats.value,
+      _numberFormats.value
+    ];
+  }
+  const locale = computed({
+    get: () => _locale.value,
+    set: (val) => {
+      _locale.value = val;
+      _context.locale = _locale.value;
+    }
+  });
+  const fallbackLocale = computed({
+    get: () => _fallbackLocale.value,
+    set: (val) => {
+      _fallbackLocale.value = val;
+      _context.fallbackLocale = _fallbackLocale.value;
+      updateFallbackLocale(_context, _locale.value, val);
+    }
+  });
+  const messages2 = computed(() => _messages.value);
+  const datetimeFormats = /* @__PURE__ */ computed(() => _datetimeFormats.value);
+  const numberFormats = /* @__PURE__ */ computed(() => _numberFormats.value);
+  function getPostTranslationHandler() {
+    return isFunction(_postTranslation) ? _postTranslation : null;
+  }
+  function setPostTranslationHandler(handler) {
+    _postTranslation = handler;
+    _context.postTranslation = handler;
+  }
+  function getMissingHandler() {
+    return _missing;
+  }
+  function setMissingHandler(handler) {
+    if (handler !== null) {
+      _runtimeMissing = defineCoreMissingHandler(handler);
+    }
+    _missing = handler;
+    _context.missing = _runtimeMissing;
+  }
+  const wrapWithDeps = (fn, argumentParser, warnType, fallbackSuccess, fallbackFail, successCondition) => {
+    trackReactivityValues();
+    let ret;
+    if (__INTLIFY_PROD_DEVTOOLS__) {
+      try {
+        setAdditionalMeta(getMetaInfo());
+        if (!_isGlobal) {
+          _context.fallbackContext = __root ? getFallbackContext() : void 0;
+        }
+        ret = fn(_context);
+      } finally {
+        setAdditionalMeta(null);
+        if (!_isGlobal) {
+          _context.fallbackContext = void 0;
+        }
+      }
+    } else {
+      ret = fn(_context);
+    }
+    if (isNumber(ret) && ret === NOT_REOSLVED) {
+      const [key, arg2] = argumentParser();
+      return __root && _fallbackRoot ? fallbackSuccess(__root) : fallbackFail(key);
+    } else if (successCondition(ret)) {
+      return ret;
+    } else {
+      throw createI18nError(I18nErrorCodes.UNEXPECTED_RETURN_TYPE);
+    }
+  };
+  function t(...args) {
+    return wrapWithDeps((context) => Reflect.apply(translate, null, [context, ...args]), () => parseTranslateArgs(...args), "translate", (root) => Reflect.apply(root.t, root, [...args]), (key) => key, (val) => isString$1(val));
+  }
+  function rt2(...args) {
+    const [arg1, arg2, arg3] = args;
+    if (arg3 && !isObject(arg3)) {
+      throw createI18nError(I18nErrorCodes.INVALID_ARGUMENT);
+    }
+    return t(...[arg1, arg2, assign({ resolvedMessage: true }, arg3 || {})]);
+  }
+  function d(...args) {
+    return wrapWithDeps((context) => Reflect.apply(datetime, null, [context, ...args]), () => parseDateTimeArgs(...args), "datetime format", (root) => Reflect.apply(root.d, root, [...args]), () => MISSING_RESOLVE_VALUE, (val) => isString$1(val));
+  }
+  function n2(...args) {
+    return wrapWithDeps((context) => Reflect.apply(number, null, [context, ...args]), () => parseNumberArgs(...args), "number format", (root) => Reflect.apply(root.n, root, [...args]), () => MISSING_RESOLVE_VALUE, (val) => isString$1(val));
+  }
+  function normalize2(values) {
+    return values.map((val) => isString$1(val) || isNumber(val) || isBoolean(val) ? createTextNode(String(val)) : val);
+  }
+  const interpolate = (val) => val;
+  const processor = {
+    normalize: normalize2,
+    interpolate,
+    type: "vnode"
+  };
+  function transrateVNode(...args) {
+    return wrapWithDeps(
+      (context) => {
+        let ret;
+        const _context2 = context;
+        try {
+          _context2.processor = processor;
+          ret = Reflect.apply(translate, null, [_context2, ...args]);
+        } finally {
+          _context2.processor = null;
+        }
+        return ret;
+      },
+      () => parseTranslateArgs(...args),
+      "translate",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (root) => root[TransrateVNodeSymbol](...args),
+      (key) => [createTextNode(key)],
+      (val) => isArray(val)
+    );
+  }
+  function numberParts(...args) {
+    return wrapWithDeps(
+      (context) => Reflect.apply(number, null, [context, ...args]),
+      () => parseNumberArgs(...args),
+      "number format",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (root) => root[NumberPartsSymbol](...args),
+      () => [],
+      (val) => isString$1(val) || isArray(val)
+    );
+  }
+  function datetimeParts(...args) {
+    return wrapWithDeps(
+      (context) => Reflect.apply(datetime, null, [context, ...args]),
+      () => parseDateTimeArgs(...args),
+      "datetime format",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (root) => root[DatetimePartsSymbol](...args),
+      () => [],
+      (val) => isString$1(val) || isArray(val)
+    );
+  }
+  function setPluralRules(rules) {
+    _pluralRules = rules;
+    _context.pluralRules = _pluralRules;
+  }
+  function te(key, locale2) {
+    const targetLocale = isString$1(locale2) ? locale2 : _locale.value;
+    const message = getLocaleMessage(targetLocale);
+    return _context.messageResolver(message, key) !== null;
+  }
+  function resolveMessages(key) {
+    let messages3 = null;
+    const locales = fallbackWithLocaleChain(_context, _fallbackLocale.value, _locale.value);
+    for (let i = 0; i < locales.length; i++) {
+      const targetLocaleMessages = _messages.value[locales[i]] || {};
+      const messageValue = _context.messageResolver(targetLocaleMessages, key);
+      if (messageValue != null) {
+        messages3 = messageValue;
+        break;
+      }
+    }
+    return messages3;
+  }
+  function tm(key) {
+    const messages3 = resolveMessages(key);
+    return messages3 != null ? messages3 : __root ? __root.tm(key) || {} : {};
+  }
+  function getLocaleMessage(locale2) {
+    return _messages.value[locale2] || {};
+  }
+  function setLocaleMessage(locale2, message) {
+    _messages.value[locale2] = message;
+    _context.messages = _messages.value;
+  }
+  function mergeLocaleMessage(locale2, message) {
+    _messages.value[locale2] = _messages.value[locale2] || {};
+    deepCopy(message, _messages.value[locale2]);
+    _context.messages = _messages.value;
+  }
+  function getDateTimeFormat(locale2) {
+    return _datetimeFormats.value[locale2] || {};
+  }
+  function setDateTimeFormat(locale2, format2) {
+    _datetimeFormats.value[locale2] = format2;
+    _context.datetimeFormats = _datetimeFormats.value;
+    clearDateTimeFormat(_context, locale2, format2);
+  }
+  function mergeDateTimeFormat(locale2, format2) {
+    _datetimeFormats.value[locale2] = assign(_datetimeFormats.value[locale2] || {}, format2);
+    _context.datetimeFormats = _datetimeFormats.value;
+    clearDateTimeFormat(_context, locale2, format2);
+  }
+  function getNumberFormat(locale2) {
+    return _numberFormats.value[locale2] || {};
+  }
+  function setNumberFormat(locale2, format2) {
+    _numberFormats.value[locale2] = format2;
+    _context.numberFormats = _numberFormats.value;
+    clearNumberFormat(_context, locale2, format2);
+  }
+  function mergeNumberFormat(locale2, format2) {
+    _numberFormats.value[locale2] = assign(_numberFormats.value[locale2] || {}, format2);
+    _context.numberFormats = _numberFormats.value;
+    clearNumberFormat(_context, locale2, format2);
+  }
+  composerID++;
+  if (__root && inBrowser) {
+    watch(__root.locale, (val) => {
+      if (_inheritLocale) {
+        _locale.value = val;
+        _context.locale = val;
+        updateFallbackLocale(_context, _locale.value, _fallbackLocale.value);
+      }
+    });
+    watch(__root.fallbackLocale, (val) => {
+      if (_inheritLocale) {
+        _fallbackLocale.value = val;
+        _context.fallbackLocale = val;
+        updateFallbackLocale(_context, _locale.value, _fallbackLocale.value);
+      }
+    });
+  }
+  const composer = {
+    id: composerID,
+    locale,
+    fallbackLocale,
+    get inheritLocale() {
+      return _inheritLocale;
+    },
+    set inheritLocale(val) {
+      _inheritLocale = val;
+      if (val && __root) {
+        _locale.value = __root.locale.value;
+        _fallbackLocale.value = __root.fallbackLocale.value;
+        updateFallbackLocale(_context, _locale.value, _fallbackLocale.value);
+      }
+    },
+    get availableLocales() {
+      return Object.keys(_messages.value).sort();
+    },
+    messages: messages2,
+    get modifiers() {
+      return _modifiers;
+    },
+    get pluralRules() {
+      return _pluralRules || {};
+    },
+    get isGlobal() {
+      return _isGlobal;
+    },
+    get missingWarn() {
+      return _missingWarn;
+    },
+    set missingWarn(val) {
+      _missingWarn = val;
+      _context.missingWarn = _missingWarn;
+    },
+    get fallbackWarn() {
+      return _fallbackWarn;
+    },
+    set fallbackWarn(val) {
+      _fallbackWarn = val;
+      _context.fallbackWarn = _fallbackWarn;
+    },
+    get fallbackRoot() {
+      return _fallbackRoot;
+    },
+    set fallbackRoot(val) {
+      _fallbackRoot = val;
+    },
+    get fallbackFormat() {
+      return _fallbackFormat;
+    },
+    set fallbackFormat(val) {
+      _fallbackFormat = val;
+      _context.fallbackFormat = _fallbackFormat;
+    },
+    get warnHtmlMessage() {
+      return _warnHtmlMessage;
+    },
+    set warnHtmlMessage(val) {
+      _warnHtmlMessage = val;
+      _context.warnHtmlMessage = val;
+    },
+    get escapeParameter() {
+      return _escapeParameter;
+    },
+    set escapeParameter(val) {
+      _escapeParameter = val;
+      _context.escapeParameter = val;
+    },
+    t,
+    getLocaleMessage,
+    setLocaleMessage,
+    mergeLocaleMessage,
+    getPostTranslationHandler,
+    setPostTranslationHandler,
+    getMissingHandler,
+    setMissingHandler,
+    [SetPluralRulesSymbol]: setPluralRules
+  };
+  {
+    composer.datetimeFormats = datetimeFormats;
+    composer.numberFormats = numberFormats;
+    composer.rt = rt2;
+    composer.te = te;
+    composer.tm = tm;
+    composer.d = d;
+    composer.n = n2;
+    composer.getDateTimeFormat = getDateTimeFormat;
+    composer.setDateTimeFormat = setDateTimeFormat;
+    composer.mergeDateTimeFormat = mergeDateTimeFormat;
+    composer.getNumberFormat = getNumberFormat;
+    composer.setNumberFormat = setNumberFormat;
+    composer.mergeNumberFormat = mergeNumberFormat;
+    composer[InejctWithOption] = options.__injectWithOption;
+    composer[TransrateVNodeSymbol] = transrateVNode;
+    composer[DatetimePartsSymbol] = datetimeParts;
+    composer[NumberPartsSymbol] = numberParts;
+  }
+  return composer;
+}
+const baseFormatProps = {
+  tag: {
+    type: [String, Object]
+  },
+  locale: {
+    type: String
+  },
+  scope: {
+    type: String,
+    // NOTE: avoid https://github.com/microsoft/rushstack/issues/1050
+    validator: (val) => val === "parent" || val === "global",
+    default: "parent"
+    /* ComponetI18nScope */
+  },
+  i18n: {
+    type: Object
+  }
+};
+function getInterpolateArg({ slots }, keys2) {
+  if (keys2.length === 1 && keys2[0] === "default") {
+    const ret = slots.default ? slots.default() : [];
+    return ret.reduce((slot, current) => {
+      return slot = [
+        ...slot,
+        ...isArray(current.children) ? current.children : [current]
+      ];
+    }, []);
+  } else {
+    return keys2.reduce((arg, key) => {
+      const slot = slots[key];
+      if (slot) {
+        arg[key] = slot();
+      }
+      return arg;
+    }, {});
+  }
+}
+function getFragmentableTag(tag) {
+  return Fragment;
+}
+const Translation = (
+  /* defineComponent */
+  {
+    /* eslint-disable */
+    name: "i18n-t",
+    props: assign({
+      keypath: {
+        type: String,
+        required: true
+      },
+      plural: {
+        type: [Number, String],
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        validator: (val) => isNumber(val) || !isNaN(val)
+      }
+    }, baseFormatProps),
+    /* eslint-enable */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setup(props, context) {
+      const { slots, attrs } = context;
+      const i18n2 = props.i18n || useI18n({
+        useScope: props.scope,
+        __useComponent: true
+      });
+      return () => {
+        const keys2 = Object.keys(slots).filter((key) => key !== "_");
+        const options = {};
+        if (props.locale) {
+          options.locale = props.locale;
+        }
+        if (props.plural !== void 0) {
+          options.plural = isString$1(props.plural) ? +props.plural : props.plural;
+        }
+        const arg = getInterpolateArg(context, keys2);
+        const children = i18n2[TransrateVNodeSymbol](props.keypath, arg, options);
+        const assignedAttrs = assign({}, attrs);
+        const tag = isString$1(props.tag) || isObject(props.tag) ? props.tag : getFragmentableTag();
+        return h(tag, assignedAttrs, children);
+      };
+    }
+  }
+);
+function isVNode(target) {
+  return isArray(target) && !isString$1(target[0]);
+}
+function renderFormatter(props, context, slotKeys, partFormatter) {
+  const { slots, attrs } = context;
+  return () => {
+    const options = { part: true };
+    let overrides = {};
+    if (props.locale) {
+      options.locale = props.locale;
+    }
+    if (isString$1(props.format)) {
+      options.key = props.format;
+    } else if (isObject(props.format)) {
+      if (isString$1(props.format.key)) {
+        options.key = props.format.key;
+      }
+      overrides = Object.keys(props.format).reduce((options2, prop) => {
+        return slotKeys.includes(prop) ? assign({}, options2, { [prop]: props.format[prop] }) : options2;
+      }, {});
+    }
+    const parts = partFormatter(...[props.value, options, overrides]);
+    let children = [options.key];
+    if (isArray(parts)) {
+      children = parts.map((part, index) => {
+        const slot = slots[part.type];
+        const node = slot ? slot({ [part.type]: part.value, index, parts }) : [part.value];
+        if (isVNode(node)) {
+          node[0].key = `${part.type}-${index}`;
+        }
+        return node;
+      });
+    } else if (isString$1(parts)) {
+      children = [parts];
+    }
+    const assignedAttrs = assign({}, attrs);
+    const tag = isString$1(props.tag) || isObject(props.tag) ? props.tag : getFragmentableTag();
+    return h(tag, assignedAttrs, children);
+  };
+}
+const NumberFormat = (
+  /* defineComponent */
+  {
+    /* eslint-disable */
+    name: "i18n-n",
+    props: assign({
+      value: {
+        type: Number,
+        required: true
+      },
+      format: {
+        type: [String, Object]
+      }
+    }, baseFormatProps),
+    /* eslint-enable */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setup(props, context) {
+      const i18n2 = props.i18n || useI18n({ useScope: "parent", __useComponent: true });
+      return renderFormatter(props, context, NUMBER_FORMAT_OPTIONS_KEYS, (...args) => (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        i18n2[NumberPartsSymbol](...args)
+      ));
+    }
+  }
+);
+const DatetimeFormat = (
+  /*defineComponent */
+  {
+    /* eslint-disable */
+    name: "i18n-d",
+    props: assign({
+      value: {
+        type: [Number, Date],
+        required: true
+      },
+      format: {
+        type: [String, Object]
+      }
+    }, baseFormatProps),
+    /* eslint-enable */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setup(props, context) {
+      const i18n2 = props.i18n || useI18n({ useScope: "parent", __useComponent: true });
+      return renderFormatter(props, context, DATETIME_FORMAT_OPTIONS_KEYS, (...args) => (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        i18n2[DatetimePartsSymbol](...args)
+      ));
+    }
+  }
+);
+function getComposer$2(i18n2, instance) {
+  const i18nInternal = i18n2;
+  if (i18n2.mode === "composition") {
+    return i18nInternal.__getInstance(instance) || i18n2.global;
+  } else {
+    const vueI18n = i18nInternal.__getInstance(instance);
+    return vueI18n != null ? vueI18n.__composer : i18n2.global.__composer;
+  }
+}
+function vTDirective(i18n2) {
+  const _process = (binding) => {
+    const { instance, modifiers, value } = binding;
+    if (!instance || !instance.$) {
+      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR);
+    }
+    const composer = getComposer$2(i18n2, instance.$);
+    const parsedValue = parseValue(value);
+    return [
+      Reflect.apply(composer.t, composer, [...makeParams(parsedValue)]),
+      composer
+    ];
+  };
+  const register2 = (el, binding) => {
+    const [textContent, composer] = _process(binding);
+    if (inBrowser && i18n2.global === composer) {
+      el.__i18nWatcher = watch(composer.locale, () => {
+        binding.instance && binding.instance.$forceUpdate();
+      });
+    }
+    el.__composer = composer;
+    el.textContent = textContent;
+  };
+  const unregister2 = (el) => {
+    if (inBrowser && el.__i18nWatcher) {
+      el.__i18nWatcher();
+      el.__i18nWatcher = void 0;
+      delete el.__i18nWatcher;
+    }
+    if (el.__composer) {
+      el.__composer = void 0;
+      delete el.__composer;
+    }
+  };
+  const update = (el, { value }) => {
+    if (el.__composer) {
+      const composer = el.__composer;
+      const parsedValue = parseValue(value);
+      el.textContent = Reflect.apply(composer.t, composer, [
+        ...makeParams(parsedValue)
+      ]);
+    }
+  };
+  const getSSRProps = (binding) => {
+    const [textContent] = _process(binding);
+    return { textContent };
+  };
+  return {
+    created: register2,
+    unmounted: unregister2,
+    beforeUpdate: update,
+    getSSRProps
+  };
+}
+function parseValue(value) {
+  if (isString$1(value)) {
+    return { path: value };
+  } else if (isPlainObject(value)) {
+    if (!("path" in value)) {
+      throw createI18nError(I18nErrorCodes.REQUIRED_VALUE, "path");
+    }
+    return value;
+  } else {
+    throw createI18nError(I18nErrorCodes.INVALID_VALUE);
+  }
+}
+function makeParams(value) {
+  const { path, locale, args, choice, plural } = value;
+  const options = {};
+  const named = args || {};
+  if (isString$1(locale)) {
+    options.locale = locale;
+  }
+  if (isNumber(choice)) {
+    options.plural = choice;
+  }
+  if (isNumber(plural)) {
+    options.plural = plural;
+  }
+  return [path, named, options];
+}
+function apply(app2, i18n2, ...options) {
+  const pluginOptions = isPlainObject(options[0]) ? options[0] : {};
+  const useI18nComponentName = !!pluginOptions.useI18nComponentName;
+  const globalInstall = isBoolean(pluginOptions.globalInstall) ? pluginOptions.globalInstall : true;
+  if (globalInstall) {
+    app2.component(!useI18nComponentName ? Translation.name : "i18n", Translation);
+    app2.component(NumberFormat.name, NumberFormat);
+    app2.component(DatetimeFormat.name, DatetimeFormat);
+  }
+  {
+    app2.directive("t", vTDirective(i18n2));
+  }
+}
+const I18nInjectionKey = /* @__PURE__ */ makeSymbol("global-vue-i18n");
+function createI18n(options = {}, VueI18nLegacy) {
+  const __globalInjection = isBoolean(options.globalInjection) ? options.globalInjection : true;
+  const __allowComposition = true;
+  const __instances = /* @__PURE__ */ new Map();
+  const [globalScope, __global] = createGlobal(options);
+  const symbol = makeSymbol("");
+  function __getInstance(component) {
+    return __instances.get(component) || null;
+  }
+  function __setInstance(component, instance) {
+    __instances.set(component, instance);
+  }
+  function __deleteInstance(component) {
+    __instances.delete(component);
+  }
+  {
+    const i18n2 = {
+      // mode
+      get mode() {
+        return "composition";
+      },
+      // allowComposition
+      get allowComposition() {
+        return __allowComposition;
+      },
+      // install plugin
+      async install(app2, ...options2) {
+        app2.__VUE_I18N_SYMBOL__ = symbol;
+        app2.provide(app2.__VUE_I18N_SYMBOL__, i18n2);
+        if (__globalInjection) {
+          injectGlobalFields(app2, i18n2.global);
+        }
+        {
+          apply(app2, i18n2, ...options2);
+        }
+        const unmountApp = app2.unmount;
+        app2.unmount = () => {
+          i18n2.dispose();
+          unmountApp();
+        };
+      },
+      // global accessor
+      get global() {
+        return __global;
+      },
+      dispose() {
+        globalScope.stop();
+      },
+      // @internal
+      __instances,
+      // @internal
+      __getInstance,
+      // @internal
+      __setInstance,
+      // @internal
+      __deleteInstance
+    };
+    return i18n2;
+  }
+}
+function useI18n(options = {}) {
+  const instance = getCurrentInstance();
+  if (instance == null) {
+    throw createI18nError(I18nErrorCodes.MUST_BE_CALL_SETUP_TOP);
+  }
+  if (!instance.isCE && instance.appContext.app != null && !instance.appContext.app.__VUE_I18N_SYMBOL__) {
+    throw createI18nError(I18nErrorCodes.NOT_INSLALLED);
+  }
+  const i18n2 = getI18nInstance(instance);
+  const global2 = getGlobalComposer(i18n2);
+  const componentOptions = getComponentOptions(instance);
+  const scope = getScope(options, componentOptions);
+  if (scope === "global") {
+    adjustI18nResources(global2, options, componentOptions);
+    return global2;
+  }
+  if (scope === "parent") {
+    let composer2 = getComposer(i18n2, instance, options.__useComponent);
+    if (composer2 == null) {
+      composer2 = global2;
+    }
+    return composer2;
+  }
+  const i18nInternal = i18n2;
+  let composer = i18nInternal.__getInstance(instance);
+  if (composer == null) {
+    const composerOptions = assign({}, options);
+    if ("__i18n" in componentOptions) {
+      composerOptions.__i18n = componentOptions.__i18n;
+    }
+    if (global2) {
+      composerOptions.__root = global2;
+    }
+    composer = createComposer(composerOptions);
+    setupLifeCycle(i18nInternal, instance);
+    i18nInternal.__setInstance(instance, composer);
+  }
+  return composer;
+}
+function createGlobal(options, legacyMode, VueI18nLegacy) {
+  const scope = effectScope();
+  {
+    const obj = scope.run(() => createComposer(options));
+    if (obj == null) {
+      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR);
+    }
+    return [scope, obj];
+  }
+}
+function getI18nInstance(instance) {
+  {
+    const i18n2 = inject(!instance.isCE ? instance.appContext.app.__VUE_I18N_SYMBOL__ : I18nInjectionKey);
+    if (!i18n2) {
+      throw createI18nError(!instance.isCE ? I18nErrorCodes.UNEXPECTED_ERROR : I18nErrorCodes.NOT_INSLALLED_WITH_PROVIDE);
+    }
+    return i18n2;
+  }
+}
+function getScope(options, componentOptions) {
+  return isEmptyObject(options) ? "__i18n" in componentOptions ? "local" : "global" : !options.useScope ? "local" : options.useScope;
+}
+function getGlobalComposer(i18n2) {
+  return i18n2.mode === "composition" ? i18n2.global : i18n2.global.__composer;
+}
+function getComposer(i18n2, target, useComponent = false) {
+  let composer = null;
+  const root = target.root;
+  let current = target.parent;
+  while (current != null) {
+    const i18nInternal = i18n2;
+    if (i18n2.mode === "composition") {
+      composer = i18nInternal.__getInstance(current);
+    }
+    if (composer != null) {
+      break;
+    }
+    if (root === current) {
+      break;
+    }
+    current = current.parent;
+  }
+  return composer;
+}
+function setupLifeCycle(i18n2, target, composer) {
+  {
+    onMounted(() => {
+    }, target);
+    onUnmounted(() => {
+      i18n2.__deleteInstance(target);
+    }, target);
+  }
+}
+const globalExportProps = [
+  "locale",
+  "fallbackLocale",
+  "availableLocales"
+];
+const globalExportMethods = ["t", "rt", "d", "n", "tm"];
+function injectGlobalFields(app2, composer) {
+  const i18n2 = /* @__PURE__ */ Object.create(null);
+  globalExportProps.forEach((prop) => {
+    const desc = Object.getOwnPropertyDescriptor(composer, prop);
+    if (!desc) {
+      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR);
+    }
+    const wrap = isRef(desc.value) ? {
+      get() {
+        return desc.value.value;
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      set(val) {
+        desc.value.value = val;
+      }
+    } : {
+      get() {
+        return desc.get && desc.get();
+      }
+    };
+    Object.defineProperty(i18n2, prop, wrap);
+  });
+  app2.config.globalProperties.$i18n = i18n2;
+  globalExportMethods.forEach((method) => {
+    const desc = Object.getOwnPropertyDescriptor(composer, method);
+    if (!desc || !desc.value) {
+      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR);
+    }
+    Object.defineProperty(app2.config.globalProperties, `$${method}`, desc);
+  });
+}
+registerMessageCompiler(compileToFunction);
+registerMessageResolver(resolveValue);
+registerLocaleFallbacker(fallbackWithLocaleChain);
+{
+  initFeatureFlags();
+}
+if (__INTLIFY_PROD_DEVTOOLS__) {
+  const target = getGlobalThis();
+  target.__INTLIFY__ = true;
+  setDevToolsHook(target.__INTLIFY_DEVTOOLS_GLOBAL_HOOK__);
+}
+const messages = {
+  "en": {
+    "locale": {
+      "ru": (ctx) => {
+        const { normalize: _normalize } = ctx;
+        return _normalize(["Russian"]);
+      },
+      "en": (ctx) => {
+        const { normalize: _normalize } = ctx;
+        return _normalize(["English"]);
+      }
+    },
+    "app": {
+      "title": {
+        "without-name": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Jira Kanban assistant"]);
+        },
+        "with-name": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Jira Kanban assistant: ", _interpolate(_named("name"))]);
+        }
+      },
+      "tabs": {
+        "main": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Main statistics"]);
+        },
+        "total-wip": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Total WIP"]);
+        },
+        "wip-by-columns": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["WIPs by columns"]);
+        },
+        "avg-time-by-columns": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Average times by columns"]);
+        },
+        "lead-time-distributions": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead time distributions"]);
+        },
+        "long-times": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Control Chart"]);
+        },
+        "analyze-by-wip": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Analyze by WIP"]);
+        },
+        "triage": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Triage"]);
+        }
+      },
+      "config-info": {
+        "text": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Selected columns: ", _interpolate(_named("columns")), ", swimlanes: ", _interpolate(_named("swimlanes")), ", filters: ", _interpolate(_named("filters"))]);
+        },
+        "help": {
+          "text": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Information about columns, lines and filters selected for analysis.\nTo change settings, click on the gear icon.\nFor a detailed description, click on this icon."]);
+          },
+          "link": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#configuration"]);
+          }
+        }
+      }
+    },
+    "main": {
+      "title": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+        return _normalize(["Kanban statistics: ", _interpolate(_named("title"))]);
+      },
+      "yAxis": {
+        "avg-wip": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Avg WIP"]);
+        },
+        "eff-waste": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Eff / Waste, %"]);
+        },
+        "lead-cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead / Cycle, days"]);
+        },
+        "throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Throughput, 1/period"]);
+        }
+      },
+      "series": {
+        "efficiency": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Efficiency"]);
+        },
+        "waste": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Waste"]);
+        },
+        "avg-total-wip": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Avg total WIP"]);
+        },
+        "throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Throughput"]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Avg"]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Med"]);
+          }
+        },
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead time"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Cycle time"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["On this screen is presented:\nThe average value of WIP for periods.\nThe ratio of time how many completed tasks were carried out in the columns of work by the time spent in the waiting columns for the periods.\nDelivery time and cycle of completed tasks for periods.\nThe capacity of the team for the period."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#main-screen"]);
+        }
+      }
+    },
+    "total-wip": {
+      "title": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+        return _normalize(["Total WIP: ", _interpolate(_named("title"))]);
+      },
+      "yAxis": {
+        "name": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Count issues in progress"]);
+        }
+      },
+      "series": {
+        "max": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Maximum"]);
+        },
+        "avg": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Average"]);
+        },
+        "med": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Median"]);
+        },
+        "mod": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Mode"]);
+        },
+        "min": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Minimum"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["This screen contains aggregated values of total WIP on the board by the periods."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#total-wip"]);
+        }
+      }
+    },
+    "wip-by-columns": {
+      "tab": {
+        "max": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Maximums"]);
+        },
+        "avg": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Averages"]);
+        },
+        "med": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Medians"]);
+        },
+        "mod": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Modes"]);
+        },
+        "min": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Minimums"]);
+        }
+      },
+      "title": {
+        "name": {
+          "max": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Maximums"]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Averages"]);
+          },
+          "mod": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Modes"]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Medians"]);
+          },
+          "min": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Minimums"]);
+          }
+        },
+        "title": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize([_interpolate(_named("aggr")), " WIP by columns : ", _interpolate(_named("title"))]);
+        }
+      },
+      "yAxis": {
+        "name": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Count issues in progress"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["This screen contains aggregated values of WIP in the columns according by the periods."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#wips-by-columns"]);
+        }
+      }
+    },
+    "avg-time-by-columns": {
+      "tab": {
+        "percent": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Percents"]);
+        },
+        "day": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Days"]);
+        }
+      },
+      "yAxis": {
+        "throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Throughput, 1/period"]);
+        },
+        "name": {
+          "percent": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["% time in column for released issues"]);
+          },
+          "day": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Time in column for released issues"]);
+          }
+        }
+      },
+      "title": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+        return _normalize(["Average time by columns for released issues: ", _interpolate(_named("title"))]);
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["This screen shows the time that spent in the columns the tasks completed in the period.\nYou can choose both the ratio to the delivery time and absolute values."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#average-times-by-columns"]);
+        }
+      },
+      "series": {
+        "throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Throughput"]);
+          }
+        }
+      }
+    },
+    "lead-time-distributions": {
+      "group": {
+        "total": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Total"]);
+        },
+        "default": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Without size"]);
+        },
+        "title": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Lead time distributions: ", _interpolate(_named("title"))]);
+        }
+      },
+      "xAxis": {
+        "name": {
+          "lead": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Lead time, days"]);
+          },
+          "cycle": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Cycle time, days"]);
+          }
+        }
+      },
+      "yAxis": {
+        "name": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Count of issues"]);
+        }
+      },
+      "series": {
+        "count": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize([_interpolate(_named("group")), " count"]);
+        },
+        "percent": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize([_interpolate(_named("group")), " percent of progress"]);
+        },
+        "sum": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Cumulative sum of completed tasks"]);
+        }
+      },
+      "info": {
+        "lead": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Avg lead time: ", _interpolate(_named("avg")), "\nMedian lead time: ", _interpolate(_named("med")), "\nDistribution: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Avg cycle time: ", _interpolate(_named("avg")), "\nMedian cycle time: ", _interpolate(_named("med")), "\nDistribution: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
+        }
+      },
+      "tail": {
+        "fat": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Fat-tailed"]);
+        },
+        "thin": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Thin-tailed"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["A diagram on the basis of which you can make a probabilistic forecast about the time of task.\nOn the horizontal axis is laid by LEAD TIME,\nBy vertical - the number of tasks performed with such LEAD TIME.\nIf the tasks are has the dimensions, then the diagram can be viewed for each of them."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead-time-distributions"]);
+        }
+      },
+      "tab": {
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead time"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Cycle time"]);
+        }
+      }
+    },
+    "control-chart": {
+      "config": {
+        "search": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
+          return _normalize(["Search ", _interpolate(_list(0)), " periods ago with bound ", _interpolate(_list(1)), " %"]);
+        }
+      },
+      "columns": {
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Cycle"]);
+        },
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead"]);
+        }
+      },
+      "row": {
+        "min": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Minimum, days"]);
+        },
+        "med": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Median, days"]);
+        },
+        "max": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Maximum, days"]);
+        },
+        "bound": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize([_interpolate(_named("bound")), " %, days"]);
+        },
+        "winners": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Winners"]);
+        }
+      },
+      "title": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+        return _normalize(["Control chart: ", _interpolate(_named("title"))]);
+      },
+      "yAxis": {
+        "name": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead time, days"]);
+        }
+      },
+      "series": {
+        "issues": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Issues"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["The control chart shows the dispersion of the task execution time.\nIt is used to search and analyze the reasons leading to the instability of the work process."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead-time-distributions"]);
+        }
+      }
+    },
+    "analyze-by-wip": {
+      "title": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+        return _normalize(["Throughput, Efficiency, Lead & Cycle times by WIP: ", _interpolate(_named("title"))]);
+      },
+      "yAxis": {
+        "throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Throughput, 1/7-days"]);
+        },
+        "efficiency": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Efficiency, %"]);
+        },
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead time, days"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Cycle time, days"]);
+        }
+      },
+      "series": {
+        "efficiency": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Efficiency"]);
+        },
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead time"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Cycle time"]);
+        },
+        "throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Throughput"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Parameters of throughput, efficiency,\nlead time and cycle time of completed tasks\nby the average WIP during the production of the task"]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#analyze-by-wip"]);
+        }
+      }
+    },
+    "triage": {
+      "tab": {
+        "name": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Triage issues in ", _interpolate(_named("col"))]);
+        },
+        "error": {
+          "lead": {
+            "undefined": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["ERROR: lead columns undefined"]);
+            },
+            "none": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["ERROR: can't find column before lead columns"]);
+            }
+          },
+          "cycle": {
+            "undefined": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["ERROR: cycle columns undefined"]);
+            },
+            "none": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["ERROR: can't find column before cycle columns"]);
+            }
+          }
+        }
+      },
+      "error": {
+        "lead": {
+          "undefined": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Lead columns undefined."]);
+          },
+          "none": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Can't find column before lead columns. In this case, we can't find a issues for triage."]);
+          }
+        },
+        "cycle": {
+          "undefined": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Cycle columns undefined."]);
+          },
+          "none": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Can't find column before cycle columns. In this case, we can't find a issues for triage."]);
+          }
+        }
+      },
+      "desired-delivered-date": {
+        "far": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Far far away"]);
+        },
+        "not-set": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Not set"]);
+        },
+        "combined": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["DDD: ", _interpolate(_named("ddd")), "<br>DL: ", _interpolate(_named("deadline"))]);
+        },
+        "normal": {
+          "none": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["-"]);
+          }
+        }
+      },
+      "value-acquisition-lifecycle": {
+        "display": {
+          "auto": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize([_interpolate(_named("val")), " (auto)"]);
+          }
+        },
+        "01": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(01) One-off opportunity with an expiry date"]);
+        },
+        "02": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(02) Very front loaded"]);
+        },
+        "03": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(03) Front loaded"]);
+        },
+        "04": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(04) Bell curve, no catch up"]);
+        },
+        "05": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(05) Bell curve with catch up"]);
+        },
+        "06": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(06) Back loaded"]);
+        },
+        "07": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(07) Very back loaded"]);
+        },
+        "08": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(08) Constant rate"]);
+        },
+        "09": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(09) Bell curve extended, decaying life, decaying loyalty"]);
+        },
+        "10": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(10) Bell curve, extended life, decaying loyalty"]);
+        },
+        "11": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(11) Last-minute decay"]);
+        }
+      },
+      "shelf-life-ratio": {
+        "display": {
+          "auto": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize([_interpolate(_named("val")), " (auto)"]);
+          }
+        },
+        "1": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(2:1) Ultra-short"]);
+        },
+        "2": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(1:1) Short"]);
+        },
+        "3": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(1:2) Medium"]);
+        },
+        "4": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(1:5) Long"]);
+        },
+        "5": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(1:10) Extra-long"]);
+        }
+      },
+      "lead-time-distribution": {
+        "display": {
+          "auto": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize([_interpolate(_named("val")), " (auto)"]);
+          },
+          "value": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize([_interpolate(_named("q50")), " / ", _interpolate(_named("q85")), " / ", _interpolate(_named("max"))]);
+          }
+        }
+      },
+      "column": {
+        "issue": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Issue"]);
+        },
+        "value-acquisition-lifecycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Value-acquisition<br>lifecycle"]);
+        },
+        "shelf-life-ratio": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Shelf-life ratio"]);
+        },
+        "desired-delivery-date": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Desired delivery date /<br>Deadline"]);
+        },
+        "issue-size": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Issue size"]);
+        },
+        "lead-time-distribution-ranges": {
+          "lead": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Lead time ranges<br>(50%, 85%, 100%), days"]);
+          },
+          "cycle": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Cycle time ranges<br>(50%, 85%, 100%), days"]);
+          }
+        },
+        "start-date-range": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Start date range"]);
+        },
+        "primary-class-of-service": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Primary CoS"]);
+        },
+        "distribution": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Distribution"]);
+        },
+        "class-of-service": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Class of service"]);
+        },
+        "sdr-normal": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Normal start date"]);
+        }
+      },
+      "tail": {
+        "display": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize([_interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
+        },
+        "fat": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Fat-tailed"]);
+        },
+        "thin": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Thin-tailed"]);
+        }
+      },
+      "start-date-range": {
+        "1": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Super early"]);
+        },
+        "2": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Early"]);
+        },
+        "3": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Normal"]);
+        },
+        "4": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Late"]);
+        },
+        "5": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Last responsible moment"]);
+        },
+        "6": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Irresponsibly late"]);
+        }
+      },
+      "class-of-service": {
+        "0": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Expedite"]);
+        },
+        "1": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Fixed date"]);
+        },
+        "2": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Standard"]);
+        },
+        "3": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Intangible"]);
+        }
+      },
+      "size": {
+        "default": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["No size"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Too big to hint\nJust click on the icon to open the link"]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#triage"]);
+        }
+      },
+      "chart": {
+        "title": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Triage start points: ", _interpolate(_named("title"))]);
+        },
+        "today": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Today"]);
+        },
+        "period": {
+          "next": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Next per."]);
+          }
+        }
+      },
+      "today": (ctx) => {
+        const { normalize: _normalize } = ctx;
+        return _normalize(["Today"]);
+      }
+    },
+    "app-config": {
+      "period-type": {
+        "text": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
+          return _normalize(["Analyze period ", _interpolate(_list(0)), " of ", _interpolate(_list(1))]);
+        },
+        "days": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["days"]);
+        },
+        "seven-days": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["seven days"]);
+        },
+        "weeks-mon-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["weeks, from Monday, excluding the current incomplete"]);
+        },
+        "weeks-mon-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["weeks, from Monday, including the current incomplete"]);
+        },
+        "weeks-sun-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["weeks, from Sunday, excluding the current incomplete"]);
+        },
+        "weeks-sun-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["weeks, from Sunday, including the current incomplete"]);
+        },
+        "months-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["months, excluding the current incomplete"]);
+        },
+        "months-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["months, including the current incomplete"]);
+        },
+        "quarters-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["quarters, excluding the current incomplete"]);
+        },
+        "quarters-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["quarters, including the current incomplete"]);
+        },
+        "years-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["years, excluding the current incomplete"]);
+        },
+        "years-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["years, including the current incomplete"]);
+        }
+      },
+      "analyze-size": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
+        return _normalize(["Analyse ", _interpolate(_list(0)), " periods"]);
+      },
+      "locale": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
+        return _normalize(["Select language ", _interpolate(_list(0))]);
+      },
+      "title": (ctx) => {
+        const { normalize: _normalize } = ctx;
+        return _normalize(["Configuration"]);
+      },
+      "button": {
+        "apply": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Apply and close"]);
+        },
+        "save": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Save and close"]);
+        },
+        "discard": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Discard and close"]);
+        }
+      },
+      "board": {
+        "filters": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Filters"]);
+        },
+        "swimlanes": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Swimlanes"]);
+        },
+        "columns": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Columns"]);
+        }
+      },
+      "field": {
+        "issue-size": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Field for issue size (type Option):"]);
+        },
+        "value-acquisition-lifecycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Field for value-acquisition lifecycle (type Option):"]);
+        },
+        "shelf-life-ratio": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Field for shelf-life ratio (type Option):"]);
+        },
+        "desire-delivery-date": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Field for desired delivery date (type Date or DateTime):"]);
+        },
+        "deadline-date": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Field for deadline date (type Date or DateTime):"]);
+        },
+        "dont-use": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Don't use"]);
+        }
+      },
+      "jira-column-status": {
+        "row": {
+          "skip": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Skip"]);
+          },
+          "work": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Work"]);
+          },
+          "wait": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Wait"]);
+          },
+          "ready": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Ready"]);
+          },
+          "lead": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Lead"]);
+          },
+          "cycle": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Cycle"]);
+          }
+        }
+      }
+    }
+  },
+  "ru": {
+    "locale": {
+      "ru": (ctx) => {
+        const { normalize: _normalize } = ctx;
+        return _normalize(["Русский"]);
+      },
+      "en": (ctx) => {
+        const { normalize: _normalize } = ctx;
+        return _normalize(["English"]);
+      }
+    },
+    "app": {
+      "title": {
+        "without-name": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Jira Kanban assistant"]);
+        },
+        "with-name": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Jira Kanban assistant: ", _interpolate(_named("name"))]);
+        }
+      },
+      "tabs": {
+        "main": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Основная статистика"]);
+        },
+        "total-wip": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Общий WIP"]);
+        },
+        "wip-by-columns": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["WIP по колонкам"]);
+        },
+        "avg-time-by-columns": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Среднее время по колонкам"]);
+        },
+        "lead-time-distributions": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Распределение времени выполнения"]);
+        },
+        "long-times": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Контрольная диаграмма"]);
+        },
+        "analyze-by-wip": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Анализ по WIP"]);
+        },
+        "triage": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Триаж"]);
+        }
+      },
+      "config-info": {
+        "text": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Выбрано колонок: ", _interpolate(_named("columns")), ", линий: ", _interpolate(_named("swimlanes")), ", фильтров: ", _interpolate(_named("filters"))]);
+        },
+        "help": {
+          "text": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Информация о выбранных для анализа колонок, линий и фильтров.\nЧтобы изменить настройки, нажмите на значок шестерёнки.\nДля подробного описания кликните на значок."]);
+          },
+          "link": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0"]);
+          }
+        }
+      }
+    },
+    "main": {
+      "title": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+        return _normalize(["Статистика Канбана: ", _interpolate(_named("title"))]);
+      },
+      "yAxis": {
+        "avg-wip": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Средний WIP"]);
+        },
+        "eff-waste": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Эфф / потери, %"]);
+        },
+        "lead-cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Поставка / цикл, дн."]);
+        },
+        "throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Проп. сп., 1/период"]);
+        }
+      },
+      "series": {
+        "efficiency": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Эффективность"]);
+        },
+        "waste": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Потери"]);
+        },
+        "avg-total-wip": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Ср. общий WIP"]);
+        },
+        "throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Пропускная способность"]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Сред."]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Медиана"]);
+          }
+        },
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время поставки"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время цикла"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["На этом экране представлены:\nСреднее значение незавершенной работы (WIP) по периодам.\nОтношение времени сколько завершенные задачи провели в колонках работы ко времени проведенном в колонках ожидания по периодам.\nВремя поставки и цикла завершенных задач по периодам.\nПропускная способность команды по периодам."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9-%D1%8D%D0%BA%D1%80%D0%B0%D0%BD"]);
+        }
+      }
+    },
+    "total-wip": {
+      "title": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+        return _normalize(["Общая незавершенная работа (WIP): ", _interpolate(_named("title"))]);
+      },
+      "yAxis": {
+        "name": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Число незавершенных задач"]);
+        }
+      },
+      "series": {
+        "max": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Максимум"]);
+        },
+        "avg": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Среднее"]);
+        },
+        "med": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Медиана"]);
+        },
+        "mod": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Мода"]);
+        },
+        "min": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Минимум"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["На этом экране представлены агрегированные значения общей незавершенной работы на доске по периодам."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BE%D0%B1%D1%89%D0%B8%D0%B9-wip"]);
+        }
+      }
+    },
+    "wip-by-columns": {
+      "tab": {
+        "max": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Максимумы"]);
+        },
+        "avg": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Средние"]);
+        },
+        "med": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Медианы"]);
+        },
+        "mod": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Моды"]);
+        },
+        "min": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Минимумы"]);
+        }
+      },
+      "title": {
+        "name": {
+          "max": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Максимумы"]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Средние"]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Медианы"]);
+          },
+          "mod": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Моды"]);
+          },
+          "min": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Минимумы"]);
+          }
+        },
+        "title": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize([_interpolate(_named("aggr")), " незавершенной работы WIP по колонкам : ", _interpolate(_named("title"))]);
+        }
+      },
+      "yAxis": {
+        "name": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Число незавершенных задач"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["На этом экране представлены агрегированные значения незавершенной работы в колонках по периодам."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#wip-%D0%BF%D0%BE-%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BA%D0%B0%D0%BC"]);
+        }
+      }
+    },
+    "avg-time-by-columns": {
+      "tab": {
+        "percent": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Проценты"]);
+        },
+        "day": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Дни"]);
+        }
+      },
+      "yAxis": {
+        "throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Проп. спос., 1/период"]);
+        },
+        "name": {
+          "percent": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Процент времени в колонке для завершенных задач"]);
+          },
+          "day": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Время в колонке для завершенных задач, дни"]);
+          }
+        }
+      },
+      "title": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+        return _normalize(["Среднее время по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["На этом экране представлено время, которые провели в колонках завершенные в периоде задачи.\nМожно выбрать как отношение к времени поставки, так и абсолютные значения."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%81%D1%80%D0%B5%D0%B4%D0%BD%D0%B5%D0%B5-%D0%B2%D1%80%D0%B5%D0%BC%D1%8F-%D0%BF%D0%BE-%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BA%D0%B0%D0%BC"]);
+        }
+      },
+      "series": {
+        "throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Пропускная способность"]);
+          }
+        }
+      }
+    },
+    "lead-time-distributions": {
+      "group": {
+        "total": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Общее"]);
+        },
+        "default": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Без размера"]);
+        },
+        "title": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Распределение времени выполнения: ", _interpolate(_named("title"))]);
+        }
+      },
+      "xAxis": {
+        "name": {
+          "lead": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Время поставки, дни"]);
+          },
+          "cycle": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Время цикла, дни"]);
+          }
+        }
+      },
+      "yAxis": {
+        "name": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Число задач"]);
+        }
+      },
+      "series": {
+        "count": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize([_interpolate(_named("group")), " число задач"]);
+        },
+        "percent": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Процент выполнения ", _interpolate(_named("group"))]);
+        },
+        "sum": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Накопительная сумма завершенных задач"]);
+        }
+      },
+      "info": {
+        "lead": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Среднее время поставки: ", _interpolate(_named("avg")), "\nМедиана времени поставки: ", _interpolate(_named("med")), "\nРаспределение: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Среднее время цикла: ", _interpolate(_named("avg")), "\nМедиана времени цикла: ", _interpolate(_named("med")), "\nРаспределение: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
+        }
+      },
+      "tail": {
+        "fat": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["с длинным хвостом"]);
+        },
+        "thin": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["с коротким хвостом"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Диаграмма, на основе которой можно делать вероятностный прогноз о времени выполнения задач.\nПо горизонтальной оси откладывается Lead Time,\nпо вертикальной — количество задач, выполненных с таким Lead Time.\nЕсли у задач заданы размеры, то диаграмму можно посмотреть для каждого из них."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%B8-%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F"]);
+        }
+      },
+      "tab": {
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время поставки"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время цикла"]);
+        }
+      }
+    },
+    "control-chart": {
+      "config": {
+        "search": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
+          return _normalize(["Искать на ", _interpolate(_list(0)), " периодов назад с порогом ", _interpolate(_list(1)), " %"]);
+        }
+      },
+      "columns": {
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Цикл"]);
+        },
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Поставка"]);
+        }
+      },
+      "row": {
+        "min": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Минимум, дни"]);
+        },
+        "med": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Медиана, дни"]);
+        },
+        "max": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Максимум, дни"]);
+        },
+        "bound": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize([_interpolate(_named("bound")), " %, дни"]);
+        },
+        "winners": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Победители"]);
+        }
+      },
+      "title": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+        return _normalize(["Контрольная диаграмма: ", _interpolate(_named("title"))]);
+      },
+      "yAxis": {
+        "name": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время поставки, дни"]);
+        }
+      },
+      "series": {
+        "issues": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Задачи"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Контрольная диаграмма показывает дисперсию времени выполнения задач.\nИспользуется для поиска и анализа причин, приводящих к нестабильности рабочего процесса."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0"]);
+        }
+      }
+    },
+    "analyze-by-wip": {
+      "title": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+        return _normalize(["Пропускная способность, эффективность, время поставки и цикла от объёма незавершенной работы: ", _interpolate(_named("title"))]);
+      },
+      "yAxis": {
+        "throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Пропускная способность, 1/период"]);
+        },
+        "efficiency": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Эффективность, %"]);
+        },
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время поставки, дни"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время цикла, дни"]);
+        }
+      },
+      "series": {
+        "efficiency": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Эффективность"]);
+        },
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время поставки"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время цикла"]);
+        },
+        "throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Пропускная способность"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Параметры пропускной способности, эффективности,\nвремени поставки и времени цикла завершенных задач\n по среднему WIP за время производства задачи"]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7-%D0%BF%D0%BE-wip"]);
+        }
+      }
+    },
+    "triage": {
+      "tab": {
+        "name": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Триаж задач в колонке ", _interpolate(_named("col"))]);
+        },
+        "error": {
+          "lead": {
+            "undefined": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["ОШИБКА: не задана колонка времени поставки"]);
+            },
+            "none": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["ОШИБКА: нет колонок до первой колонки времени поставки"]);
+            }
+          },
+          "cycle": {
+            "undefined": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["ОШИБКА: не задана колонка времени цикла"]);
+            },
+            "none": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["ОШИБКА: нет колонок до первой колонки времени цикла"]);
+            }
+          }
+        }
+      },
+      "error": {
+        "lead": {
+          "undefined": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Не задана колонка времени поставки."]);
+          },
+          "none": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Нет колонок до первой колонки времени поставки. В этом случае нечего анализировать."]);
+          }
+        },
+        "cycle": {
+          "undefined": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Не задана колонка времени цикла."]);
+          },
+          "none": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Нет колонок до первой колонки времени цикла. В этом случае нечего анализировать."]);
+          }
+        }
+      },
+      "desired-delivered-date": {
+        "far": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Далеко-далеко"]);
+        },
+        "not-set": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Не задано"]);
+        },
+        "combined": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["ЖДП: ", _interpolate(_named("ddd")), "<br>ДЛ: ", _interpolate(_named("deadline"))]);
+        },
+        "normal": {
+          "none": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["-"]);
+          }
+        }
+      },
+      "value-acquisition-lifecycle": {
+        "display": {
+          "auto": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize([_interpolate(_named("val")), "<br>(авто)"]);
+          }
+        },
+        "01": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(01) Разовая возможность с истечением срока"]);
+        },
+        "02": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(02) Прибыль на очень ранних сроках"]);
+        },
+        "03": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(03) Прибыль на ранних сроках"]);
+        },
+        "04": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(04) Колоколообразная кривая с преимуществом первого хода"]);
+        },
+        "05": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(05) Колоколообразная кривая без преимущества первого хода"]);
+        },
+        "06": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(06) Прибыль  на поздних  сроках"]);
+        },
+        "07": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(07) Прибыль на очень поздних сроках"]);
+        },
+        "08": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(08) Постоянный уровень"]);
+        },
+        "09": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(09) Колоколообразная продленная кривая, угасающие жизненный цикл и лояльность"]);
+        },
+        "10": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(10) Колоколообразная кривая, продленный жизненный  цикл, угасающая лояльность"]);
+        },
+        "11": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(11) Спад в последнюю минуту"]);
+        }
+      },
+      "shelf-life-ratio": {
+        "display": {
+          "auto": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize([_interpolate(_named("val")), "<br>(авто)"]);
+          }
+        },
+        "1": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(2:1) Очень короткая"]);
+        },
+        "2": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(1:1) Короткая"]);
+        },
+        "3": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(1:2) Средняя"]);
+        },
+        "4": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(1:5) Длительная"]);
+        },
+        "5": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["(1:10) Очень длинная"]);
+        }
+      },
+      "lead-time-distribution": {
+        "display": {
+          "auto": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize([_interpolate(_named("val")), " (авто)"]);
+          },
+          "value": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize([_interpolate(_named("q50")), " / ", _interpolate(_named("q85")), " / ", _interpolate(_named("max"))]);
+          }
+        }
+      },
+      "column": {
+        "issue": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Задача"]);
+        },
+        "value-acquisition-lifecycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Функция жизненного цикла<br>получения ценности"]);
+        },
+        "shelf-life-ratio": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Коэффициент<br>времени жизни"]);
+        },
+        "desired-delivery-date": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Желаемая дата поставки /<br>Дедлайн"]);
+        },
+        "issue-size": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Размер задачи"]);
+        },
+        "lead-time-distribution-ranges": {
+          "lead": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Диапазоны времени поставки<br>(50%, 85%, 100%), дни"]);
+          },
+          "cycle": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Диапазоны времени цикла<br>(50%, 85%, 100%), дни"]);
+          }
+        },
+        "start-date-range": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Диапазон<br>даты старта"]);
+        },
+        "primary-class-of-service": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Основной<br>класс<br>обслуживания"]);
+        },
+        "distribution": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Распределение"]);
+        },
+        "class-of-service": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Класс<br>обслуживания"]);
+        },
+        "sdr-normal": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Нормально было бы начать"]);
+        }
+      },
+      "tail": {
+        "display": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize([_interpolate(_named("tailName")), "<br>(", _interpolate(_named("tailValue")), ")"]);
+        },
+        "fat": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["С длинным хвостом"]);
+        },
+        "thin": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["С коротким хвостом"]);
+        }
+      },
+      "start-date-range": {
+        "1": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Очень рано"]);
+        },
+        "2": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Рано"]);
+        },
+        "3": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Нормально"]);
+        },
+        "4": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Поздно"]);
+        },
+        "5": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Последний<br>ответственный<br>момент"]);
+        },
+        "6": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Безответственно<br>поздно"]);
+        }
+      },
+      "class-of-service": {
+        "0": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Ускоренный"]);
+        },
+        "1": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Фиксированная<br>дата"]);
+        },
+        "2": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Стандартный"]);
+        },
+        "3": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Нематериальный"]);
+        }
+      },
+      "size": {
+        "default": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Без размера"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["'Это неописуемо' - кричала чихуахуа бегая вокруг баобаба.\nПросто кликните по иконке, чтобы открыть ссылку"]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%82%D1%80%D0%B8%D0%B0%D0%B6"]);
+        }
+      },
+      "chart": {
+        "title": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Триаж (даты старта): ", _interpolate(_named("title"))]);
+        },
+        "today": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Сегодня"]);
+        },
+        "period": {
+          "next": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["След. период"]);
+          }
+        }
+      },
+      "today": (ctx) => {
+        const { normalize: _normalize } = ctx;
+        return _normalize(["Сегодня"]);
+      }
+    },
+    "app-config": {
+      "period-type": {
+        "text": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
+          return _normalize(["Размер периода для анализа ", _interpolate(_list(0)), " ", _interpolate(_list(1))]);
+        },
+        "days": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["дней"]);
+        },
+        "seven-days": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["семидневок"]);
+        },
+        "weeks-mon-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["недель, с понедельника, исключая текущую неполную"]);
+        },
+        "weeks-mon-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["недель, с понедельника, включая текущую неполную"]);
+        },
+        "weeks-sun-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["недель, с воскресенья, исключая текущую неполную"]);
+        },
+        "weeks-sun-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["недель, с воскресенья, включая текущую неполную"]);
+        },
+        "months-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["месяцев, исключая текущий неполный"]);
+        },
+        "months-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["месяцев, включая текущий неполный"]);
+        },
+        "quarters-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["кварталов, исключая текущий неполный"]);
+        },
+        "quarters-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["кварталов, включая текущий неполный"]);
+        },
+        "years-exclude": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["лет, исключая текущий неполный"]);
+        },
+        "years-include": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["лет, включая текущий неполный"]);
+        }
+      },
+      "analyze-size": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
+        return _normalize(["Анализировать ", _interpolate(_list(0)), " периодов"]);
+      },
+      "locale": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
+        return _normalize(["Select language ", _interpolate(_list(0))]);
+      },
+      "title": (ctx) => {
+        const { normalize: _normalize } = ctx;
+        return _normalize(["Настройки"]);
+      },
+      "button": {
+        "apply": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Применить и закрыть без сохранения"]);
+        },
+        "save": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Сохранить и закрыть"]);
+        },
+        "discard": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Отменить и закрыть"]);
+        }
+      },
+      "board": {
+        "filters": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Фильтры"]);
+        },
+        "swimlanes": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Линии"]);
+        },
+        "columns": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Колонки"]);
+        }
+      },
+      "field": {
+        "issue-size": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Поле для размера задач (тип Option):"]);
+        },
+        "value-acquisition-lifecycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Поле для функции жизненного цикла получения ценности (тип Option):"]);
+        },
+        "shelf-life-ratio": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Поле для коэффициента времени жизни (тип Option):"]);
+        },
+        "desire-delivery-date": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Поле для желаемой даты поставки (тип Date или DateTime):"]);
+        },
+        "deadline-date": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Поле для даты дедлайна (тип Date или DateTime):"]);
+        },
+        "dont-use": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Не используется"]);
+        }
+      },
+      "jira-column-status": {
+        "row": {
+          "skip": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Пропустить"]);
+          },
+          "work": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["В работе"]);
+          },
+          "wait": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["В ожидании"]);
+          },
+          "ready": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Готово"]);
+          },
+          "lead": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Время поставки"]);
+          },
+          "cycle": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Время цикла"]);
+          }
+        }
+      }
+    }
+  }
+};
+const i18n = createI18n({
+  locale: getDefaultLocale(),
+  fallbackLocale: "en",
+  legacy: false,
+  globalInjection: true,
+  messages,
+  runtimeOnly: false
+});
+function getDefaultLocale() {
+  let l2 = void 0;
+  try {
+    l2 = localStorage.getItem("user.locale");
+  } catch {
+  }
+  if (l2 === void 0 || l2 === null) {
+    l2 = navigator.language;
+  }
+  let langs = Object.keys(messages);
+  if (!langs.includes(l2)) {
+    l2 = null;
+    for (const sl of navigator.languages) {
+      if (langs.includes(sl)) {
+        l2 = sl;
+        break;
+      }
+    }
+    if (l2 === null) {
+      l2 = "en";
+    }
+  }
+  return l2;
+}
 const TriageTable_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$e = {
   name: "TriageTable",
@@ -59380,12 +67675,113 @@ const _sfc_main$e = {
     jiraBase: String,
     leadTimeDistribution: Object
   },
+  components: {
+    VChart: S
+  },
   data: function() {
     return {
       selected: "lead"
     };
   },
   computed: {
+    option() {
+      return {
+        animation: true,
+        title: {
+          text: this.$t("triage.chart.title", {
+            title: this.title
+          }),
+          left: "center"
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true
+            }
+          }
+        },
+        xAxis: {
+          axisPointer: {
+            show: true,
+            label: {
+              formatter: function(value) {
+                if ((value == null ? void 0 : value.value) === void 0) {
+                  return "";
+                }
+                return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+              }
+            }
+          },
+          type: "time",
+          axisLabel: {
+            hideOverlap: true,
+            formatter: function(value) {
+              if (value === void 0) {
+                return "";
+              }
+              return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+            }
+          },
+          min: "dataMin",
+          max: "dataMax"
+        },
+        yAxis: {
+          type: "category",
+          minInterval: 1,
+          axisPointer: {
+            show: true,
+            triggerTooltip: false
+          },
+          axisLabel: {
+            hideOverlap: true
+          },
+          splitArea: {
+            show: true
+          },
+          min: 0,
+          max: this.triageTable.length - 1
+        },
+        dataZoom: [
+          {
+            type: "slider",
+            xAxisIndex: 0,
+            filterMode: "weakFilter",
+            height: 20,
+            bottom: 10,
+            start: 0,
+            end: 100,
+            handleIcon: "path://M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
+            handleSize: "80%",
+            zoomOnMouseWheel: false,
+            moveOnMouseWheel: false,
+            showDetail: false
+          }
+        ],
+        series: [
+          {
+            id: "gantt-series",
+            type: "custom",
+            renderItem: this.renderItem,
+            data: this.triageTableToData(this.triageTable),
+            encode: {
+              x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+              y: 0
+            }
+          },
+          {
+            id: "period-series",
+            type: "line",
+            data: [],
+            markLine: {
+              symbol: ["none", "none"],
+              label: {},
+              data: this.periodMarkLines()
+            }
+          }
+        ]
+      };
+    },
     leadTriageColName() {
       let leadTriageCol = this.leadTriageColIndex;
       if (leadTriageCol < -20) {
@@ -59459,6 +67855,269 @@ const _sfc_main$e = {
     }
   },
   methods: {
+    calcNextPeriodStart(curr) {
+      let res = DateTime.fromMillis(curr).startOf("day");
+      switch (this.conf.periodType) {
+        case "days":
+          return res.plus({ days: this.conf.periodSize }).toMillis();
+        case "seven-days":
+          return res.plus({ weeks: this.conf.periodSize }).toMillis();
+        case "weeks-mon-exclude":
+        case "weeks-mon-include":
+          return res.startOf("week").plus({ weeks: this.conf.periodSize }).toMillis();
+        case "weeks-sun-exclude":
+        case "weeks-sun-include":
+          return res.endOf("week").plus({ weeks: this.conf.periodSize - 1 }).toMillis();
+        case "months-exclude":
+        case "months-include":
+          return res.startOf("month").plus({ months: this.conf.periodSize }).toMillis();
+        case "quarters-exclude":
+        case "quarters-include":
+          return res.startOf("quarter").plus({ quarters: this.conf.periodSize }).toMillis();
+        case "years-exclude":
+        case "years-include":
+          return res.startOf("year").plus({ years: this.conf.periodSize }).toMillis();
+      }
+    },
+    periodMarkLines() {
+      let dt = DateTime.now().startOf("day").toMillis();
+      let res = [
+        {
+          xAxis: dt,
+          lineStyle: {
+            color: "#f00",
+            width: 3,
+            type: "solid"
+          },
+          label: {
+            formatter: this.$t("triage.chart.today")
+          }
+        }
+      ];
+      dt = this.calcNextPeriodStart(dt);
+      res.push(
+        {
+          xAxis: dt,
+          lineStyle: {
+            color: "#ccc",
+            width: 3,
+            type: "dashed"
+          },
+          label: {
+            formatter: this.$t("triage.chart.period.next"),
+            distance: [0, -10],
+            position: "end"
+          }
+        }
+      );
+      dt = this.calcNextPeriodStart(dt);
+      res.push(
+        {
+          xAxis: dt,
+          lineStyle: {
+            color: "#ccc",
+            width: 2,
+            type: "dashed"
+          },
+          label: {
+            show: false
+          }
+        }
+      );
+      dt = this.calcNextPeriodStart(dt);
+      res.push(
+        {
+          xAxis: dt,
+          lineStyle: {
+            color: "#ccc",
+            width: 1,
+            type: "dashed"
+          },
+          label: {
+            show: false
+          }
+        }
+      );
+      return res;
+    },
+    triageTableToData: function(tTable) {
+      var _a2, _b2, _c2, _d, _e, _f, _g, _h, _i, _j;
+      let data = [];
+      if (tTable.length > 0) {
+        let maxDate = DateTime.now().startOf("day").toMillis();
+        for (const item of tTable) {
+          if (item.dddVal) {
+            maxDate = Math.max(maxDate, item.dddVal.toMillis());
+          }
+          if (item.deadlineVal) {
+            maxDate = Math.max(maxDate, item.deadlineVal.toMillis());
+          }
+        }
+        for (let i = tTable.length - 1; i >= 0; i--) {
+          const item = tTable[i];
+          data.push([
+            item.issueKey,
+            ((_a2 = item.dddVal) == null ? void 0 : _a2.toMillis()) - item.ltdVal.ranges.max * 2 * 1e3 * 60 * 60 * 24,
+            ((_b2 = item.dddVal) == null ? void 0 : _b2.toMillis()) - item.ltdVal.ranges.max * 1e3 * 60 * 60 * 24,
+            ((_c2 = item.dddVal) == null ? void 0 : _c2.toMillis()) - item.ltdVal.ranges.q85 * 1e3 * 60 * 60 * 24,
+            ((_d = item.dddVal) == null ? void 0 : _d.toMillis()) - item.ltdVal.ranges.q50 * 1e3 * 60 * 60 * 24,
+            (_e = item.dddVal) == null ? void 0 : _e.toMillis(),
+            ((_f = item.deadlineVal) == null ? void 0 : _f.toMillis()) - item.ltdVal.ranges.max * 2 * 1e3 * 60 * 60 * 24,
+            ((_g = item.deadlineVal) == null ? void 0 : _g.toMillis()) - item.ltdVal.ranges.max * 1e3 * 60 * 60 * 24,
+            ((_h = item.deadlineVal) == null ? void 0 : _h.toMillis()) - item.ltdVal.ranges.q85 * 1e3 * 60 * 60 * 24,
+            ((_i = item.deadlineVal) == null ? void 0 : _i.toMillis()) - item.ltdVal.ranges.q50 * 1e3 * 60 * 60 * 24,
+            (_j = item.deadlineVal) == null ? void 0 : _j.toMillis()
+          ]);
+        }
+      }
+      return data;
+    },
+    calcShape: function(params, api, start2, end2, categoryIndex, height, dH) {
+      const startPoint = api.coord([start2, categoryIndex]);
+      const endPoint = api.coord([end2, categoryIndex]);
+      const zrRect = clipRectByRect({
+        x: startPoint[0],
+        y: startPoint[1] + dH,
+        width: endPoint[0] - startPoint[0],
+        height
+      }, {
+        x: params.coordSys.x,
+        y: params.coordSys.y,
+        width: params.coordSys.width,
+        height: params.coordSys.height
+      });
+      if (zrRect) {
+        zrRect.r = 5;
+      }
+      return zrRect;
+    },
+    getStyle: function(color1, color2) {
+      return {
+        fill: {
+          type: "linear",
+          x: 0,
+          y: 0,
+          x2: 1,
+          y2: 0,
+          colorStops: [{
+            offset: 0,
+            color: color1
+          }, {
+            offset: 1,
+            color: color2
+          }],
+          global: false
+        }
+      };
+    },
+    renderItem: function(params, api) {
+      if (api.value(1) === null && api.value(5) === null) {
+        return void 0;
+      }
+      const categoryIndex = api.value(0);
+      const height = api.size([0, 1])[1] * 3 / 10;
+      const today = DateTime.now().startOf("day").toMillis();
+      let dddRectShapeSE = void 0;
+      let dddRectShapeE = void 0;
+      let dddRectShapeN = void 0;
+      let dddRectShapeL = void 0;
+      let dddRectShapeIL = void 0;
+      if (api.value(1)) {
+        const dH = -height;
+        if (api.value(1) > today) {
+          dddRectShapeSE = this.calcShape(params, api, today, api.value(1), categoryIndex, height, dH);
+        }
+        dddRectShapeE = this.calcShape(params, api, api.value(1), api.value(2), categoryIndex, height, dH);
+        dddRectShapeN = this.calcShape(params, api, api.value(2), api.value(3), categoryIndex, height, dH);
+        dddRectShapeL = this.calcShape(params, api, api.value(3), api.value(4), categoryIndex, height, dH);
+        dddRectShapeIL = this.calcShape(params, api, api.value(4), api.value(5), categoryIndex, height, dH);
+      }
+      let deadlineRectShapeSE = void 0;
+      let deadlineRectShapeE = void 0;
+      let deadlineRectShapeN = void 0;
+      let deadlineRectShapeL = void 0;
+      let deadlineRectShapeIL = void 0;
+      if (api.value(6)) {
+        const dH = height * 0.1;
+        if (api.value(6) > today) {
+          deadlineRectShapeSE = this.calcShape(params, api, today, api.value(6), categoryIndex, height, dH);
+        }
+        deadlineRectShapeE = this.calcShape(params, api, api.value(6), api.value(7), categoryIndex, height, dH);
+        deadlineRectShapeN = this.calcShape(params, api, api.value(7), api.value(8), categoryIndex, height, dH);
+        deadlineRectShapeL = this.calcShape(params, api, api.value(8), api.value(9), categoryIndex, height, dH);
+        deadlineRectShapeIL = this.calcShape(params, api, api.value(9), api.value(10), categoryIndex, height, dH);
+      }
+      const styleSE = this.getStyle("#4060ff", "#40ccff");
+      const styleE = this.getStyle("#40ccff", "#40FF40");
+      const styleN = this.getStyle("#40FF40", "#ff9f40");
+      const styleL = this.getStyle("#ff9f40", "#ff4040");
+      const styleIL = this.getStyle("#ff4040", "#802020");
+      return {
+        type: "group",
+        children: [
+          {
+            type: "rect",
+            ignore: !dddRectShapeSE,
+            shape: dddRectShapeSE,
+            style: styleSE
+          },
+          {
+            type: "rect",
+            ignore: !dddRectShapeE,
+            shape: dddRectShapeE,
+            style: styleE
+          },
+          {
+            type: "rect",
+            ignore: !dddRectShapeN,
+            shape: dddRectShapeN,
+            style: styleN
+          },
+          {
+            type: "rect",
+            ignore: !dddRectShapeL,
+            shape: dddRectShapeL,
+            style: styleL
+          },
+          {
+            type: "rect",
+            ignore: !dddRectShapeIL,
+            shape: dddRectShapeIL,
+            style: styleIL
+          },
+          {
+            type: "rect",
+            ignore: !deadlineRectShapeSE,
+            shape: deadlineRectShapeSE,
+            style: styleSE
+          },
+          {
+            type: "rect",
+            ignore: !deadlineRectShapeE,
+            shape: deadlineRectShapeE,
+            style: styleE
+          },
+          {
+            type: "rect",
+            ignore: !deadlineRectShapeN,
+            shape: deadlineRectShapeN,
+            style: styleN
+          },
+          {
+            type: "rect",
+            ignore: !deadlineRectShapeL,
+            shape: deadlineRectShapeL,
+            style: styleL
+          },
+          {
+            type: "rect",
+            ignore: !deadlineRectShapeIL,
+            shape: deadlineRectShapeIL,
+            style: styleIL
+          }
+        ]
+      };
+    },
     calcSLR: function(issue) {
       var _a2;
       let slr = {
@@ -59611,16 +68270,20 @@ const _sfc_main$e = {
           let distribution = this.formatDistribution(ltd.used.tail);
           this.recalcCoSCoord(cos, ltd.used.tail, dates, sdr.worst);
           r.push({
-            i: this.calcWeight(cos, dates),
+            i: this.calcWeight(cos, sdr),
             issueKey,
             issueSummary: issue.summary,
             val: val.str,
             valIndex: val.index,
             slr: slr.str,
             ddd: dates.combinedStr,
+            dddVal: dates.ddd,
+            deadlineVal: dates.deadline,
             size: this.calcIssuesizeName(size2),
             ltd: ltd.str,
+            ltdVal: ltd.used,
             sdr: sdr.worstStr,
+            sdrNormal: sdr.combinedNormalStr,
             sdrIndex: sdr.worst,
             primaryCoS: cos.primaryCoS.str,
             distribution,
@@ -59639,14 +68302,14 @@ const _sfc_main$e = {
         return size2;
       }
     },
-    calcWeight(cos, dates) {
+    calcWeight(cos, sdr) {
       let res = (4 - cos.cos.index) * 1e6;
-      if (dates.deadlineDiff !== null) {
+      if (sdr.deadlineNormal) {
         res += 75e4;
-        res -= dates.deadlineDiff.as("days");
-      } else if (dates.dddDiff !== null) {
+        res -= sdr.deadlineNormal.diff(DateTime.now()).as("days");
+      } else if (sdr.dddNormal) {
         res += 25e4;
-        res -= dates.dddDiff.as("days");
+        res -= sdr.dddNormal.diff(DateTime.now()).as("days");
       }
       return res;
     },
@@ -59785,7 +68448,10 @@ const _sfc_main$e = {
       });
     },
     formatDateDiff(diff2) {
-      return diff2.rescale().toHuman({ listStyle: "long" });
+      if (diff2.as("days") === 0) {
+        return this.$t("triage.today");
+      }
+      return diff2.normalize().rescale().toHuman({ listStyle: "long" });
     },
     formatVAL(valueALIndex) {
       let valIndex = Math.round(valueALIndex);
@@ -59869,9 +68535,31 @@ const _sfc_main$e = {
         deadline: calcSDR(dates.deadlineDiff)
       };
       sdr.worst = Math.max(sdr.ddd, sdr.deadline);
+      if (dates.ddd) {
+        sdr.dddNormal = dates.ddd.minus({ days: ltd.ranges.max }).startOf("day");
+      }
+      if (dates.deadline) {
+        sdr.deadlineNormal = dates.deadline.minus({ days: ltd.ranges.max }).startOf("day");
+      }
       sdr.dddStr = this.formatStartDateRange(sdr.ddd);
       sdr.deadlineStr = this.formatStartDateRange(sdr.deadline);
       sdr.worstStr = this.formatStartDateRange(sdr.worst);
+      if (sdr.dddNormal) {
+        const diff2 = sdr.dddNormal.diff(DateTime.now().startOf("day"));
+        sdr.dddNormalStr = sdr.dddNormal.toLocaleString(DateTime.DATE_SHORT) + " (" + this.formatDateDiff(diff2) + ")";
+      } else {
+        sdr.dddNormalStr = '<span class="triage-table-gray">' + this.$t("triage.desired-delivered-date.normal.none") + "</span>";
+      }
+      if (sdr.deadlineNormal) {
+        const diff2 = sdr.deadlineNormal.diff(DateTime.now().startOf("day"));
+        sdr.deadlineNormalStr = sdr.deadlineNormal.toLocaleString(DateTime.DATE_SHORT) + " (" + this.formatDateDiff(diff2) + ")";
+      } else {
+        sdr.deadlineNormalStr = '<span class="triage-table-gray">' + this.$t("triage.desired-delivered-date.normal.none") + "</span>";
+      }
+      sdr.combinedNormalStr = this.$t("triage.desired-delivered-date.combined", {
+        ddd: sdr.dddNormalStr,
+        deadline: sdr.deadlineNormalStr
+      });
       return sdr;
     },
     formatStartDateRange(sdr) {
@@ -59993,9 +68681,9 @@ const _hoisted_11$2 = ["innerHTML"];
 const _hoisted_12$2 = ["innerHTML"];
 const _hoisted_13$2 = ["innerHTML"];
 const _hoisted_14$2 = ["innerHTML"];
-const _hoisted_15$2 = ["title"];
-const _hoisted_16$2 = ["href"];
-const _hoisted_17$2 = ["innerHTML"];
+const _hoisted_15$2 = ["innerHTML"];
+const _hoisted_16$2 = ["title"];
+const _hoisted_17$2 = ["href"];
 const _hoisted_18$1 = ["innerHTML"];
 const _hoisted_19$1 = ["innerHTML"];
 const _hoisted_20 = ["innerHTML"];
@@ -60004,8 +68692,11 @@ const _hoisted_22 = ["innerHTML"];
 const _hoisted_23 = ["innerHTML"];
 const _hoisted_24 = ["innerHTML"];
 const _hoisted_25 = ["innerHTML"];
-const _hoisted_26 = ["title", "href"];
+const _hoisted_26 = ["innerHTML"];
+const _hoisted_27 = ["innerHTML"];
+const _hoisted_28 = ["title", "href"];
 function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
     createBaseVNode("div", _hoisted_1$e, [
       createBaseVNode("div", {
@@ -60061,7 +68752,11 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
             createBaseVNode("th", {
               class: "triage-table-th",
               innerHTML: this.$t("triage.column.class-of-service")
-            }, null, 8, _hoisted_14$2)
+            }, null, 8, _hoisted_14$2),
+            createBaseVNode("th", {
+              class: "triage-table-th",
+              innerHTML: this.$t("triage.column.sdr-normal")
+            }, null, 8, _hoisted_15$2)
           ])
         ]),
         createBaseVNode("tbody", null, [
@@ -60073,55 +68768,64 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
               }, [
                 createBaseVNode("a", {
                   href: $props.jiraBase + "/browse/" + row.issueKey
-                }, toDisplayString$1(row.issueKey), 9, _hoisted_16$2)
-              ], 8, _hoisted_15$2),
+                }, toDisplayString$1(row.issueKey), 9, _hoisted_17$2)
+              ], 8, _hoisted_16$2),
               createBaseVNode("td", {
                 class: normalizeClass(["triage-table-td", "triage-table-td-val-" + row.valIndex]),
                 innerHTML: row.val
-              }, null, 10, _hoisted_17$2),
+              }, null, 10, _hoisted_18$1),
               createBaseVNode("td", {
                 class: "triage-table-td",
                 innerHTML: row.slr
-              }, null, 8, _hoisted_18$1),
-              createBaseVNode("td", {
-                class: "triage-table-td",
-                innerHTML: row.ddd
               }, null, 8, _hoisted_19$1),
               createBaseVNode("td", {
                 class: "triage-table-td",
-                innerHTML: row.size
+                innerHTML: row.ddd
               }, null, 8, _hoisted_20),
               createBaseVNode("td", {
                 class: "triage-table-td",
-                innerHTML: row.ltd
+                innerHTML: row.size
               }, null, 8, _hoisted_21),
+              createBaseVNode("td", {
+                class: "triage-table-td",
+                innerHTML: row.ltd
+              }, null, 8, _hoisted_22),
               createBaseVNode("td", {
                 class: normalizeClass(["triage-table-td", "triage-table-td-sdr-" + row.sdrIndex]),
                 innerHTML: row.sdr
-              }, null, 10, _hoisted_22),
+              }, null, 10, _hoisted_23),
               createBaseVNode("td", {
                 class: "triage-table-td",
                 innerHTML: row.primaryCoS
-              }, null, 8, _hoisted_23),
+              }, null, 8, _hoisted_24),
               createBaseVNode("td", {
                 class: "triage-table-td",
                 innerHTML: row.distribution
-              }, null, 8, _hoisted_24),
+              }, null, 8, _hoisted_25),
               createBaseVNode("td", {
                 class: normalizeClass(["triage-table-td", "triage-table-td-cos-" + row.cosIndex]),
                 innerHTML: row.cos
-              }, null, 10, _hoisted_25)
+              }, null, 10, _hoisted_26),
+              createBaseVNode("td", {
+                class: "triage-table-td",
+                innerHTML: row.sdrNormal
+              }, null, 8, _hoisted_27)
             ]);
           }), 256))
         ])
       ])) : createCommentVNode("", true)
     ]),
+    createVNode(_component_v_chart, {
+      class: "triage-chart",
+      option: $options.option,
+      autoresize: ""
+    }, null, 8, ["option"]),
     createBaseVNode("a", {
       class: "icon-info-down",
       title: _ctx.$t("triage.help.text"),
       href: _ctx.$t("triage.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_26)
+    }, " ‽ ", 8, _hoisted_28)
   ], 64);
 }
 const TriageTable = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render$d]]);
@@ -60370,7 +69074,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
 const JiraColumnStatus = /* @__PURE__ */ _export_sfc$1(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-d67583f4"]]);
 var _a;
 const isClient = typeof window !== "undefined";
-const isString$1 = (val) => typeof val === "string";
+const isString = (val) => typeof val === "string";
 const noop = () => {
 };
 isClient && ((_a = window == null ? void 0 : window.navigator) == null ? void 0 : _a.userAgent) && /iP(ad|hone|od)/.test(window.navigator.userAgent);
@@ -60401,7 +69105,7 @@ function useEventListener(...args) {
   let events;
   let listeners;
   let options;
-  if (isString$1(args[0]) || Array.isArray(args[0])) {
+  if (isString(args[0]) || Array.isArray(args[0])) {
     [events, listeners, options] = args;
     target = defaultWindow;
   } else {
@@ -62344,7 +71048,7 @@ const Io = ["innerHTML"], No = /* @__PURE__ */ defineComponent({
       renderList(d.slots, (f, v) => ({
         name: v,
         fn: withCtx(() => [
-          unref(isString$1)(f) ? (openBlock(), createElementBlock("div", {
+          unref(isString)(f) ? (openBlock(), createElementBlock("div", {
             key: 0,
             innerHTML: f
           }, null, 8, Io)) : "component" in f ? (openBlock(), createBlock(resolveDynamicComponent(f.component), normalizeProps(mergeProps({ key: 1 }, f.attrs)), null, 16)) : (openBlock(), createBlock(resolveDynamicComponent(f), { key: 2 }))
@@ -62678,5538 +71382,6 @@ function F(e2, t, n2, d, r, s2) {
 }
 const y = /* @__PURE__ */ w(E, [["render", F]]);
 const VueSearchSelect = "";
-/*!
-  * shared v9.2.2
-  * (c) 2022 kazuya kawaguchi
-  * Released under the MIT License.
-  */
-const inBrowser = typeof window !== "undefined";
-const hasSymbol = typeof Symbol === "function" && typeof Symbol.toStringTag === "symbol";
-const makeSymbol = (name) => hasSymbol ? Symbol(name) : name;
-const generateFormatCacheKey = (locale, key, source) => friendlyJSONstringify({ l: locale, k: key, s: source });
-const friendlyJSONstringify = (json) => JSON.stringify(json).replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029").replace(/\u0027/g, "\\u0027");
-const isNumber = (val) => typeof val === "number" && isFinite(val);
-const isDate = (val) => toTypeString(val) === "[object Date]";
-const isRegExp = (val) => toTypeString(val) === "[object RegExp]";
-const isEmptyObject = (val) => isPlainObject(val) && Object.keys(val).length === 0;
-function warn(msg, err) {
-  if (typeof console !== "undefined") {
-    console.warn(`[intlify] ` + msg);
-    if (err) {
-      console.warn(err.stack);
-    }
-  }
-}
-const assign = Object.assign;
-let _globalThis;
-const getGlobalThis = () => {
-  return _globalThis || (_globalThis = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : {});
-};
-function escapeHtml(rawText) {
-  return rawText.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
-}
-const hasOwnProperty = Object.prototype.hasOwnProperty;
-function hasOwn(obj, key) {
-  return hasOwnProperty.call(obj, key);
-}
-const isArray = Array.isArray;
-const isFunction = (val) => typeof val === "function";
-const isString = (val) => typeof val === "string";
-const isBoolean = (val) => typeof val === "boolean";
-const isObject = (val) => (
-  // eslint-disable-line
-  val !== null && typeof val === "object"
-);
-const objectToString = Object.prototype.toString;
-const toTypeString = (value) => objectToString.call(value);
-const isPlainObject = (val) => toTypeString(val) === "[object Object]";
-const toDisplayString = (val) => {
-  return val == null ? "" : isArray(val) || isPlainObject(val) && val.toString === objectToString ? JSON.stringify(val, null, 2) : String(val);
-};
-/*!
-  * message-compiler v9.2.2
-  * (c) 2022 kazuya kawaguchi
-  * Released under the MIT License.
-  */
-const CompileErrorCodes = {
-  // tokenizer error codes
-  EXPECTED_TOKEN: 1,
-  INVALID_TOKEN_IN_PLACEHOLDER: 2,
-  UNTERMINATED_SINGLE_QUOTE_IN_PLACEHOLDER: 3,
-  UNKNOWN_ESCAPE_SEQUENCE: 4,
-  INVALID_UNICODE_ESCAPE_SEQUENCE: 5,
-  UNBALANCED_CLOSING_BRACE: 6,
-  UNTERMINATED_CLOSING_BRACE: 7,
-  EMPTY_PLACEHOLDER: 8,
-  NOT_ALLOW_NEST_PLACEHOLDER: 9,
-  INVALID_LINKED_FORMAT: 10,
-  // parser error codes
-  MUST_HAVE_MESSAGES_IN_PLURAL: 11,
-  UNEXPECTED_EMPTY_LINKED_MODIFIER: 12,
-  UNEXPECTED_EMPTY_LINKED_KEY: 13,
-  UNEXPECTED_LEXICAL_ANALYSIS: 14,
-  // Special value for higher-order compilers to pick up the last code
-  // to avoid collision of error codes. This should always be kept as the last
-  // item.
-  __EXTEND_POINT__: 15
-};
-function createCompileError(code2, loc, options = {}) {
-  const { domain, messages: messages2, args } = options;
-  const msg = code2;
-  const error = new SyntaxError(String(msg));
-  error.code = code2;
-  if (loc) {
-    error.location = loc;
-  }
-  error.domain = domain;
-  return error;
-}
-function defaultOnError(error) {
-  throw error;
-}
-function createPosition(line, column, offset2) {
-  return { line, column, offset: offset2 };
-}
-function createLocation(start2, end2, source) {
-  const loc = { start: start2, end: end2 };
-  if (source != null) {
-    loc.source = source;
-  }
-  return loc;
-}
-const CHAR_SP = " ";
-const CHAR_CR = "\r";
-const CHAR_LF = "\n";
-const CHAR_LS = String.fromCharCode(8232);
-const CHAR_PS = String.fromCharCode(8233);
-function createScanner(str) {
-  const _buf = str;
-  let _index = 0;
-  let _line = 1;
-  let _column = 1;
-  let _peekOffset = 0;
-  const isCRLF = (index2) => _buf[index2] === CHAR_CR && _buf[index2 + 1] === CHAR_LF;
-  const isLF = (index2) => _buf[index2] === CHAR_LF;
-  const isPS = (index2) => _buf[index2] === CHAR_PS;
-  const isLS = (index2) => _buf[index2] === CHAR_LS;
-  const isLineEnd = (index2) => isCRLF(index2) || isLF(index2) || isPS(index2) || isLS(index2);
-  const index = () => _index;
-  const line = () => _line;
-  const column = () => _column;
-  const peekOffset = () => _peekOffset;
-  const charAt = (offset2) => isCRLF(offset2) || isPS(offset2) || isLS(offset2) ? CHAR_LF : _buf[offset2];
-  const currentChar = () => charAt(_index);
-  const currentPeek = () => charAt(_index + _peekOffset);
-  function next() {
-    _peekOffset = 0;
-    if (isLineEnd(_index)) {
-      _line++;
-      _column = 0;
-    }
-    if (isCRLF(_index)) {
-      _index++;
-    }
-    _index++;
-    _column++;
-    return _buf[_index];
-  }
-  function peek() {
-    if (isCRLF(_index + _peekOffset)) {
-      _peekOffset++;
-    }
-    _peekOffset++;
-    return _buf[_index + _peekOffset];
-  }
-  function reset() {
-    _index = 0;
-    _line = 1;
-    _column = 1;
-    _peekOffset = 0;
-  }
-  function resetPeek(offset2 = 0) {
-    _peekOffset = offset2;
-  }
-  function skipToPeek() {
-    const target = _index + _peekOffset;
-    while (target !== _index) {
-      next();
-    }
-    _peekOffset = 0;
-  }
-  return {
-    index,
-    line,
-    column,
-    peekOffset,
-    charAt,
-    currentChar,
-    currentPeek,
-    next,
-    peek,
-    reset,
-    resetPeek,
-    skipToPeek
-  };
-}
-const EOF = void 0;
-const LITERAL_DELIMITER = "'";
-const ERROR_DOMAIN$1 = "tokenizer";
-function createTokenizer(source, options = {}) {
-  const location = options.location !== false;
-  const _scnr = createScanner(source);
-  const currentOffset = () => _scnr.index();
-  const currentPosition = () => createPosition(_scnr.line(), _scnr.column(), _scnr.index());
-  const _initLoc = currentPosition();
-  const _initOffset = currentOffset();
-  const _context = {
-    currentType: 14,
-    offset: _initOffset,
-    startLoc: _initLoc,
-    endLoc: _initLoc,
-    lastType: 14,
-    lastOffset: _initOffset,
-    lastStartLoc: _initLoc,
-    lastEndLoc: _initLoc,
-    braceNest: 0,
-    inLinked: false,
-    text: ""
-  };
-  const context = () => _context;
-  const { onError } = options;
-  function emitError2(code2, pos, offset2, ...args) {
-    const ctx = context();
-    pos.column += offset2;
-    pos.offset += offset2;
-    if (onError) {
-      const loc = createLocation(ctx.startLoc, pos);
-      const err = createCompileError(code2, loc, {
-        domain: ERROR_DOMAIN$1,
-        args
-      });
-      onError(err);
-    }
-  }
-  function getToken(context2, type, value) {
-    context2.endLoc = currentPosition();
-    context2.currentType = type;
-    const token = { type };
-    if (location) {
-      token.loc = createLocation(context2.startLoc, context2.endLoc);
-    }
-    if (value != null) {
-      token.value = value;
-    }
-    return token;
-  }
-  const getEndToken = (context2) => getToken(
-    context2,
-    14
-    /* EOF */
-  );
-  function eat(scnr, ch) {
-    if (scnr.currentChar() === ch) {
-      scnr.next();
-      return ch;
-    } else {
-      emitError2(CompileErrorCodes.EXPECTED_TOKEN, currentPosition(), 0, ch);
-      return "";
-    }
-  }
-  function peekSpaces(scnr) {
-    let buf = "";
-    while (scnr.currentPeek() === CHAR_SP || scnr.currentPeek() === CHAR_LF) {
-      buf += scnr.currentPeek();
-      scnr.peek();
-    }
-    return buf;
-  }
-  function skipSpaces(scnr) {
-    const buf = peekSpaces(scnr);
-    scnr.skipToPeek();
-    return buf;
-  }
-  function isIdentifierStart(ch) {
-    if (ch === EOF) {
-      return false;
-    }
-    const cc = ch.charCodeAt(0);
-    return cc >= 97 && cc <= 122 || // a-z
-    cc >= 65 && cc <= 90 || // A-Z
-    cc === 95;
-  }
-  function isNumberStart(ch) {
-    if (ch === EOF) {
-      return false;
-    }
-    const cc = ch.charCodeAt(0);
-    return cc >= 48 && cc <= 57;
-  }
-  function isNamedIdentifierStart(scnr, context2) {
-    const { currentType } = context2;
-    if (currentType !== 2) {
-      return false;
-    }
-    peekSpaces(scnr);
-    const ret = isIdentifierStart(scnr.currentPeek());
-    scnr.resetPeek();
-    return ret;
-  }
-  function isListIdentifierStart(scnr, context2) {
-    const { currentType } = context2;
-    if (currentType !== 2) {
-      return false;
-    }
-    peekSpaces(scnr);
-    const ch = scnr.currentPeek() === "-" ? scnr.peek() : scnr.currentPeek();
-    const ret = isNumberStart(ch);
-    scnr.resetPeek();
-    return ret;
-  }
-  function isLiteralStart(scnr, context2) {
-    const { currentType } = context2;
-    if (currentType !== 2) {
-      return false;
-    }
-    peekSpaces(scnr);
-    const ret = scnr.currentPeek() === LITERAL_DELIMITER;
-    scnr.resetPeek();
-    return ret;
-  }
-  function isLinkedDotStart(scnr, context2) {
-    const { currentType } = context2;
-    if (currentType !== 8) {
-      return false;
-    }
-    peekSpaces(scnr);
-    const ret = scnr.currentPeek() === ".";
-    scnr.resetPeek();
-    return ret;
-  }
-  function isLinkedModifierStart(scnr, context2) {
-    const { currentType } = context2;
-    if (currentType !== 9) {
-      return false;
-    }
-    peekSpaces(scnr);
-    const ret = isIdentifierStart(scnr.currentPeek());
-    scnr.resetPeek();
-    return ret;
-  }
-  function isLinkedDelimiterStart(scnr, context2) {
-    const { currentType } = context2;
-    if (!(currentType === 8 || currentType === 12)) {
-      return false;
-    }
-    peekSpaces(scnr);
-    const ret = scnr.currentPeek() === ":";
-    scnr.resetPeek();
-    return ret;
-  }
-  function isLinkedReferStart(scnr, context2) {
-    const { currentType } = context2;
-    if (currentType !== 10) {
-      return false;
-    }
-    const fn = () => {
-      const ch = scnr.currentPeek();
-      if (ch === "{") {
-        return isIdentifierStart(scnr.peek());
-      } else if (ch === "@" || ch === "%" || ch === "|" || ch === ":" || ch === "." || ch === CHAR_SP || !ch) {
-        return false;
-      } else if (ch === CHAR_LF) {
-        scnr.peek();
-        return fn();
-      } else {
-        return isIdentifierStart(ch);
-      }
-    };
-    const ret = fn();
-    scnr.resetPeek();
-    return ret;
-  }
-  function isPluralStart(scnr) {
-    peekSpaces(scnr);
-    const ret = scnr.currentPeek() === "|";
-    scnr.resetPeek();
-    return ret;
-  }
-  function detectModuloStart(scnr) {
-    const spaces = peekSpaces(scnr);
-    const ret = scnr.currentPeek() === "%" && scnr.peek() === "{";
-    scnr.resetPeek();
-    return {
-      isModulo: ret,
-      hasSpace: spaces.length > 0
-    };
-  }
-  function isTextStart(scnr, reset = true) {
-    const fn = (hasSpace = false, prev = "", detectModulo = false) => {
-      const ch = scnr.currentPeek();
-      if (ch === "{") {
-        return prev === "%" ? false : hasSpace;
-      } else if (ch === "@" || !ch) {
-        return prev === "%" ? true : hasSpace;
-      } else if (ch === "%") {
-        scnr.peek();
-        return fn(hasSpace, "%", true);
-      } else if (ch === "|") {
-        return prev === "%" || detectModulo ? true : !(prev === CHAR_SP || prev === CHAR_LF);
-      } else if (ch === CHAR_SP) {
-        scnr.peek();
-        return fn(true, CHAR_SP, detectModulo);
-      } else if (ch === CHAR_LF) {
-        scnr.peek();
-        return fn(true, CHAR_LF, detectModulo);
-      } else {
-        return true;
-      }
-    };
-    const ret = fn();
-    reset && scnr.resetPeek();
-    return ret;
-  }
-  function takeChar(scnr, fn) {
-    const ch = scnr.currentChar();
-    if (ch === EOF) {
-      return EOF;
-    }
-    if (fn(ch)) {
-      scnr.next();
-      return ch;
-    }
-    return null;
-  }
-  function takeIdentifierChar(scnr) {
-    const closure = (ch) => {
-      const cc = ch.charCodeAt(0);
-      return cc >= 97 && cc <= 122 || // a-z
-      cc >= 65 && cc <= 90 || // A-Z
-      cc >= 48 && cc <= 57 || // 0-9
-      cc === 95 || // _
-      cc === 36;
-    };
-    return takeChar(scnr, closure);
-  }
-  function takeDigit(scnr) {
-    const closure = (ch) => {
-      const cc = ch.charCodeAt(0);
-      return cc >= 48 && cc <= 57;
-    };
-    return takeChar(scnr, closure);
-  }
-  function takeHexDigit(scnr) {
-    const closure = (ch) => {
-      const cc = ch.charCodeAt(0);
-      return cc >= 48 && cc <= 57 || // 0-9
-      cc >= 65 && cc <= 70 || // A-F
-      cc >= 97 && cc <= 102;
-    };
-    return takeChar(scnr, closure);
-  }
-  function getDigits(scnr) {
-    let ch = "";
-    let num = "";
-    while (ch = takeDigit(scnr)) {
-      num += ch;
-    }
-    return num;
-  }
-  function readModulo(scnr) {
-    skipSpaces(scnr);
-    const ch = scnr.currentChar();
-    if (ch !== "%") {
-      emitError2(CompileErrorCodes.EXPECTED_TOKEN, currentPosition(), 0, ch);
-    }
-    scnr.next();
-    return "%";
-  }
-  function readText(scnr) {
-    let buf = "";
-    while (true) {
-      const ch = scnr.currentChar();
-      if (ch === "{" || ch === "}" || ch === "@" || ch === "|" || !ch) {
-        break;
-      } else if (ch === "%") {
-        if (isTextStart(scnr)) {
-          buf += ch;
-          scnr.next();
-        } else {
-          break;
-        }
-      } else if (ch === CHAR_SP || ch === CHAR_LF) {
-        if (isTextStart(scnr)) {
-          buf += ch;
-          scnr.next();
-        } else if (isPluralStart(scnr)) {
-          break;
-        } else {
-          buf += ch;
-          scnr.next();
-        }
-      } else {
-        buf += ch;
-        scnr.next();
-      }
-    }
-    return buf;
-  }
-  function readNamedIdentifier(scnr) {
-    skipSpaces(scnr);
-    let ch = "";
-    let name = "";
-    while (ch = takeIdentifierChar(scnr)) {
-      name += ch;
-    }
-    if (scnr.currentChar() === EOF) {
-      emitError2(CompileErrorCodes.UNTERMINATED_CLOSING_BRACE, currentPosition(), 0);
-    }
-    return name;
-  }
-  function readListIdentifier(scnr) {
-    skipSpaces(scnr);
-    let value = "";
-    if (scnr.currentChar() === "-") {
-      scnr.next();
-      value += `-${getDigits(scnr)}`;
-    } else {
-      value += getDigits(scnr);
-    }
-    if (scnr.currentChar() === EOF) {
-      emitError2(CompileErrorCodes.UNTERMINATED_CLOSING_BRACE, currentPosition(), 0);
-    }
-    return value;
-  }
-  function readLiteral(scnr) {
-    skipSpaces(scnr);
-    eat(scnr, `'`);
-    let ch = "";
-    let literal = "";
-    const fn = (x2) => x2 !== LITERAL_DELIMITER && x2 !== CHAR_LF;
-    while (ch = takeChar(scnr, fn)) {
-      if (ch === "\\") {
-        literal += readEscapeSequence(scnr);
-      } else {
-        literal += ch;
-      }
-    }
-    const current = scnr.currentChar();
-    if (current === CHAR_LF || current === EOF) {
-      emitError2(CompileErrorCodes.UNTERMINATED_SINGLE_QUOTE_IN_PLACEHOLDER, currentPosition(), 0);
-      if (current === CHAR_LF) {
-        scnr.next();
-        eat(scnr, `'`);
-      }
-      return literal;
-    }
-    eat(scnr, `'`);
-    return literal;
-  }
-  function readEscapeSequence(scnr) {
-    const ch = scnr.currentChar();
-    switch (ch) {
-      case "\\":
-      case `'`:
-        scnr.next();
-        return `\\${ch}`;
-      case "u":
-        return readUnicodeEscapeSequence(scnr, ch, 4);
-      case "U":
-        return readUnicodeEscapeSequence(scnr, ch, 6);
-      default:
-        emitError2(CompileErrorCodes.UNKNOWN_ESCAPE_SEQUENCE, currentPosition(), 0, ch);
-        return "";
-    }
-  }
-  function readUnicodeEscapeSequence(scnr, unicode, digits) {
-    eat(scnr, unicode);
-    let sequence = "";
-    for (let i = 0; i < digits; i++) {
-      const ch = takeHexDigit(scnr);
-      if (!ch) {
-        emitError2(CompileErrorCodes.INVALID_UNICODE_ESCAPE_SEQUENCE, currentPosition(), 0, `\\${unicode}${sequence}${scnr.currentChar()}`);
-        break;
-      }
-      sequence += ch;
-    }
-    return `\\${unicode}${sequence}`;
-  }
-  function readInvalidIdentifier(scnr) {
-    skipSpaces(scnr);
-    let ch = "";
-    let identifiers = "";
-    const closure = (ch2) => ch2 !== "{" && ch2 !== "}" && ch2 !== CHAR_SP && ch2 !== CHAR_LF;
-    while (ch = takeChar(scnr, closure)) {
-      identifiers += ch;
-    }
-    return identifiers;
-  }
-  function readLinkedModifier(scnr) {
-    let ch = "";
-    let name = "";
-    while (ch = takeIdentifierChar(scnr)) {
-      name += ch;
-    }
-    return name;
-  }
-  function readLinkedRefer(scnr) {
-    const fn = (detect2 = false, buf) => {
-      const ch = scnr.currentChar();
-      if (ch === "{" || ch === "%" || ch === "@" || ch === "|" || !ch) {
-        return buf;
-      } else if (ch === CHAR_SP) {
-        return buf;
-      } else if (ch === CHAR_LF) {
-        buf += ch;
-        scnr.next();
-        return fn(detect2, buf);
-      } else {
-        buf += ch;
-        scnr.next();
-        return fn(true, buf);
-      }
-    };
-    return fn(false, "");
-  }
-  function readPlural(scnr) {
-    skipSpaces(scnr);
-    const plural = eat(
-      scnr,
-      "|"
-      /* Pipe */
-    );
-    skipSpaces(scnr);
-    return plural;
-  }
-  function readTokenInPlaceholder(scnr, context2) {
-    let token = null;
-    const ch = scnr.currentChar();
-    switch (ch) {
-      case "{":
-        if (context2.braceNest >= 1) {
-          emitError2(CompileErrorCodes.NOT_ALLOW_NEST_PLACEHOLDER, currentPosition(), 0);
-        }
-        scnr.next();
-        token = getToken(
-          context2,
-          2,
-          "{"
-          /* BraceLeft */
-        );
-        skipSpaces(scnr);
-        context2.braceNest++;
-        return token;
-      case "}":
-        if (context2.braceNest > 0 && context2.currentType === 2) {
-          emitError2(CompileErrorCodes.EMPTY_PLACEHOLDER, currentPosition(), 0);
-        }
-        scnr.next();
-        token = getToken(
-          context2,
-          3,
-          "}"
-          /* BraceRight */
-        );
-        context2.braceNest--;
-        context2.braceNest > 0 && skipSpaces(scnr);
-        if (context2.inLinked && context2.braceNest === 0) {
-          context2.inLinked = false;
-        }
-        return token;
-      case "@":
-        if (context2.braceNest > 0) {
-          emitError2(CompileErrorCodes.UNTERMINATED_CLOSING_BRACE, currentPosition(), 0);
-        }
-        token = readTokenInLinked(scnr, context2) || getEndToken(context2);
-        context2.braceNest = 0;
-        return token;
-      default:
-        let validNamedIdentifier = true;
-        let validListIdentifier = true;
-        let validLiteral = true;
-        if (isPluralStart(scnr)) {
-          if (context2.braceNest > 0) {
-            emitError2(CompileErrorCodes.UNTERMINATED_CLOSING_BRACE, currentPosition(), 0);
-          }
-          token = getToken(context2, 1, readPlural(scnr));
-          context2.braceNest = 0;
-          context2.inLinked = false;
-          return token;
-        }
-        if (context2.braceNest > 0 && (context2.currentType === 5 || context2.currentType === 6 || context2.currentType === 7)) {
-          emitError2(CompileErrorCodes.UNTERMINATED_CLOSING_BRACE, currentPosition(), 0);
-          context2.braceNest = 0;
-          return readToken(scnr, context2);
-        }
-        if (validNamedIdentifier = isNamedIdentifierStart(scnr, context2)) {
-          token = getToken(context2, 5, readNamedIdentifier(scnr));
-          skipSpaces(scnr);
-          return token;
-        }
-        if (validListIdentifier = isListIdentifierStart(scnr, context2)) {
-          token = getToken(context2, 6, readListIdentifier(scnr));
-          skipSpaces(scnr);
-          return token;
-        }
-        if (validLiteral = isLiteralStart(scnr, context2)) {
-          token = getToken(context2, 7, readLiteral(scnr));
-          skipSpaces(scnr);
-          return token;
-        }
-        if (!validNamedIdentifier && !validListIdentifier && !validLiteral) {
-          token = getToken(context2, 13, readInvalidIdentifier(scnr));
-          emitError2(CompileErrorCodes.INVALID_TOKEN_IN_PLACEHOLDER, currentPosition(), 0, token.value);
-          skipSpaces(scnr);
-          return token;
-        }
-        break;
-    }
-    return token;
-  }
-  function readTokenInLinked(scnr, context2) {
-    const { currentType } = context2;
-    let token = null;
-    const ch = scnr.currentChar();
-    if ((currentType === 8 || currentType === 9 || currentType === 12 || currentType === 10) && (ch === CHAR_LF || ch === CHAR_SP)) {
-      emitError2(CompileErrorCodes.INVALID_LINKED_FORMAT, currentPosition(), 0);
-    }
-    switch (ch) {
-      case "@":
-        scnr.next();
-        token = getToken(
-          context2,
-          8,
-          "@"
-          /* LinkedAlias */
-        );
-        context2.inLinked = true;
-        return token;
-      case ".":
-        skipSpaces(scnr);
-        scnr.next();
-        return getToken(
-          context2,
-          9,
-          "."
-          /* LinkedDot */
-        );
-      case ":":
-        skipSpaces(scnr);
-        scnr.next();
-        return getToken(
-          context2,
-          10,
-          ":"
-          /* LinkedDelimiter */
-        );
-      default:
-        if (isPluralStart(scnr)) {
-          token = getToken(context2, 1, readPlural(scnr));
-          context2.braceNest = 0;
-          context2.inLinked = false;
-          return token;
-        }
-        if (isLinkedDotStart(scnr, context2) || isLinkedDelimiterStart(scnr, context2)) {
-          skipSpaces(scnr);
-          return readTokenInLinked(scnr, context2);
-        }
-        if (isLinkedModifierStart(scnr, context2)) {
-          skipSpaces(scnr);
-          return getToken(context2, 12, readLinkedModifier(scnr));
-        }
-        if (isLinkedReferStart(scnr, context2)) {
-          skipSpaces(scnr);
-          if (ch === "{") {
-            return readTokenInPlaceholder(scnr, context2) || token;
-          } else {
-            return getToken(context2, 11, readLinkedRefer(scnr));
-          }
-        }
-        if (currentType === 8) {
-          emitError2(CompileErrorCodes.INVALID_LINKED_FORMAT, currentPosition(), 0);
-        }
-        context2.braceNest = 0;
-        context2.inLinked = false;
-        return readToken(scnr, context2);
-    }
-  }
-  function readToken(scnr, context2) {
-    let token = {
-      type: 14
-      /* EOF */
-    };
-    if (context2.braceNest > 0) {
-      return readTokenInPlaceholder(scnr, context2) || getEndToken(context2);
-    }
-    if (context2.inLinked) {
-      return readTokenInLinked(scnr, context2) || getEndToken(context2);
-    }
-    const ch = scnr.currentChar();
-    switch (ch) {
-      case "{":
-        return readTokenInPlaceholder(scnr, context2) || getEndToken(context2);
-      case "}":
-        emitError2(CompileErrorCodes.UNBALANCED_CLOSING_BRACE, currentPosition(), 0);
-        scnr.next();
-        return getToken(
-          context2,
-          3,
-          "}"
-          /* BraceRight */
-        );
-      case "@":
-        return readTokenInLinked(scnr, context2) || getEndToken(context2);
-      default:
-        if (isPluralStart(scnr)) {
-          token = getToken(context2, 1, readPlural(scnr));
-          context2.braceNest = 0;
-          context2.inLinked = false;
-          return token;
-        }
-        const { isModulo, hasSpace } = detectModuloStart(scnr);
-        if (isModulo) {
-          return hasSpace ? getToken(context2, 0, readText(scnr)) : getToken(context2, 4, readModulo(scnr));
-        }
-        if (isTextStart(scnr)) {
-          return getToken(context2, 0, readText(scnr));
-        }
-        break;
-    }
-    return token;
-  }
-  function nextToken() {
-    const { currentType, offset: offset2, startLoc, endLoc } = _context;
-    _context.lastType = currentType;
-    _context.lastOffset = offset2;
-    _context.lastStartLoc = startLoc;
-    _context.lastEndLoc = endLoc;
-    _context.offset = currentOffset();
-    _context.startLoc = currentPosition();
-    if (_scnr.currentChar() === EOF) {
-      return getToken(
-        _context,
-        14
-        /* EOF */
-      );
-    }
-    return readToken(_scnr, _context);
-  }
-  return {
-    nextToken,
-    currentOffset,
-    currentPosition,
-    context
-  };
-}
-const ERROR_DOMAIN = "parser";
-const KNOWN_ESCAPES = /(?:\\\\|\\'|\\u([0-9a-fA-F]{4})|\\U([0-9a-fA-F]{6}))/g;
-function fromEscapeSequence(match2, codePoint4, codePoint6) {
-  switch (match2) {
-    case `\\\\`:
-      return `\\`;
-    case `\\'`:
-      return `'`;
-    default: {
-      const codePoint = parseInt(codePoint4 || codePoint6, 16);
-      if (codePoint <= 55295 || codePoint >= 57344) {
-        return String.fromCodePoint(codePoint);
-      }
-      return "�";
-    }
-  }
-}
-function createParser(options = {}) {
-  const location = options.location !== false;
-  const { onError } = options;
-  function emitError2(tokenzer, code2, start2, offset2, ...args) {
-    const end2 = tokenzer.currentPosition();
-    end2.offset += offset2;
-    end2.column += offset2;
-    if (onError) {
-      const loc = createLocation(start2, end2);
-      const err = createCompileError(code2, loc, {
-        domain: ERROR_DOMAIN,
-        args
-      });
-      onError(err);
-    }
-  }
-  function startNode(type, offset2, loc) {
-    const node = {
-      type,
-      start: offset2,
-      end: offset2
-    };
-    if (location) {
-      node.loc = { start: loc, end: loc };
-    }
-    return node;
-  }
-  function endNode(node, offset2, pos, type) {
-    node.end = offset2;
-    if (type) {
-      node.type = type;
-    }
-    if (location && node.loc) {
-      node.loc.end = pos;
-    }
-  }
-  function parseText2(tokenizer, value) {
-    const context = tokenizer.context();
-    const node = startNode(3, context.offset, context.startLoc);
-    node.value = value;
-    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
-    return node;
-  }
-  function parseList(tokenizer, index) {
-    const context = tokenizer.context();
-    const { lastOffset: offset2, lastStartLoc: loc } = context;
-    const node = startNode(5, offset2, loc);
-    node.index = parseInt(index, 10);
-    tokenizer.nextToken();
-    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
-    return node;
-  }
-  function parseNamed(tokenizer, key) {
-    const context = tokenizer.context();
-    const { lastOffset: offset2, lastStartLoc: loc } = context;
-    const node = startNode(4, offset2, loc);
-    node.key = key;
-    tokenizer.nextToken();
-    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
-    return node;
-  }
-  function parseLiteral(tokenizer, value) {
-    const context = tokenizer.context();
-    const { lastOffset: offset2, lastStartLoc: loc } = context;
-    const node = startNode(9, offset2, loc);
-    node.value = value.replace(KNOWN_ESCAPES, fromEscapeSequence);
-    tokenizer.nextToken();
-    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
-    return node;
-  }
-  function parseLinkedModifier(tokenizer) {
-    const token = tokenizer.nextToken();
-    const context = tokenizer.context();
-    const { lastOffset: offset2, lastStartLoc: loc } = context;
-    const node = startNode(8, offset2, loc);
-    if (token.type !== 12) {
-      emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_EMPTY_LINKED_MODIFIER, context.lastStartLoc, 0);
-      node.value = "";
-      endNode(node, offset2, loc);
-      return {
-        nextConsumeToken: token,
-        node
-      };
-    }
-    if (token.value == null) {
-      emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
-    }
-    node.value = token.value || "";
-    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
-    return {
-      node
-    };
-  }
-  function parseLinkedKey(tokenizer, value) {
-    const context = tokenizer.context();
-    const node = startNode(7, context.offset, context.startLoc);
-    node.value = value;
-    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
-    return node;
-  }
-  function parseLinked(tokenizer) {
-    const context = tokenizer.context();
-    const linkedNode = startNode(6, context.offset, context.startLoc);
-    let token = tokenizer.nextToken();
-    if (token.type === 9) {
-      const parsed = parseLinkedModifier(tokenizer);
-      linkedNode.modifier = parsed.node;
-      token = parsed.nextConsumeToken || tokenizer.nextToken();
-    }
-    if (token.type !== 10) {
-      emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
-    }
-    token = tokenizer.nextToken();
-    if (token.type === 2) {
-      token = tokenizer.nextToken();
-    }
-    switch (token.type) {
-      case 11:
-        if (token.value == null) {
-          emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
-        }
-        linkedNode.key = parseLinkedKey(tokenizer, token.value || "");
-        break;
-      case 5:
-        if (token.value == null) {
-          emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
-        }
-        linkedNode.key = parseNamed(tokenizer, token.value || "");
-        break;
-      case 6:
-        if (token.value == null) {
-          emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
-        }
-        linkedNode.key = parseList(tokenizer, token.value || "");
-        break;
-      case 7:
-        if (token.value == null) {
-          emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
-        }
-        linkedNode.key = parseLiteral(tokenizer, token.value || "");
-        break;
-      default:
-        emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_EMPTY_LINKED_KEY, context.lastStartLoc, 0);
-        const nextContext = tokenizer.context();
-        const emptyLinkedKeyNode = startNode(7, nextContext.offset, nextContext.startLoc);
-        emptyLinkedKeyNode.value = "";
-        endNode(emptyLinkedKeyNode, nextContext.offset, nextContext.startLoc);
-        linkedNode.key = emptyLinkedKeyNode;
-        endNode(linkedNode, nextContext.offset, nextContext.startLoc);
-        return {
-          nextConsumeToken: token,
-          node: linkedNode
-        };
-    }
-    endNode(linkedNode, tokenizer.currentOffset(), tokenizer.currentPosition());
-    return {
-      node: linkedNode
-    };
-  }
-  function parseMessage(tokenizer) {
-    const context = tokenizer.context();
-    const startOffset = context.currentType === 1 ? tokenizer.currentOffset() : context.offset;
-    const startLoc = context.currentType === 1 ? context.endLoc : context.startLoc;
-    const node = startNode(2, startOffset, startLoc);
-    node.items = [];
-    let nextToken = null;
-    do {
-      const token = nextToken || tokenizer.nextToken();
-      nextToken = null;
-      switch (token.type) {
-        case 0:
-          if (token.value == null) {
-            emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
-          }
-          node.items.push(parseText2(tokenizer, token.value || ""));
-          break;
-        case 6:
-          if (token.value == null) {
-            emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
-          }
-          node.items.push(parseList(tokenizer, token.value || ""));
-          break;
-        case 5:
-          if (token.value == null) {
-            emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
-          }
-          node.items.push(parseNamed(tokenizer, token.value || ""));
-          break;
-        case 7:
-          if (token.value == null) {
-            emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, getTokenCaption(token));
-          }
-          node.items.push(parseLiteral(tokenizer, token.value || ""));
-          break;
-        case 8:
-          const parsed = parseLinked(tokenizer);
-          node.items.push(parsed.node);
-          nextToken = parsed.nextConsumeToken || null;
-          break;
-      }
-    } while (context.currentType !== 14 && context.currentType !== 1);
-    const endOffset = context.currentType === 1 ? context.lastOffset : tokenizer.currentOffset();
-    const endLoc = context.currentType === 1 ? context.lastEndLoc : tokenizer.currentPosition();
-    endNode(node, endOffset, endLoc);
-    return node;
-  }
-  function parsePlural(tokenizer, offset2, loc, msgNode) {
-    const context = tokenizer.context();
-    let hasEmptyMessage = msgNode.items.length === 0;
-    const node = startNode(1, offset2, loc);
-    node.cases = [];
-    node.cases.push(msgNode);
-    do {
-      const msg = parseMessage(tokenizer);
-      if (!hasEmptyMessage) {
-        hasEmptyMessage = msg.items.length === 0;
-      }
-      node.cases.push(msg);
-    } while (context.currentType !== 14);
-    if (hasEmptyMessage) {
-      emitError2(tokenizer, CompileErrorCodes.MUST_HAVE_MESSAGES_IN_PLURAL, loc, 0);
-    }
-    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
-    return node;
-  }
-  function parseResource(tokenizer) {
-    const context = tokenizer.context();
-    const { offset: offset2, startLoc } = context;
-    const msgNode = parseMessage(tokenizer);
-    if (context.currentType === 14) {
-      return msgNode;
-    } else {
-      return parsePlural(tokenizer, offset2, startLoc, msgNode);
-    }
-  }
-  function parse2(source) {
-    const tokenizer = createTokenizer(source, assign({}, options));
-    const context = tokenizer.context();
-    const node = startNode(0, context.offset, context.startLoc);
-    if (location && node.loc) {
-      node.loc.source = source;
-    }
-    node.body = parseResource(tokenizer);
-    if (context.currentType !== 14) {
-      emitError2(tokenizer, CompileErrorCodes.UNEXPECTED_LEXICAL_ANALYSIS, context.lastStartLoc, 0, source[context.offset] || "");
-    }
-    endNode(node, tokenizer.currentOffset(), tokenizer.currentPosition());
-    return node;
-  }
-  return { parse: parse2 };
-}
-function getTokenCaption(token) {
-  if (token.type === 14) {
-    return "EOF";
-  }
-  const name = (token.value || "").replace(/\r?\n/gu, "\\n");
-  return name.length > 10 ? name.slice(0, 9) + "…" : name;
-}
-function createTransformer(ast, options = {}) {
-  const _context = {
-    ast,
-    helpers: /* @__PURE__ */ new Set()
-  };
-  const context = () => _context;
-  const helper = (name) => {
-    _context.helpers.add(name);
-    return name;
-  };
-  return { context, helper };
-}
-function traverseNodes(nodes, transformer) {
-  for (let i = 0; i < nodes.length; i++) {
-    traverseNode(nodes[i], transformer);
-  }
-}
-function traverseNode(node, transformer) {
-  switch (node.type) {
-    case 1:
-      traverseNodes(node.cases, transformer);
-      transformer.helper(
-        "plural"
-        /* PLURAL */
-      );
-      break;
-    case 2:
-      traverseNodes(node.items, transformer);
-      break;
-    case 6:
-      const linked = node;
-      traverseNode(linked.key, transformer);
-      transformer.helper(
-        "linked"
-        /* LINKED */
-      );
-      transformer.helper(
-        "type"
-        /* TYPE */
-      );
-      break;
-    case 5:
-      transformer.helper(
-        "interpolate"
-        /* INTERPOLATE */
-      );
-      transformer.helper(
-        "list"
-        /* LIST */
-      );
-      break;
-    case 4:
-      transformer.helper(
-        "interpolate"
-        /* INTERPOLATE */
-      );
-      transformer.helper(
-        "named"
-        /* NAMED */
-      );
-      break;
-  }
-}
-function transform2(ast, options = {}) {
-  const transformer = createTransformer(ast);
-  transformer.helper(
-    "normalize"
-    /* NORMALIZE */
-  );
-  ast.body && traverseNode(ast.body, transformer);
-  const context = transformer.context();
-  ast.helpers = Array.from(context.helpers);
-}
-function createCodeGenerator(ast, options) {
-  const { sourceMap, filename, breakLineCode, needIndent: _needIndent } = options;
-  const _context = {
-    source: ast.loc.source,
-    filename,
-    code: "",
-    column: 1,
-    line: 1,
-    offset: 0,
-    map: void 0,
-    breakLineCode,
-    needIndent: _needIndent,
-    indentLevel: 0
-  };
-  const context = () => _context;
-  function push2(code2, node) {
-    _context.code += code2;
-  }
-  function _newline(n2, withBreakLine = true) {
-    const _breakLineCode = withBreakLine ? breakLineCode : "";
-    push2(_needIndent ? _breakLineCode + `  `.repeat(n2) : _breakLineCode);
-  }
-  function indent(withNewLine = true) {
-    const level = ++_context.indentLevel;
-    withNewLine && _newline(level);
-  }
-  function deindent(withNewLine = true) {
-    const level = --_context.indentLevel;
-    withNewLine && _newline(level);
-  }
-  function newline() {
-    _newline(_context.indentLevel);
-  }
-  const helper = (key) => `_${key}`;
-  const needIndent = () => _context.needIndent;
-  return {
-    context,
-    push: push2,
-    indent,
-    deindent,
-    newline,
-    helper,
-    needIndent
-  };
-}
-function generateLinkedNode(generator, node) {
-  const { helper } = generator;
-  generator.push(`${helper(
-    "linked"
-    /* LINKED */
-  )}(`);
-  generateNode(generator, node.key);
-  if (node.modifier) {
-    generator.push(`, `);
-    generateNode(generator, node.modifier);
-    generator.push(`, _type`);
-  } else {
-    generator.push(`, undefined, _type`);
-  }
-  generator.push(`)`);
-}
-function generateMessageNode(generator, node) {
-  const { helper, needIndent } = generator;
-  generator.push(`${helper(
-    "normalize"
-    /* NORMALIZE */
-  )}([`);
-  generator.indent(needIndent());
-  const length = node.items.length;
-  for (let i = 0; i < length; i++) {
-    generateNode(generator, node.items[i]);
-    if (i === length - 1) {
-      break;
-    }
-    generator.push(", ");
-  }
-  generator.deindent(needIndent());
-  generator.push("])");
-}
-function generatePluralNode(generator, node) {
-  const { helper, needIndent } = generator;
-  if (node.cases.length > 1) {
-    generator.push(`${helper(
-      "plural"
-      /* PLURAL */
-    )}([`);
-    generator.indent(needIndent());
-    const length = node.cases.length;
-    for (let i = 0; i < length; i++) {
-      generateNode(generator, node.cases[i]);
-      if (i === length - 1) {
-        break;
-      }
-      generator.push(", ");
-    }
-    generator.deindent(needIndent());
-    generator.push(`])`);
-  }
-}
-function generateResource(generator, node) {
-  if (node.body) {
-    generateNode(generator, node.body);
-  } else {
-    generator.push("null");
-  }
-}
-function generateNode(generator, node) {
-  const { helper } = generator;
-  switch (node.type) {
-    case 0:
-      generateResource(generator, node);
-      break;
-    case 1:
-      generatePluralNode(generator, node);
-      break;
-    case 2:
-      generateMessageNode(generator, node);
-      break;
-    case 6:
-      generateLinkedNode(generator, node);
-      break;
-    case 8:
-      generator.push(JSON.stringify(node.value), node);
-      break;
-    case 7:
-      generator.push(JSON.stringify(node.value), node);
-      break;
-    case 5:
-      generator.push(`${helper(
-        "interpolate"
-        /* INTERPOLATE */
-      )}(${helper(
-        "list"
-        /* LIST */
-      )}(${node.index}))`, node);
-      break;
-    case 4:
-      generator.push(`${helper(
-        "interpolate"
-        /* INTERPOLATE */
-      )}(${helper(
-        "named"
-        /* NAMED */
-      )}(${JSON.stringify(node.key)}))`, node);
-      break;
-    case 9:
-      generator.push(JSON.stringify(node.value), node);
-      break;
-    case 3:
-      generator.push(JSON.stringify(node.value), node);
-      break;
-  }
-}
-const generate = (ast, options = {}) => {
-  const mode2 = isString(options.mode) ? options.mode : "normal";
-  const filename = isString(options.filename) ? options.filename : "message.intl";
-  const sourceMap = !!options.sourceMap;
-  const breakLineCode = options.breakLineCode != null ? options.breakLineCode : mode2 === "arrow" ? ";" : "\n";
-  const needIndent = options.needIndent ? options.needIndent : mode2 !== "arrow";
-  const helpers = ast.helpers || [];
-  const generator = createCodeGenerator(ast, {
-    mode: mode2,
-    filename,
-    sourceMap,
-    breakLineCode,
-    needIndent
-  });
-  generator.push(mode2 === "normal" ? `function __msg__ (ctx) {` : `(ctx) => {`);
-  generator.indent(needIndent);
-  if (helpers.length > 0) {
-    generator.push(`const { ${helpers.map((s2) => `${s2}: _${s2}`).join(", ")} } = ctx`);
-    generator.newline();
-  }
-  generator.push(`return `);
-  generateNode(generator, ast);
-  generator.deindent(needIndent);
-  generator.push(`}`);
-  const { code: code2, map: map2 } = generator.context();
-  return {
-    ast,
-    code: code2,
-    map: map2 ? map2.toJSON() : void 0
-    // eslint-disable-line @typescript-eslint/no-explicit-any
-  };
-};
-function baseCompile(source, options = {}) {
-  const assignedOptions = assign({}, options);
-  const parser = createParser(assignedOptions);
-  const ast = parser.parse(source);
-  transform2(ast, assignedOptions);
-  return generate(ast, assignedOptions);
-}
-/*!
-  * devtools-if v9.2.2
-  * (c) 2022 kazuya kawaguchi
-  * Released under the MIT License.
-  */
-const IntlifyDevToolsHooks = {
-  I18nInit: "i18n:init",
-  FunctionTranslate: "function:translate"
-};
-/*!
-  * core-base v9.2.2
-  * (c) 2022 kazuya kawaguchi
-  * Released under the MIT License.
-  */
-const pathStateMachine = [];
-pathStateMachine[
-  0
-  /* BEFORE_PATH */
-] = {
-  [
-    "w"
-    /* WORKSPACE */
-  ]: [
-    0
-    /* BEFORE_PATH */
-  ],
-  [
-    "i"
-    /* IDENT */
-  ]: [
-    3,
-    0
-    /* APPEND */
-  ],
-  [
-    "["
-    /* LEFT_BRACKET */
-  ]: [
-    4
-    /* IN_SUB_PATH */
-  ],
-  [
-    "o"
-    /* END_OF_FAIL */
-  ]: [
-    7
-    /* AFTER_PATH */
-  ]
-};
-pathStateMachine[
-  1
-  /* IN_PATH */
-] = {
-  [
-    "w"
-    /* WORKSPACE */
-  ]: [
-    1
-    /* IN_PATH */
-  ],
-  [
-    "."
-    /* DOT */
-  ]: [
-    2
-    /* BEFORE_IDENT */
-  ],
-  [
-    "["
-    /* LEFT_BRACKET */
-  ]: [
-    4
-    /* IN_SUB_PATH */
-  ],
-  [
-    "o"
-    /* END_OF_FAIL */
-  ]: [
-    7
-    /* AFTER_PATH */
-  ]
-};
-pathStateMachine[
-  2
-  /* BEFORE_IDENT */
-] = {
-  [
-    "w"
-    /* WORKSPACE */
-  ]: [
-    2
-    /* BEFORE_IDENT */
-  ],
-  [
-    "i"
-    /* IDENT */
-  ]: [
-    3,
-    0
-    /* APPEND */
-  ],
-  [
-    "0"
-    /* ZERO */
-  ]: [
-    3,
-    0
-    /* APPEND */
-  ]
-};
-pathStateMachine[
-  3
-  /* IN_IDENT */
-] = {
-  [
-    "i"
-    /* IDENT */
-  ]: [
-    3,
-    0
-    /* APPEND */
-  ],
-  [
-    "0"
-    /* ZERO */
-  ]: [
-    3,
-    0
-    /* APPEND */
-  ],
-  [
-    "w"
-    /* WORKSPACE */
-  ]: [
-    1,
-    1
-    /* PUSH */
-  ],
-  [
-    "."
-    /* DOT */
-  ]: [
-    2,
-    1
-    /* PUSH */
-  ],
-  [
-    "["
-    /* LEFT_BRACKET */
-  ]: [
-    4,
-    1
-    /* PUSH */
-  ],
-  [
-    "o"
-    /* END_OF_FAIL */
-  ]: [
-    7,
-    1
-    /* PUSH */
-  ]
-};
-pathStateMachine[
-  4
-  /* IN_SUB_PATH */
-] = {
-  [
-    "'"
-    /* SINGLE_QUOTE */
-  ]: [
-    5,
-    0
-    /* APPEND */
-  ],
-  [
-    '"'
-    /* DOUBLE_QUOTE */
-  ]: [
-    6,
-    0
-    /* APPEND */
-  ],
-  [
-    "["
-    /* LEFT_BRACKET */
-  ]: [
-    4,
-    2
-    /* INC_SUB_PATH_DEPTH */
-  ],
-  [
-    "]"
-    /* RIGHT_BRACKET */
-  ]: [
-    1,
-    3
-    /* PUSH_SUB_PATH */
-  ],
-  [
-    "o"
-    /* END_OF_FAIL */
-  ]: 8,
-  [
-    "l"
-    /* ELSE */
-  ]: [
-    4,
-    0
-    /* APPEND */
-  ]
-};
-pathStateMachine[
-  5
-  /* IN_SINGLE_QUOTE */
-] = {
-  [
-    "'"
-    /* SINGLE_QUOTE */
-  ]: [
-    4,
-    0
-    /* APPEND */
-  ],
-  [
-    "o"
-    /* END_OF_FAIL */
-  ]: 8,
-  [
-    "l"
-    /* ELSE */
-  ]: [
-    5,
-    0
-    /* APPEND */
-  ]
-};
-pathStateMachine[
-  6
-  /* IN_DOUBLE_QUOTE */
-] = {
-  [
-    '"'
-    /* DOUBLE_QUOTE */
-  ]: [
-    4,
-    0
-    /* APPEND */
-  ],
-  [
-    "o"
-    /* END_OF_FAIL */
-  ]: 8,
-  [
-    "l"
-    /* ELSE */
-  ]: [
-    6,
-    0
-    /* APPEND */
-  ]
-};
-const literalValueRE = /^\s?(?:true|false|-?[\d.]+|'[^']*'|"[^"]*")\s?$/;
-function isLiteral(exp) {
-  return literalValueRE.test(exp);
-}
-function stripQuotes(str) {
-  const a = str.charCodeAt(0);
-  const b2 = str.charCodeAt(str.length - 1);
-  return a === b2 && (a === 34 || a === 39) ? str.slice(1, -1) : str;
-}
-function getPathCharType(ch) {
-  if (ch === void 0 || ch === null) {
-    return "o";
-  }
-  const code2 = ch.charCodeAt(0);
-  switch (code2) {
-    case 91:
-    case 93:
-    case 46:
-    case 34:
-    case 39:
-      return ch;
-    case 95:
-    case 36:
-    case 45:
-      return "i";
-    case 9:
-    case 10:
-    case 13:
-    case 160:
-    case 65279:
-    case 8232:
-    case 8233:
-      return "w";
-  }
-  return "i";
-}
-function formatSubPath(path) {
-  const trimmed = path.trim();
-  if (path.charAt(0) === "0" && isNaN(parseInt(path))) {
-    return false;
-  }
-  return isLiteral(trimmed) ? stripQuotes(trimmed) : "*" + trimmed;
-}
-function parse(path) {
-  const keys2 = [];
-  let index = -1;
-  let mode2 = 0;
-  let subPathDepth = 0;
-  let c;
-  let key;
-  let newChar;
-  let type;
-  let transition;
-  let action;
-  let typeMap;
-  const actions2 = [];
-  actions2[
-    0
-    /* APPEND */
-  ] = () => {
-    if (key === void 0) {
-      key = newChar;
-    } else {
-      key += newChar;
-    }
-  };
-  actions2[
-    1
-    /* PUSH */
-  ] = () => {
-    if (key !== void 0) {
-      keys2.push(key);
-      key = void 0;
-    }
-  };
-  actions2[
-    2
-    /* INC_SUB_PATH_DEPTH */
-  ] = () => {
-    actions2[
-      0
-      /* APPEND */
-    ]();
-    subPathDepth++;
-  };
-  actions2[
-    3
-    /* PUSH_SUB_PATH */
-  ] = () => {
-    if (subPathDepth > 0) {
-      subPathDepth--;
-      mode2 = 4;
-      actions2[
-        0
-        /* APPEND */
-      ]();
-    } else {
-      subPathDepth = 0;
-      if (key === void 0) {
-        return false;
-      }
-      key = formatSubPath(key);
-      if (key === false) {
-        return false;
-      } else {
-        actions2[
-          1
-          /* PUSH */
-        ]();
-      }
-    }
-  };
-  function maybeUnescapeQuote() {
-    const nextChar = path[index + 1];
-    if (mode2 === 5 && nextChar === "'" || mode2 === 6 && nextChar === '"') {
-      index++;
-      newChar = "\\" + nextChar;
-      actions2[
-        0
-        /* APPEND */
-      ]();
-      return true;
-    }
-  }
-  while (mode2 !== null) {
-    index++;
-    c = path[index];
-    if (c === "\\" && maybeUnescapeQuote()) {
-      continue;
-    }
-    type = getPathCharType(c);
-    typeMap = pathStateMachine[mode2];
-    transition = typeMap[type] || typeMap[
-      "l"
-      /* ELSE */
-    ] || 8;
-    if (transition === 8) {
-      return;
-    }
-    mode2 = transition[0];
-    if (transition[1] !== void 0) {
-      action = actions2[transition[1]];
-      if (action) {
-        newChar = c;
-        if (action() === false) {
-          return;
-        }
-      }
-    }
-    if (mode2 === 7) {
-      return keys2;
-    }
-  }
-}
-const cache = /* @__PURE__ */ new Map();
-function resolveWithKeyValue(obj, path) {
-  return isObject(obj) ? obj[path] : null;
-}
-function resolveValue(obj, path) {
-  if (!isObject(obj)) {
-    return null;
-  }
-  let hit = cache.get(path);
-  if (!hit) {
-    hit = parse(path);
-    if (hit) {
-      cache.set(path, hit);
-    }
-  }
-  if (!hit) {
-    return null;
-  }
-  const len2 = hit.length;
-  let last2 = obj;
-  let i = 0;
-  while (i < len2) {
-    const val = last2[hit[i]];
-    if (val === void 0) {
-      return null;
-    }
-    last2 = val;
-    i++;
-  }
-  return last2;
-}
-const DEFAULT_MODIFIER = (str) => str;
-const DEFAULT_MESSAGE = (ctx) => "";
-const DEFAULT_MESSAGE_DATA_TYPE = "text";
-const DEFAULT_NORMALIZE = (values) => values.length === 0 ? "" : values.join("");
-const DEFAULT_INTERPOLATE = toDisplayString;
-function pluralDefault(choice, choicesLength) {
-  choice = Math.abs(choice);
-  if (choicesLength === 2) {
-    return choice ? choice > 1 ? 1 : 0 : 1;
-  }
-  return choice ? Math.min(choice, 2) : 0;
-}
-function getPluralIndex(options) {
-  const index = isNumber(options.pluralIndex) ? options.pluralIndex : -1;
-  return options.named && (isNumber(options.named.count) || isNumber(options.named.n)) ? isNumber(options.named.count) ? options.named.count : isNumber(options.named.n) ? options.named.n : index : index;
-}
-function normalizeNamed(pluralIndex, props) {
-  if (!props.count) {
-    props.count = pluralIndex;
-  }
-  if (!props.n) {
-    props.n = pluralIndex;
-  }
-}
-function createMessageContext(options = {}) {
-  const locale = options.locale;
-  const pluralIndex = getPluralIndex(options);
-  const pluralRule = isObject(options.pluralRules) && isString(locale) && isFunction(options.pluralRules[locale]) ? options.pluralRules[locale] : pluralDefault;
-  const orgPluralRule = isObject(options.pluralRules) && isString(locale) && isFunction(options.pluralRules[locale]) ? pluralDefault : void 0;
-  const plural = (messages2) => {
-    return messages2[pluralRule(pluralIndex, messages2.length, orgPluralRule)];
-  };
-  const _list = options.list || [];
-  const list = (index) => _list[index];
-  const _named = options.named || {};
-  isNumber(options.pluralIndex) && normalizeNamed(pluralIndex, _named);
-  const named = (key) => _named[key];
-  function message(key) {
-    const msg = isFunction(options.messages) ? options.messages(key) : isObject(options.messages) ? options.messages[key] : false;
-    return !msg ? options.parent ? options.parent.message(key) : DEFAULT_MESSAGE : msg;
-  }
-  const _modifier = (name) => options.modifiers ? options.modifiers[name] : DEFAULT_MODIFIER;
-  const normalize2 = isPlainObject(options.processor) && isFunction(options.processor.normalize) ? options.processor.normalize : DEFAULT_NORMALIZE;
-  const interpolate = isPlainObject(options.processor) && isFunction(options.processor.interpolate) ? options.processor.interpolate : DEFAULT_INTERPOLATE;
-  const type = isPlainObject(options.processor) && isString(options.processor.type) ? options.processor.type : DEFAULT_MESSAGE_DATA_TYPE;
-  const linked = (key, ...args) => {
-    const [arg1, arg2] = args;
-    let type2 = "text";
-    let modifier = "";
-    if (args.length === 1) {
-      if (isObject(arg1)) {
-        modifier = arg1.modifier || modifier;
-        type2 = arg1.type || type2;
-      } else if (isString(arg1)) {
-        modifier = arg1 || modifier;
-      }
-    } else if (args.length === 2) {
-      if (isString(arg1)) {
-        modifier = arg1 || modifier;
-      }
-      if (isString(arg2)) {
-        type2 = arg2 || type2;
-      }
-    }
-    let msg = message(key)(ctx);
-    if (type2 === "vnode" && isArray(msg) && modifier) {
-      msg = msg[0];
-    }
-    return modifier ? _modifier(modifier)(msg, type2) : msg;
-  };
-  const ctx = {
-    [
-      "list"
-      /* LIST */
-    ]: list,
-    [
-      "named"
-      /* NAMED */
-    ]: named,
-    [
-      "plural"
-      /* PLURAL */
-    ]: plural,
-    [
-      "linked"
-      /* LINKED */
-    ]: linked,
-    [
-      "message"
-      /* MESSAGE */
-    ]: message,
-    [
-      "type"
-      /* TYPE */
-    ]: type,
-    [
-      "interpolate"
-      /* INTERPOLATE */
-    ]: interpolate,
-    [
-      "normalize"
-      /* NORMALIZE */
-    ]: normalize2
-  };
-  return ctx;
-}
-let devtools = null;
-function setDevToolsHook(hook) {
-  devtools = hook;
-}
-function initI18nDevTools(i18n2, version2, meta) {
-  devtools && devtools.emit(IntlifyDevToolsHooks.I18nInit, {
-    timestamp: Date.now(),
-    i18n: i18n2,
-    version: version2,
-    meta
-  });
-}
-const translateDevTools = /* @__PURE__ */ createDevToolsHook(IntlifyDevToolsHooks.FunctionTranslate);
-function createDevToolsHook(hook) {
-  return (payloads) => devtools && devtools.emit(hook, payloads);
-}
-const CoreWarnCodes = {
-  NOT_FOUND_KEY: 1,
-  FALLBACK_TO_TRANSLATE: 2,
-  CANNOT_FORMAT_NUMBER: 3,
-  FALLBACK_TO_NUMBER_FORMAT: 4,
-  CANNOT_FORMAT_DATE: 5,
-  FALLBACK_TO_DATE_FORMAT: 6,
-  __EXTEND_POINT__: 7
-};
-function fallbackWithSimple(ctx, fallback, start2) {
-  return [.../* @__PURE__ */ new Set([
-    start2,
-    ...isArray(fallback) ? fallback : isObject(fallback) ? Object.keys(fallback) : isString(fallback) ? [fallback] : [start2]
-  ])];
-}
-function fallbackWithLocaleChain(ctx, fallback, start2) {
-  const startLocale = isString(start2) ? start2 : DEFAULT_LOCALE;
-  const context = ctx;
-  if (!context.__localeChainCache) {
-    context.__localeChainCache = /* @__PURE__ */ new Map();
-  }
-  let chain = context.__localeChainCache.get(startLocale);
-  if (!chain) {
-    chain = [];
-    let block = [start2];
-    while (isArray(block)) {
-      block = appendBlockToChain(chain, block, fallback);
-    }
-    const defaults2 = isArray(fallback) || !isPlainObject(fallback) ? fallback : fallback["default"] ? fallback["default"] : null;
-    block = isString(defaults2) ? [defaults2] : defaults2;
-    if (isArray(block)) {
-      appendBlockToChain(chain, block, false);
-    }
-    context.__localeChainCache.set(startLocale, chain);
-  }
-  return chain;
-}
-function appendBlockToChain(chain, block, blocks) {
-  let follow = true;
-  for (let i = 0; i < block.length && isBoolean(follow); i++) {
-    const locale = block[i];
-    if (isString(locale)) {
-      follow = appendLocaleToChain(chain, block[i], blocks);
-    }
-  }
-  return follow;
-}
-function appendLocaleToChain(chain, locale, blocks) {
-  let follow;
-  const tokens = locale.split("-");
-  do {
-    const target = tokens.join("-");
-    follow = appendItemToChain(chain, target, blocks);
-    tokens.splice(-1, 1);
-  } while (tokens.length && follow === true);
-  return follow;
-}
-function appendItemToChain(chain, target, blocks) {
-  let follow = false;
-  if (!chain.includes(target)) {
-    follow = true;
-    if (target) {
-      follow = target[target.length - 1] !== "!";
-      const locale = target.replace(/!/g, "");
-      chain.push(locale);
-      if ((isArray(blocks) || isPlainObject(blocks)) && blocks[locale]) {
-        follow = blocks[locale];
-      }
-    }
-  }
-  return follow;
-}
-const VERSION$1 = "9.2.2";
-const NOT_REOSLVED = -1;
-const DEFAULT_LOCALE = "en-US";
-const MISSING_RESOLVE_VALUE = "";
-const capitalize = (str) => `${str.charAt(0).toLocaleUpperCase()}${str.substr(1)}`;
-function getDefaultLinkedModifiers() {
-  return {
-    upper: (val, type) => {
-      return type === "text" && isString(val) ? val.toUpperCase() : type === "vnode" && isObject(val) && "__v_isVNode" in val ? val.children.toUpperCase() : val;
-    },
-    lower: (val, type) => {
-      return type === "text" && isString(val) ? val.toLowerCase() : type === "vnode" && isObject(val) && "__v_isVNode" in val ? val.children.toLowerCase() : val;
-    },
-    capitalize: (val, type) => {
-      return type === "text" && isString(val) ? capitalize(val) : type === "vnode" && isObject(val) && "__v_isVNode" in val ? capitalize(val.children) : val;
-    }
-  };
-}
-let _compiler;
-function registerMessageCompiler(compiler) {
-  _compiler = compiler;
-}
-let _resolver;
-function registerMessageResolver(resolver) {
-  _resolver = resolver;
-}
-let _fallbacker;
-function registerLocaleFallbacker(fallbacker) {
-  _fallbacker = fallbacker;
-}
-let _additionalMeta = null;
-const setAdditionalMeta = (meta) => {
-  _additionalMeta = meta;
-};
-const getAdditionalMeta = () => _additionalMeta;
-let _fallbackContext = null;
-const setFallbackContext = (context) => {
-  _fallbackContext = context;
-};
-const getFallbackContext = () => _fallbackContext;
-let _cid = 0;
-function createCoreContext(options = {}) {
-  const version2 = isString(options.version) ? options.version : VERSION$1;
-  const locale = isString(options.locale) ? options.locale : DEFAULT_LOCALE;
-  const fallbackLocale = isArray(options.fallbackLocale) || isPlainObject(options.fallbackLocale) || isString(options.fallbackLocale) || options.fallbackLocale === false ? options.fallbackLocale : locale;
-  const messages2 = isPlainObject(options.messages) ? options.messages : { [locale]: {} };
-  const datetimeFormats = isPlainObject(options.datetimeFormats) ? options.datetimeFormats : { [locale]: {} };
-  const numberFormats = isPlainObject(options.numberFormats) ? options.numberFormats : { [locale]: {} };
-  const modifiers = assign({}, options.modifiers || {}, getDefaultLinkedModifiers());
-  const pluralRules = options.pluralRules || {};
-  const missing = isFunction(options.missing) ? options.missing : null;
-  const missingWarn = isBoolean(options.missingWarn) || isRegExp(options.missingWarn) ? options.missingWarn : true;
-  const fallbackWarn = isBoolean(options.fallbackWarn) || isRegExp(options.fallbackWarn) ? options.fallbackWarn : true;
-  const fallbackFormat = !!options.fallbackFormat;
-  const unresolving = !!options.unresolving;
-  const postTranslation = isFunction(options.postTranslation) ? options.postTranslation : null;
-  const processor = isPlainObject(options.processor) ? options.processor : null;
-  const warnHtmlMessage = isBoolean(options.warnHtmlMessage) ? options.warnHtmlMessage : true;
-  const escapeParameter = !!options.escapeParameter;
-  const messageCompiler = isFunction(options.messageCompiler) ? options.messageCompiler : _compiler;
-  const messageResolver = isFunction(options.messageResolver) ? options.messageResolver : _resolver || resolveWithKeyValue;
-  const localeFallbacker = isFunction(options.localeFallbacker) ? options.localeFallbacker : _fallbacker || fallbackWithSimple;
-  const fallbackContext = isObject(options.fallbackContext) ? options.fallbackContext : void 0;
-  const onWarn = isFunction(options.onWarn) ? options.onWarn : warn;
-  const internalOptions = options;
-  const __datetimeFormatters = isObject(internalOptions.__datetimeFormatters) ? internalOptions.__datetimeFormatters : /* @__PURE__ */ new Map();
-  const __numberFormatters = isObject(internalOptions.__numberFormatters) ? internalOptions.__numberFormatters : /* @__PURE__ */ new Map();
-  const __meta = isObject(internalOptions.__meta) ? internalOptions.__meta : {};
-  _cid++;
-  const context = {
-    version: version2,
-    cid: _cid,
-    locale,
-    fallbackLocale,
-    messages: messages2,
-    modifiers,
-    pluralRules,
-    missing,
-    missingWarn,
-    fallbackWarn,
-    fallbackFormat,
-    unresolving,
-    postTranslation,
-    processor,
-    warnHtmlMessage,
-    escapeParameter,
-    messageCompiler,
-    messageResolver,
-    localeFallbacker,
-    fallbackContext,
-    onWarn,
-    __meta
-  };
-  {
-    context.datetimeFormats = datetimeFormats;
-    context.numberFormats = numberFormats;
-    context.__datetimeFormatters = __datetimeFormatters;
-    context.__numberFormatters = __numberFormatters;
-  }
-  if (__INTLIFY_PROD_DEVTOOLS__) {
-    initI18nDevTools(context, version2, __meta);
-  }
-  return context;
-}
-function handleMissing(context, key, locale, missingWarn, type) {
-  const { missing, onWarn } = context;
-  if (missing !== null) {
-    const ret = missing(context, locale, key, type);
-    return isString(ret) ? ret : key;
-  } else {
-    return key;
-  }
-}
-function updateFallbackLocale(ctx, locale, fallback) {
-  const context = ctx;
-  context.__localeChainCache = /* @__PURE__ */ new Map();
-  ctx.localeFallbacker(ctx, fallback, locale);
-}
-const defaultOnCacheKey = (source) => source;
-let compileCache = /* @__PURE__ */ Object.create(null);
-function compileToFunction(source, options = {}) {
-  {
-    const onCacheKey = options.onCacheKey || defaultOnCacheKey;
-    const key = onCacheKey(source);
-    const cached = compileCache[key];
-    if (cached) {
-      return cached;
-    }
-    let occurred = false;
-    const onError = options.onError || defaultOnError;
-    options.onError = (err) => {
-      occurred = true;
-      onError(err);
-    };
-    const { code: code2 } = baseCompile(source, options);
-    const msg = new Function(`return ${code2}`)();
-    return !occurred ? compileCache[key] = msg : msg;
-  }
-}
-let code$1 = CompileErrorCodes.__EXTEND_POINT__;
-const inc$1 = () => ++code$1;
-const CoreErrorCodes = {
-  INVALID_ARGUMENT: code$1,
-  INVALID_DATE_ARGUMENT: inc$1(),
-  INVALID_ISO_DATE_ARGUMENT: inc$1(),
-  __EXTEND_POINT__: inc$1()
-  // 18
-};
-function createCoreError(code2) {
-  return createCompileError(code2, null, void 0);
-}
-const NOOP_MESSAGE_FUNCTION = () => "";
-const isMessageFunction = (val) => isFunction(val);
-function translate(context, ...args) {
-  const { fallbackFormat, postTranslation, unresolving, messageCompiler, fallbackLocale, messages: messages2 } = context;
-  const [key, options] = parseTranslateArgs(...args);
-  const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn;
-  const fallbackWarn = isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn;
-  const escapeParameter = isBoolean(options.escapeParameter) ? options.escapeParameter : context.escapeParameter;
-  const resolvedMessage = !!options.resolvedMessage;
-  const defaultMsgOrKey = isString(options.default) || isBoolean(options.default) ? !isBoolean(options.default) ? options.default : !messageCompiler ? () => key : key : fallbackFormat ? !messageCompiler ? () => key : key : "";
-  const enableDefaultMsg = fallbackFormat || defaultMsgOrKey !== "";
-  const locale = isString(options.locale) ? options.locale : context.locale;
-  escapeParameter && escapeParams(options);
-  let [formatScope, targetLocale, message] = !resolvedMessage ? resolveMessageFormat(context, key, locale, fallbackLocale, fallbackWarn, missingWarn) : [
-    key,
-    locale,
-    messages2[locale] || {}
-  ];
-  let format2 = formatScope;
-  let cacheBaseKey = key;
-  if (!resolvedMessage && !(isString(format2) || isMessageFunction(format2))) {
-    if (enableDefaultMsg) {
-      format2 = defaultMsgOrKey;
-      cacheBaseKey = format2;
-    }
-  }
-  if (!resolvedMessage && (!(isString(format2) || isMessageFunction(format2)) || !isString(targetLocale))) {
-    return unresolving ? NOT_REOSLVED : key;
-  }
-  let occurred = false;
-  const errorDetector = () => {
-    occurred = true;
-  };
-  const msg = !isMessageFunction(format2) ? compileMessageFormat(context, key, targetLocale, format2, cacheBaseKey, errorDetector) : format2;
-  if (occurred) {
-    return format2;
-  }
-  const ctxOptions = getMessageContextOptions(context, targetLocale, message, options);
-  const msgContext = createMessageContext(ctxOptions);
-  const messaged = evaluateMessage(context, msg, msgContext);
-  const ret = postTranslation ? postTranslation(messaged, key) : messaged;
-  if (__INTLIFY_PROD_DEVTOOLS__) {
-    const payloads = {
-      timestamp: Date.now(),
-      key: isString(key) ? key : isMessageFunction(format2) ? format2.key : "",
-      locale: targetLocale || (isMessageFunction(format2) ? format2.locale : ""),
-      format: isString(format2) ? format2 : isMessageFunction(format2) ? format2.source : "",
-      message: ret
-    };
-    payloads.meta = assign({}, context.__meta, getAdditionalMeta() || {});
-    translateDevTools(payloads);
-  }
-  return ret;
-}
-function escapeParams(options) {
-  if (isArray(options.list)) {
-    options.list = options.list.map((item) => isString(item) ? escapeHtml(item) : item);
-  } else if (isObject(options.named)) {
-    Object.keys(options.named).forEach((key) => {
-      if (isString(options.named[key])) {
-        options.named[key] = escapeHtml(options.named[key]);
-      }
-    });
-  }
-}
-function resolveMessageFormat(context, key, locale, fallbackLocale, fallbackWarn, missingWarn) {
-  const { messages: messages2, onWarn, messageResolver: resolveValue2, localeFallbacker } = context;
-  const locales = localeFallbacker(context, fallbackLocale, locale);
-  let message = {};
-  let targetLocale;
-  let format2 = null;
-  const type = "translate";
-  for (let i = 0; i < locales.length; i++) {
-    targetLocale = locales[i];
-    message = messages2[targetLocale] || {};
-    if ((format2 = resolveValue2(message, key)) === null) {
-      format2 = message[key];
-    }
-    if (isString(format2) || isFunction(format2))
-      break;
-    const missingRet = handleMissing(
-      context,
-      // eslint-disable-line @typescript-eslint/no-explicit-any
-      key,
-      targetLocale,
-      missingWarn,
-      type
-    );
-    if (missingRet !== key) {
-      format2 = missingRet;
-    }
-  }
-  return [format2, targetLocale, message];
-}
-function compileMessageFormat(context, key, targetLocale, format2, cacheBaseKey, errorDetector) {
-  const { messageCompiler, warnHtmlMessage } = context;
-  if (isMessageFunction(format2)) {
-    const msg2 = format2;
-    msg2.locale = msg2.locale || targetLocale;
-    msg2.key = msg2.key || key;
-    return msg2;
-  }
-  if (messageCompiler == null) {
-    const msg2 = () => format2;
-    msg2.locale = targetLocale;
-    msg2.key = key;
-    return msg2;
-  }
-  const msg = messageCompiler(format2, getCompileOptions(context, targetLocale, cacheBaseKey, format2, warnHtmlMessage, errorDetector));
-  msg.locale = targetLocale;
-  msg.key = key;
-  msg.source = format2;
-  return msg;
-}
-function evaluateMessage(context, msg, msgCtx) {
-  const messaged = msg(msgCtx);
-  return messaged;
-}
-function parseTranslateArgs(...args) {
-  const [arg1, arg2, arg3] = args;
-  const options = {};
-  if (!isString(arg1) && !isNumber(arg1) && !isMessageFunction(arg1)) {
-    throw createCoreError(CoreErrorCodes.INVALID_ARGUMENT);
-  }
-  const key = isNumber(arg1) ? String(arg1) : isMessageFunction(arg1) ? arg1 : arg1;
-  if (isNumber(arg2)) {
-    options.plural = arg2;
-  } else if (isString(arg2)) {
-    options.default = arg2;
-  } else if (isPlainObject(arg2) && !isEmptyObject(arg2)) {
-    options.named = arg2;
-  } else if (isArray(arg2)) {
-    options.list = arg2;
-  }
-  if (isNumber(arg3)) {
-    options.plural = arg3;
-  } else if (isString(arg3)) {
-    options.default = arg3;
-  } else if (isPlainObject(arg3)) {
-    assign(options, arg3);
-  }
-  return [key, options];
-}
-function getCompileOptions(context, locale, key, source, warnHtmlMessage, errorDetector) {
-  return {
-    warnHtmlMessage,
-    onError: (err) => {
-      errorDetector && errorDetector(err);
-      {
-        throw err;
-      }
-    },
-    onCacheKey: (source2) => generateFormatCacheKey(locale, key, source2)
-  };
-}
-function getMessageContextOptions(context, locale, message, options) {
-  const { modifiers, pluralRules, messageResolver: resolveValue2, fallbackLocale, fallbackWarn, missingWarn, fallbackContext } = context;
-  const resolveMessage = (key) => {
-    let val = resolveValue2(message, key);
-    if (val == null && fallbackContext) {
-      const [, , message2] = resolveMessageFormat(fallbackContext, key, locale, fallbackLocale, fallbackWarn, missingWarn);
-      val = resolveValue2(message2, key);
-    }
-    if (isString(val)) {
-      let occurred = false;
-      const errorDetector = () => {
-        occurred = true;
-      };
-      const msg = compileMessageFormat(context, key, locale, val, key, errorDetector);
-      return !occurred ? msg : NOOP_MESSAGE_FUNCTION;
-    } else if (isMessageFunction(val)) {
-      return val;
-    } else {
-      return NOOP_MESSAGE_FUNCTION;
-    }
-  };
-  const ctxOptions = {
-    locale,
-    modifiers,
-    pluralRules,
-    messages: resolveMessage
-  };
-  if (context.processor) {
-    ctxOptions.processor = context.processor;
-  }
-  if (options.list) {
-    ctxOptions.list = options.list;
-  }
-  if (options.named) {
-    ctxOptions.named = options.named;
-  }
-  if (isNumber(options.plural)) {
-    ctxOptions.pluralIndex = options.plural;
-  }
-  return ctxOptions;
-}
-function datetime(context, ...args) {
-  const { datetimeFormats, unresolving, fallbackLocale, onWarn, localeFallbacker } = context;
-  const { __datetimeFormatters } = context;
-  const [key, value, options, overrides] = parseDateTimeArgs(...args);
-  const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn;
-  isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn;
-  const part = !!options.part;
-  const locale = isString(options.locale) ? options.locale : context.locale;
-  const locales = localeFallbacker(
-    context,
-    // eslint-disable-line @typescript-eslint/no-explicit-any
-    fallbackLocale,
-    locale
-  );
-  if (!isString(key) || key === "") {
-    return new Intl.DateTimeFormat(locale, overrides).format(value);
-  }
-  let datetimeFormat = {};
-  let targetLocale;
-  let format2 = null;
-  const type = "datetime format";
-  for (let i = 0; i < locales.length; i++) {
-    targetLocale = locales[i];
-    datetimeFormat = datetimeFormats[targetLocale] || {};
-    format2 = datetimeFormat[key];
-    if (isPlainObject(format2))
-      break;
-    handleMissing(context, key, targetLocale, missingWarn, type);
-  }
-  if (!isPlainObject(format2) || !isString(targetLocale)) {
-    return unresolving ? NOT_REOSLVED : key;
-  }
-  let id = `${targetLocale}__${key}`;
-  if (!isEmptyObject(overrides)) {
-    id = `${id}__${JSON.stringify(overrides)}`;
-  }
-  let formatter = __datetimeFormatters.get(id);
-  if (!formatter) {
-    formatter = new Intl.DateTimeFormat(targetLocale, assign({}, format2, overrides));
-    __datetimeFormatters.set(id, formatter);
-  }
-  return !part ? formatter.format(value) : formatter.formatToParts(value);
-}
-const DATETIME_FORMAT_OPTIONS_KEYS = [
-  "localeMatcher",
-  "weekday",
-  "era",
-  "year",
-  "month",
-  "day",
-  "hour",
-  "minute",
-  "second",
-  "timeZoneName",
-  "formatMatcher",
-  "hour12",
-  "timeZone",
-  "dateStyle",
-  "timeStyle",
-  "calendar",
-  "dayPeriod",
-  "numberingSystem",
-  "hourCycle",
-  "fractionalSecondDigits"
-];
-function parseDateTimeArgs(...args) {
-  const [arg1, arg2, arg3, arg4] = args;
-  const options = {};
-  let overrides = {};
-  let value;
-  if (isString(arg1)) {
-    const matches2 = arg1.match(/(\d{4}-\d{2}-\d{2})(T|\s)?(.*)/);
-    if (!matches2) {
-      throw createCoreError(CoreErrorCodes.INVALID_ISO_DATE_ARGUMENT);
-    }
-    const dateTime = matches2[3] ? matches2[3].trim().startsWith("T") ? `${matches2[1].trim()}${matches2[3].trim()}` : `${matches2[1].trim()}T${matches2[3].trim()}` : matches2[1].trim();
-    value = new Date(dateTime);
-    try {
-      value.toISOString();
-    } catch (e2) {
-      throw createCoreError(CoreErrorCodes.INVALID_ISO_DATE_ARGUMENT);
-    }
-  } else if (isDate(arg1)) {
-    if (isNaN(arg1.getTime())) {
-      throw createCoreError(CoreErrorCodes.INVALID_DATE_ARGUMENT);
-    }
-    value = arg1;
-  } else if (isNumber(arg1)) {
-    value = arg1;
-  } else {
-    throw createCoreError(CoreErrorCodes.INVALID_ARGUMENT);
-  }
-  if (isString(arg2)) {
-    options.key = arg2;
-  } else if (isPlainObject(arg2)) {
-    Object.keys(arg2).forEach((key) => {
-      if (DATETIME_FORMAT_OPTIONS_KEYS.includes(key)) {
-        overrides[key] = arg2[key];
-      } else {
-        options[key] = arg2[key];
-      }
-    });
-  }
-  if (isString(arg3)) {
-    options.locale = arg3;
-  } else if (isPlainObject(arg3)) {
-    overrides = arg3;
-  }
-  if (isPlainObject(arg4)) {
-    overrides = arg4;
-  }
-  return [options.key || "", value, options, overrides];
-}
-function clearDateTimeFormat(ctx, locale, format2) {
-  const context = ctx;
-  for (const key in format2) {
-    const id = `${locale}__${key}`;
-    if (!context.__datetimeFormatters.has(id)) {
-      continue;
-    }
-    context.__datetimeFormatters.delete(id);
-  }
-}
-function number(context, ...args) {
-  const { numberFormats, unresolving, fallbackLocale, onWarn, localeFallbacker } = context;
-  const { __numberFormatters } = context;
-  const [key, value, options, overrides] = parseNumberArgs(...args);
-  const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn;
-  isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn;
-  const part = !!options.part;
-  const locale = isString(options.locale) ? options.locale : context.locale;
-  const locales = localeFallbacker(
-    context,
-    // eslint-disable-line @typescript-eslint/no-explicit-any
-    fallbackLocale,
-    locale
-  );
-  if (!isString(key) || key === "") {
-    return new Intl.NumberFormat(locale, overrides).format(value);
-  }
-  let numberFormat = {};
-  let targetLocale;
-  let format2 = null;
-  const type = "number format";
-  for (let i = 0; i < locales.length; i++) {
-    targetLocale = locales[i];
-    numberFormat = numberFormats[targetLocale] || {};
-    format2 = numberFormat[key];
-    if (isPlainObject(format2))
-      break;
-    handleMissing(context, key, targetLocale, missingWarn, type);
-  }
-  if (!isPlainObject(format2) || !isString(targetLocale)) {
-    return unresolving ? NOT_REOSLVED : key;
-  }
-  let id = `${targetLocale}__${key}`;
-  if (!isEmptyObject(overrides)) {
-    id = `${id}__${JSON.stringify(overrides)}`;
-  }
-  let formatter = __numberFormatters.get(id);
-  if (!formatter) {
-    formatter = new Intl.NumberFormat(targetLocale, assign({}, format2, overrides));
-    __numberFormatters.set(id, formatter);
-  }
-  return !part ? formatter.format(value) : formatter.formatToParts(value);
-}
-const NUMBER_FORMAT_OPTIONS_KEYS = [
-  "localeMatcher",
-  "style",
-  "currency",
-  "currencyDisplay",
-  "currencySign",
-  "useGrouping",
-  "minimumIntegerDigits",
-  "minimumFractionDigits",
-  "maximumFractionDigits",
-  "minimumSignificantDigits",
-  "maximumSignificantDigits",
-  "compactDisplay",
-  "notation",
-  "signDisplay",
-  "unit",
-  "unitDisplay",
-  "roundingMode",
-  "roundingPriority",
-  "roundingIncrement",
-  "trailingZeroDisplay"
-];
-function parseNumberArgs(...args) {
-  const [arg1, arg2, arg3, arg4] = args;
-  const options = {};
-  let overrides = {};
-  if (!isNumber(arg1)) {
-    throw createCoreError(CoreErrorCodes.INVALID_ARGUMENT);
-  }
-  const value = arg1;
-  if (isString(arg2)) {
-    options.key = arg2;
-  } else if (isPlainObject(arg2)) {
-    Object.keys(arg2).forEach((key) => {
-      if (NUMBER_FORMAT_OPTIONS_KEYS.includes(key)) {
-        overrides[key] = arg2[key];
-      } else {
-        options[key] = arg2[key];
-      }
-    });
-  }
-  if (isString(arg3)) {
-    options.locale = arg3;
-  } else if (isPlainObject(arg3)) {
-    overrides = arg3;
-  }
-  if (isPlainObject(arg4)) {
-    overrides = arg4;
-  }
-  return [options.key || "", value, options, overrides];
-}
-function clearNumberFormat(ctx, locale, format2) {
-  const context = ctx;
-  for (const key in format2) {
-    const id = `${locale}__${key}`;
-    if (!context.__numberFormatters.has(id)) {
-      continue;
-    }
-    context.__numberFormatters.delete(id);
-  }
-}
-{
-  if (typeof __INTLIFY_PROD_DEVTOOLS__ !== "boolean") {
-    getGlobalThis().__INTLIFY_PROD_DEVTOOLS__ = false;
-  }
-}
-/*!
-  * vue-i18n v9.2.2
-  * (c) 2022 kazuya kawaguchi
-  * Released under the MIT License.
-  */
-const VERSION = "9.2.2";
-function initFeatureFlags() {
-  if (typeof __INTLIFY_PROD_DEVTOOLS__ !== "boolean") {
-    getGlobalThis().__INTLIFY_PROD_DEVTOOLS__ = false;
-  }
-}
-CoreWarnCodes.__EXTEND_POINT__;
-let code = CompileErrorCodes.__EXTEND_POINT__;
-const inc = () => ++code;
-const I18nErrorCodes = {
-  // composer module errors
-  UNEXPECTED_RETURN_TYPE: code,
-  // legacy module errors
-  INVALID_ARGUMENT: inc(),
-  // i18n module errors
-  MUST_BE_CALL_SETUP_TOP: inc(),
-  NOT_INSLALLED: inc(),
-  NOT_AVAILABLE_IN_LEGACY_MODE: inc(),
-  // directive module errors
-  REQUIRED_VALUE: inc(),
-  INVALID_VALUE: inc(),
-  // vue-devtools errors
-  CANNOT_SETUP_VUE_DEVTOOLS_PLUGIN: inc(),
-  NOT_INSLALLED_WITH_PROVIDE: inc(),
-  // unexpected error
-  UNEXPECTED_ERROR: inc(),
-  // not compatible legacy vue-i18n constructor
-  NOT_COMPATIBLE_LEGACY_VUE_I18N: inc(),
-  // bridge support vue 2.x only
-  BRIDGE_SUPPORT_VUE_2_ONLY: inc(),
-  // need to define `i18n` option in `allowComposition: true` and `useScope: 'local' at `useI18n``
-  MUST_DEFINE_I18N_OPTION_IN_ALLOW_COMPOSITION: inc(),
-  // Not available Compostion API in Legacy API mode. Please make sure that the legacy API mode is working properly
-  NOT_AVAILABLE_COMPOSITION_IN_LEGACY: inc(),
-  // for enhancement
-  __EXTEND_POINT__: inc()
-  // 29
-};
-function createI18nError(code2, ...args) {
-  return createCompileError(code2, null, void 0);
-}
-const TransrateVNodeSymbol = /* @__PURE__ */ makeSymbol("__transrateVNode");
-const DatetimePartsSymbol = /* @__PURE__ */ makeSymbol("__datetimeParts");
-const NumberPartsSymbol = /* @__PURE__ */ makeSymbol("__numberParts");
-const SetPluralRulesSymbol = makeSymbol("__setPluralRules");
-makeSymbol("__intlifyMeta");
-const InejctWithOption = /* @__PURE__ */ makeSymbol("__injectWithOption");
-function handleFlatJson(obj) {
-  if (!isObject(obj)) {
-    return obj;
-  }
-  for (const key in obj) {
-    if (!hasOwn(obj, key)) {
-      continue;
-    }
-    if (!key.includes(".")) {
-      if (isObject(obj[key])) {
-        handleFlatJson(obj[key]);
-      }
-    } else {
-      const subKeys = key.split(".");
-      const lastIndex = subKeys.length - 1;
-      let currentObj = obj;
-      for (let i = 0; i < lastIndex; i++) {
-        if (!(subKeys[i] in currentObj)) {
-          currentObj[subKeys[i]] = {};
-        }
-        currentObj = currentObj[subKeys[i]];
-      }
-      currentObj[subKeys[lastIndex]] = obj[key];
-      delete obj[key];
-      if (isObject(currentObj[subKeys[lastIndex]])) {
-        handleFlatJson(currentObj[subKeys[lastIndex]]);
-      }
-    }
-  }
-  return obj;
-}
-function getLocaleMessages(locale, options) {
-  const { messages: messages2, __i18n, messageResolver, flatJson } = options;
-  const ret = isPlainObject(messages2) ? messages2 : isArray(__i18n) ? {} : { [locale]: {} };
-  if (isArray(__i18n)) {
-    __i18n.forEach((custom) => {
-      if ("locale" in custom && "resource" in custom) {
-        const { locale: locale2, resource } = custom;
-        if (locale2) {
-          ret[locale2] = ret[locale2] || {};
-          deepCopy(resource, ret[locale2]);
-        } else {
-          deepCopy(resource, ret);
-        }
-      } else {
-        isString(custom) && deepCopy(JSON.parse(custom), ret);
-      }
-    });
-  }
-  if (messageResolver == null && flatJson) {
-    for (const key in ret) {
-      if (hasOwn(ret, key)) {
-        handleFlatJson(ret[key]);
-      }
-    }
-  }
-  return ret;
-}
-const isNotObjectOrIsArray = (val) => !isObject(val) || isArray(val);
-function deepCopy(src, des) {
-  if (isNotObjectOrIsArray(src) || isNotObjectOrIsArray(des)) {
-    throw createI18nError(I18nErrorCodes.INVALID_VALUE);
-  }
-  for (const key in src) {
-    if (hasOwn(src, key)) {
-      if (isNotObjectOrIsArray(src[key]) || isNotObjectOrIsArray(des[key])) {
-        des[key] = src[key];
-      } else {
-        deepCopy(src[key], des[key]);
-      }
-    }
-  }
-}
-function getComponentOptions(instance) {
-  return instance.type;
-}
-function adjustI18nResources(global2, options, componentOptions) {
-  let messages2 = isObject(options.messages) ? options.messages : {};
-  if ("__i18nGlobal" in componentOptions) {
-    messages2 = getLocaleMessages(global2.locale.value, {
-      messages: messages2,
-      __i18n: componentOptions.__i18nGlobal
-    });
-  }
-  const locales = Object.keys(messages2);
-  if (locales.length) {
-    locales.forEach((locale) => {
-      global2.mergeLocaleMessage(locale, messages2[locale]);
-    });
-  }
-  {
-    if (isObject(options.datetimeFormats)) {
-      const locales2 = Object.keys(options.datetimeFormats);
-      if (locales2.length) {
-        locales2.forEach((locale) => {
-          global2.mergeDateTimeFormat(locale, options.datetimeFormats[locale]);
-        });
-      }
-    }
-    if (isObject(options.numberFormats)) {
-      const locales2 = Object.keys(options.numberFormats);
-      if (locales2.length) {
-        locales2.forEach((locale) => {
-          global2.mergeNumberFormat(locale, options.numberFormats[locale]);
-        });
-      }
-    }
-  }
-}
-function createTextNode(key) {
-  return createVNode(Text, null, key, 0);
-}
-const DEVTOOLS_META = "__INTLIFY_META__";
-let composerID = 0;
-function defineCoreMissingHandler(missing) {
-  return (ctx, locale, key, type) => {
-    return missing(locale, key, getCurrentInstance() || void 0, type);
-  };
-}
-const getMetaInfo = () => {
-  const instance = getCurrentInstance();
-  let meta = null;
-  return instance && (meta = getComponentOptions(instance)[DEVTOOLS_META]) ? { [DEVTOOLS_META]: meta } : null;
-};
-function createComposer(options = {}, VueI18nLegacy) {
-  const { __root } = options;
-  const _isGlobal = __root === void 0;
-  let _inheritLocale = isBoolean(options.inheritLocale) ? options.inheritLocale : true;
-  const _locale = ref(
-    // prettier-ignore
-    __root && _inheritLocale ? __root.locale.value : isString(options.locale) ? options.locale : DEFAULT_LOCALE
-  );
-  const _fallbackLocale = ref(
-    // prettier-ignore
-    __root && _inheritLocale ? __root.fallbackLocale.value : isString(options.fallbackLocale) || isArray(options.fallbackLocale) || isPlainObject(options.fallbackLocale) || options.fallbackLocale === false ? options.fallbackLocale : _locale.value
-  );
-  const _messages = ref(getLocaleMessages(_locale.value, options));
-  const _datetimeFormats = ref(isPlainObject(options.datetimeFormats) ? options.datetimeFormats : { [_locale.value]: {} });
-  const _numberFormats = ref(isPlainObject(options.numberFormats) ? options.numberFormats : { [_locale.value]: {} });
-  let _missingWarn = __root ? __root.missingWarn : isBoolean(options.missingWarn) || isRegExp(options.missingWarn) ? options.missingWarn : true;
-  let _fallbackWarn = __root ? __root.fallbackWarn : isBoolean(options.fallbackWarn) || isRegExp(options.fallbackWarn) ? options.fallbackWarn : true;
-  let _fallbackRoot = __root ? __root.fallbackRoot : isBoolean(options.fallbackRoot) ? options.fallbackRoot : true;
-  let _fallbackFormat = !!options.fallbackFormat;
-  let _missing = isFunction(options.missing) ? options.missing : null;
-  let _runtimeMissing = isFunction(options.missing) ? defineCoreMissingHandler(options.missing) : null;
-  let _postTranslation = isFunction(options.postTranslation) ? options.postTranslation : null;
-  let _warnHtmlMessage = __root ? __root.warnHtmlMessage : isBoolean(options.warnHtmlMessage) ? options.warnHtmlMessage : true;
-  let _escapeParameter = !!options.escapeParameter;
-  const _modifiers = __root ? __root.modifiers : isPlainObject(options.modifiers) ? options.modifiers : {};
-  let _pluralRules = options.pluralRules || __root && __root.pluralRules;
-  let _context;
-  const getCoreContext = () => {
-    _isGlobal && setFallbackContext(null);
-    const ctxOptions = {
-      version: VERSION,
-      locale: _locale.value,
-      fallbackLocale: _fallbackLocale.value,
-      messages: _messages.value,
-      modifiers: _modifiers,
-      pluralRules: _pluralRules,
-      missing: _runtimeMissing === null ? void 0 : _runtimeMissing,
-      missingWarn: _missingWarn,
-      fallbackWarn: _fallbackWarn,
-      fallbackFormat: _fallbackFormat,
-      unresolving: true,
-      postTranslation: _postTranslation === null ? void 0 : _postTranslation,
-      warnHtmlMessage: _warnHtmlMessage,
-      escapeParameter: _escapeParameter,
-      messageResolver: options.messageResolver,
-      __meta: { framework: "vue" }
-    };
-    {
-      ctxOptions.datetimeFormats = _datetimeFormats.value;
-      ctxOptions.numberFormats = _numberFormats.value;
-      ctxOptions.__datetimeFormatters = isPlainObject(_context) ? _context.__datetimeFormatters : void 0;
-      ctxOptions.__numberFormatters = isPlainObject(_context) ? _context.__numberFormatters : void 0;
-    }
-    const ctx = createCoreContext(ctxOptions);
-    _isGlobal && setFallbackContext(ctx);
-    return ctx;
-  };
-  _context = getCoreContext();
-  updateFallbackLocale(_context, _locale.value, _fallbackLocale.value);
-  function trackReactivityValues() {
-    return [
-      _locale.value,
-      _fallbackLocale.value,
-      _messages.value,
-      _datetimeFormats.value,
-      _numberFormats.value
-    ];
-  }
-  const locale = computed({
-    get: () => _locale.value,
-    set: (val) => {
-      _locale.value = val;
-      _context.locale = _locale.value;
-    }
-  });
-  const fallbackLocale = computed({
-    get: () => _fallbackLocale.value,
-    set: (val) => {
-      _fallbackLocale.value = val;
-      _context.fallbackLocale = _fallbackLocale.value;
-      updateFallbackLocale(_context, _locale.value, val);
-    }
-  });
-  const messages2 = computed(() => _messages.value);
-  const datetimeFormats = /* @__PURE__ */ computed(() => _datetimeFormats.value);
-  const numberFormats = /* @__PURE__ */ computed(() => _numberFormats.value);
-  function getPostTranslationHandler() {
-    return isFunction(_postTranslation) ? _postTranslation : null;
-  }
-  function setPostTranslationHandler(handler) {
-    _postTranslation = handler;
-    _context.postTranslation = handler;
-  }
-  function getMissingHandler() {
-    return _missing;
-  }
-  function setMissingHandler(handler) {
-    if (handler !== null) {
-      _runtimeMissing = defineCoreMissingHandler(handler);
-    }
-    _missing = handler;
-    _context.missing = _runtimeMissing;
-  }
-  const wrapWithDeps = (fn, argumentParser, warnType, fallbackSuccess, fallbackFail, successCondition) => {
-    trackReactivityValues();
-    let ret;
-    if (__INTLIFY_PROD_DEVTOOLS__) {
-      try {
-        setAdditionalMeta(getMetaInfo());
-        if (!_isGlobal) {
-          _context.fallbackContext = __root ? getFallbackContext() : void 0;
-        }
-        ret = fn(_context);
-      } finally {
-        setAdditionalMeta(null);
-        if (!_isGlobal) {
-          _context.fallbackContext = void 0;
-        }
-      }
-    } else {
-      ret = fn(_context);
-    }
-    if (isNumber(ret) && ret === NOT_REOSLVED) {
-      const [key, arg2] = argumentParser();
-      return __root && _fallbackRoot ? fallbackSuccess(__root) : fallbackFail(key);
-    } else if (successCondition(ret)) {
-      return ret;
-    } else {
-      throw createI18nError(I18nErrorCodes.UNEXPECTED_RETURN_TYPE);
-    }
-  };
-  function t(...args) {
-    return wrapWithDeps((context) => Reflect.apply(translate, null, [context, ...args]), () => parseTranslateArgs(...args), "translate", (root) => Reflect.apply(root.t, root, [...args]), (key) => key, (val) => isString(val));
-  }
-  function rt2(...args) {
-    const [arg1, arg2, arg3] = args;
-    if (arg3 && !isObject(arg3)) {
-      throw createI18nError(I18nErrorCodes.INVALID_ARGUMENT);
-    }
-    return t(...[arg1, arg2, assign({ resolvedMessage: true }, arg3 || {})]);
-  }
-  function d(...args) {
-    return wrapWithDeps((context) => Reflect.apply(datetime, null, [context, ...args]), () => parseDateTimeArgs(...args), "datetime format", (root) => Reflect.apply(root.d, root, [...args]), () => MISSING_RESOLVE_VALUE, (val) => isString(val));
-  }
-  function n2(...args) {
-    return wrapWithDeps((context) => Reflect.apply(number, null, [context, ...args]), () => parseNumberArgs(...args), "number format", (root) => Reflect.apply(root.n, root, [...args]), () => MISSING_RESOLVE_VALUE, (val) => isString(val));
-  }
-  function normalize2(values) {
-    return values.map((val) => isString(val) || isNumber(val) || isBoolean(val) ? createTextNode(String(val)) : val);
-  }
-  const interpolate = (val) => val;
-  const processor = {
-    normalize: normalize2,
-    interpolate,
-    type: "vnode"
-  };
-  function transrateVNode(...args) {
-    return wrapWithDeps(
-      (context) => {
-        let ret;
-        const _context2 = context;
-        try {
-          _context2.processor = processor;
-          ret = Reflect.apply(translate, null, [_context2, ...args]);
-        } finally {
-          _context2.processor = null;
-        }
-        return ret;
-      },
-      () => parseTranslateArgs(...args),
-      "translate",
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (root) => root[TransrateVNodeSymbol](...args),
-      (key) => [createTextNode(key)],
-      (val) => isArray(val)
-    );
-  }
-  function numberParts(...args) {
-    return wrapWithDeps(
-      (context) => Reflect.apply(number, null, [context, ...args]),
-      () => parseNumberArgs(...args),
-      "number format",
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (root) => root[NumberPartsSymbol](...args),
-      () => [],
-      (val) => isString(val) || isArray(val)
-    );
-  }
-  function datetimeParts(...args) {
-    return wrapWithDeps(
-      (context) => Reflect.apply(datetime, null, [context, ...args]),
-      () => parseDateTimeArgs(...args),
-      "datetime format",
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (root) => root[DatetimePartsSymbol](...args),
-      () => [],
-      (val) => isString(val) || isArray(val)
-    );
-  }
-  function setPluralRules(rules) {
-    _pluralRules = rules;
-    _context.pluralRules = _pluralRules;
-  }
-  function te(key, locale2) {
-    const targetLocale = isString(locale2) ? locale2 : _locale.value;
-    const message = getLocaleMessage(targetLocale);
-    return _context.messageResolver(message, key) !== null;
-  }
-  function resolveMessages(key) {
-    let messages3 = null;
-    const locales = fallbackWithLocaleChain(_context, _fallbackLocale.value, _locale.value);
-    for (let i = 0; i < locales.length; i++) {
-      const targetLocaleMessages = _messages.value[locales[i]] || {};
-      const messageValue = _context.messageResolver(targetLocaleMessages, key);
-      if (messageValue != null) {
-        messages3 = messageValue;
-        break;
-      }
-    }
-    return messages3;
-  }
-  function tm(key) {
-    const messages3 = resolveMessages(key);
-    return messages3 != null ? messages3 : __root ? __root.tm(key) || {} : {};
-  }
-  function getLocaleMessage(locale2) {
-    return _messages.value[locale2] || {};
-  }
-  function setLocaleMessage(locale2, message) {
-    _messages.value[locale2] = message;
-    _context.messages = _messages.value;
-  }
-  function mergeLocaleMessage(locale2, message) {
-    _messages.value[locale2] = _messages.value[locale2] || {};
-    deepCopy(message, _messages.value[locale2]);
-    _context.messages = _messages.value;
-  }
-  function getDateTimeFormat(locale2) {
-    return _datetimeFormats.value[locale2] || {};
-  }
-  function setDateTimeFormat(locale2, format2) {
-    _datetimeFormats.value[locale2] = format2;
-    _context.datetimeFormats = _datetimeFormats.value;
-    clearDateTimeFormat(_context, locale2, format2);
-  }
-  function mergeDateTimeFormat(locale2, format2) {
-    _datetimeFormats.value[locale2] = assign(_datetimeFormats.value[locale2] || {}, format2);
-    _context.datetimeFormats = _datetimeFormats.value;
-    clearDateTimeFormat(_context, locale2, format2);
-  }
-  function getNumberFormat(locale2) {
-    return _numberFormats.value[locale2] || {};
-  }
-  function setNumberFormat(locale2, format2) {
-    _numberFormats.value[locale2] = format2;
-    _context.numberFormats = _numberFormats.value;
-    clearNumberFormat(_context, locale2, format2);
-  }
-  function mergeNumberFormat(locale2, format2) {
-    _numberFormats.value[locale2] = assign(_numberFormats.value[locale2] || {}, format2);
-    _context.numberFormats = _numberFormats.value;
-    clearNumberFormat(_context, locale2, format2);
-  }
-  composerID++;
-  if (__root && inBrowser) {
-    watch(__root.locale, (val) => {
-      if (_inheritLocale) {
-        _locale.value = val;
-        _context.locale = val;
-        updateFallbackLocale(_context, _locale.value, _fallbackLocale.value);
-      }
-    });
-    watch(__root.fallbackLocale, (val) => {
-      if (_inheritLocale) {
-        _fallbackLocale.value = val;
-        _context.fallbackLocale = val;
-        updateFallbackLocale(_context, _locale.value, _fallbackLocale.value);
-      }
-    });
-  }
-  const composer = {
-    id: composerID,
-    locale,
-    fallbackLocale,
-    get inheritLocale() {
-      return _inheritLocale;
-    },
-    set inheritLocale(val) {
-      _inheritLocale = val;
-      if (val && __root) {
-        _locale.value = __root.locale.value;
-        _fallbackLocale.value = __root.fallbackLocale.value;
-        updateFallbackLocale(_context, _locale.value, _fallbackLocale.value);
-      }
-    },
-    get availableLocales() {
-      return Object.keys(_messages.value).sort();
-    },
-    messages: messages2,
-    get modifiers() {
-      return _modifiers;
-    },
-    get pluralRules() {
-      return _pluralRules || {};
-    },
-    get isGlobal() {
-      return _isGlobal;
-    },
-    get missingWarn() {
-      return _missingWarn;
-    },
-    set missingWarn(val) {
-      _missingWarn = val;
-      _context.missingWarn = _missingWarn;
-    },
-    get fallbackWarn() {
-      return _fallbackWarn;
-    },
-    set fallbackWarn(val) {
-      _fallbackWarn = val;
-      _context.fallbackWarn = _fallbackWarn;
-    },
-    get fallbackRoot() {
-      return _fallbackRoot;
-    },
-    set fallbackRoot(val) {
-      _fallbackRoot = val;
-    },
-    get fallbackFormat() {
-      return _fallbackFormat;
-    },
-    set fallbackFormat(val) {
-      _fallbackFormat = val;
-      _context.fallbackFormat = _fallbackFormat;
-    },
-    get warnHtmlMessage() {
-      return _warnHtmlMessage;
-    },
-    set warnHtmlMessage(val) {
-      _warnHtmlMessage = val;
-      _context.warnHtmlMessage = val;
-    },
-    get escapeParameter() {
-      return _escapeParameter;
-    },
-    set escapeParameter(val) {
-      _escapeParameter = val;
-      _context.escapeParameter = val;
-    },
-    t,
-    getLocaleMessage,
-    setLocaleMessage,
-    mergeLocaleMessage,
-    getPostTranslationHandler,
-    setPostTranslationHandler,
-    getMissingHandler,
-    setMissingHandler,
-    [SetPluralRulesSymbol]: setPluralRules
-  };
-  {
-    composer.datetimeFormats = datetimeFormats;
-    composer.numberFormats = numberFormats;
-    composer.rt = rt2;
-    composer.te = te;
-    composer.tm = tm;
-    composer.d = d;
-    composer.n = n2;
-    composer.getDateTimeFormat = getDateTimeFormat;
-    composer.setDateTimeFormat = setDateTimeFormat;
-    composer.mergeDateTimeFormat = mergeDateTimeFormat;
-    composer.getNumberFormat = getNumberFormat;
-    composer.setNumberFormat = setNumberFormat;
-    composer.mergeNumberFormat = mergeNumberFormat;
-    composer[InejctWithOption] = options.__injectWithOption;
-    composer[TransrateVNodeSymbol] = transrateVNode;
-    composer[DatetimePartsSymbol] = datetimeParts;
-    composer[NumberPartsSymbol] = numberParts;
-  }
-  return composer;
-}
-const baseFormatProps = {
-  tag: {
-    type: [String, Object]
-  },
-  locale: {
-    type: String
-  },
-  scope: {
-    type: String,
-    // NOTE: avoid https://github.com/microsoft/rushstack/issues/1050
-    validator: (val) => val === "parent" || val === "global",
-    default: "parent"
-    /* ComponetI18nScope */
-  },
-  i18n: {
-    type: Object
-  }
-};
-function getInterpolateArg({ slots }, keys2) {
-  if (keys2.length === 1 && keys2[0] === "default") {
-    const ret = slots.default ? slots.default() : [];
-    return ret.reduce((slot, current) => {
-      return slot = [
-        ...slot,
-        ...isArray(current.children) ? current.children : [current]
-      ];
-    }, []);
-  } else {
-    return keys2.reduce((arg, key) => {
-      const slot = slots[key];
-      if (slot) {
-        arg[key] = slot();
-      }
-      return arg;
-    }, {});
-  }
-}
-function getFragmentableTag(tag) {
-  return Fragment;
-}
-const Translation = (
-  /* defineComponent */
-  {
-    /* eslint-disable */
-    name: "i18n-t",
-    props: assign({
-      keypath: {
-        type: String,
-        required: true
-      },
-      plural: {
-        type: [Number, String],
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        validator: (val) => isNumber(val) || !isNaN(val)
-      }
-    }, baseFormatProps),
-    /* eslint-enable */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setup(props, context) {
-      const { slots, attrs } = context;
-      const i18n2 = props.i18n || useI18n({
-        useScope: props.scope,
-        __useComponent: true
-      });
-      return () => {
-        const keys2 = Object.keys(slots).filter((key) => key !== "_");
-        const options = {};
-        if (props.locale) {
-          options.locale = props.locale;
-        }
-        if (props.plural !== void 0) {
-          options.plural = isString(props.plural) ? +props.plural : props.plural;
-        }
-        const arg = getInterpolateArg(context, keys2);
-        const children = i18n2[TransrateVNodeSymbol](props.keypath, arg, options);
-        const assignedAttrs = assign({}, attrs);
-        const tag = isString(props.tag) || isObject(props.tag) ? props.tag : getFragmentableTag();
-        return h(tag, assignedAttrs, children);
-      };
-    }
-  }
-);
-function isVNode(target) {
-  return isArray(target) && !isString(target[0]);
-}
-function renderFormatter(props, context, slotKeys, partFormatter) {
-  const { slots, attrs } = context;
-  return () => {
-    const options = { part: true };
-    let overrides = {};
-    if (props.locale) {
-      options.locale = props.locale;
-    }
-    if (isString(props.format)) {
-      options.key = props.format;
-    } else if (isObject(props.format)) {
-      if (isString(props.format.key)) {
-        options.key = props.format.key;
-      }
-      overrides = Object.keys(props.format).reduce((options2, prop) => {
-        return slotKeys.includes(prop) ? assign({}, options2, { [prop]: props.format[prop] }) : options2;
-      }, {});
-    }
-    const parts = partFormatter(...[props.value, options, overrides]);
-    let children = [options.key];
-    if (isArray(parts)) {
-      children = parts.map((part, index) => {
-        const slot = slots[part.type];
-        const node = slot ? slot({ [part.type]: part.value, index, parts }) : [part.value];
-        if (isVNode(node)) {
-          node[0].key = `${part.type}-${index}`;
-        }
-        return node;
-      });
-    } else if (isString(parts)) {
-      children = [parts];
-    }
-    const assignedAttrs = assign({}, attrs);
-    const tag = isString(props.tag) || isObject(props.tag) ? props.tag : getFragmentableTag();
-    return h(tag, assignedAttrs, children);
-  };
-}
-const NumberFormat = (
-  /* defineComponent */
-  {
-    /* eslint-disable */
-    name: "i18n-n",
-    props: assign({
-      value: {
-        type: Number,
-        required: true
-      },
-      format: {
-        type: [String, Object]
-      }
-    }, baseFormatProps),
-    /* eslint-enable */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setup(props, context) {
-      const i18n2 = props.i18n || useI18n({ useScope: "parent", __useComponent: true });
-      return renderFormatter(props, context, NUMBER_FORMAT_OPTIONS_KEYS, (...args) => (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        i18n2[NumberPartsSymbol](...args)
-      ));
-    }
-  }
-);
-const DatetimeFormat = (
-  /*defineComponent */
-  {
-    /* eslint-disable */
-    name: "i18n-d",
-    props: assign({
-      value: {
-        type: [Number, Date],
-        required: true
-      },
-      format: {
-        type: [String, Object]
-      }
-    }, baseFormatProps),
-    /* eslint-enable */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setup(props, context) {
-      const i18n2 = props.i18n || useI18n({ useScope: "parent", __useComponent: true });
-      return renderFormatter(props, context, DATETIME_FORMAT_OPTIONS_KEYS, (...args) => (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        i18n2[DatetimePartsSymbol](...args)
-      ));
-    }
-  }
-);
-function getComposer$2(i18n2, instance) {
-  const i18nInternal = i18n2;
-  if (i18n2.mode === "composition") {
-    return i18nInternal.__getInstance(instance) || i18n2.global;
-  } else {
-    const vueI18n = i18nInternal.__getInstance(instance);
-    return vueI18n != null ? vueI18n.__composer : i18n2.global.__composer;
-  }
-}
-function vTDirective(i18n2) {
-  const _process = (binding) => {
-    const { instance, modifiers, value } = binding;
-    if (!instance || !instance.$) {
-      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR);
-    }
-    const composer = getComposer$2(i18n2, instance.$);
-    const parsedValue = parseValue(value);
-    return [
-      Reflect.apply(composer.t, composer, [...makeParams(parsedValue)]),
-      composer
-    ];
-  };
-  const register2 = (el, binding) => {
-    const [textContent, composer] = _process(binding);
-    if (inBrowser && i18n2.global === composer) {
-      el.__i18nWatcher = watch(composer.locale, () => {
-        binding.instance && binding.instance.$forceUpdate();
-      });
-    }
-    el.__composer = composer;
-    el.textContent = textContent;
-  };
-  const unregister2 = (el) => {
-    if (inBrowser && el.__i18nWatcher) {
-      el.__i18nWatcher();
-      el.__i18nWatcher = void 0;
-      delete el.__i18nWatcher;
-    }
-    if (el.__composer) {
-      el.__composer = void 0;
-      delete el.__composer;
-    }
-  };
-  const update = (el, { value }) => {
-    if (el.__composer) {
-      const composer = el.__composer;
-      const parsedValue = parseValue(value);
-      el.textContent = Reflect.apply(composer.t, composer, [
-        ...makeParams(parsedValue)
-      ]);
-    }
-  };
-  const getSSRProps = (binding) => {
-    const [textContent] = _process(binding);
-    return { textContent };
-  };
-  return {
-    created: register2,
-    unmounted: unregister2,
-    beforeUpdate: update,
-    getSSRProps
-  };
-}
-function parseValue(value) {
-  if (isString(value)) {
-    return { path: value };
-  } else if (isPlainObject(value)) {
-    if (!("path" in value)) {
-      throw createI18nError(I18nErrorCodes.REQUIRED_VALUE, "path");
-    }
-    return value;
-  } else {
-    throw createI18nError(I18nErrorCodes.INVALID_VALUE);
-  }
-}
-function makeParams(value) {
-  const { path, locale, args, choice, plural } = value;
-  const options = {};
-  const named = args || {};
-  if (isString(locale)) {
-    options.locale = locale;
-  }
-  if (isNumber(choice)) {
-    options.plural = choice;
-  }
-  if (isNumber(plural)) {
-    options.plural = plural;
-  }
-  return [path, named, options];
-}
-function apply(app2, i18n2, ...options) {
-  const pluginOptions = isPlainObject(options[0]) ? options[0] : {};
-  const useI18nComponentName = !!pluginOptions.useI18nComponentName;
-  const globalInstall = isBoolean(pluginOptions.globalInstall) ? pluginOptions.globalInstall : true;
-  if (globalInstall) {
-    app2.component(!useI18nComponentName ? Translation.name : "i18n", Translation);
-    app2.component(NumberFormat.name, NumberFormat);
-    app2.component(DatetimeFormat.name, DatetimeFormat);
-  }
-  {
-    app2.directive("t", vTDirective(i18n2));
-  }
-}
-const I18nInjectionKey = /* @__PURE__ */ makeSymbol("global-vue-i18n");
-function createI18n(options = {}, VueI18nLegacy) {
-  const __globalInjection = isBoolean(options.globalInjection) ? options.globalInjection : true;
-  const __allowComposition = true;
-  const __instances = /* @__PURE__ */ new Map();
-  const [globalScope, __global] = createGlobal(options);
-  const symbol = makeSymbol("");
-  function __getInstance(component) {
-    return __instances.get(component) || null;
-  }
-  function __setInstance(component, instance) {
-    __instances.set(component, instance);
-  }
-  function __deleteInstance(component) {
-    __instances.delete(component);
-  }
-  {
-    const i18n2 = {
-      // mode
-      get mode() {
-        return "composition";
-      },
-      // allowComposition
-      get allowComposition() {
-        return __allowComposition;
-      },
-      // install plugin
-      async install(app2, ...options2) {
-        app2.__VUE_I18N_SYMBOL__ = symbol;
-        app2.provide(app2.__VUE_I18N_SYMBOL__, i18n2);
-        if (__globalInjection) {
-          injectGlobalFields(app2, i18n2.global);
-        }
-        {
-          apply(app2, i18n2, ...options2);
-        }
-        const unmountApp = app2.unmount;
-        app2.unmount = () => {
-          i18n2.dispose();
-          unmountApp();
-        };
-      },
-      // global accessor
-      get global() {
-        return __global;
-      },
-      dispose() {
-        globalScope.stop();
-      },
-      // @internal
-      __instances,
-      // @internal
-      __getInstance,
-      // @internal
-      __setInstance,
-      // @internal
-      __deleteInstance
-    };
-    return i18n2;
-  }
-}
-function useI18n(options = {}) {
-  const instance = getCurrentInstance();
-  if (instance == null) {
-    throw createI18nError(I18nErrorCodes.MUST_BE_CALL_SETUP_TOP);
-  }
-  if (!instance.isCE && instance.appContext.app != null && !instance.appContext.app.__VUE_I18N_SYMBOL__) {
-    throw createI18nError(I18nErrorCodes.NOT_INSLALLED);
-  }
-  const i18n2 = getI18nInstance(instance);
-  const global2 = getGlobalComposer(i18n2);
-  const componentOptions = getComponentOptions(instance);
-  const scope = getScope(options, componentOptions);
-  if (scope === "global") {
-    adjustI18nResources(global2, options, componentOptions);
-    return global2;
-  }
-  if (scope === "parent") {
-    let composer2 = getComposer(i18n2, instance, options.__useComponent);
-    if (composer2 == null) {
-      composer2 = global2;
-    }
-    return composer2;
-  }
-  const i18nInternal = i18n2;
-  let composer = i18nInternal.__getInstance(instance);
-  if (composer == null) {
-    const composerOptions = assign({}, options);
-    if ("__i18n" in componentOptions) {
-      composerOptions.__i18n = componentOptions.__i18n;
-    }
-    if (global2) {
-      composerOptions.__root = global2;
-    }
-    composer = createComposer(composerOptions);
-    setupLifeCycle(i18nInternal, instance);
-    i18nInternal.__setInstance(instance, composer);
-  }
-  return composer;
-}
-function createGlobal(options, legacyMode, VueI18nLegacy) {
-  const scope = effectScope();
-  {
-    const obj = scope.run(() => createComposer(options));
-    if (obj == null) {
-      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR);
-    }
-    return [scope, obj];
-  }
-}
-function getI18nInstance(instance) {
-  {
-    const i18n2 = inject(!instance.isCE ? instance.appContext.app.__VUE_I18N_SYMBOL__ : I18nInjectionKey);
-    if (!i18n2) {
-      throw createI18nError(!instance.isCE ? I18nErrorCodes.UNEXPECTED_ERROR : I18nErrorCodes.NOT_INSLALLED_WITH_PROVIDE);
-    }
-    return i18n2;
-  }
-}
-function getScope(options, componentOptions) {
-  return isEmptyObject(options) ? "__i18n" in componentOptions ? "local" : "global" : !options.useScope ? "local" : options.useScope;
-}
-function getGlobalComposer(i18n2) {
-  return i18n2.mode === "composition" ? i18n2.global : i18n2.global.__composer;
-}
-function getComposer(i18n2, target, useComponent = false) {
-  let composer = null;
-  const root = target.root;
-  let current = target.parent;
-  while (current != null) {
-    const i18nInternal = i18n2;
-    if (i18n2.mode === "composition") {
-      composer = i18nInternal.__getInstance(current);
-    }
-    if (composer != null) {
-      break;
-    }
-    if (root === current) {
-      break;
-    }
-    current = current.parent;
-  }
-  return composer;
-}
-function setupLifeCycle(i18n2, target, composer) {
-  {
-    onMounted(() => {
-    }, target);
-    onUnmounted(() => {
-      i18n2.__deleteInstance(target);
-    }, target);
-  }
-}
-const globalExportProps = [
-  "locale",
-  "fallbackLocale",
-  "availableLocales"
-];
-const globalExportMethods = ["t", "rt", "d", "n", "tm"];
-function injectGlobalFields(app2, composer) {
-  const i18n2 = /* @__PURE__ */ Object.create(null);
-  globalExportProps.forEach((prop) => {
-    const desc = Object.getOwnPropertyDescriptor(composer, prop);
-    if (!desc) {
-      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR);
-    }
-    const wrap = isRef(desc.value) ? {
-      get() {
-        return desc.value.value;
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      set(val) {
-        desc.value.value = val;
-      }
-    } : {
-      get() {
-        return desc.get && desc.get();
-      }
-    };
-    Object.defineProperty(i18n2, prop, wrap);
-  });
-  app2.config.globalProperties.$i18n = i18n2;
-  globalExportMethods.forEach((method) => {
-    const desc = Object.getOwnPropertyDescriptor(composer, method);
-    if (!desc || !desc.value) {
-      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR);
-    }
-    Object.defineProperty(app2.config.globalProperties, `$${method}`, desc);
-  });
-}
-registerMessageCompiler(compileToFunction);
-registerMessageResolver(resolveValue);
-registerLocaleFallbacker(fallbackWithLocaleChain);
-{
-  initFeatureFlags();
-}
-if (__INTLIFY_PROD_DEVTOOLS__) {
-  const target = getGlobalThis();
-  target.__INTLIFY__ = true;
-  setDevToolsHook(target.__INTLIFY_DEVTOOLS_GLOBAL_HOOK__);
-}
-const messages = {
-  "en": {
-    "locale": {
-      "ru": (ctx) => {
-        const { normalize: _normalize } = ctx;
-        return _normalize(["Russian"]);
-      },
-      "en": (ctx) => {
-        const { normalize: _normalize } = ctx;
-        return _normalize(["English"]);
-      }
-    },
-    "app": {
-      "title": {
-        "without-name": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Jira Kanban assistant"]);
-        },
-        "with-name": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Jira Kanban assistant: ", _interpolate(_named("name"))]);
-        }
-      },
-      "tabs": {
-        "main": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Main statistics"]);
-        },
-        "total-wip": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Total WIP"]);
-        },
-        "wip-by-columns": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["WIPs by columns"]);
-        },
-        "avg-time-by-columns": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Average times by columns"]);
-        },
-        "lead-time-distributions": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Lead time distributions"]);
-        },
-        "long-times": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Control Chart"]);
-        },
-        "analyze-by-wip": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Analyze by WIP"]);
-        },
-        "triage": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Triage"]);
-        }
-      },
-      "config-info": {
-        "text": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Selected columns: ", _interpolate(_named("columns")), ", swimlanes: ", _interpolate(_named("swimlanes")), ", filters: ", _interpolate(_named("filters"))]);
-        },
-        "help": {
-          "text": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Information about columns, lines and filters selected for analysis.\nTo change settings, click on the gear icon.\nFor a detailed description, click on this icon."]);
-          },
-          "link": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#configuration"]);
-          }
-        }
-      }
-    },
-    "main": {
-      "title": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Kanban statistics: ", _interpolate(_named("title"))]);
-      },
-      "yAxis": {
-        "avg-wip": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Avg WIP"]);
-        },
-        "eff-waste": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Eff / Waste, %"]);
-        },
-        "lead-cycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Lead / Cycle, days"]);
-        },
-        "throughput": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Throughput, 1/period"]);
-        }
-      },
-      "series": {
-        "efficiency": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Efficiency"]);
-        },
-        "waste": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Waste"]);
-        },
-        "avg-total-wip": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Avg total WIP"]);
-        },
-        "throughput": {
-          "name": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Throughput"]);
-          },
-          "avg": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Avg"]);
-          },
-          "med": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Med"]);
-          }
-        },
-        "lead": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Lead time"]);
-        },
-        "cycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Cycle time"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["On this screen is presented:\nThe average value of WIP for periods.\nThe ratio of time how many completed tasks were carried out in the columns of work by the time spent in the waiting columns for the periods.\nDelivery time and cycle of completed tasks for periods.\nThe capacity of the team for the period."]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#main-screen"]);
-        }
-      }
-    },
-    "total-wip": {
-      "title": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Total WIP: ", _interpolate(_named("title"))]);
-      },
-      "yAxis": {
-        "name": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Count issues in progress"]);
-        }
-      },
-      "series": {
-        "max": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Maximum"]);
-        },
-        "avg": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Average"]);
-        },
-        "med": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Median"]);
-        },
-        "mod": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Mode"]);
-        },
-        "min": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Minimum"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["This screen contains aggregated values of total WIP on the board by the periods."]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#total-wip"]);
-        }
-      }
-    },
-    "wip-by-columns": {
-      "tab": {
-        "max": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Maximums"]);
-        },
-        "avg": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Averages"]);
-        },
-        "med": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Medians"]);
-        },
-        "mod": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Modes"]);
-        },
-        "min": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Minimums"]);
-        }
-      },
-      "title": {
-        "name": {
-          "max": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Maximums"]);
-          },
-          "avg": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Averages"]);
-          },
-          "mod": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Modes"]);
-          },
-          "med": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Medians"]);
-          },
-          "min": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Minimums"]);
-          }
-        },
-        "title": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize([_interpolate(_named("aggr")), " WIP by columns : ", _interpolate(_named("title"))]);
-        }
-      },
-      "yAxis": {
-        "name": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Count issues in progress"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["This screen contains aggregated values of WIP in the columns according by the periods."]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#wips-by-columns"]);
-        }
-      }
-    },
-    "avg-time-by-columns": {
-      "tab": {
-        "percent": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Percents"]);
-        },
-        "day": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Days"]);
-        }
-      },
-      "yAxis": {
-        "throughput": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Throughput, 1/period"]);
-        },
-        "name": {
-          "percent": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["% time in column for released issues"]);
-          },
-          "day": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Time in column for released issues"]);
-          }
-        }
-      },
-      "title": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Average time by columns for released issues: ", _interpolate(_named("title"))]);
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["This screen shows the time that spent in the columns the tasks completed in the period.\nYou can choose both the ratio to the delivery time and absolute values."]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#average-times-by-columns"]);
-        }
-      },
-      "series": {
-        "throughput": {
-          "name": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Throughput"]);
-          }
-        }
-      }
-    },
-    "lead-time-distributions": {
-      "group": {
-        "total": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Total"]);
-        },
-        "default": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Without size"]);
-        },
-        "title": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Lead time distributions: ", _interpolate(_named("title"))]);
-        }
-      },
-      "xAxis": {
-        "name": {
-          "lead": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Lead time, days"]);
-          },
-          "cycle": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Cycle time, days"]);
-          }
-        }
-      },
-      "yAxis": {
-        "name": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Count of issues"]);
-        }
-      },
-      "series": {
-        "count": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize([_interpolate(_named("group")), " count"]);
-        },
-        "percent": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize([_interpolate(_named("group")), " percent of progress"]);
-        },
-        "sum": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Cumulative sum of completed tasks"]);
-        }
-      },
-      "info": {
-        "lead": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Avg lead time: ", _interpolate(_named("avg")), "\nMedian lead time: ", _interpolate(_named("med")), "\nDistribution: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
-        },
-        "cycle": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Avg cycle time: ", _interpolate(_named("avg")), "\nMedian cycle time: ", _interpolate(_named("med")), "\nDistribution: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
-        }
-      },
-      "tail": {
-        "fat": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Fat-tailed"]);
-        },
-        "thin": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Thin-tailed"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["A diagram on the basis of which you can make a probabilistic forecast about the time of task.\nOn the horizontal axis is laid by LEAD TIME,\nBy vertical - the number of tasks performed with such LEAD TIME.\nIf the tasks are has the dimensions, then the diagram can be viewed for each of them."]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead-time-distributions"]);
-        }
-      },
-      "tab": {
-        "lead": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Lead time"]);
-        },
-        "cycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Cycle time"]);
-        }
-      }
-    },
-    "control-chart": {
-      "config": {
-        "search": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-          return _normalize(["Search ", _interpolate(_list(0)), " periods ago with bound ", _interpolate(_list(1)), " %"]);
-        }
-      },
-      "columns": {
-        "cycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Cycle"]);
-        },
-        "lead": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Lead"]);
-        }
-      },
-      "row": {
-        "min": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Minimum, days"]);
-        },
-        "med": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Median, days"]);
-        },
-        "max": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Maximum, days"]);
-        },
-        "bound": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize([_interpolate(_named("bound")), " %, days"]);
-        },
-        "winners": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Winners"]);
-        }
-      },
-      "title": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Control chart: ", _interpolate(_named("title"))]);
-      },
-      "yAxis": {
-        "name": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Lead time, days"]);
-        }
-      },
-      "series": {
-        "issues": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Issues"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["The control chart shows the dispersion of the task execution time.\nIt is used to search and analyze the reasons leading to the instability of the work process."]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead-time-distributions"]);
-        }
-      }
-    },
-    "analyze-by-wip": {
-      "title": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Throughput, Efficiency, Lead & Cycle times by WIP: ", _interpolate(_named("title"))]);
-      },
-      "yAxis": {
-        "throughput": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Throughput, 1/7-days"]);
-        },
-        "efficiency": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Efficiency, %"]);
-        },
-        "lead": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Lead time, days"]);
-        },
-        "cycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Cycle time, days"]);
-        }
-      },
-      "series": {
-        "efficiency": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Efficiency"]);
-        },
-        "lead": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Lead time"]);
-        },
-        "cycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Cycle time"]);
-        },
-        "throughput": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Throughput"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Parameters of throughput, efficiency,\nlead time and cycle time of completed tasks\nby the average WIP during the production of the task"]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#analyze-by-wip"]);
-        }
-      }
-    },
-    "triage": {
-      "tab": {
-        "name": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Triage issues in ", _interpolate(_named("col"))]);
-        },
-        "error": {
-          "lead": {
-            "undefined": (ctx) => {
-              const { normalize: _normalize } = ctx;
-              return _normalize(["ERROR: lead columns undefined"]);
-            },
-            "none": (ctx) => {
-              const { normalize: _normalize } = ctx;
-              return _normalize(["ERROR: can't find column before lead columns"]);
-            }
-          },
-          "cycle": {
-            "undefined": (ctx) => {
-              const { normalize: _normalize } = ctx;
-              return _normalize(["ERROR: cycle columns undefined"]);
-            },
-            "none": (ctx) => {
-              const { normalize: _normalize } = ctx;
-              return _normalize(["ERROR: can't find column before cycle columns"]);
-            }
-          }
-        }
-      },
-      "error": {
-        "lead": {
-          "undefined": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Lead columns undefined."]);
-          },
-          "none": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Can't find column before lead columns. In this case, we can't find a issues for triage."]);
-          }
-        },
-        "cycle": {
-          "undefined": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Cycle columns undefined."]);
-          },
-          "none": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Can't find column before cycle columns. In this case, we can't find a issues for triage."]);
-          }
-        }
-      },
-      "desired-delivered-date": {
-        "far": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Far far away"]);
-        },
-        "not-set": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Not set"]);
-        },
-        "combined": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["DDD: ", _interpolate(_named("ddd")), "<br>DL: ", _interpolate(_named("deadline"))]);
-        }
-      },
-      "value-acquisition-lifecycle": {
-        "display": {
-          "auto": (ctx) => {
-            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-            return _normalize([_interpolate(_named("val")), " (auto)"]);
-          }
-        },
-        "01": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(01) One-off opportunity with an expiry date"]);
-        },
-        "02": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(02) Very front loaded"]);
-        },
-        "03": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(03) Front loaded"]);
-        },
-        "04": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(04) Bell curve, no catch up"]);
-        },
-        "05": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(05) Bell curve with catch up"]);
-        },
-        "06": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(06) Back loaded"]);
-        },
-        "07": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(07) Very back loaded"]);
-        },
-        "08": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(08) Constant rate"]);
-        },
-        "09": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(09) Bell curve extended, decaying life, decaying loyalty"]);
-        },
-        "10": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(10) Bell curve, extended life, decaying loyalty"]);
-        },
-        "11": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(11) Last-minute decay"]);
-        }
-      },
-      "shelf-life-ratio": {
-        "display": {
-          "auto": (ctx) => {
-            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-            return _normalize([_interpolate(_named("val")), " (auto)"]);
-          }
-        },
-        "1": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(2:1) Ultra-short"]);
-        },
-        "2": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(1:1) Short"]);
-        },
-        "3": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(1:2) Medium"]);
-        },
-        "4": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(1:5) Long"]);
-        },
-        "5": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(1:10) Extra-long"]);
-        }
-      },
-      "lead-time-distribution": {
-        "display": {
-          "auto": (ctx) => {
-            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-            return _normalize([_interpolate(_named("val")), " (auto)"]);
-          },
-          "value": (ctx) => {
-            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-            return _normalize([_interpolate(_named("q50")), " / ", _interpolate(_named("q85")), " / ", _interpolate(_named("max"))]);
-          }
-        }
-      },
-      "column": {
-        "issue": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Issue"]);
-        },
-        "value-acquisition-lifecycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Value-acquisition<br>lifecycle"]);
-        },
-        "shelf-life-ratio": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Shelf-life ratio"]);
-        },
-        "desired-delivery-date": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Desired delivery date /<br>Deadline"]);
-        },
-        "issue-size": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Issue size"]);
-        },
-        "lead-time-distribution-ranges": {
-          "lead": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Lead time ranges<br>(50%, 85%, 100%), days"]);
-          },
-          "cycle": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Cycle time ranges<br>(50%, 85%, 100%), days"]);
-          }
-        },
-        "start-date-range": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Start date range"]);
-        },
-        "primary-class-of-service": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Primary CoS"]);
-        },
-        "distribution": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Distribution"]);
-        },
-        "class-of-service": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Class of service"]);
-        }
-      },
-      "tail": {
-        "display": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize([_interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
-        },
-        "fat": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Fat-tailed"]);
-        },
-        "thin": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Thin-tailed"]);
-        }
-      },
-      "start-date-range": {
-        "1": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Super early"]);
-        },
-        "2": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Early"]);
-        },
-        "3": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Normal"]);
-        },
-        "4": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Late"]);
-        },
-        "5": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Last responsible moment"]);
-        },
-        "6": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Irresponsibly late"]);
-        }
-      },
-      "class-of-service": {
-        "0": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Expedite"]);
-        },
-        "1": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Fixed date"]);
-        },
-        "2": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Standard"]);
-        },
-        "3": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Intangible"]);
-        }
-      },
-      "size": {
-        "default": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["No size"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Too big to hint\nJust click on the icon to open the link"]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#triage"]);
-        }
-      }
-    },
-    "app-config": {
-      "period-type": {
-        "text": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-          return _normalize(["Analyze period ", _interpolate(_list(0)), " of ", _interpolate(_list(1))]);
-        },
-        "days": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["days"]);
-        },
-        "seven-days": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["seven days"]);
-        },
-        "weeks-mon-exclude": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["weeks, from Monday, excluding the current incomplete"]);
-        },
-        "weeks-mon-include": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["weeks, from Monday, including the current incomplete"]);
-        },
-        "weeks-sun-exclude": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["weeks, from Sunday, excluding the current incomplete"]);
-        },
-        "weeks-sun-include": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["weeks, from Sunday, including the current incomplete"]);
-        },
-        "months-exclude": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["months, excluding the current incomplete"]);
-        },
-        "months-include": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["months, including the current incomplete"]);
-        },
-        "quarters-exclude": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["quarters, excluding the current incomplete"]);
-        },
-        "quarters-include": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["quarters, including the current incomplete"]);
-        },
-        "years-exclude": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["years, excluding the current incomplete"]);
-        },
-        "years-include": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["years, including the current incomplete"]);
-        }
-      },
-      "analyze-size": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-        return _normalize(["Analyse ", _interpolate(_list(0)), " periods"]);
-      },
-      "locale": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-        return _normalize(["Select language ", _interpolate(_list(0))]);
-      },
-      "title": (ctx) => {
-        const { normalize: _normalize } = ctx;
-        return _normalize(["Configuration"]);
-      },
-      "button": {
-        "apply": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Apply and close"]);
-        },
-        "save": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Save and close"]);
-        },
-        "discard": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Discard and close"]);
-        }
-      },
-      "board": {
-        "filters": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Filters"]);
-        },
-        "swimlanes": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Swimlanes"]);
-        },
-        "columns": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Columns"]);
-        }
-      },
-      "field": {
-        "issue-size": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Field for issue size (type Option):"]);
-        },
-        "value-acquisition-lifecycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Field for value-acquisition lifecycle (type Option):"]);
-        },
-        "shelf-life-ratio": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Field for shelf-life ratio (type Option):"]);
-        },
-        "desire-delivery-date": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Field for desired delivery date (type Date or DateTime):"]);
-        },
-        "deadline-date": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Field for deadline date (type Date or DateTime):"]);
-        },
-        "dont-use": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Don't use"]);
-        }
-      },
-      "jira-column-status": {
-        "row": {
-          "skip": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Skip"]);
-          },
-          "work": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Work"]);
-          },
-          "wait": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Wait"]);
-          },
-          "ready": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Ready"]);
-          },
-          "lead": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Lead"]);
-          },
-          "cycle": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Cycle"]);
-          }
-        }
-      }
-    }
-  },
-  "ru": {
-    "locale": {
-      "ru": (ctx) => {
-        const { normalize: _normalize } = ctx;
-        return _normalize(["Русский"]);
-      },
-      "en": (ctx) => {
-        const { normalize: _normalize } = ctx;
-        return _normalize(["English"]);
-      }
-    },
-    "app": {
-      "title": {
-        "without-name": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Jira Kanban assistant"]);
-        },
-        "with-name": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Jira Kanban assistant: ", _interpolate(_named("name"))]);
-        }
-      },
-      "tabs": {
-        "main": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Основная статистика"]);
-        },
-        "total-wip": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Общий WIP"]);
-        },
-        "wip-by-columns": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["WIP по колонкам"]);
-        },
-        "avg-time-by-columns": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Среднее время по колонкам"]);
-        },
-        "lead-time-distributions": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Распределение времени выполнения"]);
-        },
-        "long-times": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Контрольная диаграмма"]);
-        },
-        "analyze-by-wip": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Анализ по WIP"]);
-        },
-        "triage": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Триаж"]);
-        }
-      },
-      "config-info": {
-        "text": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Выбрано колонок: ", _interpolate(_named("columns")), ", линий: ", _interpolate(_named("swimlanes")), ", фильтров: ", _interpolate(_named("filters"))]);
-        },
-        "help": {
-          "text": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Информация о выбранных для анализа колонок, линий и фильтров.\nЧтобы изменить настройки, нажмите на значок шестерёнки.\nДля подробного описания кликните на значок."]);
-          },
-          "link": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0"]);
-          }
-        }
-      }
-    },
-    "main": {
-      "title": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Статистика Канбана: ", _interpolate(_named("title"))]);
-      },
-      "yAxis": {
-        "avg-wip": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Средний WIP"]);
-        },
-        "eff-waste": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Эфф / потери, %"]);
-        },
-        "lead-cycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Поставка / цикл, дн."]);
-        },
-        "throughput": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Проп. сп., 1/период"]);
-        }
-      },
-      "series": {
-        "efficiency": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Эффективность"]);
-        },
-        "waste": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Потери"]);
-        },
-        "avg-total-wip": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Ср. общий WIP"]);
-        },
-        "throughput": {
-          "name": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Пропускная способность"]);
-          },
-          "avg": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Сред."]);
-          },
-          "med": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Медиана"]);
-          }
-        },
-        "lead": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Время поставки"]);
-        },
-        "cycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Время цикла"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["На этом экране представлены:\nСреднее значение незавершенной работы (WIP) по периодам.\nОтношение времени сколько завершенные задачи провели в колонках работы ко времени проведенном в колонках ожидания по периодам.\nВремя поставки и цикла завершенных задач по периодам.\nПропускная способность команды по периодам."]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9-%D1%8D%D0%BA%D1%80%D0%B0%D0%BD"]);
-        }
-      }
-    },
-    "total-wip": {
-      "title": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Общая незавершенная работа (WIP): ", _interpolate(_named("title"))]);
-      },
-      "yAxis": {
-        "name": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Число незавершенных задач"]);
-        }
-      },
-      "series": {
-        "max": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Максимум"]);
-        },
-        "avg": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Среднее"]);
-        },
-        "med": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Медиана"]);
-        },
-        "mod": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Мода"]);
-        },
-        "min": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Минимум"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["На этом экране представлены агрегированные значения общей незавершенной работы на доске по периодам."]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BE%D0%B1%D1%89%D0%B8%D0%B9-wip"]);
-        }
-      }
-    },
-    "wip-by-columns": {
-      "tab": {
-        "max": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Максимумы"]);
-        },
-        "avg": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Средние"]);
-        },
-        "med": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Медианы"]);
-        },
-        "mod": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Моды"]);
-        },
-        "min": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Минимумы"]);
-        }
-      },
-      "title": {
-        "name": {
-          "max": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Максимумы"]);
-          },
-          "avg": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Средние"]);
-          },
-          "med": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Медианы"]);
-          },
-          "mod": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Моды"]);
-          },
-          "min": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Минимумы"]);
-          }
-        },
-        "title": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize([_interpolate(_named("aggr")), " незавершенной работы WIP по колонкам : ", _interpolate(_named("title"))]);
-        }
-      },
-      "yAxis": {
-        "name": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Число незавершенных задач"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["На этом экране представлены агрегированные значения незавершенной работы в колонках по периодам."]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#wip-%D0%BF%D0%BE-%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BA%D0%B0%D0%BC"]);
-        }
-      }
-    },
-    "avg-time-by-columns": {
-      "tab": {
-        "percent": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Проценты"]);
-        },
-        "day": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Дни"]);
-        }
-      },
-      "yAxis": {
-        "throughput": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Проп. спос., 1/период"]);
-        },
-        "name": {
-          "percent": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Процент времени в колонке для завершенных задач"]);
-          },
-          "day": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Время в колонке для завершенных задач, дни"]);
-          }
-        }
-      },
-      "title": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Среднее время по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["На этом экране представлено время, которые провели в колонках завершенные в периоде задачи.\nМожно выбрать как отношение к времени поставки, так и абсолютные значения."]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%81%D1%80%D0%B5%D0%B4%D0%BD%D0%B5%D0%B5-%D0%B2%D1%80%D0%B5%D0%BC%D1%8F-%D0%BF%D0%BE-%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BA%D0%B0%D0%BC"]);
-        }
-      },
-      "series": {
-        "throughput": {
-          "name": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Пропускная способность"]);
-          }
-        }
-      }
-    },
-    "lead-time-distributions": {
-      "group": {
-        "total": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Общее"]);
-        },
-        "default": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Без размера"]);
-        },
-        "title": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Распределение времени выполнения: ", _interpolate(_named("title"))]);
-        }
-      },
-      "xAxis": {
-        "name": {
-          "lead": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Время поставки, дни"]);
-          },
-          "cycle": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Время цикла, дни"]);
-          }
-        }
-      },
-      "yAxis": {
-        "name": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Число задач"]);
-        }
-      },
-      "series": {
-        "count": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize([_interpolate(_named("group")), " число задач"]);
-        },
-        "percent": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Процент выполнения ", _interpolate(_named("group"))]);
-        },
-        "sum": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Накопительная сумма завершенных задач"]);
-        }
-      },
-      "info": {
-        "lead": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Среднее время поставки: ", _interpolate(_named("avg")), "\nМедиана времени поставки: ", _interpolate(_named("med")), "\nРаспределение: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
-        },
-        "cycle": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Среднее время цикла: ", _interpolate(_named("avg")), "\nМедиана времени цикла: ", _interpolate(_named("med")), "\nРаспределение: ", _interpolate(_named("tailName")), " (", _interpolate(_named("tailValue")), ")"]);
-        }
-      },
-      "tail": {
-        "fat": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["с длинным хвостом"]);
-        },
-        "thin": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["с коротким хвостом"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Диаграмма, на основе которой можно делать вероятностный прогноз о времени выполнения задач.\nПо горизонтальной оси откладывается Lead Time,\nпо вертикальной — количество задач, выполненных с таким Lead Time.\nЕсли у задач заданы размеры, то диаграмму можно посмотреть для каждого из них."]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%B8-%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F"]);
-        }
-      },
-      "tab": {
-        "lead": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Время поставки"]);
-        },
-        "cycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Время цикла"]);
-        }
-      }
-    },
-    "control-chart": {
-      "config": {
-        "search": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-          return _normalize(["Искать на ", _interpolate(_list(0)), " периодов назад с порогом ", _interpolate(_list(1)), " %"]);
-        }
-      },
-      "columns": {
-        "cycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Цикл"]);
-        },
-        "lead": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Поставка"]);
-        }
-      },
-      "row": {
-        "min": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Минимум, дни"]);
-        },
-        "med": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Медиана, дни"]);
-        },
-        "max": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Максимум, дни"]);
-        },
-        "bound": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize([_interpolate(_named("bound")), " %, дни"]);
-        },
-        "winners": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Победители"]);
-        }
-      },
-      "title": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Контрольная диаграмма: ", _interpolate(_named("title"))]);
-      },
-      "yAxis": {
-        "name": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Время поставки, дни"]);
-        }
-      },
-      "series": {
-        "issues": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Задачи"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Контрольная диаграмма показывает дисперсию времени выполнения задач.\nИспользуется для поиска и анализа причин, приводящих к нестабильности рабочего процесса."]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0"]);
-        }
-      }
-    },
-    "analyze-by-wip": {
-      "title": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Пропускная способность, эффективность, время поставки и цикла от объёма незавершенной работы: ", _interpolate(_named("title"))]);
-      },
-      "yAxis": {
-        "throughput": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Пропускная способность, 1/период"]);
-        },
-        "efficiency": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Эффективность, %"]);
-        },
-        "lead": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Время поставки, дни"]);
-        },
-        "cycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Время цикла, дни"]);
-        }
-      },
-      "series": {
-        "efficiency": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Эффективность"]);
-        },
-        "lead": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Время поставки"]);
-        },
-        "cycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Время цикла"]);
-        },
-        "throughput": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Пропускная способность"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Параметры пропускной способности, эффективности,\nвремени поставки и времени цикла завершенных задач\n по среднему WIP за время производства задачи"]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7-%D0%BF%D0%BE-wip"]);
-        }
-      }
-    },
-    "triage": {
-      "tab": {
-        "name": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Триаж задач в колонке ", _interpolate(_named("col"))]);
-        },
-        "error": {
-          "lead": {
-            "undefined": (ctx) => {
-              const { normalize: _normalize } = ctx;
-              return _normalize(["ОШИБКА: не задана колонка времени поставки"]);
-            },
-            "none": (ctx) => {
-              const { normalize: _normalize } = ctx;
-              return _normalize(["ОШИБКА: нет колонок до первой колонки времени поставки"]);
-            }
-          },
-          "cycle": {
-            "undefined": (ctx) => {
-              const { normalize: _normalize } = ctx;
-              return _normalize(["ОШИБКА: не задана колонка времени цикла"]);
-            },
-            "none": (ctx) => {
-              const { normalize: _normalize } = ctx;
-              return _normalize(["ОШИБКА: нет колонок до первой колонки времени цикла"]);
-            }
-          }
-        }
-      },
-      "error": {
-        "lead": {
-          "undefined": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Не задана колонка времени поставки."]);
-          },
-          "none": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Нет колонок до первой колонки времени поставки. В этом случае нечего анализировать."]);
-          }
-        },
-        "cycle": {
-          "undefined": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Не задана колонка времени цикла."]);
-          },
-          "none": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Нет колонок до первой колонки времени цикла. В этом случае нечего анализировать."]);
-          }
-        }
-      },
-      "desired-delivered-date": {
-        "far": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Далеко-далеко"]);
-        },
-        "not-set": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Не задано"]);
-        },
-        "combined": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["ЖДП: ", _interpolate(_named("ddd")), "<br>ДЛ: ", _interpolate(_named("deadline"))]);
-        }
-      },
-      "value-acquisition-lifecycle": {
-        "display": {
-          "auto": (ctx) => {
-            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-            return _normalize([_interpolate(_named("val")), "<br>(авто)"]);
-          }
-        },
-        "01": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(01) Разовая возможность с истечением срока"]);
-        },
-        "02": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(02) Прибыль на очень ранних сроках"]);
-        },
-        "03": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(03) Прибыль на ранних сроках"]);
-        },
-        "04": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(04) Колоколообразная кривая с преимуществом первого хода"]);
-        },
-        "05": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(05) Колоколообразная кривая без преимущества первого хода"]);
-        },
-        "06": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(06) Прибыль  на поздних  сроках"]);
-        },
-        "07": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(07) Прибыль на очень поздних сроках"]);
-        },
-        "08": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(08) Постоянный уровень"]);
-        },
-        "09": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(09) Колоколообразная продленная кривая, угасающие жизненный цикл и лояльность"]);
-        },
-        "10": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(10) Колоколообразная кривая, продленный жизненный  цикл, угасающая лояльность"]);
-        },
-        "11": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(11) Спад в последнюю минуту"]);
-        }
-      },
-      "shelf-life-ratio": {
-        "display": {
-          "auto": (ctx) => {
-            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-            return _normalize([_interpolate(_named("val")), "<br>(авто)"]);
-          }
-        },
-        "1": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(2:1) Очень короткая"]);
-        },
-        "2": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(1:1) Короткая"]);
-        },
-        "3": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(1:2) Средняя"]);
-        },
-        "4": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(1:5) Длительная"]);
-        },
-        "5": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["(1:10) Очень длинная"]);
-        }
-      },
-      "lead-time-distribution": {
-        "display": {
-          "auto": (ctx) => {
-            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-            return _normalize([_interpolate(_named("val")), " (авто)"]);
-          },
-          "value": (ctx) => {
-            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-            return _normalize([_interpolate(_named("q50")), " / ", _interpolate(_named("q85")), " / ", _interpolate(_named("max"))]);
-          }
-        }
-      },
-      "column": {
-        "issue": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Задача"]);
-        },
-        "value-acquisition-lifecycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Функция жизненного цикла<br>получения ценности"]);
-        },
-        "shelf-life-ratio": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Коэффициент<br>времени жизни"]);
-        },
-        "desired-delivery-date": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Желаемая дата поставки /<br>Дедлайн"]);
-        },
-        "issue-size": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Размер задачи"]);
-        },
-        "lead-time-distribution-ranges": {
-          "lead": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Диапазоны времени поставки<br>(50%, 85%, 100%), дни"]);
-          },
-          "cycle": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Диапазоны времени цикла<br>(50%, 85%, 100%), дни"]);
-          }
-        },
-        "start-date-range": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Диапазон<br>даты старта"]);
-        },
-        "primary-class-of-service": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Основной<br>класс<br>обслуживания"]);
-        },
-        "distribution": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Распределение"]);
-        },
-        "class-of-service": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Класс<br>обслуживания"]);
-        }
-      },
-      "tail": {
-        "display": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize([_interpolate(_named("tailName")), "<br>(", _interpolate(_named("tailValue")), ")"]);
-        },
-        "fat": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["С длинным хвостом"]);
-        },
-        "thin": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["С коротким хвостом"]);
-        }
-      },
-      "start-date-range": {
-        "1": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Очень рано"]);
-        },
-        "2": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Рано"]);
-        },
-        "3": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Нормально"]);
-        },
-        "4": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Поздно"]);
-        },
-        "5": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Последний<br>ответственный<br>момент"]);
-        },
-        "6": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Безответственно<br>поздно"]);
-        }
-      },
-      "class-of-service": {
-        "0": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Ускоренный"]);
-        },
-        "1": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Фиксированная<br>дата"]);
-        },
-        "2": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Стандартный"]);
-        },
-        "3": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Нематериальный"]);
-        }
-      },
-      "size": {
-        "default": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Без размера"]);
-        }
-      },
-      "help": {
-        "text": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["'Это неописуемо' - кричала чихуахуа бегая вокруг баобаба.\nПросто кликните по иконке, чтобы открыть ссылку"]);
-        },
-        "link": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%82%D1%80%D0%B8%D0%B0%D0%B6"]);
-        }
-      }
-    },
-    "app-config": {
-      "period-type": {
-        "text": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-          return _normalize(["Размер периода для анализа ", _interpolate(_list(0)), " ", _interpolate(_list(1))]);
-        },
-        "days": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["дней"]);
-        },
-        "seven-days": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["семидневок"]);
-        },
-        "weeks-mon-exclude": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["недель, с понедельника, исключая текущую неполную"]);
-        },
-        "weeks-mon-include": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["недель, с понедельника, включая текущую неполную"]);
-        },
-        "weeks-sun-exclude": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["недель, с воскресенья, исключая текущую неполную"]);
-        },
-        "weeks-sun-include": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["недель, с воскресенья, включая текущую неполную"]);
-        },
-        "months-exclude": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["месяцев, исключая текущий неполный"]);
-        },
-        "months-include": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["месяцев, включая текущий неполный"]);
-        },
-        "quarters-exclude": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["кварталов, исключая текущий неполный"]);
-        },
-        "quarters-include": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["кварталов, включая текущий неполный"]);
-        },
-        "years-exclude": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["лет, исключая текущий неполный"]);
-        },
-        "years-include": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["лет, включая текущий неполный"]);
-        }
-      },
-      "analyze-size": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-        return _normalize(["Анализировать ", _interpolate(_list(0)), " периодов"]);
-      },
-      "locale": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, list: _list } = ctx;
-        return _normalize(["Select language ", _interpolate(_list(0))]);
-      },
-      "title": (ctx) => {
-        const { normalize: _normalize } = ctx;
-        return _normalize(["Настройки"]);
-      },
-      "button": {
-        "apply": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Применить и закрыть без сохранения"]);
-        },
-        "save": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Сохранить и закрыть"]);
-        },
-        "discard": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Отменить и закрыть"]);
-        }
-      },
-      "board": {
-        "filters": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Фильтры"]);
-        },
-        "swimlanes": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Линии"]);
-        },
-        "columns": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Колонки"]);
-        }
-      },
-      "field": {
-        "issue-size": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Поле для размера задач (тип Option):"]);
-        },
-        "value-acquisition-lifecycle": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Поле для функции жизненного цикла получения ценности (тип Option):"]);
-        },
-        "shelf-life-ratio": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Поле для коэффициента времени жизни (тип Option):"]);
-        },
-        "desire-delivery-date": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Поле для желаемой даты поставки (тип Date или DateTime):"]);
-        },
-        "deadline-date": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Поле для даты дедлайна (тип Date или DateTime):"]);
-        },
-        "dont-use": (ctx) => {
-          const { normalize: _normalize } = ctx;
-          return _normalize(["Не используется"]);
-        }
-      },
-      "jira-column-status": {
-        "row": {
-          "skip": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Пропустить"]);
-          },
-          "work": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["В работе"]);
-          },
-          "wait": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["В ожидании"]);
-          },
-          "ready": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Готово"]);
-          },
-          "lead": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Время поставки"]);
-          },
-          "cycle": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Время цикла"]);
-          }
-        }
-      }
-    }
-  }
-};
-const i18n = createI18n({
-  locale: getDefaultLocale(),
-  fallbackLocale: "en",
-  legacy: false,
-  globalInjection: true,
-  messages,
-  runtimeOnly: false
-});
-function getDefaultLocale() {
-  let l2 = void 0;
-  try {
-    l2 = localStorage.getItem("user.locale");
-  } catch {
-  }
-  if (l2 === void 0 || l2 === null) {
-    l2 = navigator.language;
-  }
-  let langs = Object.keys(messages);
-  if (!langs.includes(l2)) {
-    l2 = null;
-    for (const sl of navigator.languages) {
-      if (langs.includes(sl)) {
-        l2 = sl;
-        break;
-      }
-    }
-    if (l2 === null) {
-      l2 = "en";
-    }
-  }
-  return l2;
-}
 const _sfc_main$b = {
   name: "LanguageSwitcher",
   data() {
@@ -72190,16 +75362,18 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
   __name: "App",
   setup(__props) {
     use([
-      install$h,
-      install$f,
-      install$g,
-      install$a,
-      install$6,
-      install$7,
-      install$8,
+      install$l,
+      install$j,
+      install$k,
       install$d,
-      install$c,
-      install
+      install$9,
+      install$a,
+      install,
+      install$b,
+      install$h,
+      install$g,
+      install$f,
+      install$3
     ]);
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock(Fragment, null, [
@@ -72369,9 +75543,9 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
 });
 const main = "";
 const style = "";
-use(install$4);
-use(install$5);
-use(install$3);
+use(install$7);
+use(install$8);
+use(install$6);
 const app = createApp(_sfc_main, {
   queryString: window.location.hash.substring(1)
 });
