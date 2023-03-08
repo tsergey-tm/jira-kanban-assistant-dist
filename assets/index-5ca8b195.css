@@ -285,28 +285,28 @@
   padding: 0.2rem 0;
 }
 
-.ControlChart[data-v-742b3a0d] {
+.ControlChart[data-v-346d7010] {
   height: 50%;
 }
-.control-chart-issues-config[data-v-742b3a0d] {
+.control-chart-issues-config[data-v-346d7010] {
   padding: 0.2rem;
 }
-.control-chart-issues-table[data-v-742b3a0d] {
+.control-chart-issues-table[data-v-346d7010] {
   border-collapse: collapse;
 }
-.control-chart-issues-table-head[data-v-742b3a0d] {
+.control-chart-issues-table-head[data-v-346d7010] {
   text-align: center;
   border: 1px solid rgba(0, 0, 0, 0.25);
   padding: 0.2rem;
   font-weight: bold;
 }
-.control-chart-issues-table-item[data-v-742b3a0d] {
+.control-chart-issues-table-item[data-v-346d7010] {
   text-align: right;
   vertical-align: top;
   border: 1px solid rgba(0, 0, 0, 0.25);
   padding: 0.2rem;
 }
-.control-chart-issues-winners[data-v-742b3a0d] {
+.control-chart-issues-winners[data-v-346d7010] {
   padding: 1rem;
 }
 

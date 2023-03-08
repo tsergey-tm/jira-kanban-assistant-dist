@@ -12315,7 +12315,7 @@ function reduce(arr, cb, memo, context) {
   }
   return memo;
 }
-function filter(arr, cb, context) {
+function filter$1(arr, cb, context) {
   if (!arr) {
     return [];
   }
@@ -12638,12 +12638,12 @@ function applyTransform$1(out2, v, m2) {
   out2[1] = m2[1] * x2 + m2[3] * y2 + m2[5];
   return out2;
 }
-function min$2(out2, v1, v2) {
+function min$3(out2, v1, v2) {
   out2[0] = Math.min(v1[0], v2[0]);
   out2[1] = Math.min(v1[1], v2[1]);
   return out2;
 }
-function max$2(out2, v1, v2) {
+function max$3(out2, v1, v2) {
   out2[0] = Math.max(v1[0], v2[0]);
   out2[1] = Math.max(v1[1], v2[1]);
   return out2;
@@ -18047,7 +18047,7 @@ function animateToShallow(animatable, topKey, animateObj, target, cfg, animation
     }
   }
   if (!cfg.force) {
-    animationKeys = filter(animationKeys, function(key) {
+    animationKeys = filter$1(animationKeys, function(key) {
       return !isValueSame(target[key], animateObj[key]);
     });
     keyLen = animationKeys.length;
@@ -18078,7 +18078,7 @@ function animateToShallow(animatable, topKey, animateObj, target, cfg, animation
         copyValue(animateObj, target, innerKey);
       }
     }
-    var animator = new Animator$1(animateObj, false, false, additive ? filter(existsAnimators, function(animator2) {
+    var animator = new Animator$1(animateObj, false, false, additive ? filter$1(existsAnimators, function(animator2) {
       return animator2.targetName === topKey;
     }) : null);
     animator.targetName = topKey;
@@ -18680,7 +18680,7 @@ function nice(val, round2) {
   val = nf * exp10;
   return exponent >= -20 ? +val.toFixed(exponent < 0 ? -exponent : 0) : val;
 }
-function quantile$1(ascArr, p2) {
+function quantile$2(ascArr, p2) {
   var H = (ascArr.length - 1) * p2 + 1;
   var h2 = Math.floor(H);
   var v = +ascArr[h2 - 1];
@@ -20119,8 +20119,8 @@ function fromQuadratic(x0, y0, x1, y1, x2, y2, min3, max3) {
   max3[1] = mathMax$6(y0, y2, y3);
 }
 function fromArc(x2, y2, rx, ry, startAngle, endAngle, anticlockwise, min3, max3) {
-  var vec2Min = min$2;
-  var vec2Max = max$2;
+  var vec2Min = min$3;
+  var vec2Max = max$3;
   var diff2 = Math.abs(startAngle - endAngle);
   if (diff2 % PI2$5 < 1e-4 && diff2 > 1e-4) {
     min3[0] = x2 - rx;
@@ -20173,8 +20173,8 @@ var CMD$2 = {
 };
 var tmpOutX = [];
 var tmpOutY = [];
-var min$1 = [];
-var max$1 = [];
+var min$2 = [];
+var max$2 = [];
 var min2 = [];
 var max2 = [];
 var mathMin$5 = Math.min;
@@ -20438,8 +20438,8 @@ var PathProxy = function() {
     }
   };
   PathProxy2.prototype.getBoundingRect = function() {
-    min$1[0] = min$1[1] = min2[0] = min2[1] = Number.MAX_VALUE;
-    max$1[0] = max$1[1] = max2[0] = max2[1] = -Number.MAX_VALUE;
+    min$2[0] = min$2[1] = min2[0] = min2[1] = Number.MAX_VALUE;
+    max$2[0] = max$2[1] = max2[0] = max2[1] = -Number.MAX_VALUE;
     var data = this.data;
     var xi = 0;
     var yi = 0;
@@ -20508,13 +20508,13 @@ var PathProxy = function() {
           yi = y0;
           break;
       }
-      min$2(min$1, min$1, min2);
-      max$2(max$1, max$1, max2);
+      min$3(min$2, min$2, min2);
+      max$3(max$2, max$2, max2);
     }
     if (i === 0) {
-      min$1[0] = min$1[1] = max$1[0] = max$1[1] = 0;
+      min$2[0] = min$2[1] = max$2[0] = max$2[1] = 0;
     }
-    return new BoundingRect$1(min$1[0], min$1[1], max$1[0] - min$1[0], max$1[1] - min$1[1]);
+    return new BoundingRect$1(min$2[0], min$2[1], max$2[0] - min$2[0], max$2[1] - min$2[1]);
   };
   PathProxy2.prototype._calculateLength = function() {
     var data = this.data;
@@ -23683,11 +23683,11 @@ function smoothBezier(points2, smooth, isLoop, constraint) {
     min3 = [Infinity, Infinity];
     max3 = [-Infinity, -Infinity];
     for (var i = 0, len2 = points2.length; i < len2; i++) {
-      min$2(min3, min3, points2[i]);
-      max$2(max3, max3, points2[i]);
+      min$3(min3, min3, points2[i]);
+      max$3(max3, max3, points2[i]);
     }
-    min$2(min3, min3, constraint[0]);
-    max$2(max3, max3, constraint[1]);
+    min$3(min3, min3, constraint[0]);
+    max$3(max3, max3, constraint[1]);
   }
   for (var i = 0, len2 = points2.length; i < len2; i++) {
     var point = points2[i];
@@ -23717,10 +23717,10 @@ function smoothBezier(points2, smooth, isLoop, constraint) {
     var cp0 = add([], point, v1);
     var cp1 = add([], point, v2);
     if (constraint) {
-      max$2(cp0, cp0, min3);
-      min$2(cp0, cp0, max3);
-      max$2(cp1, cp1, min3);
-      min$2(cp1, cp1, max3);
+      max$3(cp0, cp0, min3);
+      min$3(cp0, cp0, max3);
+      max$3(cp1, cp1, min3);
+      min$3(cp1, cp1, max3);
     }
     cps.push(cp0);
     cps.push(cp1);
@@ -26908,7 +26908,7 @@ var GlobalModel = (
       } else if (name != null) {
         result = queryByIdOrName("name", name, cmpts);
       } else {
-        result = filter(cmpts, function(cmpt) {
+        result = filter$1(cmpts, function(cmpt) {
           return !!cmpt;
         });
       }
@@ -26918,7 +26918,7 @@ var GlobalModel = (
       var query = condition.query;
       var mainType = condition.mainType;
       var queryCond = getQueryCond(query);
-      var result = queryCond ? this.queryComponents(queryCond) : filter(this._componentsMap.get(mainType), function(cmpt) {
+      var result = queryCond ? this.queryComponents(queryCond) : filter$1(this._componentsMap.get(mainType), function(cmpt) {
         return !!cmpt;
       });
       return doFilter(filterBySubType(result, condition));
@@ -26935,7 +26935,7 @@ var GlobalModel = (
         } : null;
       }
       function doFilter(res) {
-        return condition.filter ? filter(res, condition.filter) : res;
+        return condition.filter ? filter$1(res, condition.filter) : res;
       }
     };
     GlobalModel2.prototype.eachComponent = function(mainType, cb, context) {
@@ -26959,7 +26959,7 @@ var GlobalModel = (
     };
     GlobalModel2.prototype.getSeriesByName = function(name) {
       var nameStr = convertOptionIdName(name, null);
-      return filter(this._componentsMap.get("series"), function(oneSeries) {
+      return filter$1(this._componentsMap.get("series"), function(oneSeries) {
         return !!oneSeries && nameStr != null && oneSeries.name === nameStr;
       });
     };
@@ -26967,12 +26967,12 @@ var GlobalModel = (
       return this._componentsMap.get("series")[seriesIndex];
     };
     GlobalModel2.prototype.getSeriesByType = function(subType) {
-      return filter(this._componentsMap.get("series"), function(oneSeries) {
+      return filter$1(this._componentsMap.get("series"), function(oneSeries) {
         return !!oneSeries && oneSeries.subType === subType;
       });
     };
     GlobalModel2.prototype.getSeries = function() {
-      return filter(this._componentsMap.get("series"), function(oneSeries) {
+      return filter$1(this._componentsMap.get("series"), function(oneSeries) {
         return !!oneSeries;
       });
     };
@@ -27100,18 +27100,18 @@ function queryByIdOrName(attr, idOrName, cmpts) {
         idName != null && keyMap_1.set(idOrNameItem, true);
       }
     });
-    return filter(cmpts, function(cmpt) {
+    return filter$1(cmpts, function(cmpt) {
       return cmpt && keyMap_1.get(cmpt[attr]);
     });
   } else {
     var idName_1 = convertOptionIdName(idOrName, null);
-    return filter(cmpts, function(cmpt) {
+    return filter$1(cmpts, function(cmpt) {
       return cmpt && idName_1 != null && cmpt[attr] === idName_1;
     });
   }
 }
 function filterBySubType(components, condition) {
-  return condition.hasOwnProperty("subType") ? filter(components, function(cmpt) {
+  return condition.hasOwnProperty("subType") ? filter$1(components, function(cmpt) {
     return cmpt && cmpt.subType === condition.subType;
   }) : components;
 }
@@ -37242,8 +37242,8 @@ function getIntervalTicks(bottomUnitName, approxInterval, isUTC, extent3) {
       currentLevelTicks = [];
     }
   }
-  var levelsTicksInExtent = filter(map$1(levelsTicks, function(levelTicks2) {
-    return filter(levelTicks2, function(tick) {
+  var levelsTicksInExtent = filter$1(map$1(levelsTicks, function(levelTicks2) {
+    return filter$1(levelTicks2, function(tick) {
       return tick.value >= extent3[0] && tick.value <= extent3[1] && !tick.notAdd;
     });
   }), function(levelTicks2) {
@@ -43116,7 +43116,7 @@ var Cartesian = (
     };
     Cartesian2.prototype.getAxesByScale = function(scaleType) {
       scaleType = scaleType.toLowerCase();
-      return filter(this.getAxes(), function(axis) {
+      return filter$1(this.getAxes(), function(axis) {
         return axis.scale.type === scaleType;
       });
     };
@@ -46583,9 +46583,9 @@ function prepareBoxplotData(rawData, opt) {
   var useExtreme = boundIQR === "none" || boundIQR === 0;
   for (var i = 0; i < rawData.length; i++) {
     var ascList = asc$1(rawData[i].slice());
-    var Q1 = quantile$1(ascList, 0.25);
-    var Q2 = quantile$1(ascList, 0.5);
-    var Q3 = quantile$1(ascList, 0.75);
+    var Q1 = quantile$2(ascList, 0.25);
+    var Q2 = quantile$2(ascList, 0.5);
+    var Q3 = quantile$2(ascList, 0.75);
     var min3 = ascList[0];
     var max3 = ascList[ascList.length - 1];
     var bound = (boundIQR == null ? 1.5 : boundIQR) * (Q3 - Q1);
@@ -47339,7 +47339,7 @@ function applyKeyframeAnimation(el, animationOpts, animatableModel) {
       }
       var propKeys = keys(kfValues);
       if (!targetPropName) {
-        propKeys = filter(propKeys, function(key) {
+        propKeys = filter$1(propKeys, function(key) {
           return indexOf(KEYFRAME_EXCLUDE_KEYS, key) < 0;
         });
       }
@@ -50400,7 +50400,7 @@ function assembleOtherSeries(series) {
 function getContentFromModel(ecModel) {
   var result = groupSeries(ecModel);
   return {
-    value: filter([assembleSeriesWithCategoryAxis(result.seriesGroupByCategoryAxis), assembleOtherSeries(result.other)], function(str) {
+    value: filter$1([assembleSeriesWithCategoryAxis(result.seriesGroupByCategoryAxis), assembleOtherSeries(result.other)], function(str) {
       return !!str.replace(/[\n\t\s]/g, "");
     }).join("\n\n" + BLOCK_SPLITER + "\n\n"),
     meta: result.meta
@@ -53034,7 +53034,7 @@ function createData(coordSys, seriesModel, mpModel) {
   var mpData = new SeriesData$1(coordDimsInfos, mpModel);
   var dataOpt = map$1(mpModel.get("data"), curry$1(dataTransform, seriesModel));
   if (coordSys) {
-    dataOpt = filter(dataOpt, curry$1(dataFilter, coordSys));
+    dataOpt = filter$1(dataOpt, curry$1(dataFilter, coordSys));
   }
   var dimValueGetter = createMarkerDimValueGetter(!!coordSys, coordDimsInfos);
   mpData.initData(dataOpt, null, dimValueGetter);
@@ -53336,7 +53336,7 @@ function createList$1(coordSys, seriesModel, mlModel) {
   var lineData = new SeriesData$1([], mlModel);
   var optData = map$1(mlModel.get("data"), curry$1(markLineTransform, seriesModel, coordSys, mlModel));
   if (coordSys) {
-    optData = filter(optData, curry$1(markLineFilter, coordSys));
+    optData = filter$1(optData, curry$1(markLineFilter, coordSys));
   }
   var dimValueGetter = createMarkerDimValueGetter(!!coordSys, coordDimsInfos);
   fromData.initData(map$1(optData, function(item) {
@@ -53669,7 +53669,7 @@ function createList(coordSys, seriesModel, maModel) {
   }
   var optData = map$1(maModel.get("data"), curry$1(markAreaTransform, seriesModel, coordSys, maModel));
   if (coordSys) {
-    optData = filter(optData, curry$1(markAreaFilter, coordSys));
+    optData = filter$1(optData, curry$1(markAreaFilter, coordSys));
   }
   var dimValueGetter = coordSys ? function(item, dimName, dataIndex, dimIndex) {
     var rawVal = item.coord[Math.floor(dimIndex / 2)][dimIndex % 2];
@@ -53804,7 +53804,7 @@ var LegendModel = (
         legendNameMap.set(dataItem.name, true);
         return new Model$1(dataItem, this, this.ecModel);
       }, this);
-      this._data = filter(legendData, function(item) {
+      this._data = filter$1(legendData, function(item) {
         return !!item;
       });
     };
@@ -65816,6 +65816,18 @@ const messages = {
         "cycle": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Cycle time"]);
+        },
+        "lead-throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Lead throughput"]);
+          }
+        },
+        "cycle-throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Cycle throughput"]);
+          }
         }
       },
       "help": {
@@ -65987,6 +65999,18 @@ const messages = {
           "name": (ctx) => {
             const { normalize: _normalize } = ctx;
             return _normalize(["Throughput"]);
+          }
+        },
+        "lead-throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Lead throughput"]);
+          }
+        },
+        "cycle-throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Cycle throughput"]);
           }
         }
       }
@@ -66788,6 +66812,18 @@ const messages = {
         "cycle": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Время цикла"]);
+        },
+        "lead-throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Пропускная способность в поставке"]);
+          }
+        },
+        "cycle-throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Пропускная способность в цикле"]);
+          }
         }
       },
       "help": {
@@ -66959,6 +66995,18 @@ const messages = {
           "name": (ctx) => {
             const { normalize: _normalize } = ctx;
             return _normalize(["Пропускная способность"]);
+          }
+        },
+        "lead-throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Пропускная способность в поставке"]);
+          }
+        },
+        "cycle-throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Пропускная способность в цикле"]);
           }
         }
       }
@@ -71840,7 +71888,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8, ["modelValue"]);
 }
 const AppConfig = /* @__PURE__ */ _export_sfc$1(_sfc_main$a, [["render", _sfc_render$9]]);
-function sum(x2) {
+function sum$1(x2) {
   if (x2.length === 0) {
     return 0;
   }
@@ -71864,11 +71912,11 @@ function sum(x2) {
   }
   return sum2 + correction;
 }
-function mean(x2) {
+function mean$1(x2) {
   if (x2.length === 0) {
     throw new Error("mean requires at least one data point");
   }
-  return sum(x2) / x2.length;
+  return sum$1(x2) / x2.length;
 }
 function modeSorted(sorted) {
   if (sorted.length === 0) {
@@ -71896,10 +71944,10 @@ function numericSort(x2) {
     return a - b2;
   });
 }
-function mode(x2) {
+function mode$1(x2) {
   return modeSorted(numericSort(x2));
 }
-function min(x2) {
+function min$1(x2) {
   if (x2.length === 0) {
     throw new Error("min requires at least one data point");
   }
@@ -71911,7 +71959,7 @@ function min(x2) {
   }
   return value;
 }
-function max(x2) {
+function max$1(x2) {
   if (x2.length === 0) {
     throw new Error("max requires at least one data point");
   }
@@ -71998,7 +72046,7 @@ function swap(arr, i, j2) {
   arr[i] = arr[j2];
   arr[j2] = tmp;
 }
-function quantile(x2, p2) {
+function quantile$1(x2, p2) {
   var copy2 = x2.slice();
   if (Array.isArray(p2)) {
     multiQuantileSelect(copy2, p2);
@@ -72063,8 +72111,71 @@ function quantileIndex(len2, p2) {
     return idx;
   }
 }
-function median(x2) {
-  return +quantile(x2, 0.5);
+function median$1(x2) {
+  return +quantile$1(x2, 0.5);
+}
+function filter(vals) {
+  return vals.filter((v) => !Number.isNaN(v) && v !== null && v !== void 0);
+}
+function min(...vals) {
+  const x2 = filter(vals);
+  if (x2.length > 0) {
+    return min$1(x2);
+  } else {
+    return NaN;
+  }
+}
+function max(...vals) {
+  const x2 = filter(vals);
+  if (x2.length > 0) {
+    return max$1(x2);
+  } else {
+    return NaN;
+  }
+}
+function mean(...vals) {
+  const x2 = filter(vals);
+  if (x2.length > 0) {
+    return mean$1(x2);
+  } else {
+    return NaN;
+  }
+}
+function mode(...vals) {
+  const x2 = filter(vals);
+  if (x2.length > 0) {
+    return mode$1(x2);
+  } else {
+    return NaN;
+  }
+}
+function median(...vals) {
+  const x2 = filter(vals);
+  if (x2.length > 0) {
+    return median$1(x2);
+  } else {
+    return NaN;
+  }
+}
+function sum(...vals) {
+  const x2 = filter(vals);
+  if (x2.length > 0) {
+    return sum$1(x2);
+  } else {
+    return NaN;
+  }
+}
+function quantile(x2, p2) {
+  const xx = filter(x2);
+  if (xx.length > 0) {
+    return quantile$1(xx, p2);
+  } else {
+    if (Array.isArray(p2)) {
+      return new Array(p2.length).fill(NaN);
+    } else {
+      return NaN;
+    }
+  }
 }
 const dayShift = 24 * 60 * 60 * 1e3;
 function nanStat() {
@@ -72079,11 +72190,11 @@ function nanStat() {
 function calcStat(arr) {
   if (Array.isArray(arr) && arr.length > 0) {
     return {
-      min: min(arr),
-      med: median(arr),
-      max: max(arr),
-      mod: mode(arr),
-      avg: mean(arr)
+      min: min(...arr),
+      med: median(...arr),
+      max: max(...arr),
+      mod: mode(...arr),
+      avg: mean(...arr)
     };
   } else {
     return nanStat();
@@ -72128,12 +72239,11 @@ const KanbanStat = {
   // lastCol - index of last column,
   // periodChecked - issue was reach a ready columns
   issues: {},
-  kanbanStat: function(columns, kanbanCFD, periodSize, periodType, periodsInStat, workColumnsIndexes, waitColumnsIndexes, readyColumnsIndexes, leadColumnsIndexes, cycleColumnsIndexes) {
+  kanbanStat: function(columns, kanbanCFD, periodSize, periodType, periodsInStat, workColumns, waitColumns, readyColumns, leadColumns, cycleColumns) {
     let tmp = {
-      columnsCnt: columns.length,
-      columns,
+      columns: this.makeColumnsMap(columns),
       // Count of issues. Replay board.
-      board: new Array(columns.length).fill(0),
+      board: {},
       // "Current day" time for history replay
       currDate: null,
       // "Next day" time for history replay
@@ -72147,38 +72257,43 @@ const KanbanStat = {
       issues: {},
       // WIP stats arrays by columns by days
       periodDayWIP: null,
-      workColumnsIndexes,
-      waitColumnsIndexes,
-      readyColumnsIndexes,
-      leadColumnsIndexes,
-      cycleColumnsIndexes,
+      workColumns,
+      waitColumns,
+      readyColumns,
+      leadColumns,
+      cycleColumns,
       //
       currentDayBoardTime: null,
       nextDayBoardTime: null,
       currentPeriodBoardTime: null,
       nextPeriodBoardTime: null,
+      lastDayBoardTime: null,
       periodSize,
       periodType,
       periodsInStat,
       today: null
     };
+    tmp.columnsIndexToId = this.makeColumnsIndexToId(tmp.columns, kanbanCFD.columns);
+    for (const id in tmp.columns) {
+      tmp.board[id] = 0;
+    }
     this.periodStat = [];
     this.issuesStat = {};
-    tmp.today = new Date();
-    tmp.today.setHours(0, 0, 0, 0);
-    tmp.today = tmp.today.getTime();
+    tmp.today = DateTime.now().startOf("day").toMillis();
     tmp.currentDayBoardTime = null;
-    this.calcFirstBoardDay(tmp);
+    this.calcFirstLastBoardDay(tmp);
     for (const [time, transitions] of Object.entries(kanbanCFD.columnChanges)) {
       while (time >= tmp.nextDayBoardTime) {
         this.tickEventDay(tmp);
       }
-      for (const transition of transitions) {
-        if (transition.hasOwnProperty("columnFrom")) {
-          this.issueLeave(tmp, time, transition);
-        }
-        if (transition.hasOwnProperty("columnTo")) {
-          this.issueEnter(tmp, time, transition);
+      if (time < tmp.lastDayBoardTime) {
+        for (const transition of transitions) {
+          if (transition.hasOwnProperty("columnFrom")) {
+            this.issueLeave(tmp, time, transition);
+          }
+          if (transition.hasOwnProperty("columnTo")) {
+            this.issueEnter(tmp, time, transition);
+          }
         }
       }
     }
@@ -72189,29 +72304,29 @@ const KanbanStat = {
   tickEventDay: function(tmp) {
     if (tmp.periodDayWIP == null) {
       tmp.periodDayWIP = [];
-      for (let i = 0; i < tmp.columnsCnt; i++) {
-        tmp.periodDayWIP.push([]);
+      for (const id in tmp.columns) {
+        tmp.periodDayWIP[id] = [];
       }
     }
     if (tmp.currentDayBoardTime == null) {
       for (const issueStat of Object.values(tmp.issues)) {
-        if (!issueStat.periodChecked && tmp.readyColumnsIndexes.includes(issueStat.lastCol)) {
+        if (!issueStat.periodChecked && tmp.readyColumns.includes(issueStat.lastCol)) {
           issueStat.periodChecked = true;
           issueStat.dayChecked = true;
         }
       }
     } else {
       let tWIP = 0;
-      for (let i = 0; i < tmp.board.length; i++) {
-        tmp.periodDayWIP[i].push(tmp.board[i]);
-        if (tmp.leadColumnsIndexes.includes(i)) {
-          tWIP += tmp.board[i];
+      for (const [id, cnt] of Object.entries(tmp.board)) {
+        tmp.periodDayWIP[id].push(cnt);
+        if (tmp.leadColumns.includes(Number(id))) {
+          tWIP += cnt;
         }
       }
       for (const issueStat of Object.values(tmp.issues)) {
         if (!issueStat.periodChecked && !issueStat.dayChecked) {
           issueStat.wip.push(tWIP);
-          if (tmp.readyColumnsIndexes.includes(issueStat.lastCol)) {
+          if (tmp.readyColumns.includes(issueStat.lastCol)) {
             issueStat.dayChecked = true;
             issueStat.readyTime = Number(issueStat.lastAct);
           }
@@ -72229,43 +72344,55 @@ const KanbanStat = {
       this.calcNextPeriodBoardTime(tmp);
     }
   },
-  calcFirstBoardDay(tmp) {
+  calcFirstLastBoardDay(tmp) {
     switch (tmp.periodType) {
       case "days":
-        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).minus({ days: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        tmp.lastDayBoardTime = tmp.today;
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.lastDayBoardTime).minus({ days: tmp.periodSize * tmp.periodsInStat }).toMillis();
         break;
       case "seven-days":
-        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).minus({ weeks: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        tmp.lastDayBoardTime = tmp.today;
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.lastDayBoardTime).minus({ weeks: tmp.periodSize * tmp.periodsInStat }).toMillis();
         break;
       case "weeks-mon-exclude":
-        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("week").minus({ weeks: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        tmp.lastDayBoardTime = DateTime.fromMillis(tmp.today).startOf("week").toMillis();
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.lastDayBoardTime).minus({ weeks: tmp.periodSize * tmp.periodsInStat }).toMillis();
         break;
       case "weeks-mon-include":
-        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("week").minus({ weeks: tmp.periodSize * tmp.periodsInStat - 1 }).toMillis();
+        tmp.lastDayBoardTime = tmp.today;
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.lastDayBoardTime).startOf("week").minus({ weeks: tmp.periodSize * tmp.periodsInStat - 1 }).toMillis();
         break;
       case "weeks-sun-exclude":
-        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).endOf("week").minus({ weeks: tmp.periodSize * tmp.periodsInStat + 1 }).toMillis();
+        tmp.lastDayBoardTime = DateTime.fromMillis(tmp.today).endOf("week").minus({ weeks: 1 }).toMillis();
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.lastDayBoardTime).minus({ weeks: tmp.periodSize * tmp.periodsInStat }).toMillis();
         break;
       case "weeks-sun-include":
-        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("week").minus({ weeks: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        tmp.lastDayBoardTime = tmp.today;
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.lastDayBoardTime).startOf("week").minus({ weeks: tmp.periodSize * tmp.periodsInStat }).toMillis();
         break;
       case "months-exclude":
-        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("month").minus({ months: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        tmp.lastDayBoardTime = DateTime.fromMillis(tmp.today).startOf("month").toMillis();
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.lastDayBoardTime).minus({ months: tmp.periodSize * tmp.periodsInStat }).toMillis();
         break;
       case "months-include":
-        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("month").minus({ months: tmp.periodSize * tmp.periodsInStat - 1 }).toMillis();
+        tmp.lastDayBoardTime = tmp.today;
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.lastDayBoardTime).startOf("month").minus({ months: tmp.periodSize * tmp.periodsInStat - 1 }).toMillis();
         break;
       case "quarters-exclude":
-        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("quarter").minus({ quarters: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        tmp.lastDayBoardTime = DateTime.fromMillis(tmp.today).startOf("quarter").toMillis();
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.lastDayBoardTime).minus({ quarters: tmp.periodSize * tmp.periodsInStat }).toMillis();
         break;
       case "quarters-include":
-        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("quarter").minus({ quarters: tmp.periodSize * tmp.periodsInStat - 1 }).toMillis();
+        tmp.lastDayBoardTime = tmp.today;
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.lastDayBoardTime).startOf("quarter").minus({ quarters: tmp.periodSize * tmp.periodsInStat - 1 }).toMillis();
         break;
       case "years-exclude":
-        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("year").minus({ years: tmp.periodSize * tmp.periodsInStat }).toMillis();
+        tmp.lastDayBoardTime = DateTime.fromMillis(tmp.today).startOf("year").toMillis();
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.lastDayBoardTime).minus({ years: tmp.periodSize * tmp.periodsInStat }).toMillis();
         break;
       case "years-include":
-        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.today).startOf("year").minus({ years: tmp.periodSize * tmp.periodsInStat - 1 }).toMillis();
+        tmp.lastDayBoardTime = tmp.today;
+        tmp.nextDayBoardTime = DateTime.fromMillis(tmp.lastDayBoardTime).startOf("year").minus({ years: tmp.periodSize * tmp.periodsInStat - 1 }).toMillis();
         break;
     }
   },
@@ -72296,40 +72423,49 @@ const KanbanStat = {
     }
   },
   tickPeriod: function(tmp) {
-    if (tmp.currentPeriodBoardTime > tmp.today || tmp.periodDayWIP === null || tmp.periodDayWIP === void 0) {
+    if (tmp.currentPeriodBoardTime >= tmp.lastDayBoardTime || tmp.periodDayWIP === null || tmp.periodDayWIP === void 0) {
       return;
     }
-    let wips = [];
+    let wips = {};
     let totalD = [];
-    for (let d = 0; d < tmp.periodDayWIP[0].length; d++) {
+    const daysCnt = Math.max(...Object.values(tmp.periodDayWIP).map((value) => value.length));
+    for (let d = 0; d < daysCnt; d++) {
       let td = 0;
-      for (let ci = 0; ci < tmp.leadColumnsIndexes.length; ci++) {
-        td += tmp.periodDayWIP[tmp.leadColumnsIndexes[ci]][d];
+      for (const ci of tmp.leadColumns) {
+        td += tmp.periodDayWIP[ci][d];
       }
       totalD.push(td);
     }
-    for (let c = 0; c < tmp.columnsCnt; c++) {
-      wips.push(calcStat(tmp.periodDayWIP[c]));
+    for (const ci in tmp.columns) {
+      wips[ci] = calcStat(tmp.periodDayWIP[ci]);
     }
     let totalWips = calcStat(totalD);
-    let timesCols = [];
-    for (let i = 0; i < tmp.columnsCnt; i++) {
-      timesCols.push([]);
+    let timesCols = {};
+    for (const id in tmp.columns) {
+      timesCols[id] = [];
     }
     let throughput = 0;
+    let leadThroughput = 0;
+    let cycleThroughput = 0;
     let timeLead = [];
     let timeWork = [];
     let timeCycle = [];
     let timeWaste = [];
     for (const [key, issueStat] of Object.entries(tmp.issues)) {
-      if (!issueStat.periodChecked && tmp.readyColumnsIndexes.includes(issueStat.lastCol)) {
+      if (!issueStat.periodChecked && tmp.readyColumns.includes(issueStat.lastCol)) {
         issueStat.periodChecked = true;
-        for (let i = 0; i < timesCols.length; i++) {
-          timesCols[i].push(issueStat.times[i]);
+        for (const id in timesCols) {
+          timesCols[id].push(issueStat.times[id]);
         }
         throughput++;
         let calcIssueStat = this.calcIssueStat(issueStat, tmp);
         this.issuesStat[key] = calcIssueStat;
+        if (!Number.isNaN(calcIssueStat.lead)) {
+          leadThroughput++;
+        }
+        if (!Number.isNaN(calcIssueStat.cycle)) {
+          cycleThroughput++;
+        }
         timeLead.push(calcIssueStat.lead);
         timeWork.push(calcIssueStat.work);
         timeCycle.push(calcIssueStat.cycle);
@@ -72337,10 +72473,12 @@ const KanbanStat = {
       }
     }
     let ps = {
-      "date": tmp.nextPeriodBoardTime - dayShift,
-      "wip": wips,
-      "totalWip": totalWips,
-      "throughput": throughput
+      date: tmp.nextPeriodBoardTime - dayShift,
+      wip: wips,
+      totalWip: totalWips,
+      throughput,
+      leadThroughput,
+      cycleThroughput
     };
     if (throughput === 0) {
       ps.cycle = nanStat();
@@ -72349,29 +72487,32 @@ const KanbanStat = {
       ps.cyclePercent = NaN;
       ps.wastePercent = NaN;
       ps.effPercent = NaN;
-      ps.times = new Array(tmp.columnsCnt).fill(NaN);
-      ps.timesPercent = new Array(tmp.columnsCnt).fill(NaN);
+      ps.times = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
+      ps.timesPercent = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
     } else {
       ps.cycle = calcStat(timeCycle);
       ps.lead = calcStat(timeLead);
       ps.waste = calcStat(timeWaste);
-      ps.times = [];
-      for (let index = 0; index < tmp.columnsCnt; index++) {
-        ps.times.push(mean(timesCols[index]) / dayShift);
+      ps.times = {};
+      for (const id in tmp.columns) {
+        ps.times[id] = mean(...timesCols[id]) / dayShift;
       }
-      let tLead = sum(timeLead);
+      let tLead = sum(...timeLead);
       if (tLead === 0) {
         ps.cyclePercent = NaN;
         ps.wastePercent = NaN;
         ps.effPercent = NaN;
-        ps.timesPercent = new Array(tmp.columnsCnt).fill(NaN);
+        ps.timesPercent = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
       } else {
-        ps.cyclePercent = 100 * sum(timeCycle) / tLead;
-        ps.wastePercent = 100 * sum(timeWaste) / tLead;
-        ps.effPercent = 100 * sum(timeWork) / tLead;
-        ps.timesPercent = [];
-        for (let index = 0; index < tmp.columnsCnt; index++) {
-          ps.timesPercent.push(100 * sum(timesCols[index]) / dayShift / tLead);
+        const wasteSum = sum(...timeWaste);
+        const workSum = sum(...timeWork);
+        const timeSum = wasteSum + workSum;
+        ps.wastePercent = 100 * wasteSum / timeSum;
+        ps.effPercent = 100 * workSum / timeSum;
+        ps.cyclePercent = 100 * sum(...timeCycle) / timeSum;
+        ps.timesPercent = {};
+        for (let id in tmp.columns) {
+          ps.timesPercent[id] = 100 * sum(...timesCols[id]) / dayShift / timeSum;
         }
       }
     }
@@ -72379,24 +72520,31 @@ const KanbanStat = {
     tmp.periodDayWIP = null;
   },
   issueLeave(tmp, evTime, transition) {
-    tmp.board[transition.columnFrom] -= 1;
+    const columnFrom = tmp.columnsIndexToId[transition.columnFrom];
+    tmp.board[columnFrom] -= 1;
     if (transition.key in tmp.issues) {
       let timeDelta = evTime - tmp.issues[transition.key].lastAct;
-      tmp.issues[transition.key].times[transition.columnFrom] += timeDelta;
+      if (Number.isNaN(tmp.issues[transition.key].times[columnFrom])) {
+        tmp.issues[transition.key].times[columnFrom] = timeDelta;
+      } else {
+        tmp.issues[transition.key].times[columnFrom] += timeDelta;
+      }
       tmp.issues[transition.key].lastAct = evTime;
       tmp.issues[transition.key].lastCol = null;
     }
   },
   issueEnter(tmp, evTime, transition) {
-    tmp.board[transition.columnTo] += 1;
+    const columnTo = tmp.columnsIndexToId[transition.columnTo];
+    tmp.board[columnTo] += 1;
     if (transition.key in tmp.issues) {
       tmp.issues[transition.key].lastAct = evTime;
-      tmp.issues[transition.key].lastCol = transition.columnTo;
+      tmp.issues[transition.key].lastCol = columnTo;
     } else {
       tmp.issues[transition.key] = {
-        times: new Array(tmp.columnsCnt).fill(0),
+        key: transition.key,
+        times: Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN])),
         lastAct: evTime,
-        lastCol: transition.columnTo,
+        lastCol: columnTo,
         dayChecked: false,
         periodChecked: false,
         wip: []
@@ -72404,27 +72552,41 @@ const KanbanStat = {
     }
   },
   calcIssueStat(issueStat, tmp) {
-    let timeLead = 0;
-    for (const index of tmp.leadColumnsIndexes) {
-      timeLead += issueStat.times[index];
+    function add2(v1, v2) {
+      if (Number.isNaN(v1)) {
+        return v2;
+      } else if (Number.isNaN(v2)) {
+        return v1;
+      } else {
+        return v1 + v2;
+      }
     }
-    let timeWork = 0;
-    for (const index of tmp.workColumnsIndexes) {
-      timeWork += issueStat.times[index];
+    let timeLead = NaN;
+    for (const id of tmp.leadColumns) {
+      timeLead = add2(timeLead, issueStat.times[id]);
     }
-    let timeCycle = 0;
-    for (const index of tmp.cycleColumnsIndexes) {
-      timeCycle += issueStat.times[index];
+    let timeWork = NaN;
+    for (const id of tmp.workColumns) {
+      timeWork = add2(timeWork, issueStat.times[id]);
     }
-    let timeWaste = 0;
-    for (const index of tmp.waitColumnsIndexes) {
-      timeWaste += issueStat.times[index];
+    let timeCycle = NaN;
+    for (const id of tmp.cycleColumns) {
+      timeCycle = add2(timeCycle, issueStat.times[id]);
     }
-    let tp = [];
-    let t = [];
-    for (const time of issueStat.times) {
-      t.push(time / dayShift);
-      tp.push(timeLead > 0 ? 100 * time / timeLead : NaN);
+    let timeWaste = NaN;
+    for (const id of tmp.waitColumns) {
+      timeWaste = add2(timeWaste, issueStat.times[id]);
+    }
+    let tp = {};
+    let t = {};
+    for (const [id, time] of Object.entries(issueStat.times)) {
+      if (Number.isNaN(time)) {
+        t[id] = NaN;
+        tp[id] = NaN;
+      } else {
+        t[id] = time / dayShift;
+        tp[id] = timeLead > 0 ? 100 * time / timeLead : NaN;
+      }
     }
     let wips = {};
     if (issueStat.wip.length > 0) {
@@ -72433,6 +72595,7 @@ const KanbanStat = {
       wips = nanStat();
     }
     return {
+      key: issueStat.key,
       wip: wips,
       cycle: timeCycle / dayShift,
       lead: timeLead / dayShift,
@@ -72446,6 +72609,26 @@ const KanbanStat = {
       times: t,
       readyTime: issueStat.readyTime
     };
+  },
+  makeColumnsMap(columns) {
+    let res = {};
+    for (let column of columns) {
+      res[column.id] = column;
+    }
+    return res;
+  },
+  makeColumnsIndexToId(columns, cfdColumns) {
+    let res = new Array(cfdColumns.length).fill(null);
+    for (let i = 0; i < cfdColumns.length; i++) {
+      const colName = cfdColumns[i].name;
+      for (const [id, col] of Object.entries(columns)) {
+        if (col.name === colName) {
+          res[i] = Number(id);
+          break;
+        }
+      }
+    }
+    return res;
   }
 };
 const _sfc_main$9 = {
@@ -72545,7 +72728,9 @@ const _sfc_main$9 = {
               }
               return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
             }
-          }
+          },
+          min: "dataMin",
+          max: "dataMax"
         },
         yAxis: {
           name: this.$t("total-wip.yAxis.name"),
@@ -72723,7 +72908,9 @@ const _sfc_main$8 = {
               }
               return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
             }
-          }
+          },
+          min: "dataMin",
+          max: "dataMax"
         },
         yAxis: {
           name: this.$t("wip-by-columns.yAxis.name"),
@@ -72751,7 +72938,8 @@ const _sfc_main$8 = {
     series() {
       let res = [];
       for (let i = 0; i < this.columns.length; i++) {
-        if (this.selectedColumns.includes(this.columns[i].id)) {
+        const id = this.columns[i].id;
+        if (this.selectedColumns.includes(id)) {
           let ser = {
             name: this.columns[i].name,
             type: "line",
@@ -72767,10 +72955,10 @@ const _sfc_main$8 = {
             switch (this.selected) {
               case "mod":
               case "avg":
-                ser.data.push([item.date, item.wip[i][this.selected].toFixed(1)]);
+                ser.data.push([item.date, item.wip[id][this.selected].toFixed(1)]);
                 break;
               default:
-                ser.data.push([item.date, item.wip[i][this.selected]]);
+                ser.data.push([item.date, item.wip[id][this.selected]]);
                 break;
             }
           }
@@ -72860,9 +73048,10 @@ const _sfc_main$7 = {
         res = Math.min(res, item.date);
       }
       if (res === Number.MAX_VALUE) {
-        res = NaN;
+        return NaN;
+      } else {
+        return res - 6e4;
       }
-      return res;
     },
     xAxisMax() {
       let res = Number.MIN_VALUE;
@@ -72870,9 +73059,10 @@ const _sfc_main$7 = {
         res = Math.max(res, item.date);
       }
       if (res === Number.MIN_VALUE) {
-        res = NaN;
+        return NaN;
+      } else {
+        return res + 6e4;
       }
-      return res;
     },
     option() {
       let opts = {
@@ -73018,14 +73208,15 @@ const _sfc_main$7 = {
         series: this.series
       };
       if (this.selected === "perc") {
-        opts.yAxis.max = 100;
+        opts.yAxis[0].max = 100;
       }
       return opts;
     },
     series() {
       let res = [];
       for (let i = 0; i < this.columns.length; i++) {
-        if (this.selectedColumns.includes(this.columns[i].id)) {
+        const id = this.columns[i].id;
+        if (this.selectedColumns.includes(id)) {
           let ser = {
             name: this.columns[i].name,
             type: "line",
@@ -73041,7 +73232,7 @@ const _sfc_main$7 = {
             if (item.throughput > 0) {
               ser.data.push([
                 item.date,
-                (this.selected === "perc" ? item.timesPercent[i] : item.times[i]).toFixed(2)
+                ((this.selected === "perc" ? item.timesPercent[id] : item.times[id]) || 0).toFixed(2)
               ]);
             }
           }
@@ -73063,10 +73254,52 @@ const _sfc_main$7 = {
         },
         data: []
       };
+      let serLeadThroughput = {
+        name: this.$t("avg-time-by-columns.series.lead-throughput.name"),
+        type: "bar",
+        xAxisIndex: 1,
+        yAxisIndex: 1,
+        label: {
+          show: true,
+          position: "top"
+        },
+        barMaxWidth: "10%",
+        itemStyle: {
+          color: "rgba(64,255,64,0.75)"
+        },
+        data: []
+      };
+      let serCycleThroughput = {
+        name: this.$t("avg-time-by-columns.series.cycle-throughput.name"),
+        type: "bar",
+        xAxisIndex: 1,
+        yAxisIndex: 1,
+        label: {
+          show: true,
+          position: "top"
+        },
+        barMaxWidth: "10%",
+        itemStyle: {
+          color: "rgba(191,64,255,0.75)"
+        },
+        data: []
+      };
+      let showLeadThroughput = false;
+      let showCycleThroughput = false;
       for (let item of this.periodStat) {
         serThroughput.data.push([item.date, item.throughput]);
+        serLeadThroughput.data.push([item.date, item.leadThroughput]);
+        serCycleThroughput.data.push([item.date, item.cycleThroughput]);
+        showLeadThroughput || (showLeadThroughput = item.throughput !== item.leadThroughput);
+        showCycleThroughput || (showCycleThroughput = item.throughput !== item.cycleThroughput);
       }
       res.push(serThroughput);
+      if (showLeadThroughput) {
+        res.push(serLeadThroughput);
+      }
+      if (showCycleThroughput) {
+        res.push(serCycleThroughput);
+      }
       return res;
     }
   }
@@ -73124,9 +73357,10 @@ const _sfc_main$6 = {
         res = Math.min(res, item.date);
       }
       if (res === Number.MAX_VALUE) {
-        res = NaN;
+        return NaN;
+      } else {
+        return res - 6e4;
       }
-      return res;
     },
     xAxisMax() {
       let res = Number.MIN_VALUE;
@@ -73134,9 +73368,10 @@ const _sfc_main$6 = {
         res = Math.max(res, item.date);
       }
       if (res === Number.MIN_VALUE) {
-        res = NaN;
+        return NaN;
+      } else {
+        return res + 6e4;
       }
-      return res;
     },
     option() {
       return {
@@ -73487,6 +73722,36 @@ const _sfc_main$6 = {
         },
         data: []
       };
+      let serLeadThroughput = {
+        name: this.$t("main.series.lead-throughput.name"),
+        type: "bar",
+        xAxisIndex: 3,
+        yAxisIndex: 3,
+        label: {
+          show: true,
+          position: "top"
+        },
+        barMaxWidth: "10%",
+        itemStyle: {
+          color: "rgba(64,255,64,0.75)"
+        },
+        data: []
+      };
+      let serCycleThroughput = {
+        name: this.$t("main.series.cycle-throughput.name"),
+        type: "bar",
+        xAxisIndex: 3,
+        yAxisIndex: 3,
+        label: {
+          show: true,
+          position: "top"
+        },
+        barMaxWidth: "10%",
+        itemStyle: {
+          color: "rgba(191,64,255,0.75)"
+        },
+        data: []
+      };
       let serLead = {
         name: this.$t("main.series.lead"),
         type: "line",
@@ -73513,9 +73778,15 @@ const _sfc_main$6 = {
         yAxisIndex: 2,
         data: []
       };
+      let showLeadThroughput = false;
+      let showCycleThroughput = false;
       for (let item of this.periodStat) {
         serTotalWIP.data.push([item.date, item.totalWip.avg.toFixed(2)]);
         serThroughput.data.push([item.date, item.throughput]);
+        serLeadThroughput.data.push([item.date, item.leadThroughput]);
+        serCycleThroughput.data.push([item.date, item.cycleThroughput]);
+        showLeadThroughput || (showLeadThroughput = item.throughput !== item.leadThroughput);
+        showCycleThroughput || (showCycleThroughput = item.throughput !== item.cycleThroughput);
         if (item.throughput > 0) {
           serEff.data.push([item.date, item.effPercent.toFixed(2)]);
           serWaste.data.push([item.date, item.wastePercent.toFixed(2)]);
@@ -73523,7 +73794,14 @@ const _sfc_main$6 = {
           serCycle.data.push([item.date, item.cycle.avg.toFixed(2)]);
         }
       }
-      return [serTotalWIP, serEff, serWaste, serLead, serCycle, serThroughput];
+      let res = [serTotalWIP, serEff, serWaste, serLead, serCycle, serThroughput];
+      if (showLeadThroughput) {
+        res.push(serLeadThroughput);
+      }
+      if (showCycleThroughput) {
+        res.push(serCycleThroughput);
+      }
+      return res;
     }
   }
 };
@@ -73650,7 +73928,8 @@ const _sfc_main$5 = {
               }
             },
             type: "value",
-            min: wMin
+            min: wMin,
+            max: wMax
           },
           {
             gridIndex: 1,
@@ -73670,7 +73949,8 @@ const _sfc_main$5 = {
               }
             },
             type: "value",
-            min: wMin
+            min: wMin,
+            max: wMax
           },
           {
             gridIndex: 2,
@@ -73690,7 +73970,8 @@ const _sfc_main$5 = {
               }
             },
             type: "value",
-            min: wMin
+            min: wMin,
+            max: wMax
           },
           {
             gridIndex: 3,
@@ -73710,7 +73991,8 @@ const _sfc_main$5 = {
               }
             },
             type: "value",
-            min: wMin
+            min: wMin,
+            max: wMax
           }
         ],
         yAxis: [
@@ -73758,7 +74040,7 @@ const _sfc_main$5 = {
               }
             },
             min: 0,
-            max: 101
+            max: 100
           },
           {
             gridIndex: 2,
@@ -73812,6 +74094,7 @@ const _sfc_main$5 = {
         type: "scatter",
         xAxisIndex: 1,
         yAxisIndex: 1,
+        clip: false,
         data: []
       };
       let serThroughput = {
@@ -73819,6 +74102,7 @@ const _sfc_main$5 = {
         type: "scatter",
         xAxisIndex: 0,
         yAxisIndex: 0,
+        clip: false,
         data: []
       };
       let serLead = {
@@ -73826,6 +74110,7 @@ const _sfc_main$5 = {
         type: "scatter",
         xAxisIndex: 2,
         yAxisIndex: 2,
+        clip: false,
         data: []
       };
       let serCycle = {
@@ -73833,6 +74118,7 @@ const _sfc_main$5 = {
         type: "scatter",
         xAxisIndex: 3,
         yAxisIndex: 3,
+        clip: false,
         data: []
       };
       for (let item of this.periodStat) {
@@ -73867,7 +74153,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64);
 }
 const StatByWIPChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$5, [["render", _sfc_render$4]]);
-const ControlChart_vue_vue_type_style_index_0_scoped_742b3a0d_lang = "";
+const ControlChart_vue_vue_type_style_index_0_scoped_346d7010_lang = "";
 const _sfc_main$4 = {
   name: "ControlChart",
   components: {
@@ -73914,7 +74200,7 @@ const _sfc_main$4 = {
       for (let i = 0; i < this.columns.length; i++) {
         if (this.selectedColumns.includes(this.columns[i].id)) {
           columns.push(this.columns[i].name);
-          columnsi.push(i);
+          columnsi.push(this.columns[i].id);
         }
       }
       let times = [];
@@ -73923,17 +74209,19 @@ const _sfc_main$4 = {
       }
       let issues = [];
       for (const [key, issueStat] of Object.entries(this.issuesStat)) {
-        let issue = { key, times: [], readyTime: issueStat.readyTime };
-        for (let i = 0; i < columnsi.length; i++) {
-          let index = columnsi[i];
-          issue.times.push(issueStat.times[index]);
-          times[i].push(issueStat.times[index]);
+        if (!Number.isNaN(issueStat.lead)) {
+          let issue = { key, times: [], readyTime: issueStat.readyTime };
+          for (let i = 0; i < columnsi.length; i++) {
+            let id = columnsi[i];
+            issue.times.push(issueStat.times[id]);
+            times[i].push(issueStat.times[id]);
+          }
+          issue.times.push(issueStat.cycle);
+          issue.times.push(issueStat.lead);
+          times[times.length - 2].push(issueStat.cycle);
+          times[times.length - 1].push(issueStat.lead);
+          issues.push(issue);
         }
-        issue.times.push(issueStat.cycle);
-        issue.times.push(issueStat.lead);
-        times[times.length - 2].push(issueStat.cycle);
-        times[times.length - 1].push(issueStat.lead);
-        issues.push(issue);
       }
       columns.push(this.$t("control-chart.columns.cycle"));
       columns.push(this.$t("control-chart.columns.lead"));
@@ -73997,18 +74285,20 @@ const _sfc_main$4 = {
       this.issuesView.winners = reactive(totalWinners);
       let dd = {};
       for (const [key, issueStat] of Object.entries(this.issuesStat)) {
-        let lead = issueStat.lead.toFixed(0);
-        let ready = new Date(issueStat.readyTime).setHours(0, 0, 0, 0);
-        if (ready in dd) {
-          if (lead in dd[ready]) {
-            dd[ready][lead].cnt++;
-            dd[ready][lead].key += "," + key;
+        if (!Number.isNaN(issueStat.lead)) {
+          let lead = issueStat.lead.toFixed(0);
+          let ready = new Date(issueStat.readyTime).setHours(0, 0, 0, 0);
+          if (ready in dd) {
+            if (lead in dd[ready]) {
+              dd[ready][lead].cnt++;
+              dd[ready][lead].key += "," + key;
+            } else {
+              dd[ready][lead] = { cnt: 1, key };
+            }
           } else {
+            dd[ready] = [];
             dd[ready][lead] = { cnt: 1, key };
           }
-        } else {
-          dd[ready] = [];
-          dd[ready][lead] = { cnt: 1, key };
         }
       }
       this.chartData.splice(0);
@@ -74143,6 +74433,7 @@ const _sfc_main$4 = {
             name: this.$t("control-chart.series.issues"),
             data: this.chartData,
             type: "scatter",
+            clip: false,
             itemStyle: {
               color: "rgba(64,64,255,0.75)"
             },
@@ -74259,7 +74550,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_7)
   ], 64);
 }
-const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-742b3a0d"]]);
+const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-346d7010"]]);
 const LeadTimeDistributionChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$3 = {
   name: "LeadTimeDistributionChart",
@@ -75082,11 +75373,11 @@ const __default__ = {
           this.conf.periodSize,
           this.conf.periodType,
           this.conf.analyzeLength,
-          this.selectedColumnIndexes(this.conf.work),
-          this.selectedColumnIndexes(this.conf.wait),
-          this.selectedColumnIndexes(this.conf.ready),
-          this.selectedColumnIndexes(this.conf.lead),
-          this.selectedColumnIndexes(this.conf.cycle)
+          this.conf.work,
+          this.conf.wait,
+          this.conf.ready,
+          this.conf.lead,
+          this.conf.cycle
         );
         for (let periodStatElement of kanbanStat.periodStat) {
           this.periodStat.push(periodStatElement);
@@ -75266,7 +75557,7 @@ const __default__ = {
           q50: qq[0],
           q85: qq[1],
           max: qq[2],
-          avg: mean(leads)
+          avg: mean(...leads)
         };
         lctd.lead.tail = qq[3] / qq[0];
       }
@@ -75276,7 +75567,7 @@ const __default__ = {
           q50: qq[0],
           q85: qq[1],
           max: qq[2],
-          avg: mean(cycles)
+          avg: mean(...cycles)
         };
         lctd.cycle.tail = qq[3] / qq[0];
       }
@@ -75288,15 +75579,6 @@ const __default__ = {
     jiraConfigClose: function() {
       this.showConfigPanel = false;
       this.loadCFD();
-    },
-    selectedColumnIndexes: function(cols) {
-      let columnsIndexes = [];
-      for (let i = 0; i < this.columns.length; i++) {
-        if (cols.includes(this.columns[i].id)) {
-          columnsIndexes.push(i);
-        }
-      }
-      return columnsIndexes;
     },
     saveConfig: async function() {
       let url = this.jiraBase + "/rest/agile/1.0/board/" + this.jiraBoardId + "/properties/tsergey.jka.config.v1";
