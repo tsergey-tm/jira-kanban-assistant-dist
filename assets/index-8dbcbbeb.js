@@ -72594,6 +72594,13 @@ const KanbanStat = {
     } else {
       wips = nanStat();
     }
+    let timeSum = 0;
+    if (!Number.isNaN(timeWaste)) {
+      timeSum += timeWaste;
+    }
+    if (!Number.isNaN(timeWork)) {
+      timeSum += timeWork;
+    }
     return {
       key: issueStat.key,
       wip: wips,
@@ -72603,8 +72610,8 @@ const KanbanStat = {
       waste: timeWaste / dayShift,
       cyclePercent: timeLead > 0 ? 100 * timeCycle / timeLead : NaN,
       workPercent: timeLead > 0 ? 100 * timeWork / timeLead : NaN,
-      wastePercent: timeLead > 0 ? 100 * timeWaste / timeLead : NaN,
-      effPercent: timeLead > 0 ? 100 * timeWork / timeLead : NaN,
+      wastePercent: timeSum > 0 ? 100 * timeWaste / timeSum : NaN,
+      effPercent: timeSum > 0 ? 100 * timeWork / timeSum : NaN,
       timesPercent: tp,
       times: t,
       readyTime: issueStat.readyTime
@@ -74127,15 +74134,45 @@ const _sfc_main$5 = {
         clip: false,
         data: []
       };
+      let dtMin = Number.MAX_VALUE;
+      let dtMax = Number.MIN_VALUE;
+      for (let item of this.periodStat) {
+        dtMin = Math.min(dtMin, item.date);
+        dtMax = Math.max(dtMax, item.date);
+      }
+      for (const issueStat of Object.values(this.issuesStat)) {
+        dtMin = Math.min(dtMin, issueStat.readyTime);
+        dtMax = Math.max(dtMax, issueStat.readyTime);
+      }
       for (let item of this.periodStat) {
         if (item.throughput > 0) {
-          serThroughput.data.push([item.totalWip.avg, Math.round(item.throughput)]);
+          serThroughput.data.push({
+            value: [item.totalWip.avg, Math.round(item.throughput)],
+            itemStyle: {
+              opacity: 0.2 + 0.8 * (item.date - dtMin) / (dtMax - dtMin)
+            }
+          });
         }
       }
       for (const issueStat of Object.values(this.issuesStat)) {
-        serEff.data.push([issueStat.wip.avg, Math.round(issueStat.effPercent)]);
-        serLead.data.push([issueStat.wip.avg, Math.round(issueStat.lead)]);
-        serCycle.data.push([issueStat.wip.avg, Math.round(issueStat.cycle)]);
+        serEff.data.push({
+          value: [issueStat.wip.avg, Math.round(issueStat.effPercent)],
+          itemStyle: {
+            opacity: 0.3 + 0.7 * (issueStat.readyTime - dtMin) / (dtMax - dtMin)
+          }
+        });
+        serLead.data.push({
+          value: [issueStat.wip.avg, Math.round(issueStat.lead)],
+          itemStyle: {
+            opacity: 0.3 + 0.7 * (issueStat.readyTime - dtMin) / (dtMax - dtMin)
+          }
+        });
+        serCycle.data.push({
+          value: [issueStat.wip.avg, Math.round(issueStat.cycle)],
+          itemStyle: {
+            opacity: 0.3 + 0.7 * (issueStat.readyTime - dtMin) / (dtMax - dtMin)
+          }
+        });
       }
       return [serThroughput, serEff, serLead, serCycle];
     }
