@@ -73248,7 +73248,8 @@ const _sfc_main$7 = {
           show: true,
           position: "top"
         },
-        barMaxWidth: "10%",
+        barMaxWidth: "15%",
+        barMinWidth: 10,
         itemStyle: {
           color: "rgba(64,64,255,0.75)"
         },
@@ -73261,9 +73262,10 @@ const _sfc_main$7 = {
         yAxisIndex: 1,
         label: {
           show: true,
-          position: "top"
+          position: "insideTop"
         },
-        barMaxWidth: "10%",
+        barMaxWidth: "15%",
+        barMinWidth: 10,
         itemStyle: {
           color: "rgba(64,255,64,0.75)"
         },
@@ -73276,9 +73278,10 @@ const _sfc_main$7 = {
         yAxisIndex: 1,
         label: {
           show: true,
-          position: "top"
+          position: "inside"
         },
-        barMaxWidth: "10%",
+        barMaxWidth: "15%",
+        barMinWidth: 10,
         itemStyle: {
           color: "rgba(191,64,255,0.75)"
         },
@@ -73679,7 +73682,8 @@ const _sfc_main$6 = {
           show: true,
           position: "top"
         },
-        barMaxWidth: "10%",
+        barMaxWidth: "15%",
+        barMinWidth: 10,
         itemStyle: {
           color: "rgba(64,64,255,0.75)"
         },
@@ -73729,9 +73733,10 @@ const _sfc_main$6 = {
         yAxisIndex: 3,
         label: {
           show: true,
-          position: "top"
+          position: "insideTop"
         },
-        barMaxWidth: "10%",
+        barMaxWidth: "15%",
+        barMinWidth: 10,
         itemStyle: {
           color: "rgba(64,255,64,0.75)"
         },
@@ -73744,9 +73749,10 @@ const _sfc_main$6 = {
         yAxisIndex: 3,
         label: {
           show: true,
-          position: "top"
+          position: "inside"
         },
-        barMaxWidth: "10%",
+        barMaxWidth: "15%",
+        barMinWidth: 10,
         itemStyle: {
           color: "rgba(191,64,255,0.75)"
         },
