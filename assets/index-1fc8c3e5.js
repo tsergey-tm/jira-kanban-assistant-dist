@@ -67693,7 +67693,7 @@ function getDefaultLocale() {
     l2 = localStorage.getItem("user.locale");
   } catch {
   }
-  if (l2 === void 0 || l2 === null) {
+  if (!l2) {
     l2 = navigator.language;
   }
   let langs = Object.keys(messages);
@@ -67705,7 +67705,7 @@ function getDefaultLocale() {
         break;
       }
     }
-    if (l2 === null) {
+    if (!l2) {
       l2 = "en";
     }
   }
@@ -67754,10 +67754,11 @@ const _sfc_main$e = {
             show: true,
             label: {
               formatter: function(value) {
-                if ((value == null ? void 0 : value.value) === void 0) {
+                if (value == null ? void 0 : value.value) {
+                  return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                } else {
                   return "";
                 }
-                return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
               }
             }
           },
@@ -67765,10 +67766,11 @@ const _sfc_main$e = {
           axisLabel: {
             hideOverlap: true,
             formatter: function(value) {
-              if (value === void 0) {
+              if (value) {
+                return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+              } else {
                 return "";
               }
-              return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
             }
           },
           min: "dataMin",
@@ -67989,7 +67991,7 @@ const _sfc_main$e = {
       return res;
     },
     triageTableToData: function(tTable) {
-      var _a2, _b2, _c2, _d, _e, _f, _g, _h, _i, _j;
+      var _a2, _b2, _c2, _d;
       let data = [];
       if (tTable.length > 0) {
         let maxDate = DateTime.now().startOf("day").toMillis();
@@ -68003,18 +68005,20 @@ const _sfc_main$e = {
         }
         for (let i = tTable.length - 1; i >= 0; i--) {
           const item = tTable[i];
+          const ddd = ((_a2 = item.dddVal) == null ? void 0 : _a2.toMillis()) ? (_b2 = item.dddVal) == null ? void 0 : _b2.toMillis() : NaN;
+          const deadline = ((_c2 = item.deadlineVal) == null ? void 0 : _c2.toMillis()) ? (_d = item.deadlineVal) == null ? void 0 : _d.toMillis() : NaN;
           data.push([
             item.issueKey,
-            ((_a2 = item.dddVal) == null ? void 0 : _a2.toMillis()) - item.ltdVal.ranges.max * 2 * 1e3 * 60 * 60 * 24,
-            ((_b2 = item.dddVal) == null ? void 0 : _b2.toMillis()) - item.ltdVal.ranges.max * 1e3 * 60 * 60 * 24,
-            ((_c2 = item.dddVal) == null ? void 0 : _c2.toMillis()) - item.ltdVal.ranges.q85 * 1e3 * 60 * 60 * 24,
-            ((_d = item.dddVal) == null ? void 0 : _d.toMillis()) - item.ltdVal.ranges.q50 * 1e3 * 60 * 60 * 24,
-            (_e = item.dddVal) == null ? void 0 : _e.toMillis(),
-            ((_f = item.deadlineVal) == null ? void 0 : _f.toMillis()) - item.ltdVal.ranges.max * 2 * 1e3 * 60 * 60 * 24,
-            ((_g = item.deadlineVal) == null ? void 0 : _g.toMillis()) - item.ltdVal.ranges.max * 1e3 * 60 * 60 * 24,
-            ((_h = item.deadlineVal) == null ? void 0 : _h.toMillis()) - item.ltdVal.ranges.q85 * 1e3 * 60 * 60 * 24,
-            ((_i = item.deadlineVal) == null ? void 0 : _i.toMillis()) - item.ltdVal.ranges.q50 * 1e3 * 60 * 60 * 24,
-            (_j = item.deadlineVal) == null ? void 0 : _j.toMillis()
+            ddd - item.ltdVal.ranges.max * 2 * 1e3 * 60 * 60 * 24,
+            ddd - item.ltdVal.ranges.max * 1e3 * 60 * 60 * 24,
+            ddd - item.ltdVal.ranges.q85 * 1e3 * 60 * 60 * 24,
+            ddd - item.ltdVal.ranges.q50 * 1e3 * 60 * 60 * 24,
+            ddd,
+            deadline - item.ltdVal.ranges.max * 2 * 1e3 * 60 * 60 * 24,
+            deadline - item.ltdVal.ranges.max * 1e3 * 60 * 60 * 24,
+            deadline - item.ltdVal.ranges.q85 * 1e3 * 60 * 60 * 24,
+            deadline - item.ltdVal.ranges.q50 * 1e3 * 60 * 60 * 24,
+            deadline
           ]);
         }
       }
@@ -68059,7 +68063,7 @@ const _sfc_main$e = {
       };
     },
     renderItem: function(params, api) {
-      if (api.value(1) === null && api.value(5) === null) {
+      if (!api.value(1) && !api.value(6)) {
         return void 0;
       }
       const categoryIndex = api.value(0);
@@ -68172,7 +68176,7 @@ const _sfc_main$e = {
         index: null,
         str: (_a2 = issue.fields[this.conf.shelfLifeRatioField]) == null ? void 0 : _a2.value
       };
-      if (slr.str === void 0) {
+      if (!slr.str) {
         slr.str = "";
       }
       if (slr.str !== "") {
@@ -68188,33 +68192,33 @@ const _sfc_main$e = {
           slr.index = 1;
         }
       }
-      if (slr.index === null) {
-        slr.str = '<span class="triage-table-gray">' + this.$t("triage.shelf-life-ratio.display.auto", { val: this.formatSLR(slr.index) }) + "</span>";
-      } else {
+      if (slr.index) {
         slr.str = this.formatSLR(slr.index);
+      } else {
+        slr.str = '<span class="triage-table-gray">' + this.$t("triage.shelf-life-ratio.display.auto", { val: this.formatSLR(slr.index) }) + "</span>";
       }
       return slr;
     },
     recalcVAL: function(val, dates) {
       if (val.str !== "") {
         let match2 = val.str.match(/^[^0-9]*([0-9]+).*$/);
-        if (match2 !== null) {
+        if (match2) {
           val.index = Number(match2[1]);
         }
       }
-      if (val.index === null) {
-        if (dates.deadlineDiff !== null) {
+      if (val.index) {
+        val.str = this.formatVAL(val.index);
+      } else {
+        if (dates.deadlineDiff) {
           val.index = 1;
           val.str = '<span class="triage-table-gray">' + this.$t("triage.value-acquisition-lifecycle.display.auto", { val: this.formatVAL(val.index) }) + "</span>";
-        } else if (dates.dddDiff === null) {
-          val.index = 11;
-          val.str = '<span class="triage-table-gray">' + this.$t("triage.value-acquisition-lifecycle.display.auto", { val: this.formatVAL(val.index) }) + "</span>";
-        } else {
+        } else if (dates.dddDiff) {
           val.index = 8;
           val.str = '<span class="triage-table-gray">' + this.$t("triage.value-acquisition-lifecycle.display.auto", { val: this.formatVAL(val.index) }) + "</span>";
+        } else {
+          val.index = 11;
+          val.str = '<span class="triage-table-gray">' + this.$t("triage.value-acquisition-lifecycle.display.auto", { val: this.formatVAL(val.index) }) + "</span>";
         }
-      } else {
-        val.str = this.formatVAL(val.index);
       }
       return val;
     },
@@ -68246,10 +68250,10 @@ const _sfc_main$e = {
         deadline: null,
         deadlineDiff: null
       };
-      if (dates.dddStr === void 0) {
+      if (!dates.dddStr) {
         dates.dddStr = "";
       }
-      if (dates.deadlineStr === void 0) {
+      if (!dates.deadlineStr) {
         dates.deadlineStr = "";
       }
       if (dates.dddStr !== "") {
@@ -68270,17 +68274,17 @@ const _sfc_main$e = {
           dates.deadlineStr = dates.deadline.toLocaleString(DateTime.DATE_SHORT);
         }
       }
-      if (dates.ddd === null) {
-        dates.dddStr = '<span class="triage-table-gray">' + this.$t("triage.desired-delivered-date.far") + "</span>";
-      } else {
+      if (dates.ddd) {
         dates.dddDiff = dates.ddd.diff(DateTime.now().startOf("day"));
         dates.dddStr += " (" + this.formatDateDiff(dates.dddDiff) + ")";
-      }
-      if (dates.deadline === null) {
-        dates.deadlineStr = '<span class="triage-table-gray">' + this.$t("triage.desired-delivered-date.not-set") + "</span>";
       } else {
+        dates.dddStr = '<span class="triage-table-gray">' + this.$t("triage.desired-delivered-date.far") + "</span>";
+      }
+      if (dates.deadline) {
         dates.deadlineDiff = dates.deadline.diff(DateTime.now().startOf("day"));
         dates.deadlineStr += " (" + this.formatDateDiff(dates.deadlineDiff) + ")";
+      } else {
+        dates.deadlineStr = '<span class="triage-table-gray">' + this.$t("triage.desired-delivered-date.not-set") + "</span>";
       }
       dates.combinedStr = this.$t("triage.desired-delivered-date.combined", {
         ddd: dates.dddStr,
@@ -68299,11 +68303,11 @@ const _sfc_main$e = {
             str: (_a2 = issue.fields[this.conf.valueAcquisitionLifecycleField]) == null ? void 0 : _a2.value,
             index: null
           };
-          if (val.str === void 0) {
+          if (!val.str) {
             val.str = "";
           }
           let size2 = (_b2 = issue.fields[this.conf.issueSizeField]) == null ? void 0 : _b2.value;
-          if (size2 === void 0) {
+          if (!size2) {
             size2 = "default";
           }
           let dates = this.calcDates(issue);
@@ -68362,7 +68366,7 @@ const _sfc_main$e = {
       return res;
     },
     recalcNewCoSCoordBySLA(cosCoord, dateDiff, tail, sdr) {
-      if (dateDiff === null) {
+      if (!dateDiff) {
         return 3;
       }
       if (dateDiff.as("days") <= 1) {
@@ -68431,7 +68435,7 @@ const _sfc_main$e = {
       }
     },
     recalcNewCoSCoordByDeadline(cosCoord, dateDiff, tail, sdr) {
-      if (dateDiff === null) {
+      if (!dateDiff) {
         return 3;
       }
       if (dateDiff.as("days") <= 1) {
@@ -68496,7 +68500,7 @@ const _sfc_main$e = {
       });
     },
     formatDateDiff(diff2) {
-      if (diff2.as("days") === 0) {
+      if (!diff2.as("days")) {
         return this.$t("triage.today");
       }
       return diff2.normalize().rescale().toHuman({ listStyle: "long" });
@@ -68557,7 +68561,7 @@ const _sfc_main$e = {
     },
     calcStartDateRange(dates, ltd) {
       function calcSDR(date) {
-        if (date === null) {
+        if (!date) {
           return 1;
         }
         let days = date.as("days");
@@ -68639,7 +68643,7 @@ const _sfc_main$e = {
       if (cos.val < 0) {
         return 0;
       }
-      if (cos.slr === 0) {
+      if (!cos.slr) {
         return 1;
       }
       if (cos.slr === 1) {
@@ -72335,7 +72339,7 @@ const KanbanStat = {
     }
     tmp.currentDayBoardTime = tmp.nextDayBoardTime;
     tmp.nextDayBoardTime += dayShift;
-    if (tmp.currentPeriodBoardTime === null) {
+    if (!tmp.currentPeriodBoardTime) {
       tmp.currentPeriodBoardTime = tmp.currentDayBoardTime;
       this.calcNextPeriodBoardTime(tmp);
     } else if (tmp.nextDayBoardTime > tmp.nextPeriodBoardTime) {
@@ -72423,7 +72427,7 @@ const KanbanStat = {
     }
   },
   tickPeriod: function(tmp) {
-    if (tmp.currentPeriodBoardTime >= tmp.lastDayBoardTime || tmp.periodDayWIP === null || tmp.periodDayWIP === void 0) {
+    if (tmp.currentPeriodBoardTime >= tmp.lastDayBoardTime || !tmp.periodDayWIP) {
       return;
     }
     let wips = {};
@@ -72480,16 +72484,7 @@ const KanbanStat = {
       leadThroughput,
       cycleThroughput
     };
-    if (throughput === 0) {
-      ps.cycle = nanStat();
-      ps.lead = nanStat();
-      ps.waste = nanStat();
-      ps.cyclePercent = NaN;
-      ps.wastePercent = NaN;
-      ps.effPercent = NaN;
-      ps.times = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
-      ps.timesPercent = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
-    } else {
+    if (throughput) {
       ps.cycle = calcStat(timeCycle);
       ps.lead = calcStat(timeLead);
       ps.waste = calcStat(timeWaste);
@@ -72498,12 +72493,7 @@ const KanbanStat = {
         ps.times[id] = mean(...timesCols[id]) / dayShift;
       }
       let tLead = sum(...timeLead);
-      if (tLead === 0) {
-        ps.cyclePercent = NaN;
-        ps.wastePercent = NaN;
-        ps.effPercent = NaN;
-        ps.timesPercent = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
-      } else {
+      if (tLead) {
         const wasteSum = sum(...timeWaste);
         const workSum = sum(...timeWork);
         const timeSum = wasteSum + workSum;
@@ -72514,7 +72504,21 @@ const KanbanStat = {
         for (let id in tmp.columns) {
           ps.timesPercent[id] = 100 * sum(...timesCols[id]) / dayShift / timeSum;
         }
+      } else {
+        ps.cyclePercent = NaN;
+        ps.wastePercent = NaN;
+        ps.effPercent = NaN;
+        ps.timesPercent = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
       }
+    } else {
+      ps.cycle = nanStat();
+      ps.lead = nanStat();
+      ps.waste = nanStat();
+      ps.cyclePercent = NaN;
+      ps.wastePercent = NaN;
+      ps.effPercent = NaN;
+      ps.times = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
+      ps.timesPercent = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
     }
     this.periodStat.push(ps);
     tmp.periodDayWIP = null;
@@ -72667,14 +72671,7 @@ const _sfc_main$9 = {
         this.meds.splice(0);
         this.mins.splice(0);
         this.mods.splice(0);
-        if (newVal === void 0) {
-          let d = new Date().getTime();
-          this.maxs.push([d, 0]);
-          this.avgs.push([d, 0]);
-          this.meds.push([d, 0]);
-          this.mins.push([d, 0]);
-          this.mods.push([d, 0]);
-        } else {
+        if (newVal) {
           for (let item of newVal) {
             this.maxs.push([item.date, item.totalWip.max]);
             this.avgs.push([item.date, item.totalWip.avg.toFixed(0)]);
@@ -72682,6 +72679,13 @@ const _sfc_main$9 = {
             this.mins.push([item.date, item.totalWip.min]);
             this.mods.push([item.date, item.totalWip.mod]);
           }
+        } else {
+          let d = new Date().getTime();
+          this.maxs.push([d, 0]);
+          this.avgs.push([d, 0]);
+          this.meds.push([d, 0]);
+          this.mins.push([d, 0]);
+          this.mods.push([d, 0]);
         }
       }
     }
@@ -72716,13 +72720,11 @@ const _sfc_main$9 = {
             snap: true,
             label: {
               formatter: function(value) {
-                if ((value == null ? void 0 : value.value) === void 0) {
+                if (value == null ? void 0 : value.value) {
+                  return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                } else {
                   return "";
                 }
-                return new Date(value.value).toLocaleDateString(
-                  i18n.global.locale.value,
-                  { dateStyle: "short" }
-                );
               }
             }
           },
@@ -72730,10 +72732,11 @@ const _sfc_main$9 = {
           axisLabel: {
             hideOverlap: true,
             formatter: function(value) {
-              if (value === void 0) {
+              if (value) {
+                return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+              } else {
                 return "";
               }
-              return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
             }
           },
           min: "dataMin",
@@ -72751,10 +72754,7 @@ const _sfc_main$9 = {
           axisLabel: {
             hideOverlap: true,
             formatter: function(value) {
-              if (value === void 0) {
-                return "";
-              }
-              return value.toFixed(0);
+              return value ? value.toFixed(0) : "";
             }
           }
         },
@@ -72899,10 +72899,11 @@ const _sfc_main$8 = {
             snap: true,
             label: {
               formatter: function(value) {
-                if ((value == null ? void 0 : value.value) === void 0) {
+                if (value == null ? void 0 : value.value) {
+                  return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                } else {
                   return "";
                 }
-                return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
               }
             }
           },
@@ -72910,10 +72911,11 @@ const _sfc_main$8 = {
           axisLabel: {
             hideOverlap: true,
             formatter: function(value) {
-              if (value === void 0) {
+              if (value) {
+                return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+              } else {
                 return "";
               }
-              return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
             }
           },
           min: "dataMin",
@@ -72931,10 +72933,7 @@ const _sfc_main$8 = {
           axisLabel: {
             hideOverlap: true,
             formatter: function(value) {
-              if (value === void 0) {
-                return "";
-              }
-              return value.toFixed(0);
+              return value ? value.toFixed(0) : "";
             }
           },
           min: 0
@@ -73121,13 +73120,11 @@ const _sfc_main$7 = {
               snap: true,
               label: {
                 formatter: function(value) {
-                  if ((value == null ? void 0 : value.value) === void 0) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
                     return "";
                   }
-                  return new Date(value.value).toLocaleDateString(
-                    i18n.global.locale.value,
-                    { dateStyle: "short" }
-                  );
                 }
               }
             },
@@ -73145,23 +73142,22 @@ const _sfc_main$7 = {
               triggerTooltip: false,
               label: {
                 formatter: function(value) {
-                  if ((value == null ? void 0 : value.value) === void 0) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
                     return "";
                   }
-                  return new Date(value.value).toLocaleDateString(
-                    i18n.global.locale.value,
-                    { dateStyle: "short" }
-                  );
                 }
               }
             },
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
+                if (value) {
+                  return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                } else {
                   return "";
                 }
-                return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
               }
             },
             min: this.xAxisMin,
@@ -73181,10 +73177,7 @@ const _sfc_main$7 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             min: 0
@@ -73202,10 +73195,7 @@ const _sfc_main$7 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             min: 0,
@@ -73440,13 +73430,11 @@ const _sfc_main$6 = {
               snap: true,
               label: {
                 formatter: function(value) {
-                  if ((value == null ? void 0 : value.value) === void 0) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
                     return "";
                   }
-                  return new Date(value.value).toLocaleDateString(
-                    i18n.global.locale.value,
-                    { dateStyle: "short" }
-                  );
                 }
               }
             },
@@ -73463,13 +73451,11 @@ const _sfc_main$6 = {
               snap: true,
               label: {
                 formatter: function(value) {
-                  if ((value == null ? void 0 : value.value) === void 0) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
                     return "";
                   }
-                  return new Date(value.value).toLocaleDateString(
-                    i18n.global.locale.value,
-                    { dateStyle: "short" }
-                  );
                 }
               }
             },
@@ -73486,13 +73472,11 @@ const _sfc_main$6 = {
               snap: true,
               label: {
                 formatter: function(value) {
-                  if ((value == null ? void 0 : value.value) === void 0) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
                     return "";
                   }
-                  return new Date(value.value).toLocaleDateString(
-                    i18n.global.locale.value,
-                    { dateStyle: "short" }
-                  );
                 }
               }
             },
@@ -73508,26 +73492,22 @@ const _sfc_main$6 = {
               snap: true,
               label: {
                 formatter: function(value) {
-                  if ((value == null ? void 0 : value.value) === void 0) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
                     return "";
                   }
-                  return new Date(value.value).toLocaleDateString(
-                    i18n.global.locale.value,
-                    { dateStyle: "short" }
-                  );
                 }
               }
             },
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
+                if (value) {
+                  return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                } else {
                   return "";
                 }
-                return new Date(value).toLocaleDateString(
-                  i18n.global.locale.value,
-                  { dateStyle: "short" }
-                );
               }
             },
             type: "time",
@@ -73550,10 +73530,7 @@ const _sfc_main$6 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             min: 0,
@@ -73574,10 +73551,7 @@ const _sfc_main$6 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             min: 0,
@@ -73596,10 +73570,7 @@ const _sfc_main$6 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             min: 0,
@@ -73618,10 +73589,7 @@ const _sfc_main$6 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             min: 0,
@@ -73934,10 +73902,7 @@ const _sfc_main$5 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             type: "value",
@@ -73955,10 +73920,7 @@ const _sfc_main$5 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             type: "value",
@@ -73976,10 +73938,7 @@ const _sfc_main$5 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             type: "value",
@@ -73997,10 +73956,7 @@ const _sfc_main$5 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             type: "value",
@@ -74023,10 +73979,7 @@ const _sfc_main$5 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             min: 0
@@ -74046,10 +73999,7 @@ const _sfc_main$5 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             min: 0,
@@ -74068,10 +74018,7 @@ const _sfc_main$5 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             min: 0
@@ -74089,10 +74036,7 @@ const _sfc_main$5 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             min: 0
@@ -74196,7 +74140,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64);
 }
 const StatByWIPChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$5, [["render", _sfc_render$4]]);
-const ControlChart_vue_vue_type_style_index_0_scoped_346d7010_lang = "";
+const ControlChart_vue_vue_type_style_index_0_scoped_4698aebd_lang = "";
 const _sfc_main$4 = {
   name: "ControlChart",
   components: {
@@ -74404,10 +74348,10 @@ const _sfc_main$4 = {
           formatter: function(params) {
             function form(par) {
               if (par.componentType === "series") {
-                if (par.seriesIndex === 0) {
-                  return par.marker + par.seriesName + " : " + par.value[3] + " (" + par.value[1] + ")";
-                } else {
+                if (par.seriesIndex) {
                   return par.marker + par.seriesName + " : " + par.value[1];
+                } else {
+                  return par.marker + par.seriesName + " : " + par.value[3] + " (" + par.value[1] + ")";
                 }
               } else
                 return "";
@@ -74432,13 +74376,11 @@ const _sfc_main$4 = {
             snap: true,
             label: {
               formatter: function(value) {
-                if ((value == null ? void 0 : value.value) === void 0) {
+                if (value == null ? void 0 : value.value) {
+                  return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                } else {
                   return "";
                 }
-                return new Date(value.value).toLocaleDateString(
-                  i18n.global.locale.value,
-                  { dateStyle: "short" }
-                );
               }
             }
           },
@@ -74446,10 +74388,11 @@ const _sfc_main$4 = {
           axisLabel: {
             hideOverlap: true,
             formatter: function(value) {
-              if (value === void 0) {
+              if (value) {
+                return new Date(Number(value)).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+              } else {
                 return "";
               }
-              return new Date(Number(value)).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
             }
           },
           min: "dataMin",
@@ -74593,7 +74536,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_7)
   ], 64);
 }
-const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-346d7010"]]);
+const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-4698aebd"]]);
 const LeadTimeDistributionChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$3 = {
   name: "LeadTimeDistributionChart",
@@ -74627,7 +74570,7 @@ const _sfc_main$3 = {
     yAxisMax() {
       var _a2;
       let res = Number.MIN_VALUE;
-      if (((_a2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _a2.ranges) !== void 0) {
+      if ((_a2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _a2.ranges) {
         for (let i = 0; i < this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count.length; i++) {
           res = Math.max(res, this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count[i]);
         }
@@ -74677,10 +74620,7 @@ const _sfc_main$3 = {
             snap: true,
             label: {
               formatter: function(value) {
-                if ((value == null ? void 0 : value.value) === void 0) {
-                  return "";
-                }
-                return value.value.toFixed(0);
+                return (value == null ? void 0 : value.value) ? value.value.toFixed(0) : "";
               }
             }
           },
@@ -74707,10 +74647,7 @@ const _sfc_main$3 = {
               minInterval: 1,
               alignTicks: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             min: 0,
@@ -74724,10 +74661,7 @@ const _sfc_main$3 = {
             axisLabel: {
               hideOverlap: true,
               formatter: function(value) {
-                if (value === void 0) {
-                  return "";
-                }
-                return value.toFixed(0);
+                return value ? value.toFixed(0) : "";
               }
             },
             min: 0,
@@ -74763,7 +74697,7 @@ const _sfc_main$3 = {
               stack: "cnt",
               data: []
             };
-            if (key in this.leadCycleTimeDistribution && ((_a2 = this.leadCycleTimeDistribution[key][this.leadCycleSelected]) == null ? void 0 : _a2.ranges) !== void 0) {
+            if (key in this.leadCycleTimeDistribution && ((_a2 = this.leadCycleTimeDistribution[key][this.leadCycleSelected]) == null ? void 0 : _a2.ranges)) {
               for (let i = 0; i < this.leadCycleTimeDistribution[key][this.leadCycleSelected].count.length; i++) {
                 if (this.leadCycleTimeDistribution[key][this.leadCycleSelected].count[i]) {
                   s2.data.push([i, this.leadCycleTimeDistribution[key][this.leadCycleSelected].count[i].toFixed(0)]);
@@ -74783,7 +74717,7 @@ const _sfc_main$3 = {
           stack: "cnt",
           data: []
         };
-        if (((_b2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _b2.ranges) !== void 0) {
+        if ((_b2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _b2.ranges) {
           for (let i = 0; i < this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count.length; i++) {
             if (this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count[i]) {
               s2.data.push([i, this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count[i].toFixed(0)]);
@@ -74804,10 +74738,10 @@ const _sfc_main$3 = {
         },
         data: []
       };
-      if (((_c2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _c2.ranges) !== void 0) {
+      if ((_c2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _c2.ranges) {
         let totalCnt = 0;
         for (let i = 0; i < this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count.length; i++) {
-          if (i === 0 || this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count[i] > 0) {
+          if (!i || this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count[i] > 0) {
             totalCnt += this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count[i];
             serCnt[0].data.push([i, totalCnt.toFixed(0)]);
             serPerc.data.push([i, (this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].percentiles[i] * 100).toFixed(2)]);
@@ -74819,7 +74753,7 @@ const _sfc_main$3 = {
     },
     ltdText() {
       var _a2;
-      if (((_a2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _a2.ranges) === void 0) {
+      if (!((_a2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _a2.ranges)) {
         return "";
       }
       return this.$t(
@@ -74840,7 +74774,7 @@ const _sfc_main$3 = {
     },
     maxXAxisValue() {
       var _a2;
-      if (((_a2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _a2.ranges) !== void 0) {
+      if ((_a2 = this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected]) == null ? void 0 : _a2.ranges) {
         return Math.ceil((this.leadCycleTimeDistribution[this.selected][this.leadCycleSelected].count.length + 1) / 10) * 10;
       } else {
         return NaN;
@@ -75365,15 +75299,15 @@ const __default__ = {
       try {
         let url = this.jiraBase + "/rest/agile/1.0/board/" + this.jiraBoardId + "/properties/tsergey.jka.config.v1";
         let conf = await fetch(url).then((res) => res.ok ? res.json() : void 0);
-        if (conf !== void 0 && conf.value !== void 0) {
+        if (conf == null ? void 0 : conf.value) {
           this.conf = conf.value;
-          if (this.conf.periodSize === void 0) {
+          if (!this.conf.periodSize) {
             this.conf.periodSize = 1;
           }
-          if (this.conf.periodType === void 0) {
+          if (!this.conf.periodType) {
             this.conf.periodType = "seven-days";
           }
-          if (this.conf.analyzeLength === void 0) {
+          if (!this.conf.analyzeLength) {
             this.conf.analyzeLength = 13;
           }
         }
@@ -75441,11 +75375,11 @@ const __default__ = {
       await this.loadIssues();
     },
     loadIssues: async function() {
-      var _a2, _b2, _c2, _d, _e, _f, _g, _h, _i, _j;
+      var _a2, _b2, _c2, _d, _e;
       this.loadingMax = loadingMaxSteps;
       this.loadingCurr = 60;
       this.loading = true;
-      if (this.conf.issueSizeField !== null && this.conf.issueSizeField !== void 0 || this.conf.valueAcquisitionLifecycleField !== null && this.conf.valueAcquisitionLifecycleField !== void 0 || this.conf.shelfLifeRatioField !== null && this.conf.shelfLifeRatioField !== void 0 || this.conf.desiredDeliveryDateField !== null && this.conf.desiredDeliveryDateField !== void 0 || this.conf.deadlineDateField !== null && this.conf.deadlineDateField !== void 0) {
+      if (this.conf.issueSizeField || this.conf.valueAcquisitionLifecycleField || this.conf.shelfLifeRatioField || this.conf.desiredDeliveryDateField || this.conf.deadlineDateField) {
         let issuesToLoad = Object.keys(this.issuesStat);
         let issuesSummary = {};
         for (const issue of this.boardAllData.issuesData.issues) {
@@ -75463,19 +75397,19 @@ const __default__ = {
             maxResults: 100,
             fields: []
           };
-          if (((_a2 = this.conf) == null ? void 0 : _a2.issueSizeField) !== null && ((_b2 = this.conf) == null ? void 0 : _b2.issueSizeField) !== void 0) {
+          if ((_a2 = this.conf) == null ? void 0 : _a2.issueSizeField) {
             req.fields.push(this.conf.issueSizeField);
           }
-          if (((_c2 = this.conf) == null ? void 0 : _c2.valueAcquisitionLifecycleField) !== null && ((_d = this.conf) == null ? void 0 : _d.valueAcquisitionLifecycleField) !== void 0) {
+          if ((_b2 = this.conf) == null ? void 0 : _b2.valueAcquisitionLifecycleField) {
             req.fields.push(this.conf.valueAcquisitionLifecycleField);
           }
-          if (((_e = this.conf) == null ? void 0 : _e.shelfLifeRatioField) !== null && ((_f = this.conf) == null ? void 0 : _f.shelfLifeRatioField) !== void 0) {
+          if ((_c2 = this.conf) == null ? void 0 : _c2.shelfLifeRatioField) {
             req.fields.push(this.conf.shelfLifeRatioField);
           }
-          if (((_g = this.conf) == null ? void 0 : _g.desiredDeliveryDateField) !== null && ((_h = this.conf) == null ? void 0 : _h.desiredDeliveryDateField) !== void 0) {
+          if ((_d = this.conf) == null ? void 0 : _d.desiredDeliveryDateField) {
             req.fields.push(this.conf.desiredDeliveryDateField);
           }
-          if (((_i = this.conf) == null ? void 0 : _i.deadlineDateField) !== null && ((_j = this.conf) == null ? void 0 : _j.deadlineDateField) !== void 0) {
+          if ((_e = this.conf) == null ? void 0 : _e.deadlineDateField) {
             req.fields.push(this.conf.deadlineDateField);
           }
           while (issuesToLoad.length > 0) {
@@ -75516,7 +75450,7 @@ const __default__ = {
         let group = "default";
         if (key in this.issuesMap && this.conf.issueSizeField in this.issuesMap[key].fields) {
           let sizeField = this.issuesMap[key].fields[this.conf.issueSizeField];
-          if (sizeField !== null && sizeField !== void 0 && sizeField.value !== void 0 && sizeField.value !== null) {
+          if (sizeField == null ? void 0 : sizeField.value) {
             group = sizeField.value;
           }
         }
@@ -75670,15 +75604,15 @@ const __default__ = {
       return res;
     },
     showTriage() {
-      var _a2, _b2, _c2, _d, _e, _f;
-      return ((_a2 = this.conf) == null ? void 0 : _a2.valueAcquisitionLifecycleField) !== void 0 && ((_b2 = this.conf) == null ? void 0 : _b2.valueAcquisitionLifecycleField) !== null && ((_c2 = this.conf) == null ? void 0 : _c2.desiredDeliveryDateField) !== void 0 && ((_d = this.conf) == null ? void 0 : _d.desiredDeliveryDateField) !== null && ((_e = this.conf) == null ? void 0 : _e.deadlineDateField) !== void 0 && ((_f = this.conf) == null ? void 0 : _f.deadlineDateField) !== null;
+      var _a2, _b2, _c2;
+      return ((_a2 = this.conf) == null ? void 0 : _a2.valueAcquisitionLifecycleField) && ((_b2 = this.conf) == null ? void 0 : _b2.desiredDeliveryDateField) && ((_c2 = this.conf) == null ? void 0 : _c2.deadlineDateField);
     },
     appName() {
       var _a2;
-      if (((_a2 = this.kanbanBoardConfig) == null ? void 0 : _a2.name) === void 0) {
-        return this.$t("app.title.without-name");
-      } else {
+      if ((_a2 = this.kanbanBoardConfig) == null ? void 0 : _a2.name) {
         return this.$t("app.title.with-name", { name: this.kanbanBoardConfig.name });
+      } else {
+        return this.$t("app.title.without-name");
       }
     }
   }
