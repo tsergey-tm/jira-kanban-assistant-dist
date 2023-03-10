@@ -65888,11 +65888,15 @@ const messages = {
           },
           "avg": (ctx) => {
             const { normalize: _normalize } = ctx;
-            return _normalize(["Avg"]);
+            return _normalize(["Avg. throughput"]);
           },
           "med": (ctx) => {
             const { normalize: _normalize } = ctx;
-            return _normalize(["Med"]);
+            return _normalize(["Med. throughput"]);
+          },
+          "q3": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["75% throughput"]);
           }
         },
         "periods": {
@@ -66920,11 +66924,15 @@ const messages = {
           },
           "avg": (ctx) => {
             const { normalize: _normalize } = ctx;
-            return _normalize(["Сред."]);
+            return _normalize(["Проп. сп. сред."]);
           },
           "med": (ctx) => {
             const { normalize: _normalize } = ctx;
-            return _normalize(["Медиана"]);
+            return _normalize(["Проп. сп. медиана"]);
+          },
+          "q3": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Проп. сп. 75%"]);
           }
         },
         "periods": {
@@ -72732,7 +72740,10 @@ const _sfc_main$9 = {
       throughput: [],
       periodsAvg: [],
       periodsMed: [],
-      periodsQ3: []
+      periodsQ3: [],
+      throughputAvg: [],
+      throughputMed: [],
+      throughputQ3: []
     };
   },
   methods: {},
@@ -72773,6 +72784,9 @@ const _sfc_main$9 = {
             this.periodsAvg.push([item.date, persAvg.toFixed(2)]);
             this.periodsMed.push([item.date, persMed.toFixed(2)]);
             this.periodsQ3.push([item.date, persQ3.toFixed(2)]);
+            this.throughputAvg.push([item.date, avgTp.toFixed(1)]);
+            this.throughputMed.push([item.date, medTp.toFixed(1)]);
+            this.throughputQ3.push([item.date, q3Tp.toFixed(1)]);
           }
         } else {
           let d = new Date().getTime();
@@ -73112,44 +73126,73 @@ const _sfc_main$9 = {
             itemStyle: {
               color: "rgba(64,64,255,0.75)"
             },
-            markLine: {
-              symbol: ["none", "none"],
-              precision: 0,
-              label: {
-                show: true,
-                formatter: "{b}: {c}"
-              },
-              lineStyle: {
-                type: [5, 9]
-              },
-              data: [
-                {
-                  name: this.$t("total-wip.series.throughput.avg"),
-                  type: "average",
-                  label: {
-                    position: "end",
-                    color: "rgba(255,64,64,0.75)"
-                  },
-                  lineStyle: {
-                    color: "rgba(255,64,64,0.75)"
-                  }
-                },
-                {
-                  name: this.$t("total-wip.series.throughput.med"),
-                  type: "median",
-                  label: {
-                    distance: [50, 0],
-                    position: "end",
-                    color: "rgba(64,64,255,0.75)"
-                  },
-                  lineStyle: {
-                    color: "rgba(64,64,255,0.75)",
-                    dashOffset: 7
-                  }
-                }
-              ]
-            },
             data: this.throughput
+          },
+          {
+            name: this.$t("total-wip.series.throughput.avg"),
+            type: "line",
+            smooth: true,
+            smoothMonotone: "x",
+            xAxisIndex: 2,
+            yAxisIndex: 2,
+            label: {
+              show: false,
+              position: "bottom"
+            },
+            showSymbol: false,
+            itemStyle: {
+              color: "rgba(255,64,64,0.75)"
+            },
+            lineStyle: {
+              color: "rgba(255,64,64,0.75)",
+              type: [5, 9],
+              width: 1
+            },
+            data: this.throughputAvg
+          },
+          {
+            name: this.$t("total-wip.series.throughput.med"),
+            type: "line",
+            smooth: true,
+            smoothMonotone: "x",
+            xAxisIndex: 2,
+            yAxisIndex: 2,
+            label: {
+              show: false,
+              position: "bottom"
+            },
+            showSymbol: false,
+            itemStyle: {
+              color: "rgba(255,64,255,0.75)"
+            },
+            lineStyle: {
+              color: "rgba(255,64,255,0.75)",
+              type: [5, 9],
+              width: 1
+            },
+            data: this.throughputMed
+          },
+          {
+            name: this.$t("total-wip.series.throughput.q3"),
+            type: "line",
+            smooth: true,
+            smoothMonotone: "x",
+            xAxisIndex: 2,
+            yAxisIndex: 2,
+            label: {
+              show: false,
+              position: "bottom"
+            },
+            showSymbol: false,
+            itemStyle: {
+              color: "rgba(255,159,64,0.75)"
+            },
+            lineStyle: {
+              color: "rgba(255,159,64,0.75)",
+              type: [5, 9],
+              width: 1
+            },
+            data: this.throughputQ3
           }
         ]
       };
