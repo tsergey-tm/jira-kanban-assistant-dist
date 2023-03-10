@@ -72549,7 +72549,7 @@ const KanbanStat = {
         throughput++;
         let calcIssueStat = this.calcIssueStat(issueStat, tmp);
         this.issuesStat[key] = calcIssueStat;
-        if (!(calcIssueStat == null ? void 0 : calcIssueStat.cycle)) {
+        if (calcIssueStat == null ? void 0 : calcIssueStat.cycle) {
           cycleThroughput++;
         }
         timeLead.push(calcIssueStat.lead);
