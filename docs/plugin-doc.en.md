@@ -76,7 +76,12 @@ a triage of tasks before giving them to the development team.
 
 On this screen, you can evaluate the trend of daily WIP values aggregated by period.
 
-For what? I don't know, it's just beautiful. :)
+And also understand how long the team will implement the current work in progress 
+based on the average, median and 75 percentile of throughput. 
+If you have an analysis period of 2 weeks, and the current WIP team will 
+implement 30 periods, then I have a question for you: do you really need so
+much work in progress that you have already invested in, 
+that it will have to be done for more than a year?
 
 ### WIPs by columns
 

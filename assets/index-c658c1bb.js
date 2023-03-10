@@ -65847,9 +65847,17 @@ const messages = {
         return _normalize(["Total WIP: ", _interpolate(_named("title"))]);
       },
       "yAxis": {
-        "name": (ctx) => {
+        "wip": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Count issues in progress"]);
+        },
+        "periods": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["WIP / throughput, per."]);
+        },
+        "throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Throughput, 1/per."]);
         }
       },
       "series": {
@@ -65872,12 +65880,40 @@ const messages = {
         "min": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Minimum"]);
+        },
+        "throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Throughput"]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Avg"]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Med"]);
+          }
+        },
+        "periods": {
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["WIP / avg. throughput"]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["WIP / med. throughput"]);
+          },
+          "q3": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["WIP / 75% throughput"]);
+          }
         }
       },
       "help": {
         "text": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["This screen contains aggregated values of total WIP on the board by the periods."]);
+          return _normalize(["This screen contains aggregated values of total WIP on the board by the periods.\nAs well as the number of periods for which the current WIP will be implemented based on the average, median and 75 percentile throughput"]);
         },
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -66843,9 +66879,17 @@ const messages = {
         return _normalize(["Общая незавершенная работа (WIP): ", _interpolate(_named("title"))]);
       },
       "yAxis": {
-        "name": (ctx) => {
+        "wip": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Число незавершенных задач"]);
+        },
+        "periods": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["WIP / проп. сп., пер."]);
+        },
+        "throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Проп. сп., 1/пер."]);
         }
       },
       "series": {
@@ -66868,12 +66912,40 @@ const messages = {
         "min": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Минимум"]);
+        },
+        "throughput": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Пропускная способность"]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Сред."]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Медиана"]);
+          }
+        },
+        "periods": {
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["WIP / ср. проп. сп."]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["WIP / мед. проп. сп."]);
+          },
+          "q3": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["WIP / 75% проп. сп."]);
+          }
         }
       },
       "help": {
         "text": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["На этом экране представлены агрегированные значения общей незавершенной работы на доске по периодам."]);
+          return _normalize(["На этом экране представлены агрегированные значения общей незавершенной работы на доске по периодам.\nА так же Количество периодов, за которые текущий WIP будет реализован исходя из средней, медианы и 75 персентили пропускной способности"]);
         },
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -68735,7 +68807,7 @@ const _hoisted_13$2 = ["innerHTML"];
 const _hoisted_14$2 = ["innerHTML"];
 const _hoisted_15$2 = ["innerHTML"];
 const _hoisted_16$2 = ["title"];
-const _hoisted_17$2 = ["href"];
+const _hoisted_17$1 = ["href"];
 const _hoisted_18$1 = ["innerHTML"];
 const _hoisted_19$1 = ["innerHTML"];
 const _hoisted_20 = ["innerHTML"];
@@ -68820,7 +68892,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
               }, [
                 createBaseVNode("a", {
                   href: $props.jiraBase + "/browse/" + row.issueKey
-                }, toDisplayString$1(row.issueKey), 9, _hoisted_17$2)
+                }, toDisplayString$1(row.issueKey), 9, _hoisted_17$1)
               ], 8, _hoisted_16$2),
               createBaseVNode("td", {
                 class: normalizeClass(["triage-table-td", "triage-table-td-val-" + row.valIndex]),
@@ -68916,7 +68988,7 @@ function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
   ]);
 }
 const JiraFilters = /* @__PURE__ */ _export_sfc$1(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-dc5a911c"]]);
-const JiraColumnStatus_vue_vue_type_style_index_0_scoped_d67583f4_lang = "";
+const JiraColumnStatus_vue_vue_type_style_index_0_scoped_7d723413_lang = "";
 const _sfc_main$c = {
   name: "JiraColumnStatus",
   props: {
@@ -68960,6 +69032,9 @@ const _sfc_main$c = {
       if (index >= 0) {
         this.readyColumns.splice(index, 1);
       }
+      if (!this.leadColumns.includes(id)) {
+        this.leadColumns.push(id);
+      }
       if (!this.workColumns.includes(id)) {
         this.workColumns.push(id);
       }
@@ -68972,6 +69047,9 @@ const _sfc_main$c = {
       index = this.readyColumns.indexOf(id);
       if (index >= 0) {
         this.readyColumns.splice(index, 1);
+      }
+      if (!this.leadColumns.includes(id)) {
+        this.leadColumns.push(id);
       }
       if (!this.waitColumns.includes(id)) {
         this.waitColumns.push(id);
@@ -69016,7 +69094,7 @@ const _sfc_main$c = {
     }
   }
 };
-const _withScopeId = (n2) => (pushScopeId("data-v-d67583f4"), n2 = n2(), popScopeId(), n2);
+const _withScopeId = (n2) => (pushScopeId("data-v-7d723413"), n2 = n2(), popScopeId(), n2);
 const _hoisted_1$c = { class: "jira-columns-box" };
 const _hoisted_2$6 = { class: "jira-columns-box-title" };
 const _hoisted_3$6 = { class: "jira-columns-box-table" };
@@ -69031,9 +69109,8 @@ const _hoisted_11$1 = ["onClick"];
 const _hoisted_12$1 = { class: "jira-columns-box-table-header" };
 const _hoisted_13$1 = ["onClick"];
 const _hoisted_14$1 = { class: "jira-columns-box-table-header" };
-const _hoisted_15$1 = ["onClick"];
-const _hoisted_16$1 = { class: "jira-columns-box-table-header" };
-const _hoisted_17$1 = ["onClick"];
+const _hoisted_15$1 = { class: "jira-columns-box-table-header" };
+const _hoisted_16$1 = ["onClick"];
 function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", _hoisted_1$c, [
     createBaseVNode("div", _hoisted_2$6, toDisplayString$1($props.title) + ":", 1),
@@ -69100,15 +69177,14 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
           (openBlock(true), createElementBlock(Fragment, null, renderList($props.columns, (column) => {
             return openBlock(), createElementBlock("td", {
               class: normalizeClass(["jira-columns-box-table-item", {
-                "jira-columns-box-table-item-sel": $props.leadColumns.includes(column.id),
+                "jira-columns-box-table-item-sel1": $props.leadColumns.includes(column.id),
                 "jira-columns-box-table-item-unsel": !$props.leadColumns.includes(column.id)
-              }]),
-              onClick: ($event) => $options.leadOnClick(column.id)
-            }, "  ", 10, _hoisted_15$1);
+              }])
+            }, "  ", 2);
           }), 256))
         ]),
         createBaseVNode("tr", null, [
-          createBaseVNode("td", _hoisted_16$1, toDisplayString$1(_ctx.$t("app-config.jira-column-status.row.cycle")), 1),
+          createBaseVNode("td", _hoisted_15$1, toDisplayString$1(_ctx.$t("app-config.jira-column-status.row.cycle")), 1),
           (openBlock(true), createElementBlock(Fragment, null, renderList($props.columns, (column) => {
             return openBlock(), createElementBlock("td", {
               class: normalizeClass(["jira-columns-box-table-item", {
@@ -69116,14 +69192,14 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
                 "jira-columns-box-table-item-unsel": !$props.cycleColumns.includes(column.id)
               }]),
               onClick: ($event) => $options.cycleOnClick(column.id)
-            }, "  ", 10, _hoisted_17$1);
+            }, "  ", 10, _hoisted_16$1);
           }), 256))
         ])
       ])
     ])
   ]);
 }
-const JiraColumnStatus = /* @__PURE__ */ _export_sfc$1(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-d67583f4"]]);
+const JiraColumnStatus = /* @__PURE__ */ _export_sfc$1(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-7d723413"]]);
 var _a;
 const isClient = typeof window !== "undefined";
 const isString = (val) => typeof val === "string";
@@ -72449,7 +72525,6 @@ const KanbanStat = {
       timesCols[id] = [];
     }
     let throughput = 0;
-    let leadThroughput = 0;
     let cycleThroughput = 0;
     let timeLead = [];
     let timeWork = [];
@@ -72464,9 +72539,6 @@ const KanbanStat = {
         throughput++;
         let calcIssueStat = this.calcIssueStat(issueStat, tmp);
         this.issuesStat[key] = calcIssueStat;
-        if (!Number.isNaN(calcIssueStat.lead)) {
-          leadThroughput++;
-        }
         if (!Number.isNaN(calcIssueStat.cycle)) {
           cycleThroughput++;
         }
@@ -72481,7 +72553,6 @@ const KanbanStat = {
       wip: wips,
       totalWip: totalWips,
       throughput,
-      leadThroughput,
       cycleThroughput
     };
     if (throughput) {
@@ -72657,7 +72728,11 @@ const _sfc_main$9 = {
       avgs: [],
       meds: [],
       mins: [],
-      mods: []
+      mods: [],
+      throughput: [],
+      periodsAvg: [],
+      periodsMed: [],
+      periodsQ3: []
     };
   },
   methods: {},
@@ -72671,13 +72746,33 @@ const _sfc_main$9 = {
         this.meds.splice(0);
         this.mins.splice(0);
         this.mods.splice(0);
+        this.throughput.splice(0);
+        this.periodsAvg.splice(0);
+        this.periodsMed.splice(0);
+        this.periodsQ3.splice(0);
         if (newVal) {
+          let throughputs = [];
           for (let item of newVal) {
             this.maxs.push([item.date, item.totalWip.max]);
             this.avgs.push([item.date, item.totalWip.avg.toFixed(0)]);
             this.meds.push([item.date, item.totalWip.med.toFixed(0)]);
             this.mins.push([item.date, item.totalWip.min]);
             this.mods.push([item.date, item.totalWip.mod]);
+            this.mods.push([item.date, item.totalWip.mod]);
+            const tp = item.throughput ? item.throughput : 0;
+            this.throughput.push([item.date, tp]);
+            throughputs.push(tp);
+          }
+          const avgTp = mean(...throughputs);
+          const medTp = median(...throughputs);
+          const q3Tp = quantile(throughputs, 0.75);
+          for (let item of newVal) {
+            const persAvg = avgTp ? item.totalWip.avg / avgTp : NaN;
+            const persMed = medTp ? item.totalWip.med / medTp : NaN;
+            const persQ3 = q3Tp ? item.totalWip.med / q3Tp : NaN;
+            this.periodsAvg.push([item.date, persAvg.toFixed(2)]);
+            this.periodsMed.push([item.date, persMed.toFixed(2)]);
+            this.periodsQ3.push([item.date, persQ3.toFixed(2)]);
           }
         } else {
           let d = new Date().getTime();
@@ -72686,11 +72781,37 @@ const _sfc_main$9 = {
           this.meds.push([d, 0]);
           this.mins.push([d, 0]);
           this.mods.push([d, 0]);
+          this.throughput.push([d, 0]);
+          this.periodsAvg.push([d, 0]);
+          this.periodsMed.push([d, 0]);
+          this.periodsQ3.push([d, 0]);
         }
       }
     }
   },
   computed: {
+    xAxisMin() {
+      let res = Number.MAX_VALUE;
+      for (let item of this.periodStat) {
+        res = Math.min(res, item.date);
+      }
+      if (res === Number.MAX_VALUE) {
+        return NaN;
+      } else {
+        return res - 6e4;
+      }
+    },
+    xAxisMax() {
+      let res = Number.MIN_VALUE;
+      for (let item of this.periodStat) {
+        res = Math.max(res, item.date);
+      }
+      if (res === Number.MIN_VALUE) {
+        return NaN;
+      } else {
+        return res + 6e4;
+      }
+    },
     option() {
       return {
         animation: true,
@@ -72706,6 +72827,13 @@ const _sfc_main$9 = {
             }
           }
         },
+        axisPointer: {
+          link: [
+            {
+              xAxisIndex: "all"
+            }
+          ]
+        },
         tooltip: {
           axisPointer: {
             show: true
@@ -72714,52 +72842,161 @@ const _sfc_main$9 = {
         legend: {
           top: "bottom"
         },
-        xAxis: {
-          axisPointer: {
-            show: true,
-            snap: true,
-            label: {
+        grid: [
+          {
+            top: "10%",
+            height: "27%"
+          },
+          {
+            top: "43%",
+            height: "28%"
+          },
+          {
+            bottom: "10%",
+            height: "15%"
+          }
+        ],
+        xAxis: [
+          {
+            axisLabel: {
+              show: false
+            },
+            boundaryGap: false,
+            gridIndex: 0,
+            axisPointer: {
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
+                    return "";
+                  }
+                }
+              }
+            },
+            type: "time",
+            min: this.xAxisMin,
+            max: this.xAxisMax
+          },
+          {
+            gridIndex: 1,
+            axisLabel: {
+              show: false
+            },
+            boundaryGap: false,
+            axisPointer: {
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
+                    return "";
+                  }
+                }
+              }
+            },
+            type: "time",
+            min: this.xAxisMin,
+            max: this.xAxisMax
+          },
+          {
+            gridIndex: 2,
+            boundaryGap: false,
+            axisPointer: {
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
+                    return "";
+                  }
+                }
+              }
+            },
+            axisLabel: {
+              hideOverlap: true,
               formatter: function(value) {
-                if (value == null ? void 0 : value.value) {
-                  return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                if (value) {
+                  return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
                 } else {
                   return "";
                 }
               }
-            }
-          },
-          type: "time",
-          axisLabel: {
-            hideOverlap: true,
-            formatter: function(value) {
-              if (value) {
-                return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
-              } else {
-                return "";
+            },
+            type: "time",
+            min: this.xAxisMin,
+            max: this.xAxisMax
+          }
+        ],
+        yAxis: [
+          {
+            gridIndex: 0,
+            name: this.$t("total-wip.yAxis.wip"),
+            nameLocation: "middle",
+            nameGap: "30",
+            minInterval: 1,
+            axisPointer: {
+              show: true,
+              triggerTooltip: false
+            },
+            axisLabel: {
+              hideOverlap: true,
+              formatter: function(value) {
+                return value ? value.toFixed(0) : "";
               }
             }
           },
-          min: "dataMin",
-          max: "dataMax"
-        },
-        yAxis: {
-          name: this.$t("total-wip.yAxis.name"),
-          nameLocation: "middle",
-          nameGap: "30",
-          minInterval: 1,
-          axisPointer: {
-            show: true,
-            triggerTooltip: false
+          {
+            gridIndex: 1,
+            boundaryGap: [0, "100%"],
+            name: this.$t("total-wip.yAxis.periods"),
+            nameLocation: "middle",
+            nameGap: "30",
+            minInterval: 1,
+            alignTicks: true,
+            axisPointer: {
+              show: true,
+              triggerTooltip: false
+            },
+            axisLabel: {
+              hideOverlap: true,
+              formatter: function(value) {
+                return value ? value.toFixed(0) : "";
+              }
+            },
+            min: 0,
+            max: "dataMax"
           },
-          axisLabel: {
-            hideOverlap: true,
-            formatter: function(value) {
-              return value ? value.toFixed(0) : "";
-            }
+          {
+            gridIndex: 2,
+            boundaryGap: [0, "100%"],
+            name: this.$t("total-wip.yAxis.throughput"),
+            nameLocation: "middle",
+            nameGap: "30",
+            axisPointer: {
+              show: true,
+              triggerTooltip: false
+            },
+            axisLabel: {
+              hideOverlap: true,
+              formatter: function(value) {
+                return value ? value.toFixed(0) : "";
+              }
+            },
+            min: 0,
+            max: "dataMax"
           }
-        },
+        ],
         series: [
           {
+            xAxisIndex: 0,
+            yAxisIndex: 0,
             name: this.$t("total-wip.series.max"),
             type: "line",
             smooth: true,
@@ -72806,6 +73043,113 @@ const _sfc_main$9 = {
             },
             data: this.mins,
             color: "rgba(64,255,64,0.75)"
+          },
+          {
+            name: this.$t("total-wip.series.periods.avg"),
+            type: "line",
+            smooth: true,
+            smoothMonotone: "x",
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            label: {
+              show: true,
+              position: "top"
+            },
+            barMaxWidth: "15%",
+            barMinWidth: 10,
+            itemStyle: {
+              color: "rgba(64,64,255,0.75)"
+            },
+            data: this.periodsAvg
+          },
+          {
+            name: this.$t("total-wip.series.periods.med"),
+            type: "line",
+            smooth: true,
+            smoothMonotone: "x",
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            label: {
+              show: true,
+              position: "top"
+            },
+            barMaxWidth: "15%",
+            barMinWidth: 10,
+            itemStyle: {
+              color: "rgba(255,64,64,0.75)"
+            },
+            data: this.periodsMed
+          },
+          {
+            name: this.$t("total-wip.series.periods.q3"),
+            type: "line",
+            smooth: true,
+            smoothMonotone: "x",
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            label: {
+              show: true,
+              position: "bottom"
+            },
+            barMaxWidth: "15%",
+            barMinWidth: 10,
+            itemStyle: {
+              color: "rgba(64,255,64,0.75)"
+            },
+            data: this.periodsQ3
+          },
+          {
+            name: this.$t("total-wip.series.throughput.name"),
+            type: "bar",
+            xAxisIndex: 2,
+            yAxisIndex: 2,
+            label: {
+              show: true,
+              position: "top"
+            },
+            barMaxWidth: "15%",
+            barMinWidth: 10,
+            itemStyle: {
+              color: "rgba(64,64,255,0.75)"
+            },
+            markLine: {
+              symbol: ["none", "none"],
+              precision: 0,
+              label: {
+                show: true,
+                formatter: "{b}: {c}"
+              },
+              lineStyle: {
+                type: [5, 9]
+              },
+              data: [
+                {
+                  name: this.$t("total-wip.series.throughput.avg"),
+                  type: "average",
+                  label: {
+                    position: "end",
+                    color: "rgba(255,64,64,0.75)"
+                  },
+                  lineStyle: {
+                    color: "rgba(255,64,64,0.75)"
+                  }
+                },
+                {
+                  name: this.$t("total-wip.series.throughput.med"),
+                  type: "median",
+                  label: {
+                    distance: [50, 0],
+                    position: "end",
+                    color: "rgba(64,64,255,0.75)"
+                  },
+                  lineStyle: {
+                    color: "rgba(64,64,255,0.75)",
+                    dashOffset: 7
+                  }
+                }
+              ]
+            },
+            data: this.throughput
           }
         ]
       };
@@ -73112,7 +73456,9 @@ const _sfc_main$7 = {
         ],
         xAxis: [
           {
-            show: false,
+            axisLabel: {
+              show: false
+            },
             boundaryGap: false,
             gridIndex: 0,
             axisPointer: {
@@ -73252,22 +73598,6 @@ const _sfc_main$7 = {
         },
         data: []
       };
-      let serLeadThroughput = {
-        name: this.$t("avg-time-by-columns.series.lead-throughput.name"),
-        type: "bar",
-        xAxisIndex: 1,
-        yAxisIndex: 1,
-        label: {
-          show: true,
-          position: "insideTop"
-        },
-        barMaxWidth: "15%",
-        barMinWidth: 10,
-        itemStyle: {
-          color: "rgba(64,255,64,0.75)"
-        },
-        data: []
-      };
       let serCycleThroughput = {
         name: this.$t("avg-time-by-columns.series.cycle-throughput.name"),
         type: "bar",
@@ -73280,23 +73610,17 @@ const _sfc_main$7 = {
         barMaxWidth: "15%",
         barMinWidth: 10,
         itemStyle: {
-          color: "rgba(191,64,255,0.75)"
+          color: "rgba(64,255,64,0.75)"
         },
         data: []
       };
-      let showLeadThroughput = false;
       let showCycleThroughput = false;
       for (let item of this.periodStat) {
         serThroughput.data.push([item.date, item.throughput]);
-        serLeadThroughput.data.push([item.date, item.leadThroughput]);
         serCycleThroughput.data.push([item.date, item.cycleThroughput]);
-        showLeadThroughput || (showLeadThroughput = item.throughput !== item.leadThroughput);
         showCycleThroughput || (showCycleThroughput = item.throughput !== item.cycleThroughput);
       }
       res.push(serThroughput);
-      if (showLeadThroughput) {
-        res.push(serLeadThroughput);
-      }
       if (showCycleThroughput) {
         res.push(serCycleThroughput);
       }
@@ -73423,8 +73747,10 @@ const _sfc_main$6 = {
         ],
         xAxis: [
           {
-            show: false,
             boundaryGap: false,
+            axisLabel: {
+              show: false
+            },
             axisPointer: {
               show: true,
               snap: true,
@@ -73444,8 +73770,10 @@ const _sfc_main$6 = {
           },
           {
             gridIndex: 1,
-            show: false,
             boundaryGap: false,
+            axisLabel: {
+              show: false
+            },
             axisPointer: {
               show: true,
               snap: true,
@@ -73465,8 +73793,10 @@ const _sfc_main$6 = {
           },
           {
             gridIndex: 2,
-            show: false,
             boundaryGap: false,
+            axisLabel: {
+              show: false
+            },
             axisPointer: {
               show: true,
               snap: true,
@@ -73701,22 +74031,6 @@ const _sfc_main$6 = {
         },
         data: []
       };
-      let serLeadThroughput = {
-        name: this.$t("main.series.lead-throughput.name"),
-        type: "bar",
-        xAxisIndex: 3,
-        yAxisIndex: 3,
-        label: {
-          show: true,
-          position: "insideTop"
-        },
-        barMaxWidth: "15%",
-        barMinWidth: 10,
-        itemStyle: {
-          color: "rgba(64,255,64,0.75)"
-        },
-        data: []
-      };
       let serCycleThroughput = {
         name: this.$t("main.series.cycle-throughput.name"),
         type: "bar",
@@ -73729,7 +74043,7 @@ const _sfc_main$6 = {
         barMaxWidth: "15%",
         barMinWidth: 10,
         itemStyle: {
-          color: "rgba(191,64,255,0.75)"
+          color: "rgba(64,255,64,0.75)"
         },
         data: []
       };
@@ -73759,14 +74073,11 @@ const _sfc_main$6 = {
         yAxisIndex: 2,
         data: []
       };
-      let showLeadThroughput = false;
       let showCycleThroughput = false;
       for (let item of this.periodStat) {
         serTotalWIP.data.push([item.date, item.totalWip.avg.toFixed(2)]);
         serThroughput.data.push([item.date, item.throughput]);
-        serLeadThroughput.data.push([item.date, item.leadThroughput]);
         serCycleThroughput.data.push([item.date, item.cycleThroughput]);
-        showLeadThroughput || (showLeadThroughput = item.throughput !== item.leadThroughput);
         showCycleThroughput || (showCycleThroughput = item.throughput !== item.cycleThroughput);
         if (item.throughput > 0) {
           serEff.data.push([item.date, item.effPercent.toFixed(2)]);
@@ -73776,9 +74087,6 @@ const _sfc_main$6 = {
         }
       }
       let res = [serTotalWIP, serEff, serWaste, serLead, serCycle, serThroughput];
-      if (showLeadThroughput) {
-        res.push(serLeadThroughput);
-      }
       if (showCycleThroughput) {
         res.push(serCycleThroughput);
       }
@@ -75310,6 +75618,7 @@ const __default__ = {
           if (!this.conf.analyzeLength) {
             this.conf.analyzeLength = 13;
           }
+          this.conf.lead = [.../* @__PURE__ */ new Set([...this.conf.work, ...this.conf.wait])];
         }
       } catch (e2) {
         console.warn(e2);
@@ -75596,7 +75905,7 @@ const __default__ = {
     },
     selectedColumns() {
       let res = [];
-      for (let id of this.conf.cycle.concat(this.conf.lead.concat(this.conf.wait.concat(this.conf.work)))) {
+      for (let id of this.conf.cycle.concat(this.conf.lead)) {
         if (!res.includes(id)) {
           res.push(id);
         }

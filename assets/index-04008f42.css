@@ -141,36 +141,40 @@
 }
 
 
-.jira-columns-box[data-v-d67583f4] {
+.jira-columns-box[data-v-7d723413] {
   margin: 0.1rem 0.2rem;
   clear: left;
 }
-.jira-columns-box-table[data-v-d67583f4] {
+.jira-columns-box-table[data-v-7d723413] {
   background-color: var(--color-tabs-bg);
   border-radius: 5px;
   margin: 0.2rem;
   padding: 0.2rem 0.4rem;
 }
-.jira-columns-box-table-header[data-v-d67583f4] {
+.jira-columns-box-table-header[data-v-7d723413] {
   background-color: var(--color-tabs-bg-sel);
   color: var(--color-tabs-text-sel);
   border-radius: 5px;
   padding: 0.2rem 0.4rem;
 }
-.jira-columns-box-table-item[data-v-d67583f4] {
+.jira-columns-box-table-item[data-v-7d723413] {
   padding: 0.2rem 0.4rem;
   border-radius: 5px;
   cursor: pointer;
 }
-.jira-columns-box-table-item-sel[data-v-d67583f4] {
+.jira-columns-box-table-item-sel[data-v-7d723413] {
   background-color: var(--color-tabs-bg-sel-alt);
   color: var(--color-tabs-text-sel-alt);
 }
-.jira-columns-box-table-item-unsel[data-v-d67583f4] {
+.jira-columns-box-table-item-sel1[data-v-7d723413] {
+  background-color: var(--color-main-4);
+  color: var(--color-tabs-text-sel);
+}
+.jira-columns-box-table-item-unsel[data-v-7d723413] {
   background-color: var(--color-tabs-bg-sel-alt1);
   color: var(--color-tabs-text-sel-alt1);
 }
-.jira-columns-box-title[data-v-d67583f4] {
+.jira-columns-box-title[data-v-7d723413] {
   padding: 0.2rem 0;
 }
 /*!
