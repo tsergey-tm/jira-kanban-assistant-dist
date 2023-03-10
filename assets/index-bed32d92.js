@@ -72520,7 +72520,9 @@ const KanbanStat = {
     for (let d = 0; d < daysCnt; d++) {
       let td = 0;
       for (const ci of tmp.leadColumns) {
-        td += tmp.periodDayWIP[ci][d];
+        if (ci in tmp.periodDayWIP) {
+          td += tmp.periodDayWIP[ci][d];
+        }
       }
       totalD.push(td);
     }
