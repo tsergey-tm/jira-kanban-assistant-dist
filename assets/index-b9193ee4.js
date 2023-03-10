@@ -72549,7 +72549,7 @@ const KanbanStat = {
         throughput++;
         let calcIssueStat = this.calcIssueStat(issueStat, tmp);
         this.issuesStat[key] = calcIssueStat;
-        if (!Number.isNaN(calcIssueStat.cycle)) {
+        if (!(calcIssueStat == null ? void 0 : calcIssueStat.cycle)) {
           cycleThroughput++;
         }
         timeLead.push(calcIssueStat.lead);
@@ -72609,10 +72609,10 @@ const KanbanStat = {
     tmp.board[columnFrom] -= 1;
     if (transition.key in tmp.issues) {
       let timeDelta = evTime - tmp.issues[transition.key].lastAct;
-      if (Number.isNaN(tmp.issues[transition.key].times[columnFrom])) {
-        tmp.issues[transition.key].times[columnFrom] = timeDelta;
-      } else {
+      if (tmp.issues[transition.key].times[columnFrom]) {
         tmp.issues[transition.key].times[columnFrom] += timeDelta;
+      } else {
+        tmp.issues[transition.key].times[columnFrom] = timeDelta;
       }
       tmp.issues[transition.key].lastAct = evTime;
       tmp.issues[transition.key].lastCol = null;
@@ -72638,12 +72638,14 @@ const KanbanStat = {
   },
   calcIssueStat(issueStat, tmp) {
     function add2(v1, v2) {
-      if (Number.isNaN(v1)) {
-        return v2;
-      } else if (Number.isNaN(v2)) {
-        return v1;
+      if (v1) {
+        if (v2) {
+          return v1 + v2;
+        } else {
+          return v1;
+        }
       } else {
-        return v1 + v2;
+        return v2;
       }
     }
     let timeLead = NaN;
@@ -72665,12 +72667,12 @@ const KanbanStat = {
     let tp = {};
     let t = {};
     for (const [id, time] of Object.entries(issueStat.times)) {
-      if (Number.isNaN(time)) {
-        t[id] = NaN;
-        tp[id] = NaN;
-      } else {
+      if (time) {
         t[id] = time / dayShift;
         tp[id] = timeLead > 0 ? 100 * time / timeLead : NaN;
+      } else {
+        t[id] = NaN;
+        tp[id] = NaN;
       }
     }
     let wips = {};
@@ -72680,10 +72682,10 @@ const KanbanStat = {
       wips = nanStat();
     }
     let timeSum = 0;
-    if (!Number.isNaN(timeWaste)) {
+    if (timeWaste) {
       timeSum += timeWaste;
     }
-    if (!Number.isNaN(timeWork)) {
+    if (timeWork) {
       timeSum += timeWork;
     }
     return {
@@ -74493,7 +74495,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64);
 }
 const StatByWIPChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$5, [["render", _sfc_render$4]]);
-const ControlChart_vue_vue_type_style_index_0_scoped_4698aebd_lang = "";
+const ControlChart_vue_vue_type_style_index_0_scoped_9d8eea50_lang = "";
 const _sfc_main$4 = {
   name: "ControlChart",
   components: {
@@ -74549,7 +74551,7 @@ const _sfc_main$4 = {
       }
       let issues = [];
       for (const [key, issueStat] of Object.entries(this.issuesStat)) {
-        if (!Number.isNaN(issueStat.lead)) {
+        if (issueStat.lead) {
           let issue = { key, times: [], readyTime: issueStat.readyTime };
           for (let i = 0; i < columnsi.length; i++) {
             let id = columnsi[i];
@@ -74625,7 +74627,7 @@ const _sfc_main$4 = {
       this.issuesView.winners = reactive(totalWinners);
       let dd = {};
       for (const [key, issueStat] of Object.entries(this.issuesStat)) {
-        if (!Number.isNaN(issueStat.lead)) {
+        if (issueStat.lead) {
           let lead = issueStat.lead.toFixed(0);
           let ready = new Date(issueStat.readyTime).setHours(0, 0, 0, 0);
           if (ready in dd) {
@@ -74889,7 +74891,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_7)
   ], 64);
 }
-const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-4698aebd"]]);
+const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-9d8eea50"]]);
 const LeadTimeDistributionChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$3 = {
   name: "LeadTimeDistributionChart",
