@@ -69538,7 +69538,7 @@ function quantile(x2, p2) {
     }
   }
 }
-const LeadCycleTimeChart_vue_vue_type_style_index_0_scoped_c2ee74ad_lang = "";
+const LeadCycleTimeChart_vue_vue_type_style_index_0_scoped_d27db0c2_lang = "";
 const _sfc_main$e = {
   name: "LeadCycleTimeChart",
   components: {
@@ -69562,7 +69562,9 @@ const _sfc_main$e = {
       let vals = [];
       for (let item of this.periodStat) {
         if (this.typeSelected === "lead") {
-          vals.push(...item.leadVals);
+          if (Array.isArray(item.leadVals)) {
+            vals.push(...item.leadVals);
+          }
           throughput.push([item.date, item.throughput ? item.throughput : 0]);
           chartData.push({
             name: "",
@@ -69576,7 +69578,9 @@ const _sfc_main$e = {
             ]
           });
         } else {
-          vals.push(...item.cycleVals);
+          if (Array.isArray(item.cycleVals)) {
+            vals.push(...item.cycleVals);
+          }
           throughput.push([item.date, item.cycleThroughput ? item.cycleThroughput : 0]);
           chartData.push({
             name: "",
@@ -69667,14 +69671,18 @@ const _sfc_main$e = {
         }
         vals[vals.length - 1] = [];
         if (this.typeSelected === "lead") {
-          vals[vals.length - 1].push(...item.leadVals);
+          if (Array.isArray(item.leadVals)) {
+            vals[vals.length - 1].push(...item.leadVals);
+          }
           throughput.push([item.date, item.throughput ? item.throughput : 0]);
           chartData.push([
             item.date,
             item.lead.avg.toFixed(1)
           ]);
         } else {
-          vals[vals.length - 1].push(...item.cycleVals);
+          if (Array.isArray(item.cycleVals)) {
+            vals[vals.length - 1].push(...item.cycleVals);
+          }
           throughput.push([item.date, item.cycleThroughput ? item.cycleThroughput : 0]);
           chartData.push([
             item.date,
@@ -69947,7 +69955,7 @@ const _sfc_main$e = {
     }
   }
 };
-const _withScopeId$1 = (n2) => (pushScopeId("data-v-c2ee74ad"), n2 = n2(), popScopeId(), n2);
+const _withScopeId$1 = (n2) => (pushScopeId("data-v-d27db0c2"), n2 = n2(), popScopeId(), n2);
 const _hoisted_1$e = { class: "lead-cycle-times-chart-selector" };
 const _hoisted_2$8 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "lead-cycle-times-chart-selector-space" }, "   ", -1));
 const _hoisted_3$8 = { style: { "height": "100%", "clear": "both" } };
@@ -69989,7 +69997,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_4$5)
   ], 64);
 }
-const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-c2ee74ad"]]);
+const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-d27db0c2"]]);
 const JiraFilters_vue_vue_type_style_index_0_scoped_dc5a911c_lang = "";
 const _sfc_main$d = {
   name: "JiraFilters",
