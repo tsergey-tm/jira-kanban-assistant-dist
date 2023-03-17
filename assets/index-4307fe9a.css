@@ -119,6 +119,31 @@
 }
 
 
+.lead-cycle-times-chart-selector[data-v-c2ee74ad] {
+  margin: 0.1rem 0.2rem;
+  float: left;
+  clear: both;
+}
+.lead-cycle-times-chart-selector-space[data-v-c2ee74ad] {
+  float: left;
+  margin: 0.1rem 0.2rem;
+  padding: 0.2rem 0.4rem;
+}
+.lead-cycle-times-chart-selector-item[data-v-c2ee74ad] {
+  float: left;
+  margin: 0.1rem 0.2rem;
+  padding: 0.2rem 0.4rem;
+  background-color: var(--color-tabs-bg);
+  color: var(--color-tabs-text);
+  cursor: pointer;
+  border-radius: 5px;
+}
+.lead-cycle-times-chart-selector-item.lead-cycle-times-chart-selector-item-selected[data-v-c2ee74ad] {
+  background-color: var(--color-tabs-bg-sel);
+  color: var(--color-tabs-text-sel);
+}
+
+
 .jira-filters-box[data-v-dc5a911c] {
   margin: 0.1rem 0.2rem;
   clear: left;

@@ -56292,7 +56292,7 @@ const _export_sfc$1 = (sfc, props) => {
   }
   return target;
 };
-const _sfc_main$f = {
+const _sfc_main$g = {
   name: "NameProgressBar",
   components: {
     VChart: S
@@ -56319,16 +56319,16 @@ const _sfc_main$f = {
     }
   }
 };
-const _hoisted_1$f = { class: "name-progressbar-name" };
-function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$g = { class: "name-progressbar-name" };
+function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", {
     class: "name-progressbar-box",
     style: normalizeStyle$1($options.progressLoadingStyle)
   }, [
-    createBaseVNode("span", _hoisted_1$f, toDisplayString$1($props.title), 1)
+    createBaseVNode("span", _hoisted_1$g, toDisplayString$1($props.title), 1)
   ], 4);
 }
-const NameProgressBar = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-adea8f9f"]]);
+const NameProgressBar = /* @__PURE__ */ _export_sfc$1(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-adea8f9f"]]);
 class LuxonError extends Error {
 }
 class InvalidDateTimeError extends LuxonError {
@@ -65740,6 +65740,10 @@ const messages = {
         "triage": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Triage"]);
+        },
+        "lead-cycle-times": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead & cycle times"]);
         }
       },
       "config-info": {
@@ -66217,7 +66221,7 @@ const messages = {
       "yAxis": {
         "throughput": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Throughput, 1/7-days"]);
+          return _normalize(["Throughput, 1/period"]);
         },
         "efficiency": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -66720,6 +66724,146 @@ const messages = {
           }
         }
       }
+    },
+    "lead-cycle-times-chart": {
+      "help": {
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["lead-cycle-times-chart.help.link"]);
+        },
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead and cycle time statistics for completed tasks"]);
+        }
+      },
+      "title": {
+        "lead": {
+          "perc": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Lead time percentiles: ", _interpolate(_named("title"))]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Average lead time: ", _interpolate(_named("title"))]);
+          }
+        },
+        "cycle": {
+          "perc": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Cycle time percentiles: ", _interpolate(_named("title"))]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Average cycle time: ", _interpolate(_named("title"))]);
+          }
+        }
+      },
+      "yAxis": {
+        "lead": {
+          "perc": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Lead time, days"]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Avg. lead time, days"]);
+          }
+        },
+        "lead-throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead throughput"]);
+        },
+        "cycle": {
+          "perc": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Cycle time, days"]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Avg. cycle time, days"]);
+          }
+        },
+        "cycle-throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Cycle throughput"]);
+        }
+      },
+      "series": {
+        "lead": {
+          "name": {
+            "perc": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["Lead time"]);
+            },
+            "avg": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["Avg. lead time"]);
+            }
+          },
+          "avg3": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Avg. lead time 3 periods"]);
+          },
+          "avg5": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Avg. lead time 5 periods"]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Med. lead time"]);
+          },
+          "throughput": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Lead throughput"]);
+          }
+        },
+        "cycle": {
+          "name": {
+            "perc": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["Cycle time"]);
+            },
+            "avg": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["Avg. cycle time"]);
+            }
+          },
+          "avg3": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Avg. cycle time 3 periods"]);
+          },
+          "avg5": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Avg. cycle time 5 periods"]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Med. cycle time"]);
+          },
+          "throughput": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Cycle throughput"]);
+          }
+        }
+      },
+      "tab": {
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Lead time"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Cycle time"]);
+        },
+        "percentiles": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Percentiles"]);
+        },
+        "averages": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Averages"]);
+        }
+      }
     }
   },
   "ru": {
@@ -66776,6 +66920,10 @@ const messages = {
         "triage": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Триаж"]);
+        },
+        "lead-cycle-times": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время поставки и цикла"]);
         }
       },
       "config-info": {
@@ -67756,6 +67904,146 @@ const messages = {
           }
         }
       }
+    },
+    "lead-cycle-times-chart": {
+      "help": {
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["lead-cycle-times-chart.help.link"]);
+        },
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Статистика времен поставки и цикла для завершенных задач"]);
+        }
+      },
+      "title": {
+        "lead": {
+          "perc": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Процентили времени поставки: ", _interpolate(_named("title"))]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Среднее времени поставки: ", _interpolate(_named("title"))]);
+          }
+        },
+        "cycle": {
+          "perc": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Процентили времени цикла: ", _interpolate(_named("title"))]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Среднее времени цикла: ", _interpolate(_named("title"))]);
+          }
+        }
+      },
+      "yAxis": {
+        "lead": {
+          "perc": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Вр. поставки, дни"]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Ср. вр. поставки, дни"]);
+          }
+        },
+        "lead-throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Пр. сп. поставки"]);
+        },
+        "cycle": {
+          "perc": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Вр. цикла, дни"]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Ср. вр. цикла, дни"]);
+          }
+        },
+        "cycle-throughput": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Пр. сп. цикла"]);
+        }
+      },
+      "series": {
+        "lead": {
+          "name": {
+            "perc": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["Время поставки"]);
+            },
+            "avg": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["Среднее время поставки"]);
+            }
+          },
+          "avg3": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Ср. поставки за 3 периода"]);
+          },
+          "avg5": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Ср. поставки за 5 периодов"]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Мед. поставки"]);
+          },
+          "throughput": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Пр. сп. поставки"]);
+          }
+        },
+        "cycle": {
+          "name": {
+            "perc": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["Время цикла"]);
+            },
+            "avg": (ctx) => {
+              const { normalize: _normalize } = ctx;
+              return _normalize(["Среднее время цикла"]);
+            }
+          },
+          "avg3": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Ср. цикла за 3 периода"]);
+          },
+          "avg5": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Ср. цикла за 5 периодов"]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Мед. цикла"]);
+          },
+          "throughput": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Пр. сп. цикла"]);
+          }
+        }
+      },
+      "tab": {
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время поставки"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время цикла"]);
+        },
+        "percentiles": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Процентили"]);
+        },
+        "averages": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Средние"]);
+        }
+      }
     }
   }
 };
@@ -67792,7 +68080,7 @@ function getDefaultLocale() {
   return l2;
 }
 const TriageTable_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$e = {
+const _sfc_main$f = {
   name: "TriageTable",
   props: {
     title: String,
@@ -68796,10 +69084,10 @@ const _sfc_main$e = {
     }
   }
 };
-const _hoisted_1$e = { class: "triage-selector" };
-const _hoisted_2$8 = { style: { "clear": "both" } };
-const _hoisted_3$8 = { key: 0 };
-const _hoisted_4$5 = {
+const _hoisted_1$f = { class: "triage-selector" };
+const _hoisted_2$9 = { style: { "clear": "both" } };
+const _hoisted_3$9 = { key: 0 };
+const _hoisted_4$6 = {
   key: 1,
   class: "triage-table"
 };
@@ -68827,10 +69115,10 @@ const _hoisted_25 = ["innerHTML"];
 const _hoisted_26 = ["innerHTML"];
 const _hoisted_27 = ["innerHTML"];
 const _hoisted_28 = ["title", "href"];
-function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$e, [
+    createBaseVNode("div", _hoisted_1$f, [
       createBaseVNode("div", {
         class: normalizeClass(["triage-selector-item", { "triage-selector-item-selected": _ctx.selected === "lead" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "lead")
@@ -68840,9 +69128,9 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[1] || (_cache[1] = ($event) => _ctx.selected = "cycle")
       }, toDisplayString$1(_ctx.$t("triage.tab.name", { col: $options.cycleTriageColName })), 3)
     ]),
-    createBaseVNode("div", _hoisted_2$8, [
-      !Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("div", _hoisted_3$8, toDisplayString$1($options.triageTable), 1)) : createCommentVNode("", true),
-      Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$5, [
+    createBaseVNode("div", _hoisted_2$9, [
+      !Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("div", _hoisted_3$9, toDisplayString$1($options.triageTable), 1)) : createCommentVNode("", true),
+      Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$6, [
         createBaseVNode("thead", null, [
           createBaseVNode("tr", null, [
             createBaseVNode("th", {
@@ -68960,7 +69248,748 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_28)
   ], 64);
 }
-const TriageTable = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render$d]]);
+const TriageTable = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["render", _sfc_render$e]]);
+function sum$1(x2) {
+  if (x2.length === 0) {
+    return 0;
+  }
+  var sum2 = x2[0];
+  var correction = 0;
+  var transition;
+  if (typeof sum2 !== "number") {
+    return NaN;
+  }
+  for (var i = 1; i < x2.length; i++) {
+    if (typeof x2[i] !== "number") {
+      return NaN;
+    }
+    transition = sum2 + x2[i];
+    if (Math.abs(sum2) >= Math.abs(x2[i])) {
+      correction += sum2 - transition + x2[i];
+    } else {
+      correction += x2[i] - transition + sum2;
+    }
+    sum2 = transition;
+  }
+  return sum2 + correction;
+}
+function mean$1(x2) {
+  if (x2.length === 0) {
+    throw new Error("mean requires at least one data point");
+  }
+  return sum$1(x2) / x2.length;
+}
+function modeSorted(sorted) {
+  if (sorted.length === 0) {
+    throw new Error("mode requires at least one data point");
+  } else if (sorted.length === 1) {
+    return sorted[0];
+  }
+  var last2 = sorted[0], value = NaN, maxSeen = 0, seenThis = 1;
+  for (var i = 1; i < sorted.length + 1; i++) {
+    if (sorted[i] !== last2) {
+      if (seenThis > maxSeen) {
+        maxSeen = seenThis;
+        value = last2;
+      }
+      seenThis = 1;
+      last2 = sorted[i];
+    } else {
+      seenThis++;
+    }
+  }
+  return value;
+}
+function numericSort(x2) {
+  return x2.slice().sort(function(a, b2) {
+    return a - b2;
+  });
+}
+function mode$1(x2) {
+  return modeSorted(numericSort(x2));
+}
+function min$1(x2) {
+  if (x2.length === 0) {
+    throw new Error("min requires at least one data point");
+  }
+  var value = x2[0];
+  for (var i = 1; i < x2.length; i++) {
+    if (x2[i] < value) {
+      value = x2[i];
+    }
+  }
+  return value;
+}
+function max$1(x2) {
+  if (x2.length === 0) {
+    throw new Error("max requires at least one data point");
+  }
+  var value = x2[0];
+  for (var i = 1; i < x2.length; i++) {
+    if (x2[i] > value) {
+      value = x2[i];
+    }
+  }
+  return value;
+}
+function quantileSorted(x2, p2) {
+  var idx = x2.length * p2;
+  if (x2.length === 0) {
+    throw new Error("quantile requires at least one data point.");
+  } else if (p2 < 0 || p2 > 1) {
+    throw new Error("quantiles must be between 0 and 1");
+  } else if (p2 === 1) {
+    return x2[x2.length - 1];
+  } else if (p2 === 0) {
+    return x2[0];
+  } else if (idx % 1 !== 0) {
+    return x2[Math.ceil(idx) - 1];
+  } else if (x2.length % 2 === 0) {
+    return (x2[idx - 1] + x2[idx]) / 2;
+  } else {
+    return x2[idx];
+  }
+}
+function quickselect(arr, k2, left, right) {
+  left = left || 0;
+  right = right || arr.length - 1;
+  while (right > left) {
+    if (right - left > 600) {
+      var n2 = right - left + 1;
+      var m2 = k2 - left + 1;
+      var z2 = Math.log(n2);
+      var s2 = 0.5 * Math.exp(2 * z2 / 3);
+      var sd = 0.5 * Math.sqrt(z2 * s2 * (n2 - s2) / n2);
+      if (m2 - n2 / 2 < 0) {
+        sd *= -1;
+      }
+      var newLeft = Math.max(left, Math.floor(k2 - m2 * s2 / n2 + sd));
+      var newRight = Math.min(
+        right,
+        Math.floor(k2 + (n2 - m2) * s2 / n2 + sd)
+      );
+      quickselect(arr, k2, newLeft, newRight);
+    }
+    var t = arr[k2];
+    var i = left;
+    var j2 = right;
+    swap(arr, left, k2);
+    if (arr[right] > t) {
+      swap(arr, left, right);
+    }
+    while (i < j2) {
+      swap(arr, i, j2);
+      i++;
+      j2--;
+      while (arr[i] < t) {
+        i++;
+      }
+      while (arr[j2] > t) {
+        j2--;
+      }
+    }
+    if (arr[left] === t) {
+      swap(arr, left, j2);
+    } else {
+      j2++;
+      swap(arr, j2, right);
+    }
+    if (j2 <= k2) {
+      left = j2 + 1;
+    }
+    if (k2 <= j2) {
+      right = j2 - 1;
+    }
+  }
+}
+function swap(arr, i, j2) {
+  var tmp = arr[i];
+  arr[i] = arr[j2];
+  arr[j2] = tmp;
+}
+function quantile$1(x2, p2) {
+  var copy2 = x2.slice();
+  if (Array.isArray(p2)) {
+    multiQuantileSelect(copy2, p2);
+    var results = [];
+    for (var i = 0; i < p2.length; i++) {
+      results[i] = quantileSorted(copy2, p2[i]);
+    }
+    return results;
+  } else {
+    var idx = quantileIndex(copy2.length, p2);
+    quantileSelect(copy2, idx, 0, copy2.length - 1);
+    return quantileSorted(copy2, p2);
+  }
+}
+function quantileSelect(arr, k2, left, right) {
+  if (k2 % 1 === 0) {
+    quickselect(arr, k2, left, right);
+  } else {
+    k2 = Math.floor(k2);
+    quickselect(arr, k2, left, right);
+    quickselect(arr, k2 + 1, k2 + 1, right);
+  }
+}
+function multiQuantileSelect(arr, p2) {
+  var indices = [0];
+  for (var i = 0; i < p2.length; i++) {
+    indices.push(quantileIndex(arr.length, p2[i]));
+  }
+  indices.push(arr.length - 1);
+  indices.sort(compare);
+  var stack = [0, indices.length - 1];
+  while (stack.length) {
+    var r = Math.ceil(stack.pop());
+    var l2 = Math.floor(stack.pop());
+    if (r - l2 <= 1) {
+      continue;
+    }
+    var m2 = Math.floor((l2 + r) / 2);
+    quantileSelect(
+      arr,
+      indices[m2],
+      Math.floor(indices[l2]),
+      Math.ceil(indices[r])
+    );
+    stack.push(l2, m2, m2, r);
+  }
+}
+function compare(a, b2) {
+  return a - b2;
+}
+function quantileIndex(len2, p2) {
+  var idx = len2 * p2;
+  if (p2 === 1) {
+    return len2 - 1;
+  } else if (p2 === 0) {
+    return 0;
+  } else if (idx % 1 !== 0) {
+    return Math.ceil(idx) - 1;
+  } else if (len2 % 2 === 0) {
+    return idx - 0.5;
+  } else {
+    return idx;
+  }
+}
+function median$1(x2) {
+  return +quantile$1(x2, 0.5);
+}
+function filter(vals) {
+  return vals.filter((v) => !Number.isNaN(v) && v !== null && v !== void 0);
+}
+function min(...vals) {
+  const x2 = filter(vals);
+  if (x2.length > 0) {
+    return min$1(x2);
+  } else {
+    return NaN;
+  }
+}
+function max(...vals) {
+  const x2 = filter(vals);
+  if (x2.length > 0) {
+    return max$1(x2);
+  } else {
+    return NaN;
+  }
+}
+function mean(...vals) {
+  const x2 = filter(vals);
+  if (x2.length > 0) {
+    return mean$1(x2);
+  } else {
+    return NaN;
+  }
+}
+function mode(...vals) {
+  const x2 = filter(vals);
+  if (x2.length > 0) {
+    return mode$1(x2);
+  } else {
+    return NaN;
+  }
+}
+function median(...vals) {
+  const x2 = filter(vals);
+  if (x2.length > 0) {
+    return median$1(x2);
+  } else {
+    return NaN;
+  }
+}
+function sum(...vals) {
+  const x2 = filter(vals);
+  if (x2.length > 0) {
+    return sum$1(x2);
+  } else {
+    return NaN;
+  }
+}
+function quantile(x2, p2) {
+  const xx = filter(x2);
+  if (xx.length > 0) {
+    return quantile$1(xx, p2);
+  } else {
+    if (Array.isArray(p2)) {
+      return new Array(p2.length).fill(NaN);
+    } else {
+      return NaN;
+    }
+  }
+}
+const LeadCycleTimeChart_vue_vue_type_style_index_0_scoped_c2ee74ad_lang = "";
+const _sfc_main$e = {
+  name: "LeadCycleTimeChart",
+  components: {
+    VChart: S
+  },
+  props: {
+    title: String,
+    periodStat: Array
+  },
+  data: function() {
+    return {
+      typeSelected: "lead",
+      aggrSelected: "perc"
+    };
+  },
+  methods: {
+    calcPercentileSeries: function() {
+      let chartData = [];
+      let aggrData = [];
+      let throughput = [];
+      let vals = [];
+      for (let item of this.periodStat) {
+        if (this.typeSelected === "lead") {
+          vals.push(...item.leadVals);
+          throughput.push([item.date, item.throughput ? item.throughput : 0]);
+          chartData.push({
+            name: "",
+            value: [
+              item.date,
+              item.lead.min.toFixed(1),
+              item.lead.q1.toFixed(1),
+              item.lead.med.toFixed(1),
+              item.lead.q3.toFixed(1),
+              item.lead.max.toFixed(1)
+            ]
+          });
+        } else {
+          vals.push(...item.cycleVals);
+          throughput.push([item.date, item.cycleThroughput ? item.cycleThroughput : 0]);
+          chartData.push({
+            name: "",
+            value: [
+              item.date,
+              item.cycle.min.toFixed(1),
+              item.cycle.q1.toFixed(1),
+              item.cycle.med.toFixed(1),
+              item.cycle.q3.toFixed(1),
+              item.cycle.max.toFixed(1)
+            ]
+          });
+        }
+      }
+      const aggr = median(...vals);
+      for (let item of this.periodStat) {
+        aggrData.push([item.date, aggr.toFixed(1)]);
+      }
+      const mainSeries = {
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        id: "mainSeries",
+        name: this.$t("lead-cycle-times-chart.series." + this.typeSelected + ".name.perc"),
+        type: "boxplot",
+        boxWidth: ["5%", "10%"],
+        encode: {
+          x: 0,
+          y: [1, 2, 3, 4, 5]
+        },
+        itemStyle: {
+          color: "rgba(191,128,255,0.75)",
+          borderColor: "rgb(80,32,128)"
+        },
+        data: chartData
+      };
+      const aggrSeries = {
+        id: "aggrSeries",
+        name: this.$t("lead-cycle-times-chart.series." + this.typeSelected + ".med"),
+        type: "line",
+        smooth: true,
+        smoothMonotone: "x",
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        label: {
+          show: false,
+          position: "bottom"
+        },
+        showSymbol: false,
+        itemStyle: {},
+        lineStyle: {
+          type: [5, 9],
+          width: 1
+        },
+        data: aggrData
+      };
+      const throughputSeries = {
+        id: "throughputSeries",
+        name: this.$t("lead-cycle-times-chart.series." + this.typeSelected + ".throughput"),
+        type: "bar",
+        xAxisIndex: 1,
+        yAxisIndex: 1,
+        label: {
+          show: true,
+          position: "top"
+        },
+        barMaxWidth: "15%",
+        barMinWidth: 10,
+        itemStyle: {
+          color: this.typeSelected === "lead" ? "rgba(64,64,255,0.75)" : "rgba(64,255,64,0.75)"
+        },
+        data: throughput
+      };
+      return [
+        mainSeries,
+        aggrSeries,
+        throughputSeries
+      ];
+    },
+    calcAverageSeries: function() {
+      let chartData = [];
+      let aggr3Data = [];
+      let aggr5Data = [];
+      let throughput = [];
+      let vals = [[], [], [], [], []];
+      for (let item of this.periodStat) {
+        for (let i = 0; i < vals.length - 1; i++) {
+          vals[i] = vals[i + 1];
+        }
+        vals[vals.length - 1] = [];
+        if (this.typeSelected === "lead") {
+          vals[vals.length - 1].push(...item.leadVals);
+          throughput.push([item.date, item.throughput ? item.throughput : 0]);
+          chartData.push([
+            item.date,
+            item.lead.avg.toFixed(1)
+          ]);
+        } else {
+          vals[vals.length - 1].push(...item.cycleVals);
+          throughput.push([item.date, item.cycleThroughput ? item.cycleThroughput : 0]);
+          chartData.push([
+            item.date,
+            item.cycle.avg.toFixed(1)
+          ]);
+        }
+        aggr3Data.push([item.date, mean(
+          ...vals[vals.length - 1],
+          ...vals[vals.length - 2],
+          ...vals[vals.length - 3]
+        )]);
+        aggr5Data.push([item.date, mean(
+          ...vals[vals.length - 1],
+          ...vals[vals.length - 2],
+          ...vals[vals.length - 3],
+          ...vals[vals.length - 4],
+          ...vals[vals.length - 5]
+        )]);
+      }
+      const mainSeries = {
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        id: "mainSeries",
+        name: this.$t("lead-cycle-times-chart.series." + this.typeSelected + ".name.avg"),
+        type: "scatter",
+        clip: false,
+        itemStyle: {
+          color: "rgba(191,128,255,0.75)",
+          borderColor: "rgb(80,32,128)"
+        },
+        label: {
+          show: true,
+          position: "top"
+        },
+        data: chartData
+      };
+      const aggr3Series = {
+        id: "aggr3Series",
+        name: this.$t("lead-cycle-times-chart.series." + this.typeSelected + ".avg3"),
+        type: "line",
+        smooth: true,
+        smoothMonotone: "x",
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        label: {
+          show: false,
+          position: "bottom"
+        },
+        showSymbol: false,
+        itemStyle: {},
+        lineStyle: {
+          type: [9, 3],
+          width: 1
+        },
+        data: aggr3Data
+      };
+      const aggr5Series = {
+        id: "aggr5Series",
+        name: this.$t("lead-cycle-times-chart.series." + this.typeSelected + ".avg5"),
+        type: "line",
+        smooth: true,
+        smoothMonotone: "x",
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        label: {
+          show: false,
+          position: "bottom"
+        },
+        showSymbol: false,
+        itemStyle: {},
+        lineStyle: {
+          type: [9, 5],
+          width: 1
+        },
+        data: aggr5Data
+      };
+      const throughputSeries = {
+        id: "throughputSeries",
+        name: this.$t("lead-cycle-times-chart.series." + this.typeSelected + ".throughput"),
+        type: "bar",
+        xAxisIndex: 1,
+        yAxisIndex: 1,
+        label: {
+          show: true,
+          position: "top"
+        },
+        barMaxWidth: "15%",
+        barMinWidth: 10,
+        itemStyle: {
+          color: this.typeSelected === "lead" ? "rgba(64,64,255,0.75)" : "rgba(64,255,64,0.75)"
+        },
+        data: throughput
+      };
+      return [
+        mainSeries,
+        aggr3Series,
+        aggr5Series,
+        throughputSeries
+      ];
+    }
+  },
+  watch: {},
+  computed: {
+    xAxisMin() {
+      let res = Number.MAX_VALUE;
+      for (let item of this.periodStat) {
+        res = Math.min(res, item.date);
+      }
+      if (res === Number.MAX_VALUE) {
+        return NaN;
+      } else {
+        return res - 6e4;
+      }
+    },
+    xAxisMax() {
+      let res = Number.MIN_VALUE;
+      for (let item of this.periodStat) {
+        res = Math.max(res, item.date);
+      }
+      if (res === Number.MIN_VALUE) {
+        return NaN;
+      } else {
+        return res + 6e4;
+      }
+    },
+    option() {
+      return {
+        animation: true,
+        title: {
+          text: this.$t("lead-cycle-times-chart.title." + this.typeSelected + "." + this.aggrSelected, { title: this.title }),
+          left: "center"
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true
+            }
+          }
+        },
+        axisPointer: {
+          link: [
+            {
+              xAxisIndex: "all"
+            }
+          ]
+        },
+        tooltip: {
+          axisPointer: {
+            show: true
+          }
+        },
+        legend: {
+          top: "bottom",
+          left: "10%",
+          right: "10%"
+        },
+        grid: [
+          {
+            top: "10%",
+            height: "60%"
+          },
+          {
+            bottom: "10%",
+            height: "15%"
+          }
+        ],
+        xAxis: [
+          {
+            axisLabel: {
+              show: false
+            },
+            boundaryGap: false,
+            gridIndex: 0,
+            axisPointer: {
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
+                    return "";
+                  }
+                }
+              }
+            },
+            type: "time",
+            min: this.xAxisMin,
+            max: this.xAxisMax
+          },
+          {
+            gridIndex: 1,
+            boundaryGap: false,
+            axisPointer: {
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
+                    return "";
+                  }
+                }
+              }
+            },
+            axisLabel: {
+              hideOverlap: true,
+              formatter: function(value) {
+                if (value) {
+                  return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                } else {
+                  return "";
+                }
+              }
+            },
+            type: "time",
+            min: this.xAxisMin,
+            max: this.xAxisMax
+          }
+        ],
+        yAxis: [
+          {
+            gridIndex: 0,
+            name: this.$t("lead-cycle-times-chart.yAxis." + this.typeSelected + "." + this.aggrSelected),
+            nameLocation: "middle",
+            nameGap: "35",
+            minInterval: 1,
+            axisPointer: {
+              show: true,
+              triggerTooltip: false
+            },
+            axisLabel: {
+              hideOverlap: true,
+              formatter: function(value) {
+                return value ? value.toFixed(0) : "";
+              }
+            }
+          },
+          {
+            gridIndex: 1,
+            boundaryGap: [0, "100%"],
+            name: this.$t("lead-cycle-times-chart.yAxis." + this.typeSelected + "-throughput"),
+            nameLocation: "middle",
+            nameGap: "35",
+            axisPointer: {
+              show: true,
+              triggerTooltip: false
+            },
+            axisLabel: {
+              hideOverlap: true,
+              formatter: function(value) {
+                return value ? value.toFixed(0) : "";
+              }
+            },
+            min: 0,
+            max: "dataMax"
+          }
+        ],
+        series: this.series
+      };
+    },
+    series: function() {
+      if (this.aggrSelected === "perc") {
+        return this.calcPercentileSeries();
+      } else {
+        return this.calcAverageSeries();
+      }
+    }
+  }
+};
+const _withScopeId$1 = (n2) => (pushScopeId("data-v-c2ee74ad"), n2 = n2(), popScopeId(), n2);
+const _hoisted_1$e = { class: "lead-cycle-times-chart-selector" };
+const _hoisted_2$8 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "lead-cycle-times-chart-selector-space" }, "   ", -1));
+const _hoisted_3$8 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_4$5 = ["title", "href"];
+function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_v_chart = resolveComponent("v-chart");
+  return openBlock(), createElementBlock(Fragment, null, [
+    createBaseVNode("div", _hoisted_1$e, [
+      createBaseVNode("div", {
+        class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.typeSelected === "lead" }]),
+        onClick: _cache[0] || (_cache[0] = ($event) => _ctx.typeSelected = "lead")
+      }, toDisplayString$1(_ctx.$t("lead-cycle-times-chart.tab.lead")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.typeSelected === "cycle" }]),
+        onClick: _cache[1] || (_cache[1] = ($event) => _ctx.typeSelected = "cycle")
+      }, toDisplayString$1(_ctx.$t("lead-cycle-times-chart.tab.cycle")), 3),
+      _hoisted_2$8,
+      createBaseVNode("div", {
+        class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.aggrSelected === "perc" }]),
+        onClick: _cache[2] || (_cache[2] = ($event) => _ctx.aggrSelected = "perc")
+      }, toDisplayString$1(_ctx.$t("lead-cycle-times-chart.tab.percentiles")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.aggrSelected === "avg" }]),
+        onClick: _cache[3] || (_cache[3] = ($event) => _ctx.aggrSelected = "avg")
+      }, toDisplayString$1(_ctx.$t("lead-cycle-times-chart.tab.averages")), 3)
+    ]),
+    createBaseVNode("div", _hoisted_3$8, [
+      createVNode(_component_v_chart, {
+        class: "LeadCycleTimeChart",
+        option: $options.option,
+        autoresize: ""
+      }, null, 8, ["option"])
+    ]),
+    createBaseVNode("a", {
+      class: "icon-info-down",
+      title: _ctx.$t("lead-cycle-times-chart.help.text"),
+      href: _ctx.$t("lead-cycle-times-chart.help.link"),
+      target: "_blank"
+    }, " ‽ ", 8, _hoisted_4$5)
+  ], 64);
+}
+const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-c2ee74ad"]]);
 const JiraFilters_vue_vue_type_style_index_0_scoped_dc5a911c_lang = "";
 const _sfc_main$d = {
   name: "JiraFilters",
@@ -71976,295 +73005,6 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8, ["modelValue"]);
 }
 const AppConfig = /* @__PURE__ */ _export_sfc$1(_sfc_main$a, [["render", _sfc_render$9]]);
-function sum$1(x2) {
-  if (x2.length === 0) {
-    return 0;
-  }
-  var sum2 = x2[0];
-  var correction = 0;
-  var transition;
-  if (typeof sum2 !== "number") {
-    return NaN;
-  }
-  for (var i = 1; i < x2.length; i++) {
-    if (typeof x2[i] !== "number") {
-      return NaN;
-    }
-    transition = sum2 + x2[i];
-    if (Math.abs(sum2) >= Math.abs(x2[i])) {
-      correction += sum2 - transition + x2[i];
-    } else {
-      correction += x2[i] - transition + sum2;
-    }
-    sum2 = transition;
-  }
-  return sum2 + correction;
-}
-function mean$1(x2) {
-  if (x2.length === 0) {
-    throw new Error("mean requires at least one data point");
-  }
-  return sum$1(x2) / x2.length;
-}
-function modeSorted(sorted) {
-  if (sorted.length === 0) {
-    throw new Error("mode requires at least one data point");
-  } else if (sorted.length === 1) {
-    return sorted[0];
-  }
-  var last2 = sorted[0], value = NaN, maxSeen = 0, seenThis = 1;
-  for (var i = 1; i < sorted.length + 1; i++) {
-    if (sorted[i] !== last2) {
-      if (seenThis > maxSeen) {
-        maxSeen = seenThis;
-        value = last2;
-      }
-      seenThis = 1;
-      last2 = sorted[i];
-    } else {
-      seenThis++;
-    }
-  }
-  return value;
-}
-function numericSort(x2) {
-  return x2.slice().sort(function(a, b2) {
-    return a - b2;
-  });
-}
-function mode$1(x2) {
-  return modeSorted(numericSort(x2));
-}
-function min$1(x2) {
-  if (x2.length === 0) {
-    throw new Error("min requires at least one data point");
-  }
-  var value = x2[0];
-  for (var i = 1; i < x2.length; i++) {
-    if (x2[i] < value) {
-      value = x2[i];
-    }
-  }
-  return value;
-}
-function max$1(x2) {
-  if (x2.length === 0) {
-    throw new Error("max requires at least one data point");
-  }
-  var value = x2[0];
-  for (var i = 1; i < x2.length; i++) {
-    if (x2[i] > value) {
-      value = x2[i];
-    }
-  }
-  return value;
-}
-function quantileSorted(x2, p2) {
-  var idx = x2.length * p2;
-  if (x2.length === 0) {
-    throw new Error("quantile requires at least one data point.");
-  } else if (p2 < 0 || p2 > 1) {
-    throw new Error("quantiles must be between 0 and 1");
-  } else if (p2 === 1) {
-    return x2[x2.length - 1];
-  } else if (p2 === 0) {
-    return x2[0];
-  } else if (idx % 1 !== 0) {
-    return x2[Math.ceil(idx) - 1];
-  } else if (x2.length % 2 === 0) {
-    return (x2[idx - 1] + x2[idx]) / 2;
-  } else {
-    return x2[idx];
-  }
-}
-function quickselect(arr, k2, left, right) {
-  left = left || 0;
-  right = right || arr.length - 1;
-  while (right > left) {
-    if (right - left > 600) {
-      var n2 = right - left + 1;
-      var m2 = k2 - left + 1;
-      var z2 = Math.log(n2);
-      var s2 = 0.5 * Math.exp(2 * z2 / 3);
-      var sd = 0.5 * Math.sqrt(z2 * s2 * (n2 - s2) / n2);
-      if (m2 - n2 / 2 < 0) {
-        sd *= -1;
-      }
-      var newLeft = Math.max(left, Math.floor(k2 - m2 * s2 / n2 + sd));
-      var newRight = Math.min(
-        right,
-        Math.floor(k2 + (n2 - m2) * s2 / n2 + sd)
-      );
-      quickselect(arr, k2, newLeft, newRight);
-    }
-    var t = arr[k2];
-    var i = left;
-    var j2 = right;
-    swap(arr, left, k2);
-    if (arr[right] > t) {
-      swap(arr, left, right);
-    }
-    while (i < j2) {
-      swap(arr, i, j2);
-      i++;
-      j2--;
-      while (arr[i] < t) {
-        i++;
-      }
-      while (arr[j2] > t) {
-        j2--;
-      }
-    }
-    if (arr[left] === t) {
-      swap(arr, left, j2);
-    } else {
-      j2++;
-      swap(arr, j2, right);
-    }
-    if (j2 <= k2) {
-      left = j2 + 1;
-    }
-    if (k2 <= j2) {
-      right = j2 - 1;
-    }
-  }
-}
-function swap(arr, i, j2) {
-  var tmp = arr[i];
-  arr[i] = arr[j2];
-  arr[j2] = tmp;
-}
-function quantile$1(x2, p2) {
-  var copy2 = x2.slice();
-  if (Array.isArray(p2)) {
-    multiQuantileSelect(copy2, p2);
-    var results = [];
-    for (var i = 0; i < p2.length; i++) {
-      results[i] = quantileSorted(copy2, p2[i]);
-    }
-    return results;
-  } else {
-    var idx = quantileIndex(copy2.length, p2);
-    quantileSelect(copy2, idx, 0, copy2.length - 1);
-    return quantileSorted(copy2, p2);
-  }
-}
-function quantileSelect(arr, k2, left, right) {
-  if (k2 % 1 === 0) {
-    quickselect(arr, k2, left, right);
-  } else {
-    k2 = Math.floor(k2);
-    quickselect(arr, k2, left, right);
-    quickselect(arr, k2 + 1, k2 + 1, right);
-  }
-}
-function multiQuantileSelect(arr, p2) {
-  var indices = [0];
-  for (var i = 0; i < p2.length; i++) {
-    indices.push(quantileIndex(arr.length, p2[i]));
-  }
-  indices.push(arr.length - 1);
-  indices.sort(compare);
-  var stack = [0, indices.length - 1];
-  while (stack.length) {
-    var r = Math.ceil(stack.pop());
-    var l2 = Math.floor(stack.pop());
-    if (r - l2 <= 1) {
-      continue;
-    }
-    var m2 = Math.floor((l2 + r) / 2);
-    quantileSelect(
-      arr,
-      indices[m2],
-      Math.floor(indices[l2]),
-      Math.ceil(indices[r])
-    );
-    stack.push(l2, m2, m2, r);
-  }
-}
-function compare(a, b2) {
-  return a - b2;
-}
-function quantileIndex(len2, p2) {
-  var idx = len2 * p2;
-  if (p2 === 1) {
-    return len2 - 1;
-  } else if (p2 === 0) {
-    return 0;
-  } else if (idx % 1 !== 0) {
-    return Math.ceil(idx) - 1;
-  } else if (len2 % 2 === 0) {
-    return idx - 0.5;
-  } else {
-    return idx;
-  }
-}
-function median$1(x2) {
-  return +quantile$1(x2, 0.5);
-}
-function filter(vals) {
-  return vals.filter((v) => !Number.isNaN(v) && v !== null && v !== void 0);
-}
-function min(...vals) {
-  const x2 = filter(vals);
-  if (x2.length > 0) {
-    return min$1(x2);
-  } else {
-    return NaN;
-  }
-}
-function max(...vals) {
-  const x2 = filter(vals);
-  if (x2.length > 0) {
-    return max$1(x2);
-  } else {
-    return NaN;
-  }
-}
-function mean(...vals) {
-  const x2 = filter(vals);
-  if (x2.length > 0) {
-    return mean$1(x2);
-  } else {
-    return NaN;
-  }
-}
-function mode(...vals) {
-  const x2 = filter(vals);
-  if (x2.length > 0) {
-    return mode$1(x2);
-  } else {
-    return NaN;
-  }
-}
-function median(...vals) {
-  const x2 = filter(vals);
-  if (x2.length > 0) {
-    return median$1(x2);
-  } else {
-    return NaN;
-  }
-}
-function sum(...vals) {
-  const x2 = filter(vals);
-  if (x2.length > 0) {
-    return sum$1(x2);
-  } else {
-    return NaN;
-  }
-}
-function quantile(x2, p2) {
-  const xx = filter(x2);
-  if (xx.length > 0) {
-    return quantile$1(xx, p2);
-  } else {
-    if (Array.isArray(p2)) {
-      return new Array(p2.length).fill(NaN);
-    } else {
-      return NaN;
-    }
-  }
-}
 const dayShift = 24 * 60 * 60 * 1e3;
 function nanStat() {
   return {
@@ -72272,7 +73012,9 @@ function nanStat() {
     med: NaN,
     max: NaN,
     mod: NaN,
-    avg: NaN
+    avg: NaN,
+    q1: NaN,
+    q3: NaN
   };
 }
 function calcStat(arr) {
@@ -72282,7 +73024,9 @@ function calcStat(arr) {
       med: median(...arr),
       max: max(...arr),
       mod: mode(...arr),
-      avg: mean(...arr)
+      avg: mean(...arr),
+      q1: quantile(arr, 0.25),
+      q3: quantile(arr, 0.75)
     };
   } else {
     return nanStat();
@@ -72295,6 +73039,8 @@ const KanbanStat = {
   //   "max": max value
   //   "mod": mode
   //   "avg": average
+  //   "q1": quantile 1
+  //   "q3": quantile 3
   // }
   // Periods stats array
   // "date": time of period start
@@ -72567,7 +73313,9 @@ const KanbanStat = {
     };
     if (throughput) {
       ps.cycle = calcStat(timeCycle);
+      ps.cycleVals = timeCycle;
       ps.lead = calcStat(timeLead);
+      ps.leadVals = timeLead;
       ps.waste = calcStat(timeWaste);
       ps.times = {};
       for (const id in tmp.columns) {
@@ -76059,6 +76807,18 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                     columns: _ctx.columns,
                     "selected-columns": _ctx.selectedColumns
                   }, null, 8, ["title", "period-stat", "columns", "selected-columns"])
+                ]),
+                _: 1
+              }, 8, ["name"]),
+              createVNode(unref(Tab), {
+                id: "tabs-lead-cycle-times",
+                name: _ctx.$t("app.tabs.lead-cycle-times")
+              }, {
+                default: withCtx(() => [
+                  createVNode(LeadCycleTimeChart, {
+                    title: _ctx.kanbanBoardConfig.name,
+                    "period-stat": _ctx.periodStat
+                  }, null, 8, ["title", "period-stat"])
                 ]),
                 _: 1
               }, 8, ["name"]),

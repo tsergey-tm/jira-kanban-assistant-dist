@@ -100,6 +100,10 @@ the WIP limits too much:
 if the minimum before the bottleneck is zero, then most likely your bottleneck was 
 idle due to lack of work.
 
+### Lead & cycle times
+
+Here you can evaluate the trends and range of lead and cycle times.
+
 ### Average times by columns
 
 Readings, on average, performed tasks in each of the columns.
