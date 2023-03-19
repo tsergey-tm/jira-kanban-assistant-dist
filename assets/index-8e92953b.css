@@ -292,12 +292,12 @@
   padding: 0.2rem 0;
 }
 
-.avg-times-chart-selector {
+.times-chart-selector {
   margin: 0.1rem 0.2rem;
   float: left;
   clear: both;
 }
-.avg-times-chart-selector-item {
+.times-chart-selector-item {
   float: left;
   margin: 0.1rem 0.2rem;
   padding: 0.2rem 0.4rem;
@@ -306,7 +306,7 @@
   cursor: pointer;
   border-radius: 5px;
 }
-.avg-times-chart-selector-item.avg-times-chart-selector-item-selected {
+.times-chart-selector-item.times-chart-selector-item-selected {
   background-color: var(--color-tabs-bg-sel);
   color: var(--color-tabs-text-sel);
 }

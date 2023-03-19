@@ -50,7 +50,7 @@ function makeMap(str, expectsLowerCase) {
 const GLOBALS_WHITE_LISTED = "Infinity,undefined,NaN,isFinite,isNaN,parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,Math,Number,Date,Array,Object,Boolean,String,RegExp,Map,Set,JSON,Intl,BigInt";
 const isGloballyWhitelisted = /* @__PURE__ */ makeMap(GLOBALS_WHITE_LISTED);
 function normalizeStyle$1(value) {
-  if (isArray$2(value)) {
+  if (isArray$3(value)) {
     const res = {};
     for (let i = 0; i < value.length; i++) {
       const item = value[i];
@@ -64,7 +64,7 @@ function normalizeStyle$1(value) {
     return res;
   } else if (isString$4(value)) {
     return value;
-  } else if (isObject$4(value)) {
+  } else if (isObject$5(value)) {
     return value;
   }
 }
@@ -85,14 +85,14 @@ function normalizeClass(value) {
   let res = "";
   if (isString$4(value)) {
     res = value;
-  } else if (isArray$2(value)) {
+  } else if (isArray$3(value)) {
     for (let i = 0; i < value.length; i++) {
       const normalized = normalizeClass(value[i]);
       if (normalized) {
         res += normalized + " ";
       }
     }
-  } else if (isObject$4(value)) {
+  } else if (isObject$5(value)) {
     for (const name in value) {
       if (value[name]) {
         res += name + " ";
@@ -146,13 +146,13 @@ function looseEqual(a, b2) {
   if (aValidType || bValidType) {
     return a === b2;
   }
-  aValidType = isArray$2(a);
-  bValidType = isArray$2(b2);
+  aValidType = isArray$3(a);
+  bValidType = isArray$3(b2);
   if (aValidType || bValidType) {
     return aValidType && bValidType ? looseCompareArrays(a, b2) : false;
   }
-  aValidType = isObject$4(a);
-  bValidType = isObject$4(b2);
+  aValidType = isObject$5(a);
+  bValidType = isObject$5(b2);
   if (aValidType || bValidType) {
     if (!aValidType || !bValidType) {
       return false;
@@ -176,7 +176,7 @@ function looseIndexOf(arr, val) {
   return arr.findIndex((item) => looseEqual(item, val));
 }
 const toDisplayString$1 = (val) => {
-  return isString$4(val) ? val : val == null ? "" : isArray$2(val) || isObject$4(val) && (val.toString === objectToString$1 || !isFunction$2(val.toString)) ? JSON.stringify(val, replacer, 2) : String(val);
+  return isString$4(val) ? val : val == null ? "" : isArray$3(val) || isObject$5(val) && (val.toString === objectToString$1 || !isFunction$2(val.toString)) ? JSON.stringify(val, replacer, 2) : String(val);
 };
 const replacer = (_key, val) => {
   if (val && val.__v_isRef) {
@@ -192,7 +192,7 @@ const replacer = (_key, val) => {
     return {
       [`Set(${val.size})`]: [...val.values()]
     };
-  } else if (isObject$4(val) && !isArray$2(val) && !isPlainObject$1(val)) {
+  } else if (isObject$5(val) && !isArray$3(val) && !isPlainObject$1(val)) {
     return String(val);
   }
   return val;
@@ -214,7 +214,7 @@ const remove = (arr, el) => {
 };
 const hasOwnProperty$3 = Object.prototype.hasOwnProperty;
 const hasOwn$2 = (val, key) => hasOwnProperty$3.call(val, key);
-const isArray$2 = Array.isArray;
+const isArray$3 = Array.isArray;
 const isMap = (val) => toTypeString$1(val) === "[object Map]";
 const isSet = (val) => toTypeString$1(val) === "[object Set]";
 const isDate$2 = (val) => toTypeString$1(val) === "[object Date]";
@@ -222,9 +222,9 @@ const isRegExp$1 = (val) => toTypeString$1(val) === "[object RegExp]";
 const isFunction$2 = (val) => typeof val === "function";
 const isString$4 = (val) => typeof val === "string";
 const isSymbol = (val) => typeof val === "symbol";
-const isObject$4 = (val) => val !== null && typeof val === "object";
+const isObject$5 = (val) => val !== null && typeof val === "object";
 const isPromise = (val) => {
-  return isObject$4(val) && isFunction$2(val.then) && isFunction$2(val.catch);
+  return isObject$5(val) && isFunction$2(val.then) && isFunction$2(val.catch);
 };
 const objectToString$1 = Object.prototype.toString;
 const toTypeString$1 = (value) => objectToString$1.call(value);
@@ -531,7 +531,7 @@ function trigger$2(target, type, key, newValue, oldValue, oldTarget) {
   let deps = [];
   if (type === "clear") {
     deps = [...depsMap.values()];
-  } else if (key === "length" && isArray$2(target)) {
+  } else if (key === "length" && isArray$3(target)) {
     const newLength = Number(newValue);
     depsMap.forEach((dep, key2) => {
       if (key2 === "length" || key2 >= newLength) {
@@ -544,7 +544,7 @@ function trigger$2(target, type, key, newValue, oldValue, oldTarget) {
     }
     switch (type) {
       case "add":
-        if (!isArray$2(target)) {
+        if (!isArray$3(target)) {
           deps.push(depsMap.get(ITERATE_KEY));
           if (isMap(target)) {
             deps.push(depsMap.get(MAP_KEY_ITERATE_KEY));
@@ -554,7 +554,7 @@ function trigger$2(target, type, key, newValue, oldValue, oldTarget) {
         }
         break;
       case "delete":
-        if (!isArray$2(target)) {
+        if (!isArray$3(target)) {
           deps.push(depsMap.get(ITERATE_KEY));
           if (isMap(target)) {
             deps.push(depsMap.get(MAP_KEY_ITERATE_KEY));
@@ -587,7 +587,7 @@ function trigger$2(target, type, key, newValue, oldValue, oldTarget) {
   }
 }
 function triggerEffects(dep, debuggerEventExtraInfo) {
-  const effects = isArray$2(dep) ? dep : [...dep];
+  const effects = isArray$3(dep) ? dep : [...dep];
   for (const effect2 of effects) {
     if (effect2.computed) {
       triggerEffect(effect2);
@@ -663,7 +663,7 @@ function createGetter(isReadonly2 = false, shallow = false) {
     } else if (key === "__v_raw" && receiver === (isReadonly2 ? shallow ? shallowReadonlyMap : readonlyMap : shallow ? shallowReactiveMap : reactiveMap).get(target)) {
       return target;
     }
-    const targetIsArray = isArray$2(target);
+    const targetIsArray = isArray$3(target);
     if (!isReadonly2) {
       if (targetIsArray && hasOwn$2(arrayInstrumentations, key)) {
         return Reflect.get(arrayInstrumentations, key, receiver);
@@ -685,7 +685,7 @@ function createGetter(isReadonly2 = false, shallow = false) {
     if (isRef(res)) {
       return targetIsArray && isIntegerKey(key) ? res : res.value;
     }
-    if (isObject$4(res)) {
+    if (isObject$5(res)) {
       return isReadonly2 ? readonly(res) : reactive(res);
     }
     return res;
@@ -704,12 +704,12 @@ function createSetter(shallow = false) {
         oldValue = toRaw(oldValue);
         value = toRaw(value);
       }
-      if (!isArray$2(target) && isRef(oldValue) && !isRef(value)) {
+      if (!isArray$3(target) && isRef(oldValue) && !isRef(value)) {
         oldValue.value = value;
         return true;
       }
     }
-    const hadKey = isArray$2(target) && isIntegerKey(key) ? Number(key) < target.length : hasOwn$2(target, key);
+    const hadKey = isArray$3(target) && isIntegerKey(key) ? Number(key) < target.length : hasOwn$2(target, key);
     const result = Reflect.set(target, key, value, receiver);
     if (target === toRaw(receiver)) {
       if (!hadKey) {
@@ -738,7 +738,7 @@ function has$1(target, key) {
   return result;
 }
 function ownKeys$1(target) {
-  track(target, "iterate", isArray$2(target) ? "length" : ITERATE_KEY);
+  track(target, "iterate", isArray$3(target) ? "length" : ITERATE_KEY);
   return Reflect.ownKeys(target);
 }
 const mutableHandlers = {
@@ -789,7 +789,7 @@ function get$2(target, key, isReadonly2 = false, isShallow2 = false) {
     target.get(key);
   }
 }
-function has(key, isReadonly2 = false) {
+function has$2(key, isReadonly2 = false) {
   const target = this[
     "__v_raw"
     /* ReactiveFlags.RAW */
@@ -922,7 +922,7 @@ function createInstrumentations() {
     get size() {
       return size(this);
     },
-    has,
+    has: has$2,
     add: add$1,
     set: set$2,
     delete: deleteEntry,
@@ -936,7 +936,7 @@ function createInstrumentations() {
     get size() {
       return size(this);
     },
-    has,
+    has: has$2,
     add: add$1,
     set: set$2,
     delete: deleteEntry,
@@ -951,7 +951,7 @@ function createInstrumentations() {
       return size(this, true);
     },
     has(key) {
-      return has.call(this, key, true);
+      return has$2.call(this, key, true);
     },
     add: createReadonlyMethod(
       "add"
@@ -979,7 +979,7 @@ function createInstrumentations() {
       return size(this, true);
     },
     has(key) {
-      return has.call(this, key, true);
+      return has$2.call(this, key, true);
     },
     add: createReadonlyMethod(
       "add"
@@ -1079,7 +1079,7 @@ function shallowReadonly(target) {
   return createReactiveObject(target, true, shallowReadonlyHandlers, shallowReadonlyCollectionHandlers, shallowReadonlyMap);
 }
 function createReactiveObject(target, isReadonly2, baseHandlers, collectionHandlers, proxyMap) {
-  if (!isObject$4(target)) {
+  if (!isObject$5(target)) {
     return target;
   }
   if (target[
@@ -1141,8 +1141,8 @@ function markRaw(value) {
   def(value, "__v_skip", true);
   return value;
 }
-const toReactive = (value) => isObject$4(value) ? reactive(value) : value;
-const toReadonly = (value) => isObject$4(value) ? readonly(value) : value;
+const toReactive = (value) => isObject$5(value) ? reactive(value) : value;
+const toReadonly = (value) => isObject$5(value) ? readonly(value) : value;
 function trackRefValue(ref2) {
   if (shouldTrack && activeEffect) {
     ref2 = toRaw(ref2);
@@ -1237,7 +1237,7 @@ function customRef(factory) {
   return new CustomRefImpl(factory);
 }
 function toRefs(object) {
-  const ret = isArray$2(object) ? new Array(object.length) : {};
+  const ret = isArray$3(object) ? new Array(object.length) : {};
   for (const key in object) {
     ret[key] = toRef(object, key);
   }
@@ -1314,7 +1314,7 @@ function computed$1(getterOrOptions, debugOptions, isSSR = false) {
   const cRef = new ComputedRefImpl(getter, setter, onlyGetter || !setter, isSSR);
   return cRef;
 }
-function warn$1(msg, ...args) {
+function warn$2(msg, ...args) {
   return;
 }
 function assertNumber(val, type) {
@@ -1421,7 +1421,7 @@ function invalidateJob(job) {
   }
 }
 function queuePostFlushCb(cb) {
-  if (!isArray$2(cb)) {
+  if (!isArray$3(cb)) {
     if (!activePostFlushCbs || !activePostFlushCbs.includes(cb, cb.allowRecurse ? postFlushIndex + 1 : postFlushIndex)) {
       pendingPostFlushCbs.push(cb);
     }
@@ -1594,17 +1594,17 @@ function normalizeEmitsOptions(comp, appContext, asMixin = false) {
     }
   }
   if (!raw && !hasExtends) {
-    if (isObject$4(comp)) {
+    if (isObject$5(comp)) {
       cache2.set(comp, null);
     }
     return null;
   }
-  if (isArray$2(raw)) {
+  if (isArray$3(raw)) {
     raw.forEach((key) => normalized[key] = null);
   } else {
     extend$1(normalized, raw);
   }
-  if (isObject$4(comp)) {
+  if (isObject$5(comp)) {
     cache2.set(comp, normalized);
   }
   return normalized;
@@ -2190,7 +2190,7 @@ function normalizeSuspenseSlot(s2) {
       closeBlock();
     }
   }
-  if (isArray$2(s2)) {
+  if (isArray$3(s2)) {
     const singleChild = filterSingleRoot(s2);
     s2 = singleChild;
   }
@@ -2202,7 +2202,7 @@ function normalizeSuspenseSlot(s2) {
 }
 function queueEffectWithSuspense(fn, suspense) {
   if (suspense && suspense.pendingBranch) {
-    if (isArray$2(fn)) {
+    if (isArray$3(fn)) {
       suspense.effects.push(...fn);
     } else {
       suspense.effects.push(fn);
@@ -2268,7 +2268,7 @@ function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger } = EM
   } else if (isReactive(source)) {
     getter = () => source;
     deep = true;
-  } else if (isArray$2(source)) {
+  } else if (isArray$3(source)) {
     isMultiSource = true;
     forceTrigger = source.some((s2) => isReactive(s2) || isShallow(s2));
     getter = () => source.map((s2) => {
@@ -2430,7 +2430,7 @@ function createPathGetter(ctx, path) {
   };
 }
 function traverse(value, seen2) {
-  if (!isObject$4(value) || value[
+  if (!isObject$5(value) || value[
     "__v_skip"
     /* ReactiveFlags.SKIP */
   ]) {
@@ -2443,7 +2443,7 @@ function traverse(value, seen2) {
   seen2.add(value);
   if (isRef(value)) {
     traverse(value.value, seen2);
-  } else if (isArray$2(value)) {
+  } else if (isArray$3(value)) {
     for (let i = 0; i < value.length; i++) {
       traverse(value[i], seen2);
     }
@@ -2587,7 +2587,7 @@ function resolveTransitionHooks(vnode, props, state, instance) {
   const callAsyncHook = (hook, args) => {
     const done = args[1];
     callHook2(hook, args);
-    if (isArray$2(hook)) {
+    if (isArray$3(hook)) {
       if (hook.every((hook2) => hook2.length <= 1))
         done();
     } else if (hook.length <= 1) {
@@ -3025,7 +3025,7 @@ const KeepAliveImpl = {
 };
 const KeepAlive = KeepAliveImpl;
 function matches$1(pattern, name) {
-  if (isArray$2(pattern)) {
+  if (isArray$3(pattern)) {
     return pattern.some((p2) => matches$1(p2, name));
   } else if (isString$4(pattern)) {
     return pattern.split(",").includes(name);
@@ -3246,7 +3246,7 @@ function resolve(registry, name) {
 function renderList(source, renderItem, cache2, index) {
   let ret;
   const cached = cache2 && cache2[index];
-  if (isArray$2(source) || isString$4(source)) {
+  if (isArray$3(source) || isString$4(source)) {
     ret = new Array(source.length);
     for (let i = 0, l2 = source.length; i < l2; i++) {
       ret[i] = renderItem(source[i], i, void 0, cached && cached[i]);
@@ -3256,7 +3256,7 @@ function renderList(source, renderItem, cache2, index) {
     for (let i = 0; i < source; i++) {
       ret[i] = renderItem(i + 1, i, void 0, cached && cached[i]);
     }
-  } else if (isObject$4(source)) {
+  } else if (isObject$5(source)) {
     if (source[Symbol.iterator]) {
       ret = Array.from(source, (item, i) => renderItem(item, i, void 0, cached && cached[i]));
     } else {
@@ -3278,7 +3278,7 @@ function renderList(source, renderItem, cache2, index) {
 function createSlots(slots, dynamicSlots) {
   for (let i = 0; i < dynamicSlots.length; i++) {
     const slot = dynamicSlots[i];
-    if (isArray$2(slot)) {
+    if (isArray$3(slot)) {
       for (let j2 = 0; j2 < slot.length; j2++) {
         slots[slot[j2].name] = slot[j2].fn;
       }
@@ -3540,7 +3540,7 @@ function applyOptions(instance) {
   }
   if (dataOptions) {
     const data = dataOptions.call(publicThis, publicThis);
-    if (!isObject$4(data))
+    if (!isObject$5(data))
       ;
     else {
       instance.data = reactive(data);
@@ -3584,7 +3584,7 @@ function applyOptions(instance) {
     );
   }
   function registerLifecycleHook(register2, hook) {
-    if (isArray$2(hook)) {
+    if (isArray$3(hook)) {
       hook.forEach((_hook) => register2(_hook.bind(publicThis)));
     } else if (hook) {
       register2(hook.bind(publicThis));
@@ -3602,7 +3602,7 @@ function applyOptions(instance) {
   registerLifecycleHook(onBeforeUnmount, beforeUnmount);
   registerLifecycleHook(onUnmounted, unmounted);
   registerLifecycleHook(onServerPrefetch, serverPrefetch);
-  if (isArray$2(expose)) {
+  if (isArray$3(expose)) {
     if (expose.length) {
       const exposed = instance.exposed || (instance.exposed = {});
       expose.forEach((key) => {
@@ -3627,13 +3627,13 @@ function applyOptions(instance) {
     instance.directives = directives;
 }
 function resolveInjections(injectOptions, ctx, checkDuplicateProperties = NOOP, unwrapRef = false) {
-  if (isArray$2(injectOptions)) {
+  if (isArray$3(injectOptions)) {
     injectOptions = normalizeInject(injectOptions);
   }
   for (const key in injectOptions) {
     const opt = injectOptions[key];
     let injected;
-    if (isObject$4(opt)) {
+    if (isObject$5(opt)) {
       if ("default" in opt) {
         injected = inject(
           opt.from || key,
@@ -3664,7 +3664,7 @@ function resolveInjections(injectOptions, ctx, checkDuplicateProperties = NOOP, 
   }
 }
 function callHook$1(hook, instance, type) {
-  callWithAsyncErrorHandling(isArray$2(hook) ? hook.map((h2) => h2.bind(instance.proxy)) : hook.bind(instance.proxy), instance, type);
+  callWithAsyncErrorHandling(isArray$3(hook) ? hook.map((h2) => h2.bind(instance.proxy)) : hook.bind(instance.proxy), instance, type);
 }
 function createWatcher(raw, ctx, publicThis, key) {
   const getter = key.includes(".") ? createPathGetter(publicThis, key) : () => publicThis[key];
@@ -3675,8 +3675,8 @@ function createWatcher(raw, ctx, publicThis, key) {
     }
   } else if (isFunction$2(raw)) {
     watch(getter, raw.bind(publicThis));
-  } else if (isObject$4(raw)) {
-    if (isArray$2(raw)) {
+  } else if (isObject$5(raw)) {
+    if (isArray$3(raw)) {
       raw.forEach((r) => createWatcher(r, ctx, publicThis, key));
     } else {
       const handler = isFunction$2(raw.handler) ? raw.handler.bind(publicThis) : ctx[raw.handler];
@@ -3706,7 +3706,7 @@ function resolveMergedOptions(instance) {
     }
     mergeOptions(resolved, base2, optionMergeStrategies);
   }
-  if (isObject$4(base2)) {
+  if (isObject$5(base2)) {
     cache2.set(base2, resolved);
   }
   return resolved;
@@ -3775,7 +3775,7 @@ function mergeInject(to2, from) {
   return mergeObjectOptions(normalizeInject(to2), normalizeInject(from));
 }
 function normalizeInject(raw) {
-  if (isArray$2(raw)) {
+  if (isArray$3(raw)) {
     const res = {};
     for (let i = 0; i < raw.length; i++) {
       res[raw[i]] = raw[i];
@@ -4009,12 +4009,12 @@ function normalizePropsOptions(comp, appContext, asMixin = false) {
     }
   }
   if (!raw && !hasExtends) {
-    if (isObject$4(comp)) {
+    if (isObject$5(comp)) {
       cache2.set(comp, EMPTY_ARR);
     }
     return EMPTY_ARR;
   }
-  if (isArray$2(raw)) {
+  if (isArray$3(raw)) {
     for (let i = 0; i < raw.length; i++) {
       const normalizedKey = camelize$1(raw[i]);
       if (validatePropName(normalizedKey)) {
@@ -4026,7 +4026,7 @@ function normalizePropsOptions(comp, appContext, asMixin = false) {
       const normalizedKey = camelize$1(key);
       if (validatePropName(normalizedKey)) {
         const opt = raw[key];
-        const prop = normalized[normalizedKey] = isArray$2(opt) || isFunction$2(opt) ? { type: opt } : Object.assign({}, opt);
+        const prop = normalized[normalizedKey] = isArray$3(opt) || isFunction$2(opt) ? { type: opt } : Object.assign({}, opt);
         if (prop) {
           const booleanIndex = getTypeIndex(Boolean, prop.type);
           const stringIndex = getTypeIndex(String, prop.type);
@@ -4046,7 +4046,7 @@ function normalizePropsOptions(comp, appContext, asMixin = false) {
     }
   }
   const res = [normalized, needCastKeys];
-  if (isObject$4(comp)) {
+  if (isObject$5(comp)) {
     cache2.set(comp, res);
   }
   return res;
@@ -4065,7 +4065,7 @@ function isSameType(a, b2) {
   return getType(a) === getType(b2);
 }
 function getTypeIndex(type, expectedTypes) {
-  if (isArray$2(expectedTypes)) {
+  if (isArray$3(expectedTypes)) {
     return expectedTypes.findIndex((t) => isSameType(t, type));
   } else if (isFunction$2(expectedTypes)) {
     return isSameType(expectedTypes, type) ? 0 : -1;
@@ -4073,7 +4073,7 @@ function getTypeIndex(type, expectedTypes) {
   return -1;
 }
 const isInternalKey = (key) => key[0] === "_" || key === "$stable";
-const normalizeSlotValue = (value) => isArray$2(value) ? value.map(normalizeVNode) : [normalizeVNode(value)];
+const normalizeSlotValue = (value) => isArray$3(value) ? value.map(normalizeVNode) : [normalizeVNode(value)];
 const normalizeSlot = (key, rawSlot, ctx) => {
   if (rawSlot._n) {
     return rawSlot;
@@ -4180,7 +4180,7 @@ function createAppAPI(render2, hydrate2) {
     if (!isFunction$2(rootComponent)) {
       rootComponent = Object.assign({}, rootComponent);
     }
-    if (rootProps != null && !isObject$4(rootProps)) {
+    if (rootProps != null && !isObject$5(rootProps)) {
       rootProps = null;
     }
     const context = createAppContext();
@@ -4264,8 +4264,8 @@ function createAppAPI(render2, hydrate2) {
   };
 }
 function setRef(rawRef, oldRawRef, parentSuspense, vnode, isUnmount = false) {
-  if (isArray$2(rawRef)) {
-    rawRef.forEach((r, i) => setRef(r, oldRawRef && (isArray$2(oldRawRef) ? oldRawRef[i] : oldRawRef), parentSuspense, vnode, isUnmount));
+  if (isArray$3(rawRef)) {
+    rawRef.forEach((r, i) => setRef(r, oldRawRef && (isArray$3(oldRawRef) ? oldRawRef[i] : oldRawRef), parentSuspense, vnode, isUnmount));
     return;
   }
   if (isAsyncWrapper(vnode) && !isUnmount) {
@@ -4297,9 +4297,9 @@ function setRef(rawRef, oldRawRef, parentSuspense, vnode, isUnmount = false) {
         if (rawRef.f) {
           const existing = _isString ? hasOwn$2(setupState, ref2) ? setupState[ref2] : refs[ref2] : ref2.value;
           if (isUnmount) {
-            isArray$2(existing) && remove(existing, refValue);
+            isArray$3(existing) && remove(existing, refValue);
           } else {
-            if (!isArray$2(existing)) {
+            if (!isArray$3(existing)) {
               if (_isString) {
                 refs[ref2] = [refValue];
                 if (hasOwn$2(setupState, ref2)) {
@@ -5428,7 +5428,7 @@ function toggleRecurse({ effect: effect2, update }, allowed) {
 function traverseStaticChildren(n1, n2, shallow = false) {
   const ch1 = n1.children;
   const ch2 = n2.children;
-  if (isArray$2(ch1) && isArray$2(ch2)) {
+  if (isArray$3(ch1) && isArray$3(ch2)) {
     for (let i = 0; i < ch1.length; i++) {
       const c1 = ch1[i];
       let c2 = ch2[i];
@@ -5810,14 +5810,14 @@ function _createVNode(type, props = null, children = null, patchFlag = 0, dynami
     if (klass && !isString$4(klass)) {
       props.class = normalizeClass(klass);
     }
-    if (isObject$4(style2)) {
-      if (isProxy(style2) && !isArray$2(style2)) {
+    if (isObject$5(style2)) {
+      if (isProxy(style2) && !isArray$3(style2)) {
         style2 = extend$1({}, style2);
       }
       props.style = normalizeStyle$1(style2);
     }
   }
-  const shapeFlag = isString$4(type) ? 1 : isSuspense(type) ? 128 : isTeleport(type) ? 64 : isObject$4(type) ? 4 : isFunction$2(type) ? 2 : 0;
+  const shapeFlag = isString$4(type) ? 1 : isSuspense(type) ? 128 : isTeleport(type) ? 64 : isObject$5(type) ? 4 : isFunction$2(type) ? 2 : 0;
   return createBaseVNode(type, props, children, patchFlag, dynamicProps, shapeFlag, isBlockNode, true);
 }
 function guardReactiveProps(props) {
@@ -5838,7 +5838,7 @@ function cloneVNode(vnode, extraProps, mergeRef = false) {
       // #2078 in the case of <component :is="vnode" ref="extra"/>
       // if the vnode itself already has a ref, cloneVNode will need to merge
       // the refs so the single vnode can be set on multiple refs
-      mergeRef && ref2 ? isArray$2(ref2) ? ref2.concat(normalizeRef(extraProps)) : [ref2, normalizeRef(extraProps)] : normalizeRef(extraProps)
+      mergeRef && ref2 ? isArray$3(ref2) ? ref2.concat(normalizeRef(extraProps)) : [ref2, normalizeRef(extraProps)] : normalizeRef(extraProps)
     ) : ref2,
     scopeId: vnode.scopeId,
     slotScopeIds: vnode.slotScopeIds,
@@ -5886,7 +5886,7 @@ function createCommentVNode(text = "", asBlock = false) {
 function normalizeVNode(child) {
   if (child == null || typeof child === "boolean") {
     return createVNode(Comment);
-  } else if (isArray$2(child)) {
+  } else if (isArray$3(child)) {
     return createVNode(
       Fragment,
       null,
@@ -5907,7 +5907,7 @@ function normalizeChildren(vnode, children) {
   const { shapeFlag } = vnode;
   if (children == null) {
     children = null;
-  } else if (isArray$2(children)) {
+  } else if (isArray$3(children)) {
     type = 16;
   } else if (typeof children === "object") {
     if (shapeFlag & (1 | 64)) {
@@ -5961,7 +5961,7 @@ function mergeProps(...args) {
       } else if (isOn(key)) {
         const existing = ret[key];
         const incoming = toMerge[key];
-        if (incoming && existing !== incoming && !(isArray$2(existing) && existing.includes(incoming))) {
+        if (incoming && existing !== incoming && !(isArray$3(existing) && existing.includes(incoming))) {
           ret[key] = existing ? [].concat(existing, incoming) : incoming;
         }
       } else if (key !== "") {
@@ -6128,7 +6128,7 @@ function handleSetupResult(instance, setupResult, isSSR) {
     } else {
       instance.render = setupResult;
     }
-  } else if (isObject$4(setupResult)) {
+  } else if (isObject$5(setupResult)) {
     instance.setupState = proxyRefs(setupResult);
   } else
     ;
@@ -6244,11 +6244,11 @@ function getContext() {
   return i.setupContext || (i.setupContext = createSetupContext(i));
 }
 function mergeDefaults(raw, defaults2) {
-  const props = isArray$2(raw) ? raw.reduce((normalized, p2) => (normalized[p2] = {}, normalized), {}) : raw;
+  const props = isArray$3(raw) ? raw.reduce((normalized, p2) => (normalized[p2] = {}, normalized), {}) : raw;
   for (const key in defaults2) {
     const opt = props[key];
     if (opt) {
-      if (isArray$2(opt) || isFunction$2(opt)) {
+      if (isArray$3(opt) || isFunction$2(opt)) {
         props[key] = { type: opt, default: defaults2[key] };
       } else {
         opt.default = defaults2[key];
@@ -6287,7 +6287,7 @@ function withAsyncContext(getAwaitable) {
 function h(type, propsOrChildren, children) {
   const l2 = arguments.length;
   if (l2 === 2) {
-    if (isObject$4(propsOrChildren) && !isArray$2(propsOrChildren)) {
+    if (isObject$5(propsOrChildren) && !isArray$3(propsOrChildren)) {
       if (isVNode$1(propsOrChildren)) {
         return createVNode(type, null, [propsOrChildren]);
       }
@@ -6461,7 +6461,7 @@ function patchStyle(el, prev, next) {
 }
 const importantRE = /\s*!important$/;
 function setStyle(style2, name, val) {
-  if (isArray$2(val)) {
+  if (isArray$3(val)) {
     val.forEach((v) => setStyle(style2, name, v));
   } else {
     if (val == null)
@@ -6610,7 +6610,7 @@ function createInvoker(initialValue, instance) {
   return invoker;
 }
 function patchStopImmediatePropagation(e2, value) {
-  if (isArray$2(value)) {
+  if (isArray$3(value)) {
     const originalStop = e2.stopImmediatePropagation;
     e2.stopImmediatePropagation = () => {
       originalStop.call(e2);
@@ -6737,7 +6737,7 @@ class VueElement extends BaseClass {
     const resolve2 = (def2, isAsync = false) => {
       const { props, styles } = def2;
       let numberProps;
-      if (props && !isArray$2(props)) {
+      if (props && !isArray$3(props)) {
         for (const key in props) {
           const opt = props[key];
           if (opt === Number || opt && opt.type === Number) {
@@ -6764,7 +6764,7 @@ class VueElement extends BaseClass {
   }
   _resolveProps(def2) {
     const { props } = def2;
-    const declaredPropKeys = isArray$2(props) ? props : Object.keys(props || {});
+    const declaredPropKeys = isArray$3(props) ? props : Object.keys(props || {});
     for (const key of Object.keys(this)) {
       if (key[0] !== "_" && declaredPropKeys.includes(key)) {
         this._setProp(key, this[key], true, false);
@@ -6953,14 +6953,14 @@ const DOMTransitionPropsValidators = {
 };
 const TransitionPropsValidators = Transition.props = /* @__PURE__ */ extend$1({}, BaseTransition.props, DOMTransitionPropsValidators);
 const callHook = (hook, args = []) => {
-  if (isArray$2(hook)) {
+  if (isArray$3(hook)) {
     hook.forEach((h2) => h2(...args));
   } else if (hook) {
     hook(...args);
   }
 };
 const hasExplicitCallback = (hook) => {
-  return hook ? isArray$2(hook) ? hook.some((h2) => h2.length > 1) : hook.length > 1 : false;
+  return hook ? isArray$3(hook) ? hook.some((h2) => h2.length > 1) : hook.length > 1 : false;
 };
 function resolveTransitionProps(rawProps) {
   const baseProps = {};
@@ -7051,7 +7051,7 @@ function resolveTransitionProps(rawProps) {
 function normalizeDuration(duration) {
   if (duration == null) {
     return null;
-  } else if (isObject$4(duration)) {
+  } else if (isObject$5(duration)) {
     return [NumberOf(duration.enter), NumberOf(duration.leave)];
   } else {
     const n2 = NumberOf(duration);
@@ -7273,7 +7273,7 @@ function hasCSSTransform(el, root, moveClass) {
 }
 const getModelAssigner = (vnode) => {
   const fn = vnode.props["onUpdate:modelValue"] || false;
-  return isArray$2(fn) ? (value) => invokeArrayFns(fn, value) : fn;
+  return isArray$3(fn) ? (value) => invokeArrayFns(fn, value) : fn;
 };
 function onCompositionStart(e2) {
   e2.target.composing = true;
@@ -7347,7 +7347,7 @@ const vModelCheckbox = {
       const elementValue = getValue(el);
       const checked = el.checked;
       const assign2 = el._assign;
-      if (isArray$2(modelValue)) {
+      if (isArray$3(modelValue)) {
         const index = looseIndexOf(modelValue, elementValue);
         const found = index !== -1;
         if (checked && !found) {
@@ -7379,7 +7379,7 @@ const vModelCheckbox = {
 };
 function setChecked(el, { value, oldValue }, vnode) {
   el._modelValue = value;
-  if (isArray$2(value)) {
+  if (isArray$3(value)) {
     el.checked = looseIndexOf(value, vnode.props.value) > -1;
   } else if (isSet(value)) {
     el.checked = value.has(vnode.props.value);
@@ -7427,14 +7427,14 @@ const vModelSelect = {
 };
 function setSelected(el, value) {
   const isMultiple = el.multiple;
-  if (isMultiple && !isArray$2(value) && !isSet(value)) {
+  if (isMultiple && !isArray$3(value) && !isSet(value)) {
     return;
   }
   for (let i = 0, l2 = el.options.length; i < l2; i++) {
     const option = el.options[i];
     const optionValue = getValue(option);
     if (isMultiple) {
-      if (isArray$2(value)) {
+      if (isArray$3(value)) {
         option.selected = looseIndexOf(value, optionValue) > -1;
       } else {
         option.selected = value.has(optionValue);
@@ -7502,7 +7502,7 @@ function initVModelForSSR() {
     }
   };
   vModelCheckbox.getSSRProps = ({ value }, vnode) => {
-    if (isArray$2(value)) {
+    if (isArray$3(value)) {
       if (vnode.props && looseIndexOf(value, vnode.props.value) > -1) {
         return { checked: true };
       }
@@ -7817,7 +7817,7 @@ const runtimeDom = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   vModelText,
   vShow,
   version,
-  warn: warn$1,
+  warn: warn$2,
   watch,
   watchEffect,
   watchPostEffect,
@@ -8353,7 +8353,7 @@ const defaultParserOptions = {
 };
 function baseParse(content, options = {}) {
   const context = createParserContext(content, options);
-  const start2 = getCursor$1(context);
+  const start2 = getCursor$2(context);
   return createRoot$1(parseChildren(context, 0, []), getSelection(context, start2));
 }
 function createParserContext(content, rawOptions) {
@@ -8446,7 +8446,7 @@ function parseChildren(context, mode2, ancestors) {
     if (!node) {
       node = parseText(context, mode2);
     }
-    if (isArray$2(node)) {
+    if (isArray$3(node)) {
       for (let i = 0; i < node.length; i++) {
         pushNode(nodes, node[i]);
       }
@@ -8517,7 +8517,7 @@ function parseCDATA(context, ancestors) {
   return nodes;
 }
 function parseComment(context) {
-  const start2 = getCursor$1(context);
+  const start2 = getCursor$2(context);
   let content;
   const match2 = /--(\!)?>/.exec(context.source);
   if (!match2) {
@@ -8566,7 +8566,7 @@ function parseComment(context) {
   };
 }
 function parseBogusComment(context) {
-  const start2 = getCursor$1(context);
+  const start2 = getCursor$2(context);
   const contentStart = context.source[1] === "?" ? 1 : 2;
   let content;
   const closeIndex = context.source.indexOf(">");
@@ -8641,13 +8641,13 @@ function parseElement(context, ancestors) {
 }
 const isSpecialTemplateDirective = /* @__PURE__ */ makeMap(`if,else,else-if,for,slot`);
 function parseTag(context, type, parent) {
-  const start2 = getCursor$1(context);
+  const start2 = getCursor$2(context);
   const match2 = /^<\/?([a-z][^\t\r\n\f />]*)/i.exec(context.source);
   const tag = match2[1];
   const ns = context.options.getNamespace(tag, parent);
   advanceBy(context, match2[0].length);
   advanceSpaces(context);
-  const cursor = getCursor$1(context);
+  const cursor = getCursor$2(context);
   const currentSource = context.source;
   if (context.options.isPreTag(tag)) {
     context.inPre = true;
@@ -8775,7 +8775,7 @@ function parseAttributes(context, type) {
   return props;
 }
 function parseAttribute(context, nameSet) {
-  const start2 = getCursor$1(context);
+  const start2 = getCursor$2(context);
   const match2 = /^[^\t\r\n\f />][^\t\r\n\f />=]*/.exec(context.source);
   const name = match2[0];
   if (nameSet.has(name)) {
@@ -8902,7 +8902,7 @@ function parseAttribute(context, nameSet) {
   };
 }
 function parseAttributeValue(context) {
-  const start2 = getCursor$1(context);
+  const start2 = getCursor$2(context);
   let content;
   const quote = context.source[0];
   const isQuoted = quote === `"` || quote === `'`;
@@ -8955,10 +8955,10 @@ function parseInterpolation(context, mode2) {
     );
     return void 0;
   }
-  const start2 = getCursor$1(context);
+  const start2 = getCursor$2(context);
   advanceBy(context, open.length);
-  const innerStart = getCursor$1(context);
-  const innerEnd = getCursor$1(context);
+  const innerStart = getCursor$2(context);
+  const innerEnd = getCursor$2(context);
   const rawContentLength = closeIndex - open.length;
   const rawContent = context.source.slice(0, rawContentLength);
   const preTrimContent = parseTextData(context, rawContentLength, mode2);
@@ -8992,7 +8992,7 @@ function parseText(context, mode2) {
       endIndex = index;
     }
   }
-  const start2 = getCursor$1(context);
+  const start2 = getCursor$2(context);
   const content = parseTextData(context, endIndex, mode2);
   return {
     type: 2,
@@ -9013,12 +9013,12 @@ function parseTextData(context, length, mode2) {
     );
   }
 }
-function getCursor$1(context) {
+function getCursor$2(context) {
   const { column, line, offset: offset2 } = context;
   return { column, line, offset: offset2 };
 }
 function getSelection(context, start2, end2) {
-  end2 = end2 || getCursor$1(context);
+  end2 = end2 || getCursor$2(context);
   return {
     start: start2,
     end: end2,
@@ -9045,7 +9045,7 @@ function advanceSpaces(context) {
 function getNewPosition(context, start2, numberOfCharacters) {
   return advancePositionWithClone(start2, context.originalSource.slice(start2.offset, numberOfCharacters), numberOfCharacters);
 }
-function emitError(context, code2, offset2, loc = getCursor$1(context)) {
+function emitError(context, code2, offset2, loc = getCursor$2(context)) {
   if (offset2) {
     loc.offset += offset2;
     loc.column += offset2;
@@ -9151,7 +9151,7 @@ function walk(node, context, doNotHoistNode = false) {
   if (hoistedCount && context.transformHoist) {
     context.transformHoist(children, context, node);
   }
-  if (hoistedCount && hoistedCount === originalCount && node.type === 1 && node.tagType === 0 && node.codegenNode && node.codegenNode.type === 13 && isArray$2(node.codegenNode.children)) {
+  if (hoistedCount && hoistedCount === originalCount && node.type === 1 && node.tagType === 0 && node.codegenNode && node.codegenNode.type === 13 && isArray$3(node.codegenNode.children)) {
     node.codegenNode.children = context.hoist(createArrayExpression(node.codegenNode.children));
   }
 }
@@ -9524,7 +9524,7 @@ function traverseNode$1(node, context) {
   for (let i2 = 0; i2 < nodeTransforms.length; i2++) {
     const onExit = nodeTransforms[i2](node, context);
     if (onExit) {
-      if (isArray$2(onExit)) {
+      if (isArray$3(onExit)) {
         exitFns.push(...onExit);
       } else {
         exitFns.push(onExit);
@@ -9787,7 +9787,7 @@ function genNodeList(nodes, context, multilines = false, comma = true) {
     const node = nodes[i];
     if (isString$4(node)) {
       push2(node);
-    } else if (isArray$2(node)) {
+    } else if (isArray$3(node)) {
       genNodeListAsArray(node, context);
     } else {
       genNode(node, context);
@@ -9982,7 +9982,7 @@ function genFunctionExpression(node, context) {
     push2(`_${helperNameMap[WITH_CTX]}(`);
   }
   push2(`(`, node);
-  if (isArray$2(params)) {
+  if (isArray$3(params)) {
     genNodeList(params, context);
   } else if (params) {
     genNode(params, context);
@@ -9996,7 +9996,7 @@ function genFunctionExpression(node, context) {
     if (newline) {
       push2(`return `);
     }
-    if (isArray$2(returns)) {
+    if (isArray$3(returns)) {
       genNodeListAsArray(returns, context);
     } else {
       genNode(returns, context);
@@ -10589,7 +10589,7 @@ const transformElement = (node, context) => {
     const { tag, props } = node;
     const isComponent2 = node.tagType === 1;
     let vnodeTag = isComponent2 ? resolveComponentType(node, context) : `"${tag}"`;
-    const isDynamicComponent = isObject$4(vnodeTag) && vnodeTag.callee === RESOLVE_DYNAMIC_COMPONENT;
+    const isDynamicComponent = isObject$5(vnodeTag) && vnodeTag.callee === RESOLVE_DYNAMIC_COMPONENT;
     let vnodeProps;
     let vnodeChildren;
     let vnodePatchFlag;
@@ -12172,14 +12172,14 @@ function clone$4(source) {
   return result;
 }
 function merge(target, source, overwrite) {
-  if (!isObject$3(source) || !isObject$3(target)) {
+  if (!isObject$4(source) || !isObject$4(target)) {
     return overwrite ? clone$4(source) : target;
   }
   for (var key in source) {
     if (source.hasOwnProperty(key) && key !== protoKey) {
       var targetProp = target[key];
       var sourceProp = source[key];
-      if (isObject$3(sourceProp) && isObject$3(targetProp) && !isArray$1(sourceProp) && !isArray$1(targetProp) && !isDom(sourceProp) && !isDom(targetProp) && !isBuiltInObject(sourceProp) && !isBuiltInObject(targetProp) && !isPrimitive(sourceProp) && !isPrimitive(targetProp)) {
+      if (isObject$4(sourceProp) && isObject$4(targetProp) && !isArray$2(sourceProp) && !isArray$2(targetProp) && !isDom(sourceProp) && !isDom(targetProp) && !isBuiltInObject(sourceProp) && !isBuiltInObject(targetProp) && !isPrimitive(sourceProp) && !isPrimitive(targetProp)) {
         merge(targetProp, sourceProp, overwrite);
       } else if (overwrite || !(key in target)) {
         target[key] = clone$4(source[key]);
@@ -12271,7 +12271,7 @@ function isArrayLike(data) {
   }
   return typeof data.length === "number";
 }
-function each$8(arr, cb, context) {
+function each$d(arr, cb, context) {
   if (!(arr && cb)) {
     return;
   }
@@ -12368,7 +12368,7 @@ function curry$1(func) {
     return func.apply(this, args.concat(nativeSlice.call(arguments)));
   };
 }
-function isArray$1(value) {
+function isArray$2(value) {
   if (Array.isArray) {
     return Array.isArray(value);
   }
@@ -12386,7 +12386,7 @@ function isStringSafe(value) {
 function isNumber$2(value) {
   return typeof value === "number";
 }
-function isObject$3(value) {
+function isObject$4(value) {
   var type = typeof value;
   return type === "function" || !!value && type === "object";
 }
@@ -12505,10 +12505,10 @@ function maybeNativeMap() {
 }
 var HashMap = function() {
   function HashMap2(obj) {
-    var isArr = isArray$1(obj);
+    var isArr = isArray$2(obj);
     this.data = maybeNativeMap();
     var thisMap = this;
-    obj instanceof HashMap2 ? obj.each(visit) : obj && each$8(obj, visit);
+    obj instanceof HashMap2 ? obj.each(visit) : obj && each$d(obj, visit);
     function visit(value, key) {
       isArr ? thisMap.set(value, key) : thisMap.set(key, value);
     }
@@ -13393,8 +13393,8 @@ var Point = function() {
   return Point2;
 }();
 const Point$1 = Point;
-var mathMin$7 = Math.min;
-var mathMax$7 = Math.max;
+var mathMin$8 = Math.min;
+var mathMax$8 = Math.max;
 var lt = new Point$1();
 var rb = new Point$1();
 var lb = new Point$1();
@@ -13417,15 +13417,15 @@ var BoundingRect = function() {
     this.height = height;
   }
   BoundingRect2.prototype.union = function(other) {
-    var x2 = mathMin$7(other.x, this.x);
-    var y2 = mathMin$7(other.y, this.y);
+    var x2 = mathMin$8(other.x, this.x);
+    var y2 = mathMin$8(other.y, this.y);
     if (isFinite(this.x) && isFinite(this.width)) {
-      this.width = mathMax$7(other.x + other.width, this.x + this.width) - x2;
+      this.width = mathMax$8(other.x + other.width, this.x + this.width) - x2;
     } else {
       this.width = other.width;
     }
     if (isFinite(this.y) && isFinite(this.height)) {
-      this.height = mathMax$7(other.y + other.height, this.y + this.height) - y2;
+      this.height = mathMax$8(other.y + other.height, this.y + this.height) - y2;
     } else {
       this.height = other.height;
     }
@@ -13582,10 +13582,10 @@ var BoundingRect = function() {
     rt.transform(m2);
     rb.transform(m2);
     lb.transform(m2);
-    target.x = mathMin$7(lt.x, rb.x, lb.x, rt.x);
-    target.y = mathMin$7(lt.y, rb.y, lb.y, rt.y);
-    var maxX = mathMax$7(lt.x, rb.x, lb.x, rt.x);
-    var maxY = mathMax$7(lt.y, rb.y, lb.y, rt.y);
+    target.x = mathMin$8(lt.x, rb.x, lb.x, rt.x);
+    target.y = mathMin$8(lt.y, rb.y, lb.y, rt.y);
+    var maxX = mathMax$8(lt.x, rb.x, lb.x, rt.x);
+    var maxY = mathMax$8(lt.y, rb.y, lb.y, rt.y);
     target.width = maxX - target.x;
     target.height = maxY - target.y;
   };
@@ -13666,7 +13666,7 @@ var Handler = function(_super) {
       this.proxy.dispose();
     }
     if (proxy) {
-      each$8(handlerNames, function(name) {
+      each$d(handlerNames, function(name) {
         proxy.on && proxy.on(name, this[name], this);
       }, this);
       proxy.handler = this;
@@ -13808,7 +13808,7 @@ var Handler = function(_super) {
   };
   return Handler2;
 }(Eventful$1);
-each$8(["click", "mousedown", "mouseup", "mousewheel", "dblclick", "contextmenu"], function(name) {
+each$d(["click", "mousedown", "mouseup", "mousewheel", "dblclick", "contextmenu"], function(name) {
   Handler.prototype[name] = function(event) {
     var x2 = event.zrX;
     var y2 = event.zrY;
@@ -15390,6 +15390,10 @@ function clampCssByte(i) {
   i = Math.round(i);
   return i < 0 ? 0 : i > 255 ? 255 : i;
 }
+function clampCssAngle(i) {
+  i = Math.round(i);
+  return i < 0 ? 0 : i > 360 ? 360 : i;
+}
 function clampCssFloat(f) {
   return f < 0 ? 0 : f > 1 ? 1 : f;
 }
@@ -15546,6 +15550,51 @@ function hsla2rgba(hsla, rgba) {
   }
   return rgba;
 }
+function rgba2hsla(rgba) {
+  if (!rgba) {
+    return;
+  }
+  var R2 = rgba[0] / 255;
+  var G2 = rgba[1] / 255;
+  var B = rgba[2] / 255;
+  var vMin = Math.min(R2, G2, B);
+  var vMax = Math.max(R2, G2, B);
+  var delta = vMax - vMin;
+  var L2 = (vMax + vMin) / 2;
+  var H;
+  var S2;
+  if (delta === 0) {
+    H = 0;
+    S2 = 0;
+  } else {
+    if (L2 < 0.5) {
+      S2 = delta / (vMax + vMin);
+    } else {
+      S2 = delta / (2 - vMax - vMin);
+    }
+    var deltaR = ((vMax - R2) / 6 + delta / 2) / delta;
+    var deltaG = ((vMax - G2) / 6 + delta / 2) / delta;
+    var deltaB = ((vMax - B) / 6 + delta / 2) / delta;
+    if (R2 === vMax) {
+      H = deltaB - deltaG;
+    } else if (G2 === vMax) {
+      H = 1 / 3 + deltaR - deltaB;
+    } else if (B === vMax) {
+      H = 2 / 3 + deltaG - deltaR;
+    }
+    if (H < 0) {
+      H += 1;
+    }
+    if (H > 1) {
+      H -= 1;
+    }
+  }
+  var hsla = [H * 360, S2, L2];
+  if (rgba[3] != null) {
+    hsla.push(rgba[3]);
+  }
+  return hsla;
+}
 function lift(color, level) {
   var colorArr = parse$2(color);
   if (colorArr) {
@@ -15563,6 +15612,23 @@ function lift(color, level) {
     }
     return stringify(colorArr, colorArr.length === 4 ? "rgba" : "rgb");
   }
+}
+function fastLerp(normalizedValue, colors, out2) {
+  if (!(colors && colors.length) || !(normalizedValue >= 0 && normalizedValue <= 1)) {
+    return;
+  }
+  out2 = out2 || [];
+  var value = normalizedValue * (colors.length - 1);
+  var leftIndex = Math.floor(value);
+  var rightIndex = Math.ceil(value);
+  var leftColor = colors[leftIndex];
+  var rightColor = colors[rightIndex];
+  var dv = value - leftIndex;
+  out2[0] = clampCssByte(lerpNumber(leftColor[0], rightColor[0], dv));
+  out2[1] = clampCssByte(lerpNumber(leftColor[1], rightColor[1], dv));
+  out2[2] = clampCssByte(lerpNumber(leftColor[2], rightColor[2], dv));
+  out2[3] = clampCssFloat(lerpNumber(leftColor[3], rightColor[3], dv));
+  return out2;
 }
 function lerp(normalizedValue, colors, fullOutput) {
   if (!(colors && colors.length) || !(normalizedValue >= 0 && normalizedValue <= 1)) {
@@ -15586,6 +15652,16 @@ function lerp(normalizedValue, colors, fullOutput) {
     rightIndex,
     value
   } : color;
+}
+function modifyHSL(color, h2, s2, l2) {
+  var colorArr = parse$2(color);
+  if (color) {
+    colorArr = rgba2hsla(colorArr);
+    h2 != null && (colorArr[0] = clampCssAngle(h2));
+    s2 != null && (colorArr[1] = parseCssFloat(s2));
+    l2 != null && (colorArr[2] = parseCssFloat(l2));
+    return stringify(hsla2rgba(colorArr), "rgba");
+  }
 }
 function modifyAlpha(color, alpha) {
   var colorArr = parse$2(color);
@@ -16623,7 +16699,7 @@ var localDOMHandlers = {
     }
   }
 };
-each$8(["click", "dblclick", "contextmenu"], function(name) {
+each$d(["click", "dblclick", "contextmenu"], function(name) {
   localDOMHandlers[name] = function(event) {
     event = normalizeEvent(this.dom, event);
     this.trigger(name, event);
@@ -16654,21 +16730,21 @@ var globalDOMHandlers = {
 function mountLocalDOMEventListeners(instance, scope) {
   var domHandlers = scope.domHandlers;
   if (env$1.pointerEventsSupported) {
-    each$8(localNativeListenerNames.pointer, function(nativeEventName) {
+    each$d(localNativeListenerNames.pointer, function(nativeEventName) {
       mountSingleDOMEventListener(scope, nativeEventName, function(event) {
         domHandlers[nativeEventName].call(instance, event);
       });
     });
   } else {
     if (env$1.touchEventsSupported) {
-      each$8(localNativeListenerNames.touch, function(nativeEventName) {
+      each$d(localNativeListenerNames.touch, function(nativeEventName) {
         mountSingleDOMEventListener(scope, nativeEventName, function(event) {
           domHandlers[nativeEventName].call(instance, event);
           setTouchTimer(scope);
         });
       });
     }
-    each$8(localNativeListenerNames.mouse, function(nativeEventName) {
+    each$d(localNativeListenerNames.mouse, function(nativeEventName) {
       mountSingleDOMEventListener(scope, nativeEventName, function(event) {
         event = getNativeEvent(event);
         if (!scope.touching) {
@@ -16680,9 +16756,9 @@ function mountLocalDOMEventListeners(instance, scope) {
 }
 function mountGlobalDOMEventListeners(instance, scope) {
   if (env$1.pointerEventsSupported) {
-    each$8(globalNativeListenerNames.pointer, mount);
+    each$d(globalNativeListenerNames.pointer, mount);
   } else if (!env$1.touchEventsSupported) {
-    each$8(globalNativeListenerNames.mouse, mount);
+    each$d(globalNativeListenerNames.mouse, mount);
   }
   function mount(nativeEventName) {
     function nativeEventListener(event) {
@@ -17351,7 +17427,7 @@ var Element$1 = function() {
   Element2.prototype.attr = function(keyOrObj, value) {
     if (typeof keyOrObj === "string") {
       this.attrKV(keyOrObj, value);
-    } else if (isObject$3(keyOrObj)) {
+    } else if (isObject$4(keyOrObj)) {
       var obj = keyOrObj;
       var keysArr = keys(obj);
       for (var i = 0; i < keysArr.length; i++) {
@@ -18008,14 +18084,14 @@ function animateToShallow(animatable, topKey, animateObj, target, cfg, animation
   var delay3 = cfg.delay;
   var additive = cfg.additive;
   var setToFinal = cfg.setToFinal;
-  var animateAll = !isObject$3(animationProps);
+  var animateAll = !isObject$4(animationProps);
   var existsAnimators = animatable.animators;
   var animationKeys = [];
   for (var k2 = 0; k2 < targetKeys.length; k2++) {
     var innerKey = targetKeys[k2];
     var targetVal = target[innerKey];
     if (targetVal != null && animateObj[innerKey] != null && (animateAll || animationProps[innerKey])) {
-      if (isObject$3(targetVal) && !isArrayLike(targetVal) && !isGradientObject(targetVal)) {
+      if (isObject$4(targetVal) && !isArrayLike(targetVal) && !isGradientObject(targetVal)) {
         if (topKey) {
           if (!reverse) {
             animateObj[innerKey] = targetVal;
@@ -18496,7 +18572,7 @@ var ROUND_SUPPORTED_PRECISION_MAX = 20;
 function _trim(str) {
   return str.replace(/^\s+|\s+$/g, "");
 }
-function linearMap(val, domain, range, clamp2) {
+function linearMap$2(val, domain, range, clamp2) {
   var d0 = domain[0];
   var d1 = domain[1];
   var r0 = range[0];
@@ -18561,7 +18637,7 @@ function round$1(x2, precision, returnStr) {
   x2 = (+x2).toFixed(precision);
   return returnStr ? x2 : +x2;
 }
-function asc$1(arr) {
+function asc$2(arr) {
   arr.sort(function(a, b2) {
     return a - b2;
   });
@@ -18687,6 +18763,34 @@ function quantile$2(ascArr, p2) {
   var e2 = H - h2;
   return e2 ? v + e2 * (ascArr[h2] - v) : v;
 }
+function reformIntervals(list) {
+  list.sort(function(a, b2) {
+    return littleThan2(a, b2, 0) ? -1 : 1;
+  });
+  var curr = -Infinity;
+  var currClose = 1;
+  for (var i = 0; i < list.length; ) {
+    var interval = list[i].interval;
+    var close_1 = list[i].close;
+    for (var lg = 0; lg < 2; lg++) {
+      if (interval[lg] <= curr) {
+        interval[lg] = curr;
+        close_1[lg] = !lg ? 1 - currClose : 1;
+      }
+      curr = interval[lg];
+      currClose = close_1[lg];
+    }
+    if (interval[0] === interval[1] && close_1[0] * close_1[1] !== 1) {
+      list.splice(i, 1);
+    } else {
+      i++;
+    }
+  }
+  return list;
+  function littleThan2(a, b2, lg2) {
+    return a.interval[lg2] < b2.interval[lg2] || a.interval[lg2] === b2.interval[lg2] && (a.close[lg2] - b2.close[lg2] === (!lg2 ? 1 : -1) || !lg2 && littleThan2(a, b2, 1));
+  }
+}
 function numericToNumber(val) {
   var valFloat = parseFloat(val);
   return valFloat == val && (valFloat !== 0 || !isString$3(val) || val.indexOf("x") <= 0) ? valFloat : NaN;
@@ -18711,6 +18815,23 @@ function getLeastCommonMultiple(a, b2) {
     return a;
   }
   return a * b2 / getGreatestCommonDividor(a, b2);
+}
+var ECHARTS_PREFIX = "[ECharts] ";
+var storedLogs = {};
+var hasConsole = typeof console !== "undefined" && console.warn && console.log;
+function outputLog(type, str, onlyOnce) {
+  if (hasConsole) {
+    if (onlyOnce) {
+      if (storedLogs[str]) {
+        return;
+      }
+      storedLogs[str] = true;
+    }
+    console[type](ECHARTS_PREFIX + str);
+  }
+}
+function warn$1(str, onlyOnce) {
+  outputLog("warn", str, onlyOnce);
 }
 function throwError(msg) {
   throw new Error(msg);
@@ -18738,10 +18859,10 @@ function defaultEmphasis(opt, key, subOpts) {
 }
 var TEXT_STYLE_OPTIONS = ["fontStyle", "fontWeight", "fontSize", "fontFamily", "rich", "tag", "color", "textBorderColor", "textBorderWidth", "width", "height", "lineHeight", "align", "verticalAlign", "baseline", "shadowColor", "shadowBlur", "shadowOffsetX", "shadowOffsetY", "textShadowColor", "textShadowBlur", "textShadowOffsetX", "textShadowOffsetY", "backgroundColor", "borderColor", "borderWidth", "borderRadius", "padding"];
 function getDataItemValue(dataItem) {
-  return isObject$3(dataItem) && !isArray$1(dataItem) && !(dataItem instanceof Date) ? dataItem.value : dataItem;
+  return isObject$4(dataItem) && !isArray$2(dataItem) && !(dataItem instanceof Date) ? dataItem.value : dataItem;
 }
 function isDataItemOption(dataItem) {
-  return isObject$3(dataItem) && !(dataItem instanceof Array);
+  return isObject$4(dataItem) && !(dataItem instanceof Array);
 }
 function mappingToExists(existings, newCmptOptions, mode2) {
   var isNormalMergeMode = mode2 === "normalMerge";
@@ -18750,8 +18871,8 @@ function mappingToExists(existings, newCmptOptions, mode2) {
   existings = existings || [];
   newCmptOptions = (newCmptOptions || []).slice();
   var existingIdIdxMap = createHashMap();
-  each$8(newCmptOptions, function(cmptOption, index) {
-    if (!isObject$3(cmptOption)) {
+  each$d(newCmptOptions, function(cmptOption, index) {
+    if (!isObject$4(cmptOption)) {
       newCmptOptions[index] = null;
       return;
     }
@@ -18791,7 +18912,7 @@ function prepareResult(existings, existingIdIdxMap, mode2) {
   return result;
 }
 function mappingById(result, existings, existingIdIdxMap, newCmptOptions) {
-  each$8(newCmptOptions, function(cmptOption, index) {
+  each$d(newCmptOptions, function(cmptOption, index) {
     if (!cmptOption || cmptOption.id == null) {
       return;
     }
@@ -18807,7 +18928,7 @@ function mappingById(result, existings, existingIdIdxMap, newCmptOptions) {
   });
 }
 function mappingByName(result, newCmptOptions) {
-  each$8(newCmptOptions, function(cmptOption, index) {
+  each$d(newCmptOptions, function(cmptOption, index) {
     if (!cmptOption || cmptOption.name == null) {
       return;
     }
@@ -18822,7 +18943,7 @@ function mappingByName(result, newCmptOptions) {
   });
 }
 function mappingByIndex(result, newCmptOptions, brandNew) {
-  each$8(newCmptOptions, function(cmptOption) {
+  each$d(newCmptOptions, function(cmptOption) {
     if (!cmptOption) {
       return;
     }
@@ -18856,7 +18977,7 @@ function mappingByIndex(result, newCmptOptions, brandNew) {
   });
 }
 function mappingInReplaceAllMode(result, newCmptOptions) {
-  each$8(newCmptOptions, function(cmptOption) {
+  each$d(newCmptOptions, function(cmptOption) {
     result.push({
       newOption: cmptOption,
       brandNew: true,
@@ -18867,21 +18988,21 @@ function mappingInReplaceAllMode(result, newCmptOptions) {
 }
 function makeIdAndName(mapResult) {
   var idMap = createHashMap();
-  each$8(mapResult, function(item) {
+  each$d(mapResult, function(item) {
     var existing = item.existing;
     existing && idMap.set(existing.id, item);
   });
-  each$8(mapResult, function(item) {
+  each$d(mapResult, function(item) {
     var opt = item.newOption;
     assert(!opt || opt.id == null || !idMap.get(opt.id) || idMap.get(opt.id) === item, "id duplicates: " + (opt && opt.id));
     opt && opt.id != null && idMap.set(opt.id, item);
     !item.keyInfo && (item.keyInfo = {});
   });
-  each$8(mapResult, function(item, index) {
+  each$d(mapResult, function(item, index) {
     var existing = item.existing;
     var opt = item.newOption;
     var keyInfo = item.keyInfo;
-    if (!isObject$3(opt)) {
+    if (!isObject$4(opt)) {
       return;
     }
     keyInfo.name = opt.name != null ? makeComparableKey(opt.name) : existing ? existing.name : DUMMY_COMPONENT_NAME_PREFIX + index;
@@ -18923,9 +19044,9 @@ function makeInternalComponentId(idSuffix) {
   return INTERNAL_COMPONENT_ID_PREFIX + idSuffix;
 }
 function setComponentTypeToKeyInfo(mappingResult, mainType, componentModelCtor) {
-  each$8(mappingResult, function(item) {
+  each$d(mappingResult, function(item) {
     var newOption = item.newOption;
-    if (isObject$3(newOption)) {
+    if (isObject$4(newOption)) {
       item.keyInfo.mainType = mainType;
       item.keyInfo.subType = determineSubType(mainType, newOption, item.existing, componentModelCtor);
     }
@@ -18935,15 +19056,57 @@ function determineSubType(mainType, newCmptOption, existComponent, componentMode
   var subType = newCmptOption.type ? newCmptOption.type : existComponent ? existComponent.subType : componentModelCtor.determineSubType(mainType, newCmptOption);
   return subType;
 }
+function compressBatches(batchA, batchB) {
+  var mapA = {};
+  var mapB = {};
+  makeMap2(batchA || [], mapA);
+  makeMap2(batchB || [], mapB, mapA);
+  return [mapToArray(mapA), mapToArray(mapB)];
+  function makeMap2(sourceBatch, map2, otherMap) {
+    for (var i = 0, len2 = sourceBatch.length; i < len2; i++) {
+      var seriesId = convertOptionIdName(sourceBatch[i].seriesId, null);
+      if (seriesId == null) {
+        return;
+      }
+      var dataIndices = normalizeToArray(sourceBatch[i].dataIndex);
+      var otherDataIndices = otherMap && otherMap[seriesId];
+      for (var j2 = 0, lenj = dataIndices.length; j2 < lenj; j2++) {
+        var dataIndex = dataIndices[j2];
+        if (otherDataIndices && otherDataIndices[dataIndex]) {
+          otherDataIndices[dataIndex] = null;
+        } else {
+          (map2[seriesId] || (map2[seriesId] = {}))[dataIndex] = 1;
+        }
+      }
+    }
+  }
+  function mapToArray(map2, isData) {
+    var result = [];
+    for (var i in map2) {
+      if (map2.hasOwnProperty(i) && map2[i] != null) {
+        if (isData) {
+          result.push(+i);
+        } else {
+          var dataIndices = mapToArray(map2[i], true);
+          dataIndices.length && result.push({
+            seriesId: i,
+            dataIndex: dataIndices
+          });
+        }
+      }
+    }
+    return result;
+  }
+}
 function queryDataIndex(data, payload) {
   if (payload.dataIndexInside != null) {
     return payload.dataIndexInside;
   } else if (payload.dataIndex != null) {
-    return isArray$1(payload.dataIndex) ? map$1(payload.dataIndex, function(value) {
+    return isArray$2(payload.dataIndex) ? map$1(payload.dataIndex, function(value) {
       return data.indexOfRawIndex(value);
     }) : data.indexOfRawIndex(payload.dataIndex);
   } else if (payload.name != null) {
-    return isArray$1(payload.name) ? map$1(payload.name, function(value) {
+    return isArray$2(payload.name) ? map$1(payload.name, function(value) {
       return data.indexOfName(value);
     }) : data.indexOfName(payload.name);
   }
@@ -18985,7 +19148,7 @@ function preParseFinder(finderInput, opt) {
   var queryOptionMap = createHashMap();
   var others = {};
   var mainTypeSpecified = false;
-  each$8(finder, function(value, key) {
+  each$d(finder, function(value, key) {
     if (key === "dataIndex" || key === "dataIndexInside") {
       others[key] = value;
       return;
@@ -19195,7 +19358,7 @@ function enableClassManagement(target) {
     var result = [];
     var obj = storage[componentTypeInfo.main];
     if (obj && obj[IS_CONTAINER]) {
-      each$8(obj, function(o, type) {
+      each$d(obj, function(o, type) {
         type !== IS_CONTAINER && result.push(o);
       });
     } else {
@@ -19209,7 +19372,7 @@ function enableClassManagement(target) {
   };
   target.getAllClassMainTypes = function() {
     var types = [];
-    each$8(storage, function(obj, type) {
+    each$d(storage, function(obj, type) {
       types.push(type);
     });
     return types;
@@ -20062,8 +20225,8 @@ function isDisplayableCulled(el, width, height) {
   return !tmpRect.intersect(viewRect);
 }
 const Displayable$1 = Displayable;
-var mathMin$6 = Math.min;
-var mathMax$6 = Math.max;
+var mathMin$7 = Math.min;
+var mathMax$7 = Math.max;
 var mathSin$3 = Math.sin;
 var mathCos$3 = Math.cos;
 var PI2$5 = Math.PI * 2;
@@ -20071,10 +20234,10 @@ var start = create$1();
 var end = create$1();
 var extremity = create$1();
 function fromLine(x0, y0, x1, y1, min3, max3) {
-  min3[0] = mathMin$6(x0, x1);
-  min3[1] = mathMin$6(y0, y1);
-  max3[0] = mathMax$6(x0, x1);
-  max3[1] = mathMax$6(y0, y1);
+  min3[0] = mathMin$7(x0, x1);
+  min3[1] = mathMin$7(y0, y1);
+  max3[0] = mathMax$7(x0, x1);
+  max3[1] = mathMax$7(y0, y1);
 }
 var xDim = [];
 var yDim = [];
@@ -20088,35 +20251,35 @@ function fromCubic(x0, y0, x1, y1, x2, y2, x3, y3, min3, max3) {
   max3[1] = -Infinity;
   for (var i = 0; i < n2; i++) {
     var x4 = cubicAt$1(x0, x1, x2, x3, xDim[i]);
-    min3[0] = mathMin$6(x4, min3[0]);
-    max3[0] = mathMax$6(x4, max3[0]);
+    min3[0] = mathMin$7(x4, min3[0]);
+    max3[0] = mathMax$7(x4, max3[0]);
   }
   n2 = cubicExtrema$1(y0, y1, y2, y3, yDim);
   for (var i = 0; i < n2; i++) {
     var y4 = cubicAt$1(y0, y1, y2, y3, yDim[i]);
-    min3[1] = mathMin$6(y4, min3[1]);
-    max3[1] = mathMax$6(y4, max3[1]);
+    min3[1] = mathMin$7(y4, min3[1]);
+    max3[1] = mathMax$7(y4, max3[1]);
   }
-  min3[0] = mathMin$6(x0, min3[0]);
-  max3[0] = mathMax$6(x0, max3[0]);
-  min3[0] = mathMin$6(x3, min3[0]);
-  max3[0] = mathMax$6(x3, max3[0]);
-  min3[1] = mathMin$6(y0, min3[1]);
-  max3[1] = mathMax$6(y0, max3[1]);
-  min3[1] = mathMin$6(y3, min3[1]);
-  max3[1] = mathMax$6(y3, max3[1]);
+  min3[0] = mathMin$7(x0, min3[0]);
+  max3[0] = mathMax$7(x0, max3[0]);
+  min3[0] = mathMin$7(x3, min3[0]);
+  max3[0] = mathMax$7(x3, max3[0]);
+  min3[1] = mathMin$7(y0, min3[1]);
+  max3[1] = mathMax$7(y0, max3[1]);
+  min3[1] = mathMin$7(y3, min3[1]);
+  max3[1] = mathMax$7(y3, max3[1]);
 }
 function fromQuadratic(x0, y0, x1, y1, x2, y2, min3, max3) {
   var quadraticExtremum$1 = quadraticExtremum;
   var quadraticAt$1 = quadraticAt;
-  var tx = mathMax$6(mathMin$6(quadraticExtremum$1(x0, x1, x2), 1), 0);
-  var ty = mathMax$6(mathMin$6(quadraticExtremum$1(y0, y1, y2), 1), 0);
+  var tx = mathMax$7(mathMin$7(quadraticExtremum$1(x0, x1, x2), 1), 0);
+  var ty = mathMax$7(mathMin$7(quadraticExtremum$1(y0, y1, y2), 1), 0);
   var x3 = quadraticAt$1(x0, x1, x2, tx);
   var y3 = quadraticAt$1(y0, y1, y2, ty);
-  min3[0] = mathMin$6(x0, x2, x3);
-  min3[1] = mathMin$6(y0, y2, y3);
-  max3[0] = mathMax$6(x0, x2, x3);
-  max3[1] = mathMax$6(y0, y2, y3);
+  min3[0] = mathMin$7(x0, x2, x3);
+  min3[1] = mathMin$7(y0, y2, y3);
+  max3[0] = mathMax$7(x0, x2, x3);
+  max3[1] = mathMax$7(y0, y2, y3);
 }
 function fromArc(x2, y2, rx, ry, startAngle, endAngle, anticlockwise, min3, max3) {
   var vec2Min = min$3;
@@ -20177,8 +20340,8 @@ var min$2 = [];
 var max$2 = [];
 var min2 = [];
 var max2 = [];
-var mathMin$5 = Math.min;
-var mathMax$5 = Math.max;
+var mathMin$6 = Math.min;
+var mathMax$6 = Math.max;
 var mathCos$2 = Math.cos;
 var mathSin$2 = Math.sin;
 var mathAbs$1 = Math.abs;
@@ -20594,7 +20757,7 @@ var PathProxy = function() {
             x0 = mathCos$2(startAngle) * rx + cx;
             y0 = mathSin$2(startAngle) * ry + cy;
           }
-          l2 = mathMax$5(rx, ry) * mathMin$5(PI2$4, Math.abs(delta));
+          l2 = mathMax$6(rx, ry) * mathMin$6(PI2$4, Math.abs(delta));
           xi = mathCos$2(endAngle) * rx + cx;
           yi = mathSin$2(endAngle) * ry + cy;
           break;
@@ -20795,18 +20958,18 @@ var PathProxy = function() {
               if (accumLength + l2 > displayedLength) {
                 var d_1 = displayedLength - accumLength;
                 ctx.moveTo(x2, y2);
-                ctx.lineTo(x2 + mathMin$5(d_1, width), y2);
+                ctx.lineTo(x2 + mathMin$6(d_1, width), y2);
                 d_1 -= width;
                 if (d_1 > 0) {
-                  ctx.lineTo(x2 + width, y2 + mathMin$5(d_1, height));
+                  ctx.lineTo(x2 + width, y2 + mathMin$6(d_1, height));
                 }
                 d_1 -= height;
                 if (d_1 > 0) {
-                  ctx.lineTo(x2 + mathMax$5(width - d_1, 0), y2 + height);
+                  ctx.lineTo(x2 + mathMax$6(width - d_1, 0), y2 + height);
                 }
                 d_1 -= width;
                 if (d_1 > 0) {
-                  ctx.lineTo(x2, y2 + mathMax$5(height - d_1, 0));
+                  ctx.lineTo(x2, y2 + mathMax$6(height - d_1, 0));
                 }
                 break lo;
               }
@@ -22349,7 +22512,7 @@ function hasSeparateFont(style2) {
 }
 function normalizeTextStyle(style2) {
   normalizeStyle(style2);
-  each$8(style2.rich, normalizeStyle);
+  each$d(style2.rich, normalizeStyle);
   return style2;
 }
 function normalizeStyle(style2) {
@@ -22648,7 +22811,7 @@ function allLeaveBlur(api) {
     }
     componentStates.isBlured = false;
   });
-  each$8(allComponentViews, function(view) {
+  each$d(allComponentViews, function(view) {
     if (view && view.toggleBlurSeries) {
       view.toggleBlurSeries(leaveBlurredSeries, false, model);
     }
@@ -22690,7 +22853,7 @@ function blurSeries(targetSeriesIndex, focus, blurScope, api) {
       });
       if (isArrayLike(focus)) {
         leaveBlurOfIndices(seriesModel.getData(), focus);
-      } else if (isObject$3(focus)) {
+      } else if (isObject$4(focus)) {
         var dataTypes = keys(focus);
         for (var d = 0; d < dataTypes.length; d++) {
           leaveBlurOfIndices(seriesModel.getData(dataTypes[d]), focus[dataTypes[d]]);
@@ -22734,7 +22897,7 @@ function blurSeriesFromHighlightPayload(seriesModel, payload, api) {
     return;
   }
   var dataIndex = queryDataIndex(data, payload);
-  dataIndex = (isArray$1(dataIndex) ? dataIndex[0] : dataIndex) || 0;
+  dataIndex = (isArray$2(dataIndex) ? dataIndex[0] : dataIndex) || 0;
   var el = data.getItemGraphicEl(dataIndex);
   if (!el) {
     var count2 = data.count();
@@ -22790,7 +22953,7 @@ function handleGlobalMouseOverForHighDown(dispatcher, e2, api) {
     if (focusSelf) {
       blurComponent(ecData.componentMainType, ecData.componentIndex, api);
     }
-    each$8(dispatchers, function(dispatcher2) {
+    each$d(dispatchers, function(dispatcher2) {
       return enterEmphasisWhenMouseOver(dispatcher2, e2);
     });
   } else {
@@ -22806,7 +22969,7 @@ function handleGlobalMouseOutForHighDown(dispatcher, e2, api) {
   var ecData = getECData(dispatcher);
   var dispatchers = findComponentHighDownDispatchers(ecData.componentMainType, ecData.componentIndex, ecData.componentHighDownName, api).dispatchers;
   if (dispatchers) {
-    each$8(dispatchers, function(dispatcher2) {
+    each$d(dispatchers, function(dispatcher2) {
       return leaveEmphasisWhenMouseOut(dispatcher2, e2);
     });
   } else {
@@ -22820,14 +22983,14 @@ function toggleSelectionFromPayload(seriesModel, payload, api) {
   var dataType = payload.dataType;
   var data = seriesModel.getData(dataType);
   var dataIndex = queryDataIndex(data, payload);
-  if (!isArray$1(dataIndex)) {
+  if (!isArray$2(dataIndex)) {
     dataIndex = [dataIndex];
   }
   seriesModel[payload.type === TOGGLE_SELECT_ACTION_TYPE ? "toggleSelect" : payload.type === SELECT_ACTION_TYPE ? "select" : "unselect"](dataIndex, dataType);
 }
 function updateSeriesElementSelection(seriesModel) {
   var allData = seriesModel.getAllData();
-  each$8(allData, function(_a2) {
+  each$d(allData, function(_a2) {
     var data = _a2.data, type = _a2.type;
     data.eachItemGraphicEl(function(el, idx) {
       seriesModel.isSelected(idx, type) ? enterSelect(el) : leaveSelect(el);
@@ -22838,7 +23001,7 @@ function getAllSelectedIndices(ecModel) {
   var ret = [];
   ecModel.eachSeries(function(seriesModel) {
     var allData = seriesModel.getAllData();
-    each$8(allData, function(_a2) {
+    each$d(allData, function(_a2) {
       _a2.data;
       var type = _a2.type;
       var dataIndices = seriesModel.getSelectedDataIndices();
@@ -23403,8 +23566,8 @@ var mathACos = Math.acos;
 var mathATan2 = Math.atan2;
 var mathAbs = Math.abs;
 var mathSqrt = Math.sqrt;
-var mathMax$4 = Math.max;
-var mathMin$4 = Math.min;
+var mathMax$5 = Math.max;
+var mathMin$5 = Math.min;
 var e = 1e-4;
 function intersect(x0, y0, x1, y1, x2, y2, x3, y3) {
   var dx10 = x1 - x0;
@@ -23435,7 +23598,7 @@ function computeCornerTangents(x0, y0, x1, y1, radius, cr, clockwise) {
   var d2 = dx * dx + dy * dy;
   var r = radius - cr;
   var s2 = x11 * y10 - x10 * y11;
-  var d = (dy < 0 ? -1 : 1) * mathSqrt(mathMax$4(0, r * r * d2 - s2 * s2));
+  var d = (dy < 0 ? -1 : 1) * mathSqrt(mathMax$5(0, r * r * d2 - s2 * s2));
   var cx0 = (s2 * dy - dx * d) / d2;
   var cy0 = (-s2 * dx - dy * d) / d2;
   var cx1 = (s2 * dy + dx * d) / d2;
@@ -23459,7 +23622,7 @@ function computeCornerTangents(x0, y0, x1, y1, radius, cr, clockwise) {
 }
 function normalizeCornerRadius(cr) {
   var arr;
-  if (isArray$1(cr)) {
+  if (isArray$2(cr)) {
     var len2 = cr.length;
     if (!len2) {
       return cr;
@@ -23480,8 +23643,8 @@ function normalizeCornerRadius(cr) {
 }
 function buildPath$1(ctx, shape) {
   var _a2;
-  var radius = mathMax$4(shape.r, 0);
-  var innerRadius = mathMax$4(shape.r0 || 0, 0);
+  var radius = mathMax$5(shape.r, 0);
+  var innerRadius = mathMax$5(shape.r0 || 0, 0);
   var hasRadius = radius > 0;
   var hasInnerRadius = innerRadius > 0;
   if (!hasRadius && !hasInnerRadius) {
@@ -23542,12 +23705,12 @@ function buildPath$1(ctx, shape) {
         _a2 = normalizeCornerRadius(cornerRadius), icrStart = _a2[0], icrEnd = _a2[1], ocrStart = _a2[2], ocrEnd = _a2[3];
       }
       var halfRd = mathAbs(radius - innerRadius) / 2;
-      ocrs = mathMin$4(halfRd, ocrStart);
-      ocre = mathMin$4(halfRd, ocrEnd);
-      icrs = mathMin$4(halfRd, icrStart);
-      icre = mathMin$4(halfRd, icrEnd);
-      limitedOcrMax = ocrMax = mathMax$4(ocrs, ocre);
-      limitedIcrMax = icrMax = mathMax$4(icrs, icre);
+      ocrs = mathMin$5(halfRd, ocrStart);
+      ocre = mathMin$5(halfRd, ocrEnd);
+      icrs = mathMin$5(halfRd, icrStart);
+      icre = mathMin$5(halfRd, icrEnd);
+      limitedOcrMax = ocrMax = mathMax$5(ocrs, ocre);
+      limitedIcrMax = icrMax = mathMax$5(icrs, icre);
       if (ocrMax > e || icrMax > e) {
         xre = radius * mathCos(endAngle);
         yre = radius * mathSin(endAngle);
@@ -23562,8 +23725,8 @@ function buildPath$1(ctx, shape) {
             var y1 = yre - it_1[1];
             var a = 1 / mathSin(mathACos((x0 * x1 + y0 * y1) / (mathSqrt(x0 * x0 + y0 * y0) * mathSqrt(x1 * x1 + y1 * y1))) / 2);
             var b2 = mathSqrt(it_1[0] * it_1[0] + it_1[1] * it_1[1]);
-            limitedOcrMax = mathMin$4(ocrMax, (radius - b2) / (a + 1));
-            limitedIcrMax = mathMin$4(icrMax, (innerRadius - b2) / (a - 1));
+            limitedOcrMax = mathMin$5(ocrMax, (radius - b2) / (a + 1));
+            limitedIcrMax = mathMin$5(icrMax, (innerRadius - b2) / (a - 1));
           }
         }
       }
@@ -23571,8 +23734,8 @@ function buildPath$1(ctx, shape) {
     if (!hasArc) {
       ctx.moveTo(cx + xrs, cy + yrs);
     } else if (limitedOcrMax > e) {
-      var crStart = mathMin$4(ocrStart, limitedOcrMax);
-      var crEnd = mathMin$4(ocrEnd, limitedOcrMax);
+      var crStart = mathMin$5(ocrStart, limitedOcrMax);
+      var crEnd = mathMin$5(ocrEnd, limitedOcrMax);
       var ct0 = computeCornerTangents(xirs, yirs, xrs, yrs, radius, crStart, clockwise);
       var ct1 = computeCornerTangents(xre, yre, xire, yire, radius, crEnd, clockwise);
       ctx.moveTo(cx + ct0.cx + ct0.x0, cy + ct0.cy + ct0.y0);
@@ -23590,8 +23753,8 @@ function buildPath$1(ctx, shape) {
     if (!(innerRadius > e) || !hasArc) {
       ctx.lineTo(cx + xire, cy + yire);
     } else if (limitedIcrMax > e) {
-      var crStart = mathMin$4(icrStart, limitedIcrMax);
-      var crEnd = mathMin$4(icrEnd, limitedIcrMax);
+      var crStart = mathMin$5(icrStart, limitedIcrMax);
+      var crEnd = mathMin$5(icrEnd, limitedIcrMax);
       var ct0 = computeCornerTangents(xire, yire, xre, yre, innerRadius, -crEnd, clockwise);
       var ct1 = computeCornerTangents(xrs, yrs, xirs, yirs, innerRadius, -crStart, clockwise);
       ctx.lineTo(cx + ct0.cx + ct0.x0, cy + ct0.cy + ct0.y0);
@@ -24365,7 +24528,7 @@ function animateOrSetProps(animationType, el, props, animatableModel, dataIndex,
     during = cb;
     cb = dataIndex;
     dataIndex = null;
-  } else if (isObject$3(dataIndex)) {
+  } else if (isObject$4(dataIndex)) {
     cb = dataIndex.cb;
     during = dataIndex.during;
     isFrom = dataIndex.isFrom;
@@ -24451,8 +24614,8 @@ function removeElementWithFadeOut(el, animatableModel, dataIndex) {
 function saveOldStyle(el) {
   transitionStore(el).oldStyle = el.style;
 }
-var mathMax$3 = Math.max;
-var mathMin$3 = Math.min;
+var mathMax$4 = Math.max;
+var mathMin$4 = Math.min;
 var _customShapeMap = {};
 function extendShape(opts) {
   return Path$1.extend(opts);
@@ -24608,19 +24771,19 @@ function groupTransition(g1, g2, animatableModel) {
 function clipPointsByRect(points2, rect) {
   return map$1(points2, function(point) {
     var x2 = point[0];
-    x2 = mathMax$3(x2, rect.x);
-    x2 = mathMin$3(x2, rect.x + rect.width);
+    x2 = mathMax$4(x2, rect.x);
+    x2 = mathMin$4(x2, rect.x + rect.width);
     var y2 = point[1];
-    y2 = mathMax$3(y2, rect.y);
-    y2 = mathMin$3(y2, rect.y + rect.height);
+    y2 = mathMax$4(y2, rect.y);
+    y2 = mathMin$4(y2, rect.y + rect.height);
     return [x2, y2];
   });
 }
 function clipRectByRect(targetRect, rect) {
-  var x2 = mathMax$3(targetRect.x, rect.x);
-  var x22 = mathMin$3(targetRect.x + targetRect.width, rect.x + rect.width);
-  var y2 = mathMax$3(targetRect.y, rect.y);
-  var y22 = mathMin$3(targetRect.y + targetRect.height, rect.y + rect.height);
+  var x2 = mathMax$4(targetRect.x, rect.x);
+  var x22 = mathMin$4(targetRect.x + targetRect.width, rect.x + rect.width);
+  var y2 = mathMax$4(targetRect.y, rect.y);
+  var y22 = mathMin$4(targetRect.y + targetRect.height, rect.y + rect.height);
   if (x22 >= x2 && y22 >= y2) {
     return {
       x: x2,
@@ -24700,7 +24863,7 @@ function setTooltipConfig(opt) {
   formatterParams[mainType + "Index"] = componentIndex;
   var formatterParamsExtra = opt.formatterParamsExtra;
   if (formatterParamsExtra) {
-    each$8(keys(formatterParamsExtra), function(key) {
+    each$d(keys(formatterParamsExtra), function(key) {
       if (!hasOwn$1(formatterParams, key)) {
         formatterParams[key] = formatterParamsExtra[key];
         formatterParams.$vars.push(key);
@@ -24729,7 +24892,7 @@ function traverseElement(el, cb) {
 }
 function traverseElements(els, cb) {
   if (els) {
-    if (isArray$1(els)) {
+    if (isArray$2(els)) {
       for (var i = 0; i < els.length; i++) {
         traverseElement(els[i], cb);
       }
@@ -25331,7 +25494,7 @@ function enableTopologicalTravel(entity, dependencyGetter) {
     var graph = result.graph;
     var noEntryList = result.noEntryList;
     var targetNameSet = {};
-    each$8(targetNameList, function(name) {
+    each$d(targetNameList, function(name) {
       targetNameSet[name] = true;
     });
     while (noEntryList.length) {
@@ -25342,9 +25505,9 @@ function enableTopologicalTravel(entity, dependencyGetter) {
         callback.call(context, currComponentType, currVertex.originalDeps.slice());
         delete targetNameSet[currComponentType];
       }
-      each$8(currVertex.successor, isInTargetNameSet ? removeEdgeAndAdd : removeEdge);
+      each$d(currVertex.successor, isInTargetNameSet ? removeEdgeAndAdd : removeEdge);
     }
-    each$8(targetNameSet, function() {
+    each$d(targetNameSet, function() {
       var errMsg = "";
       throw new Error(errMsg);
     });
@@ -25362,7 +25525,7 @@ function enableTopologicalTravel(entity, dependencyGetter) {
   function makeDepndencyGraph(fullNameList) {
     var graph = {};
     var noEntryList = [];
-    each$8(fullNameList, function(name) {
+    each$d(fullNameList, function(name) {
       var thisItem = createDependencyGraphItem(graph, name);
       var originalDeps = thisItem.originalDeps = dependencyGetter(name);
       var availableDeps = getAvailableDependencies(originalDeps, fullNameList);
@@ -25370,7 +25533,7 @@ function enableTopologicalTravel(entity, dependencyGetter) {
       if (thisItem.entryCount === 0) {
         noEntryList.push(name);
       }
-      each$8(availableDeps, function(dependentName) {
+      each$d(availableDeps, function(dependentName) {
         if (indexOf(thisItem.predecessor, dependentName) < 0) {
           thisItem.predecessor.push(dependentName);
         }
@@ -25396,7 +25559,7 @@ function enableTopologicalTravel(entity, dependencyGetter) {
   }
   function getAvailableDependencies(originalDeps, fullNameList) {
     var availableDeps = [];
-    each$8(originalDeps, function(dep) {
+    each$d(originalDeps, function(dep) {
       indexOf(fullNameList, dep) >= 0 && availableDeps.push(dep);
     });
     return availableDeps;
@@ -25769,7 +25932,7 @@ function leveledFormat(tick, idx, formatter, lang, isUTC) {
       }
       template = template || defaults$1.none;
     }
-    if (isArray$1(template)) {
+    if (isArray$2(template)) {
       var levelId = tick.level == null ? 0 : tick.level >= 0 ? tick.level : template.length + tick.level;
       levelId = Math.min(levelId, template.length - 1);
       template = template[levelId];
@@ -25921,7 +26084,7 @@ var wrapVar = function(varName, seriesIdx) {
   return "{" + varName + (seriesIdx == null ? "" : seriesIdx) + "}";
 };
 function formatTpl(tpl, paramsList, encode) {
-  if (!isArray$1(paramsList)) {
+  if (!isArray$2(paramsList)) {
     paramsList = [paramsList];
   }
   var seriesLen = paramsList.length;
@@ -25976,7 +26139,7 @@ function getTooltipMarker(inOpt, extraCssText) {
 }
 function convertToColorString(color, defaultColor) {
   defaultColor = defaultColor || "transparent";
-  return isString$3(color) ? color : isObject$3(color) ? color.colorStops && (color.colorStops[0] || {}).color || defaultColor : defaultColor;
+  return isString$3(color) ? color : isObject$4(color) ? color.colorStops && (color.colorStops[0] || {}).color || defaultColor : defaultColor;
 }
 function windowOpen(link, target) {
   if (target === "_blank" || target === "blank") {
@@ -25987,7 +26150,7 @@ function windowOpen(link, target) {
     window.open(link, target);
   }
 }
-var each$7 = each$8;
+var each$c = each$d;
 var LOCATION_PARAMS = ["left", "right", "top", "bottom", "width", "height"];
 var HV_NAMES = [["width", "left", "right"], ["height", "top", "bottom"]];
 function boxLayout(orient, group, gap, maxWidth, maxHeight) {
@@ -26151,13 +26314,13 @@ function positionElement(el, positionInfo, containerRect, margin, opt, out2) {
 }
 function fetchLayoutMode(ins) {
   var layoutMode = ins.layoutMode || ins.constructor.layoutMode;
-  return isObject$3(layoutMode) ? layoutMode : layoutMode ? {
+  return isObject$4(layoutMode) ? layoutMode : layoutMode ? {
     type: layoutMode
   } : null;
 }
 function mergeLayoutParam(targetOption, newOption, opt) {
   var ignoreSize = opt && opt.ignoreSize;
-  !isArray$1(ignoreSize) && (ignoreSize = [ignoreSize, ignoreSize]);
+  !isArray$2(ignoreSize) && (ignoreSize = [ignoreSize, ignoreSize]);
   var hResult = merge2(HV_NAMES[0], 0);
   var vResult = merge2(HV_NAMES[1], 1);
   copy2(HV_NAMES[0], targetOption, hResult);
@@ -26168,10 +26331,10 @@ function mergeLayoutParam(targetOption, newOption, opt) {
     var merged = {};
     var mergedValueCount = 0;
     var enoughParamNumber = 2;
-    each$7(names, function(name) {
+    each$c(names, function(name) {
       merged[name] = targetOption[name];
     });
-    each$7(names, function(name) {
+    each$c(names, function(name) {
       hasProp2(newOption, name) && (newParams[name] = merged[name] = newOption[name]);
       hasValue(newParams, name) && newValueCount++;
       hasValue(merged, name) && mergedValueCount++;
@@ -26206,7 +26369,7 @@ function mergeLayoutParam(targetOption, newOption, opt) {
     return obj[name] != null && obj[name] !== "auto";
   }
   function copy2(names, target, source) {
-    each$7(names, function(name) {
+    each$c(names, function(name) {
       target[name] = source[name];
     });
   }
@@ -26215,7 +26378,7 @@ function getLayoutParams(source) {
   return copyLayoutParams({}, source);
 }
 function copyLayoutParams(target, source) {
-  source && target && each$7(LOCATION_PARAMS, function(name) {
+  source && target && each$c(LOCATION_PARAMS, function(name) {
     source.hasOwnProperty(name) && (target[name] = source[name]);
   });
   return target;
@@ -26317,7 +26480,7 @@ enableSubTypeDefaulter(ComponentModel);
 enableTopologicalTravel(ComponentModel, getDependencies);
 function getDependencies(componentType) {
   var deps = [];
-  each$8(ComponentModel.getClassesByMainType(componentType), function(clz) {
+  each$d(ComponentModel.getClassesByMainType(componentType), function(clz) {
     deps = deps.concat(clz.dependencies || clz.prototype.dependencies || []);
   });
   deps = map$1(deps, function(type) {
@@ -26448,8 +26611,8 @@ function makeSeriesEncodeForAxisCoordSys(coordDimensions, seriesModel, source) {
   var baseCategoryDimIndex;
   var categoryWayValueDimStart;
   coordDimensions = coordDimensions.slice();
-  each$8(coordDimensions, function(coordDimInfoLoose, coordDimIdx) {
-    var coordDimInfo = isObject$3(coordDimInfoLoose) ? coordDimInfoLoose : coordDimensions[coordDimIdx] = {
+  each$d(coordDimensions, function(coordDimInfoLoose, coordDimIdx) {
+    var coordDimInfo = isObject$4(coordDimInfoLoose) ? coordDimInfoLoose : coordDimensions[coordDimIdx] = {
       name: coordDimInfoLoose
     };
     if (coordDimInfo.type === "ordinal" && baseCategoryDimIndex == null) {
@@ -26462,7 +26625,7 @@ function makeSeriesEncodeForAxisCoordSys(coordDimensions, seriesModel, source) {
     categoryWayDim: categoryWayValueDimStart,
     valueWayDim: 0
   });
-  each$8(coordDimensions, function(coordDimInfo, coordDimIdx) {
+  each$d(coordDimensions, function(coordDimInfo, coordDimIdx) {
     var coordDimName = coordDimInfo.name;
     var count2 = getDataDimCountOnCoordDim(coordDimInfo);
     if (baseCategoryDimIndex == null) {
@@ -26524,7 +26687,7 @@ function doGuessOrdinal(data, sourceFormat, seriesLayoutBy, dimensionsDefine, st
   var dimType;
   if (dimensionsDefine) {
     var dimDefItem = dimensionsDefine[dimIndex];
-    if (isObject$3(dimDefItem)) {
+    if (isObject$4(dimDefItem)) {
       dimName = dimDefItem.name;
       dimType = dimDefItem.type;
     } else if (isString$3(dimDefItem)) {
@@ -26581,7 +26744,7 @@ function doGuessOrdinal(data, sourceFormat, seriesLayoutBy, dimensionsDefine, st
     for (var i = 0; i < dataOriginal.length && i < maxLoop; i++) {
       var item = dataOriginal[i];
       var val = getDataItemValue(item);
-      if (!isArray$1(val)) {
+      if (!isArray$2(val)) {
         return BE_ORDINAL.Not;
       }
       if ((result = detectValue(val[dimIndex])) != null) {
@@ -26719,7 +26882,7 @@ var GlobalModel = (
       if (!type || type === "recreate" || type === "media") {
         var mediaOptions = optionManager.getMediaOption(this);
         if (mediaOptions.length) {
-          each$8(mediaOptions, function(mediaOption) {
+          each$d(mediaOptions, function(mediaOption) {
             optionChanged = true;
             this._mergeOption(mediaOption, opt);
           }, this);
@@ -26738,7 +26901,7 @@ var GlobalModel = (
       var newCmptTypeMap = createHashMap();
       var replaceMergeMainTypeMap = opt && opt.replaceMergeMainTypeMap;
       resetSourceDefaulter(this);
-      each$8(newOption, function(componentOption, mainType) {
+      each$d(newOption, function(componentOption, mainType) {
         if (componentOption == null) {
           return;
         }
@@ -26774,7 +26937,7 @@ var GlobalModel = (
         var cmptsByMainType = [];
         var cmptsCountByMainType = 0;
         var tooltipExists;
-        each$8(mappingResult, function(resultItem, index) {
+        each$d(mappingResult, function(resultItem, index) {
           var componentModel = resultItem.existing;
           var newCmptOption = resultItem.newOption;
           if (!newCmptOption) {
@@ -26838,7 +27001,7 @@ var GlobalModel = (
     };
     GlobalModel2.prototype.getOption = function() {
       var option = clone$4(this.option);
-      each$8(option, function(optInMainType, mainType) {
+      each$d(option, function(optInMainType, mainType) {
         if (ComponentModel$1.hasClass(mainType)) {
           var opts = normalizeToArray(optInMainType);
           var realLen = opts.length;
@@ -26900,7 +27063,7 @@ var GlobalModel = (
       var result;
       if (index != null) {
         result = [];
-        each$8(normalizeToArray(index), function(idx) {
+        each$d(normalizeToArray(index), function(idx) {
           cmpts[idx] && result.push(cmpts[idx]);
         });
       } else if (id != null) {
@@ -26950,7 +27113,7 @@ var GlobalModel = (
           }
         });
       } else {
-        var cmpts = isString$3(mainType) ? componentsMap.get(mainType) : isObject$3(mainType) ? this.findComponents(mainType) : null;
+        var cmpts = isString$3(mainType) ? componentsMap.get(mainType) : isObject$4(mainType) ? this.findComponents(mainType) : null;
         for (var i = 0; cmpts && i < cmpts.length; i++) {
           var cmpt = cmpts[i];
           cmpt && cb.call(context, cmpt, cmpt.componentIndex);
@@ -26981,19 +27144,19 @@ var GlobalModel = (
     };
     GlobalModel2.prototype.eachSeries = function(cb, context) {
       assertSeriesInitialized(this);
-      each$8(this._seriesIndices, function(rawSeriesIndex) {
+      each$d(this._seriesIndices, function(rawSeriesIndex) {
         var series = this._componentsMap.get("series")[rawSeriesIndex];
         cb.call(context, series, rawSeriesIndex);
       }, this);
     };
     GlobalModel2.prototype.eachRawSeries = function(cb, context) {
-      each$8(this._componentsMap.get("series"), function(series) {
+      each$d(this._componentsMap.get("series"), function(series) {
         series && cb.call(context, series, series.componentIndex);
       });
     };
     GlobalModel2.prototype.eachSeriesByType = function(subType, cb, context) {
       assertSeriesInitialized(this);
-      each$8(this._seriesIndices, function(rawSeriesIndex) {
+      each$d(this._seriesIndices, function(rawSeriesIndex) {
         var series = this._componentsMap.get("series")[rawSeriesIndex];
         if (series.subType === subType) {
           cb.call(context, series, rawSeriesIndex);
@@ -27001,7 +27164,7 @@ var GlobalModel = (
       }, this);
     };
     GlobalModel2.prototype.eachRawSeriesByType = function(subType, cb, context) {
-      return each$8(this.getSeriesByType(subType), cb, context);
+      return each$d(this.getSeriesByType(subType), cb, context);
     };
     GlobalModel2.prototype.isSeriesFiltered = function(seriesModel) {
       assertSeriesInitialized(this);
@@ -27013,7 +27176,7 @@ var GlobalModel = (
     GlobalModel2.prototype.filterSeries = function(cb, context) {
       assertSeriesInitialized(this);
       var newSeriesIndices = [];
-      each$8(this._seriesIndices, function(seriesRawIdx) {
+      each$d(this._seriesIndices, function(seriesRawIdx) {
         var series = this._componentsMap.get("series")[seriesRawIdx];
         cb.call(context, series, seriesRawIdx) && newSeriesIndices.push(seriesRawIdx);
       }, this);
@@ -27030,7 +27193,7 @@ var GlobalModel = (
         }
       });
       ComponentModel$1.topologicalTravel(componentTypes, ComponentModel$1.getAllClassMainTypes(), function(componentType) {
-        each$8(componentsMap.get(componentType), function(component) {
+        each$d(componentsMap.get(componentType), function(component) {
           if (component && (componentType !== "series" || !isNotTargetSeries(component, payload))) {
             component.restoreData();
           }
@@ -27040,7 +27203,7 @@ var GlobalModel = (
     GlobalModel2.internalField = function() {
       reCreateSeriesIndices = function(ecModel) {
         var seriesIndices = ecModel._seriesIndices = [];
-        each$8(ecModel._componentsMap.get("series"), function(series) {
+        each$d(ecModel._componentsMap.get("series"), function(series) {
           series && seriesIndices.push(series.componentIndex);
         });
         ecModel._seriesIndicesMap = createHashMap(seriesIndices);
@@ -27055,7 +27218,7 @@ var GlobalModel = (
         });
         ecModel._componentsCount = createHashMap();
         var airaOption = baseOption.aria;
-        if (isObject$3(airaOption) && airaOption.enabled == null) {
+        if (isObject$4(airaOption) && airaOption.enabled == null) {
           airaOption.enabled = true;
         }
         mergeTheme(baseOption, ecModel._theme.option);
@@ -27076,7 +27239,7 @@ function isNotTargetSeries(seriesModel, payload) {
 }
 function mergeTheme(option, theme2) {
   var notMergeColorLayer = option.color && !option.colorLayer;
-  each$8(theme2, function(themeItem, name) {
+  each$d(theme2, function(themeItem, name) {
     if (name === "colorLayer" && notMergeColorLayer) {
       return;
     }
@@ -27092,9 +27255,9 @@ function mergeTheme(option, theme2) {
   });
 }
 function queryByIdOrName(attr, idOrName, cmpts) {
-  if (isArray$1(idOrName)) {
+  if (isArray$2(idOrName)) {
     var keyMap_1 = createHashMap();
-    each$8(idOrName, function(idOrNameItem) {
+    each$d(idOrName, function(idOrNameItem) {
       if (idOrNameItem != null) {
         var idName = convertOptionIdName(idOrNameItem, null);
         idName != null && keyMap_1.set(idOrNameItem, true);
@@ -27117,7 +27280,7 @@ function filterBySubType(components, condition) {
 }
 function normalizeSetOptionInput(opts) {
   var replaceMergeMainTypeMap = createHashMap();
-  opts && each$8(normalizeToArray(opts.replaceMerge), function(mainType) {
+  opts && each$d(normalizeToArray(opts.replaceMerge), function(mainType) {
     replaceMergeMainTypeMap.set(mainType, true);
   });
   return {
@@ -27150,7 +27313,7 @@ var ExtensionAPI = (
   /** @class */
   function() {
     function ExtensionAPI2(ecInstance) {
-      each$8(availableMethods, function(methodName) {
+      each$d(availableMethods, function(methodName) {
         this[methodName] = bind$1(ecInstance[methodName], ecInstance);
       }, this);
     }
@@ -27167,14 +27330,14 @@ var CoordinateSystemManager = (
     }
     CoordinateSystemManager2.prototype.create = function(ecModel, api) {
       var coordinateSystems = [];
-      each$8(coordinateSystemCreators, function(creator, type) {
+      each$d(coordinateSystemCreators, function(creator, type) {
         var list = creator.create(ecModel, api);
         coordinateSystems = coordinateSystems.concat(list || []);
       });
       this._coordinateSystems = coordinateSystems;
     };
     CoordinateSystemManager2.prototype.update = function(ecModel, api) {
-      each$8(this._coordinateSystems, function(coordSys) {
+      each$d(this._coordinateSystems, function(coordSys) {
         coordSys.update && coordSys.update(ecModel, api);
       });
     };
@@ -27203,10 +27366,10 @@ var OptionManager = (
     }
     OptionManager2.prototype.setOption = function(rawOption, optionPreprocessorFuncs2, opt) {
       if (rawOption) {
-        each$8(normalizeToArray(rawOption.series), function(series) {
+        each$d(normalizeToArray(rawOption.series), function(series) {
           series && series.data && isTypedArray(series.data) && setAsPrimitive(series.data);
         });
-        each$8(normalizeToArray(rawOption.dataset), function(dataset) {
+        each$d(normalizeToArray(rawOption.dataset), function(dataset) {
           dataset && dataset.source && isTypedArray(dataset.source) && setAsPrimitive(dataset.source);
         });
       }
@@ -27301,8 +27464,8 @@ function parseRawOption(rawOption, optionPreprocessorFuncs2, isNew) {
     baseOption = rawOption;
   }
   if (hasMedia) {
-    if (isArray$1(mediaOnRoot)) {
-      each$8(mediaOnRoot, function(singleMedia) {
+    if (isArray$2(mediaOnRoot)) {
+      each$d(mediaOnRoot, function(singleMedia) {
         if (singleMedia && singleMedia.option) {
           if (singleMedia.query) {
             mediaList.push(singleMedia);
@@ -27314,14 +27477,14 @@ function parseRawOption(rawOption, optionPreprocessorFuncs2, isNew) {
     }
   }
   doPreprocess(baseOption);
-  each$8(timelineOptionsOnRoot, function(option) {
+  each$d(timelineOptionsOnRoot, function(option) {
     return doPreprocess(option);
   });
-  each$8(mediaList, function(media) {
+  each$d(mediaList, function(media) {
     return doPreprocess(media.option);
   });
   function doPreprocess(option) {
-    each$8(optionPreprocessorFuncs2, function(preProcess) {
+    each$d(optionPreprocessorFuncs2, function(preProcess) {
       preProcess(option, isNew);
     });
   }
@@ -27340,7 +27503,7 @@ function applyMediaQuery(query, ecWidth, ecHeight) {
     // lower case for convenience.
   };
   var applicable = true;
-  each$8(query, function(value, attr) {
+  each$d(query, function(value, attr) {
     var matched = attr.match(QUERY_REG);
     if (!matched || !matched[1] || !matched[2]) {
       return;
@@ -27366,8 +27529,8 @@ function indicesEquals(indices1, indices2) {
   return indices1.join(",") === indices2.join(",");
 }
 const OptionManager$1 = OptionManager;
-var each$6 = each$8;
-var isObject$2 = isObject$3;
+var each$b = each$d;
+var isObject$3 = isObject$4;
 var POSSIBLE_STYLES = ["areaStyle", "lineStyle", "nodeStyle", "linkStyle", "chordStyle", "label", "labelLine"];
 function compatEC2ItemStyle(opt) {
   var itemStyleOpt = opt && opt.itemStyle;
@@ -27432,8 +27595,8 @@ function removeEC3NormalStatus(opt) {
   convertNormalEmphasis(opt, "edgeLabel");
 }
 function compatTextStyle(opt, propName) {
-  var labelOptSingle = isObject$2(opt) && opt[propName];
-  var textStyle = isObject$2(labelOptSingle) && labelOptSingle.textStyle;
+  var labelOptSingle = isObject$3(opt) && opt[propName];
+  var textStyle = isObject$3(labelOptSingle) && labelOptSingle.textStyle;
   if (textStyle) {
     for (var i = 0, len2 = TEXT_STYLE_OPTIONS.length; i < len2; i++) {
       var textPropName = TEXT_STYLE_OPTIONS[i];
@@ -27451,7 +27614,7 @@ function compatEC3CommonStyles(opt) {
   }
 }
 function processSeries(seriesOpt) {
-  if (!isObject$2(seriesOpt)) {
+  if (!isObject$3(seriesOpt)) {
     return;
   }
   compatEC2ItemStyle(seriesOpt);
@@ -27487,7 +27650,7 @@ function processSeries(seriesOpt) {
         compatEC3CommonStyles(edgeData[i]);
       }
     }
-    each$8(seriesOpt.categories, function(opt) {
+    each$d(seriesOpt.categories, function(opt) {
       removeEC3NormalStatus(opt);
     });
   }
@@ -27507,7 +27670,7 @@ function processSeries(seriesOpt) {
   if (markLine && markLine.data) {
     var mlData = markLine.data;
     for (var i = 0; i < mlData.length; i++) {
-      if (isArray$1(mlData[i])) {
+      if (isArray$2(mlData[i])) {
         compatEC3CommonStyles(mlData[i][0]);
         compatEC3CommonStyles(mlData[i][1]);
       } else {
@@ -27521,7 +27684,7 @@ function processSeries(seriesOpt) {
     compatTextStyle(seriesOpt, "detail");
   } else if (seriesOpt.type === "treemap") {
     convertNormalEmphasis(seriesOpt.breadcrumb, "itemStyle");
-    each$8(seriesOpt.levels, function(opt) {
+    each$d(seriesOpt.levels, function(opt) {
       removeEC3NormalStatus(opt);
     });
   } else if (seriesOpt.type === "tree") {
@@ -27529,37 +27692,37 @@ function processSeries(seriesOpt) {
   }
 }
 function toArr(o) {
-  return isArray$1(o) ? o : o ? [o] : [];
+  return isArray$2(o) ? o : o ? [o] : [];
 }
 function toObj(o) {
-  return (isArray$1(o) ? o[0] : o) || {};
+  return (isArray$2(o) ? o[0] : o) || {};
 }
 function globalCompatStyle(option, isTheme) {
-  each$6(toArr(option.series), function(seriesOpt) {
-    isObject$2(seriesOpt) && processSeries(seriesOpt);
+  each$b(toArr(option.series), function(seriesOpt) {
+    isObject$3(seriesOpt) && processSeries(seriesOpt);
   });
   var axes = ["xAxis", "yAxis", "radiusAxis", "angleAxis", "singleAxis", "parallelAxis", "radar"];
   isTheme && axes.push("valueAxis", "categoryAxis", "logAxis", "timeAxis");
-  each$6(axes, function(axisName) {
-    each$6(toArr(option[axisName]), function(axisOpt) {
+  each$b(axes, function(axisName) {
+    each$b(toArr(option[axisName]), function(axisOpt) {
       if (axisOpt) {
         compatTextStyle(axisOpt, "axisLabel");
         compatTextStyle(axisOpt.axisPointer, "label");
       }
     });
   });
-  each$6(toArr(option.parallel), function(parallelOpt) {
+  each$b(toArr(option.parallel), function(parallelOpt) {
     var parallelAxisDefault = parallelOpt && parallelOpt.parallelAxisDefault;
     compatTextStyle(parallelAxisDefault, "axisLabel");
     compatTextStyle(parallelAxisDefault && parallelAxisDefault.axisPointer, "label");
   });
-  each$6(toArr(option.calendar), function(calendarOpt) {
+  each$b(toArr(option.calendar), function(calendarOpt) {
     convertNormalEmphasis(calendarOpt, "itemStyle");
     compatTextStyle(calendarOpt, "dayLabel");
     compatTextStyle(calendarOpt, "monthLabel");
     compatTextStyle(calendarOpt, "yearLabel");
   });
-  each$6(toArr(option.radar), function(radarOpt) {
+  each$b(toArr(option.radar), function(radarOpt) {
     compatTextStyle(radarOpt, "name");
     if (radarOpt.name && radarOpt.axisName == null) {
       radarOpt.axisName = radarOpt.name;
@@ -27570,30 +27733,30 @@ function globalCompatStyle(option, isTheme) {
       delete radarOpt.nameGap;
     }
   });
-  each$6(toArr(option.geo), function(geoOpt) {
-    if (isObject$2(geoOpt)) {
+  each$b(toArr(option.geo), function(geoOpt) {
+    if (isObject$3(geoOpt)) {
       compatEC3CommonStyles(geoOpt);
-      each$6(toArr(geoOpt.regions), function(regionObj) {
+      each$b(toArr(geoOpt.regions), function(regionObj) {
         compatEC3CommonStyles(regionObj);
       });
     }
   });
-  each$6(toArr(option.timeline), function(timelineOpt) {
+  each$b(toArr(option.timeline), function(timelineOpt) {
     compatEC3CommonStyles(timelineOpt);
     convertNormalEmphasis(timelineOpt, "label");
     convertNormalEmphasis(timelineOpt, "itemStyle");
     convertNormalEmphasis(timelineOpt, "controlStyle", true);
     var data = timelineOpt.data;
-    isArray$1(data) && each$8(data, function(item) {
-      if (isObject$3(item)) {
+    isArray$2(data) && each$d(data, function(item) {
+      if (isObject$4(item)) {
         convertNormalEmphasis(item, "label");
         convertNormalEmphasis(item, "itemStyle");
       }
     });
   });
-  each$6(toArr(option.toolbox), function(toolboxOpt) {
+  each$b(toArr(option.toolbox), function(toolboxOpt) {
     convertNormalEmphasis(toolboxOpt, "iconStyle");
-    each$6(toolboxOpt.feature, function(featureOpt) {
+    each$b(toolboxOpt.feature, function(featureOpt) {
       convertNormalEmphasis(featureOpt, "iconStyle");
     });
   });
@@ -27628,7 +27791,7 @@ function set(opt, path, val, overwrite) {
   }
 }
 function compatLayoutProperties(option) {
-  option && each$8(LAYOUT_PROPERTIES, function(prop) {
+  option && each$d(LAYOUT_PROPERTIES, function(prop) {
     if (prop[0] in option && !(prop[1] in option)) {
       option[prop[1]] = option[prop[0]];
     }
@@ -27687,8 +27850,8 @@ function traverseTree(data, cb) {
 function globalBackwardCompat(option, isTheme) {
   globalCompatStyle(option, isTheme);
   option.series = normalizeToArray(option.series);
-  each$8(option.series, function(seriesOpt) {
-    if (!isObject$3(seriesOpt)) {
+  each$d(option.series, function(seriesOpt) {
+    if (!isObject$4(seriesOpt)) {
       return;
     }
     var seriesType2 = seriesOpt.type;
@@ -27760,13 +27923,13 @@ function globalBackwardCompat(option, isTheme) {
   if (option.dataRange) {
     option.visualMap = option.dataRange;
   }
-  each$8(COMPATITABLE_COMPONENTS, function(componentName) {
+  each$d(COMPATITABLE_COMPONENTS, function(componentName) {
     var options = option[componentName];
     if (options) {
-      if (!isArray$1(options)) {
+      if (!isArray$2(options)) {
         options = [options];
       }
-      each$8(options, function(option2) {
+      each$d(options, function(option2) {
         compatLayoutProperties(option2);
       });
     }
@@ -27800,7 +27963,7 @@ function dataStack(ecModel) {
   stackInfoMap.each(calculateStack);
 }
 function calculateStack(stackInfoList) {
-  each$8(stackInfoList, function(targetStackInfo, idxInStack) {
+  each$d(stackInfoList, function(targetStackInfo, idxInStack) {
     var resultVal = [];
     var resultNaN = [NaN, NaN];
     var dims = [targetStackInfo.stackResultDimension, targetStackInfo.stackedOverDimension];
@@ -27903,7 +28066,7 @@ function detectSourceFormat(data) {
   var sourceFormat = SOURCE_FORMAT_UNKNOWN;
   if (isTypedArray(data)) {
     sourceFormat = SOURCE_FORMAT_TYPED_ARRAY;
-  } else if (isArray$1(data)) {
+  } else if (isArray$2(data)) {
     if (data.length === 0) {
       sourceFormat = SOURCE_FORMAT_ARRAY_ROWS;
     }
@@ -27911,15 +28074,15 @@ function detectSourceFormat(data) {
       var item = data[i];
       if (item == null) {
         continue;
-      } else if (isArray$1(item)) {
+      } else if (isArray$2(item)) {
         sourceFormat = SOURCE_FORMAT_ARRAY_ROWS;
         break;
-      } else if (isObject$3(item)) {
+      } else if (isObject$4(item)) {
         sourceFormat = SOURCE_FORMAT_OBJECT_ROWS;
         break;
       }
     }
-  } else if (isObject$3(data)) {
+  } else if (isObject$4(data)) {
     for (var key in data) {
       if (hasOwn$1(data, key) && isArrayLike(data[key])) {
         sourceFormat = SOURCE_FORMAT_KEYED_COLUMNS;
@@ -27968,13 +28131,13 @@ function determineSourceDimensions(data, sourceFormat, seriesLayoutBy, sourceHea
   } else if (sourceFormat === SOURCE_FORMAT_KEYED_COLUMNS) {
     if (!dimensionsDefine) {
       dimensionsDefine = [];
-      each$8(data, function(colArr, key) {
+      each$d(data, function(colArr, key) {
         dimensionsDefine.push(key);
       });
     }
   } else if (sourceFormat === SOURCE_FORMAT_ORIGINAL) {
     var value0 = getDataItemValue(data[0]);
-    dimensionsDetectedCount = isArray$1(value0) && value0.length || 1;
+    dimensionsDetectedCount = isArray$2(value0) && value0.length || 1;
   } else
     ;
   return {
@@ -27990,7 +28153,7 @@ function objectRowsCollectDimensions(data) {
   }
   if (obj) {
     var dimensions_1 = [];
-    each$8(obj, function(value, key) {
+    each$d(obj, function(value, key) {
       dimensions_1.push(key);
     });
     return dimensions_1;
@@ -28002,7 +28165,7 @@ function normalizeDimensionsOption(dimensionsDefine) {
   }
   var nameMap = createHashMap();
   return map$1(dimensionsDefine, function(rawItem, index) {
-    rawItem = isObject$3(rawItem) ? rawItem : {
+    rawItem = isObject$4(rawItem) ? rawItem : {
       name: rawItem
     };
     var item = {
@@ -28147,7 +28310,7 @@ var DefaultDataProvider = (
         pure: true,
         appendData: function(newData) {
           var data = this._data;
-          each$8(newData, function(newCol, key) {
+          each$d(newData, function(newCol, key) {
             var oldCol = data[key] || (data[key] = []);
             for (var i = 0; i < (newCol || []).length; i++) {
               oldCol.push(newCol[i]);
@@ -28305,7 +28468,7 @@ var DataFormatMixin = (
       if (extendParams) {
         params.value = extendParams.interpolatedValue;
       }
-      if (labelDimIndex != null && isArray$1(params.value)) {
+      if (labelDimIndex != null && isArray$2(params.value)) {
         params.value = params.value[labelDimIndex];
       }
       if (!formatter) {
@@ -28325,7 +28488,7 @@ var DataFormatMixin = (
             dimLoose = +dimLoose.slice(1, len2 - 1);
           }
           var val = retrieveRawValue(data, dataIndex, dimLoose);
-          if (extendParams && isArray$1(extendParams.interpolatedValue)) {
+          if (extendParams && isArray$2(extendParams.interpolatedValue)) {
             var dimIndex = data.getDimensionIndex(dimLoose);
             if (dimIndex >= 0) {
               val = extendParams.interpolatedValue[dimIndex];
@@ -28347,7 +28510,7 @@ var DataFormatMixin = (
 function normalizeTooltipFormatResult(result) {
   var markupText;
   var markupFragment;
-  if (isObject$3(result)) {
+  if (isObject$4(result)) {
     if (result.type) {
       markupFragment = result;
     }
@@ -28417,7 +28580,7 @@ var Task = (
         var end2 = Math.min(step != null ? this._dueIndex + step : Infinity, this._dueEnd);
         if (!skip && (forceFirstProgress || start2 < end2)) {
           var progress = this._progress;
-          if (isArray$1(progress)) {
+          if (isArray$2(progress)) {
             for (var i = 0; i < progress.length; i++) {
               this._doProgress(progress[i], start2, end2, modBy, modDataCount);
             }
@@ -28458,7 +28621,7 @@ var Task = (
           forceFirstProgress = progress.forceFirstProgress;
           progress = progress.progress;
         }
-        if (isArray$1(progress) && !progress.length) {
+        if (isArray$2(progress) && !progress.length) {
           progress = null;
         }
       }
@@ -28632,7 +28795,7 @@ function createExternalSource(internalSource, externalTransform) {
   var dimsByName = {};
   var dimsDef = internalSource.dimensionsDefine;
   if (dimsDef) {
-    each$8(dimsDef, function(dimDef, idx) {
+    each$d(dimsDef, function(dimDef, idx) {
       var name = dimDef.name;
       var dimDefExt = {
         index: idx,
@@ -28766,7 +28929,7 @@ function applySingleDataTransform(transOption, upSourceList, infoForPrint, pipeI
   if (!upSourceList.length) {
     throwError(errMsg);
   }
-  if (!isObject$3(transOption)) {
+  if (!isObject$4(transOption)) {
     throwError(errMsg);
   }
   var transType = transOption.type;
@@ -28784,7 +28947,7 @@ function applySingleDataTransform(transOption, upSourceList, infoForPrint, pipeI
   }));
   return map$1(resultList, function(result, resultIndex) {
     var errMsg2 = "";
-    if (!isObject$3(result)) {
+    if (!isObject$4(result)) {
       throwError(errMsg2);
     }
     if (!result.data) {
@@ -29680,7 +29843,7 @@ var SourceManager = (
       var sourceList;
       var upSourceList = [];
       var upstreamSignList = [];
-      each$8(upMgrList, function(upMgr) {
+      each$d(upMgrList, function(upMgr) {
         upMgr.prepareSource();
         var upSource = upMgr.getSource(fromTransformResult || 0);
         var errMsg2 = "";
@@ -29839,7 +30002,7 @@ function getBlockGapLevel(frag) {
     var gapLevel_1 = 0;
     var subBlockLen = frag.blocks.length;
     var hasInnerGap_1 = subBlockLen > 1 || subBlockLen > 0 && !frag.noHeader;
-    each$8(frag.blocks, function(subBlock) {
+    each$d(frag.blocks, function(subBlock) {
       var subGapLevel = getBlockGapLevel(subBlock);
       if (subGapLevel >= gapLevel_1) {
         gapLevel_1 = subGapLevel + +(hasInnerGap_1 && // 0 always can not be readable gap level.
@@ -29855,7 +30018,7 @@ function buildSection(ctx, fragment, topMarginForOuterGap, toolTipTextStyle) {
   var gaps = getGap(getBlockGapLevel(fragment));
   var subMarkupTextList = [];
   var subBlocks = fragment.blocks || [];
-  assert(!subBlocks || isArray$1(subBlocks));
+  assert(!subBlocks || isArray$2(subBlocks));
   subBlocks = subBlocks || [];
   var orderMode = ctx.orderMode;
   if (fragment.sortBlocks && orderMode) {
@@ -29873,7 +30036,7 @@ function buildSection(ctx, fragment, topMarginForOuterGap, toolTipTextStyle) {
       subBlocks.reverse();
     }
   }
-  each$8(subBlocks, function(subBlock, idx) {
+  each$d(subBlocks, function(subBlock, idx) {
     var valueFormatter = fragment.valueFormatter;
     var subMarkupText2 = getBuilder(subBlock)(
       // Inherit valueFormatter
@@ -29906,9 +30069,9 @@ function buildNameValue(ctx, fragment, topMarginForOuterGap, toolTipTextStyle) {
   var name = fragment.name;
   var useUTC = ctx.useUTC;
   var valueFormatter = fragment.valueFormatter || ctx.valueFormatter || function(value) {
-    value = isArray$1(value) ? value : [value];
+    value = isArray$2(value) ? value : [value];
     return map$1(value, function(val, idx) {
-      return makeValueReadable(val, isArray$1(valueTypeOption) ? valueTypeOption[idx] : valueTypeOption, useUTC);
+      return makeValueReadable(val, isArray$2(valueTypeOption) ? valueTypeOption[idx] : valueTypeOption, useUTC);
     });
   };
   if (noName && noValue) {
@@ -29955,7 +30118,7 @@ function wrapInlineNameHTML(name, leftHasMarker, style2) {
 function wrapInlineValueHTML(valueList, alignRight, valueCloseToMarker, style2) {
   var paddingStr = valueCloseToMarker ? "10px" : "20px";
   var alignCSS = alignRight ? "float:right;margin-left:" + paddingStr : "";
-  valueList = isArray$1(valueList) ? valueList : [valueList];
+  valueList = isArray$2(valueList) ? valueList : [valueList];
   return '<span style="' + alignCSS + ";" + style2 + '">' + map$1(valueList, function(value) {
     return encodeHTML(value);
   }).join("&nbsp;&nbsp;") + "</span>";
@@ -29970,7 +30133,7 @@ function wrapInlineValueRichText(ctx, values, alignRight, valueCloseToMarker, st
     padding: [0, 0, 0, paddingLeft],
     align: "right"
   });
-  return ctx.markupStyleCreator.wrapRichTextStyle(isArray$1(values) ? values.join("  ") : values, styles);
+  return ctx.markupStyleCreator.wrapRichTextStyle(isArray$2(values) ? values.join("  ") : values, styles);
 }
 function retrieveVisualColorForTooltipMarker(series, dataIndex) {
   var style2 = series.getData().getItemVisual(dataIndex, "style");
@@ -30008,8 +30171,8 @@ var TooltipMarkupStyleCreator = (
     };
     TooltipMarkupStyleCreator2.prototype.wrapRichTextStyle = function(text, styles) {
       var finalStl = {};
-      if (isArray$1(styles)) {
-        each$8(styles, function(stl) {
+      if (isArray$2(styles)) {
+        each$d(styles, function(stl) {
           return extend(finalStl, stl);
         });
       } else {
@@ -30030,7 +30193,7 @@ function defaultSeriesFormatTooltip(opt) {
   var tooltipDims = data.mapDimensionsAll("defaultedTooltip");
   var tooltipDimLen = tooltipDims.length;
   var value = series.getRawValue(dataIndex);
-  var isValueArr = isArray$1(value);
+  var isValueArr = isArray$2(value);
   var markerColor = retrieveVisualColorForTooltipMarker(series, dataIndex);
   var inlineValue;
   var inlineValueType;
@@ -30082,9 +30245,9 @@ function formatTooltipArrayValue(value, series, dataIndex, tooltipDims, colorStr
   var inlineValues = [];
   var inlineValueTypes = [];
   var blocks = [];
-  tooltipDims.length ? each$8(tooltipDims, function(dim) {
+  tooltipDims.length ? each$d(tooltipDims, function(dim) {
     setEachItem(retrieveRawValue(data, dataIndex, dim), dim);
-  }) : each$8(value, setEachItem);
+  }) : each$d(value, setEachItem);
   function setEachItem(val, dim) {
     var dimInfo = data.getDimensionInfo(dim);
     if (!dimInfo || dimInfo.otherDims.tooltip === false) {
@@ -30360,7 +30523,7 @@ var SeriesModel = (
       if (selectedMode === "series") {
         option.selectedMap = "all";
       } else if (selectedMode === "multiple") {
-        if (!isObject$3(option.selectedMap)) {
+        if (!isObject$4(option.selectedMap)) {
           option.selectedMap = {};
         }
         var selectedMap = option.selectedMap;
@@ -30423,7 +30586,7 @@ function getSeriesAutoName(seriesModel) {
   var data = seriesModel.getRawData();
   var dataDims = data.mapDimensionsAll("seriesName");
   var nameArr = [];
-  each$8(dataDims, function(dataDim) {
+  each$d(dataDims, function(dataDim) {
     var dimInfo = data.getDimensionInfo(dataDim);
     dimInfo.displayName && nameArr.push(dimInfo.displayName);
   });
@@ -30443,7 +30606,7 @@ function dataTaskProgress(param, context) {
   }
 }
 function wrapData(data, seriesModel) {
-  each$8(concatArray(data.CHANGABLE_METHODS, data.DOWNSAMPLE_METHODS), function(methodName) {
+  each$d(concatArray(data.CHANGABLE_METHODS, data.DOWNSAMPLE_METHODS), function(methodName) {
     data.wrapMethod(methodName, curry$1(onDataChange, seriesModel));
   });
 }
@@ -30584,7 +30747,7 @@ function toggleHighlight(data, payload, state) {
   var dataIndex = queryDataIndex(data, payload);
   var highlightDigit = payload && payload.highlightKey != null ? getHighlightDigit(payload.highlightKey) : null;
   if (dataIndex != null) {
-    each$8(normalizeToArray(dataIndex), function(dataIdx) {
+    each$d(normalizeToArray(dataIndex), function(dataIdx) {
       elSetState(data.getItemGraphicEl(dataIdx), state, highlightDigit);
     });
   } else {
@@ -31030,7 +31193,7 @@ var Scheduler = (
       var stageTaskMap = this._stageTaskMap;
       var ecModel = this.api.getModel();
       var api = this.api;
-      each$8(this._allHandlers, function(handler) {
+      each$d(this._allHandlers, function(handler) {
         var record = stageTaskMap.get(handler.uid) || stageTaskMap.set(handler.uid, {});
         var errMsg = "";
         assert(!(handler.reset && handler.overallReset), errMsg);
@@ -31059,7 +31222,7 @@ var Scheduler = (
       opt = opt || {};
       var unfinished = false;
       var scheduler = this;
-      each$8(stageHandlers, function(stageHandler, idx) {
+      each$d(stageHandlers, function(stageHandler, idx) {
         if (opt.visualType && opt.visualType !== stageHandler.visualType) {
           return;
         }
@@ -31183,7 +31346,7 @@ var Scheduler = (
         getTargetSeries(ecModel, api).each(createStub);
       } else {
         overallProgress = false;
-        each$8(ecModel.getSeries(), createStub);
+        each$d(ecModel.getSeries(), createStub);
       }
       function createStub(seriesModel) {
         var pipelineId = seriesModel.uid;
@@ -31503,7 +31666,7 @@ var ECEventProcessor = (
           dataIndex: 1,
           dataType: 1
         };
-        each$8(query, function(val, key) {
+        each$d(query, function(val, key) {
           var reserved = false;
           for (var i = 0; i < suffixes_1.length; i++) {
             var propSuffix = suffixes_1[i];
@@ -31659,6 +31822,23 @@ function getVisualFromData(data, key) {
       return data.getVisual(key);
   }
 }
+function setItemVisualFromData(data, dataIndex, key, value) {
+  switch (key) {
+    case "color":
+      var style2 = data.ensureUniqueItemVisual(dataIndex, "style");
+      style2[data.getVisual("drawType")] = value;
+      data.setItemVisual(dataIndex, "colorFromPalette", false);
+      break;
+    case "opacity":
+      data.ensureUniqueItemVisual(dataIndex, "style").opacity = value;
+      break;
+    case "symbol":
+    case "symbolSize":
+    case "liftZ":
+      data.setItemVisual(dataIndex, key, value);
+      break;
+  }
+}
 function handleSeriesLegacySelectEvents(type, eventPostfix, ecIns, ecModel, payload) {
   var legacyEventName = type + eventPostfix;
   if (!ecIns.isSilent(legacyEventName)) {
@@ -31676,7 +31856,7 @@ function handleSeriesLegacySelectEvents(type, eventPostfix, ecIns, ecModel, payl
           ecIns.trigger(legacyEventName, {
             type: legacyEventName,
             seriesId: seriesModel.id,
-            name: isArray$1(dataIndex) ? data.getName(dataIndex[0]) : data.getName(dataIndex),
+            name: isArray$2(dataIndex) ? data.getName(dataIndex[0]) : data.getName(dataIndex),
             selected: isString$3(selectedMap) ? selectedMap : extend({}, selectedMap)
           });
         }
@@ -31913,7 +32093,7 @@ var symbolShapeMakers = {
   }
 };
 var symbolBuildProxies = {};
-each$8(symbolCtors, function(Ctor, name) {
+each$d(symbolCtors, function(Ctor, name) {
   symbolBuildProxies[name] = new Ctor();
 });
 var SymbolClz$1 = Path$1.extend({
@@ -31990,7 +32170,7 @@ function createSymbol$1(symbolType, x2, y2, w2, h2, color, keepAspect) {
   return symbolPath;
 }
 function normalizeSymbolSize(symbolSize) {
-  if (!isArray$1(symbolSize)) {
+  if (!isArray$2(symbolSize)) {
     symbolSize = [+symbolSize, +symbolSize];
   }
   return [symbolSize[0] || 0, symbolSize[1] || 0];
@@ -31999,7 +32179,7 @@ function normalizeSymbolOffset(symbolOffset, symbolSize) {
   if (symbolOffset == null) {
     return;
   }
-  if (!isArray$1(symbolOffset)) {
+  if (!isArray$2(symbolOffset)) {
     symbolOffset = [symbolOffset, symbolOffset];
   }
   return [parsePercent(symbolOffset[0], symbolSize[0]) || 0, parsePercent(retrieve2(symbolOffset[1], symbolOffset[0]), symbolSize[1]) || 0];
@@ -32083,7 +32263,7 @@ function normalizeLineDash(lineType, lineWidth) {
   if (!lineType || lineType === "solid" || !(lineWidth > 0)) {
     return null;
   }
-  return lineType === "dashed" ? [4 * lineWidth, 2 * lineWidth] : lineType === "dotted" ? [lineWidth] : isNumber$2(lineType) ? [lineType] : isArray$1(lineType) ? lineType : null;
+  return lineType === "dashed" ? [4 * lineWidth, 2 * lineWidth] : lineType === "dotted" ? [lineWidth] : isNumber$2(lineType) ? [lineType] : isArray$2(lineType) ? lineType : null;
 }
 function getLineDash(el) {
   var style2 = el.style;
@@ -32651,7 +32831,7 @@ function createOrUpdatePatternFromDecal(decalObject, api) {
     var isValidKey = true;
     for (var i = 0; i < decalKeys.length; ++i) {
       var value = decalOpt[decalKeys[i]];
-      if (value != null && !isArray$1(value) && !isString$3(value) && !isNumber$2(value) && typeof value !== "boolean") {
+      if (value != null && !isArray$2(value) && !isString$3(value) && !isNumber$2(value) && typeof value !== "boolean") {
         isValidKey = false;
         break;
       }
@@ -33122,7 +33302,7 @@ var ECharts = (
       var silent;
       var replaceMerge;
       var transitionOpt;
-      if (isObject$3(notMerge)) {
+      if (isObject$4(notMerge)) {
         lazyUpdate = notMerge.lazyUpdate;
         silent = notMerge.silent;
         replaceMerge = notMerge.replaceMerge;
@@ -33211,7 +33391,7 @@ var ECharts = (
       }
       var zr = this._zr;
       var list = zr.storage.getDisplayList();
-      each$8(list, function(el) {
+      each$d(list, function(el) {
         el.stopAnimation(null, true);
       });
       return zr.painter.toDataURL();
@@ -33226,7 +33406,7 @@ var ECharts = (
       var ecModel = this._model;
       var excludesComponentViews = [];
       var self2 = this;
-      each$8(excludeComponents, function(componentType) {
+      each$d(excludeComponents, function(componentType) {
         ecModel.eachComponent({
           mainType: componentType
         }, function(component) {
@@ -33238,7 +33418,7 @@ var ECharts = (
         });
       });
       var url = this._zr.painter.getType() === "svg" ? this.getSvgDataURL() : this.renderToCanvas(opts).toDataURL("image/" + (opts && opts.type || "png"));
-      each$8(excludesComponentViews, function(view) {
+      each$d(excludesComponentViews, function(view) {
         view.group.ignore = false;
       });
       return url;
@@ -33260,7 +33440,7 @@ var ECharts = (
         var bottom_1 = -MAX_NUMBER;
         var canvasList_1 = [];
         var dpr_1 = opts && opts.pixelRatio || this.getDevicePixelRatio();
-        each$8(instances, function(chart, id) {
+        each$d(instances, function(chart, id) {
           if (chart.group === groupId) {
             var canvas = isSvg ? chart.getZr().painter.getSvgDom().innerHTML : chart.renderToCanvas(clone$4(opts));
             var boundingRect = chart.getDom().getBoundingClientRect();
@@ -33291,7 +33471,7 @@ var ECharts = (
         });
         if (isSvg) {
           var content_1 = "";
-          each$8(canvasList_1, function(item) {
+          each$d(canvasList_1, function(item) {
             var x2 = item.left - left_1;
             var y2 = item.top - top_1;
             content_1 += '<g transform="translate(' + x2 + "," + y2 + ')">' + item.dom + "</g>";
@@ -33316,7 +33496,7 @@ var ECharts = (
               }
             }));
           }
-          each$8(canvasList_1, function(item) {
+          each$d(canvasList_1, function(item) {
             var img = new ZRImage$1({
               style: {
                 x: item.left * dpr_1 - left_1,
@@ -33347,8 +33527,8 @@ var ECharts = (
       var ecModel = this._model;
       var result;
       var findResult = parseFinder$1(ecModel, finder);
-      each$8(findResult, function(models, key) {
-        key.indexOf("Models") >= 0 && each$8(models, function(model) {
+      each$d(findResult, function(models, key) {
+        key.indexOf("Models") >= 0 && each$d(models, function(model) {
           var coordSys = model.coordinateSystem;
           if (coordSys && coordSys.containPoint) {
             result = result || !!coordSys.containPoint(value);
@@ -33381,7 +33561,7 @@ var ECharts = (
     };
     ECharts2.prototype._initEvents = function() {
       var _this = this;
-      each$8(MOUSE_EVENT_NAMES, function(eveName) {
+      each$d(MOUSE_EVENT_NAMES, function(eveName) {
         var handler = function(e2) {
           var ecModel = _this.getModel();
           var el = e2.target;
@@ -33425,12 +33605,12 @@ var ECharts = (
         handler.zrEventfulCallAtLast = true;
         _this._zr.on(eveName, handler, _this);
       });
-      each$8(eventActionMap, function(actionType, eventType) {
+      each$d(eventActionMap, function(actionType, eventType) {
         _this._messageCenter.on(eventType, function(event) {
           this.trigger(eventType, event);
         }, _this);
       });
-      each$8(["selectchanged"], function(eventType) {
+      each$d(["selectchanged"], function(eventType) {
         _this._messageCenter.on(eventType, function(event) {
           this.trigger(eventType, event);
         }, _this);
@@ -33462,10 +33642,10 @@ var ECharts = (
       var chart = this;
       var api = chart._api;
       var ecModel = chart._model;
-      each$8(chart._componentsViews, function(component) {
+      each$d(chart._componentsViews, function(component) {
         component.dispose(ecModel, api);
       });
-      each$8(chart._chartsViews, function(chart2) {
+      each$d(chart._chartsViews, function(chart2) {
         chart2.dispose(ecModel, api);
       });
       chart._zr.dispose();
@@ -33518,7 +33698,7 @@ var ECharts = (
         disposedWarning(this.id);
         return;
       }
-      if (isObject$3(name)) {
+      if (isObject$4(name)) {
         cfg = name;
         name = "";
       }
@@ -33550,7 +33730,7 @@ var ECharts = (
         disposedWarning(this.id);
         return;
       }
-      if (!isObject$3(opt)) {
+      if (!isObject$4(opt)) {
         opt = {
           silent: !!opt
         };
@@ -33667,7 +33847,7 @@ var ECharts = (
         var ecModel = ecIns._model;
         ecModel.setUpdatePayload(payload);
         if (!mainType) {
-          each$8([].concat(ecIns._componentsViews).concat(ecIns._chartsViews), callView);
+          each$d([].concat(ecIns._componentsViews).concat(ecIns._chartsViews), callView);
           return;
         }
         var query = {};
@@ -33683,7 +33863,7 @@ var ECharts = (
         var excludeSeriesIdMap;
         if (excludeSeriesId != null) {
           excludeSeriesIdMap = createHashMap();
-          each$8(normalizeToArray(excludeSeriesId), function(id) {
+          each$d(normalizeToArray(excludeSeriesId), function(id) {
             var modelId = convertOptionIdName(id, null);
             if (modelId != null) {
               excludeSeriesIdMap.set(modelId, true);
@@ -33706,7 +33886,7 @@ var ECharts = (
                 blurComponent(model.mainType, model.componentIndex, ecIns._api);
               }
               if (dispatchers) {
-                each$8(dispatchers, function(dispatcher) {
+                each$d(dispatchers, function(dispatcher) {
                   payload.type === HIGHLIGHT_ACTION_TYPE ? enterEmphasis(dispatcher) : leaveEmphasis(dispatcher);
                 });
               }
@@ -33905,7 +34085,7 @@ var ECharts = (
         if (isHighDown) {
           allLeaveBlur(this._api);
         }
-        each$8(payloads, function(batchItem) {
+        each$d(payloads, function(batchItem) {
           eventObj = actionWrap.action(batchItem, _this._model, _this._api);
           eventObj = eventObj || extend({}, batchItem);
           eventObj.type = actionInfo.event || eventObj.type;
@@ -34051,7 +34231,7 @@ var ECharts = (
             }
             return a.zlevel - b2.zlevel;
           });
-          each$8(zLevels, function(item) {
+          each$d(zLevels, function(item) {
             var componentModel = ecModel.getComponent(item.type, item.idx);
             var zlevel = item.zlevel;
             var key = item.key;
@@ -34077,18 +34257,18 @@ var ECharts = (
       render = function(ecIns, ecModel, api, payload, updateParams) {
         allocateZlevels(ecModel);
         renderComponents(ecIns, ecModel, api, payload, updateParams);
-        each$8(ecIns._chartsViews, function(chart) {
+        each$d(ecIns._chartsViews, function(chart) {
           chart.__alive = false;
         });
         renderSeries(ecIns, ecModel, api, payload, updateParams);
-        each$8(ecIns._chartsViews, function(chart) {
+        each$d(ecIns._chartsViews, function(chart) {
           if (!chart.__alive) {
             chart.remove(ecModel, api);
           }
         });
       };
       renderComponents = function(ecIns, ecModel, api, payload, updateParams, dirtyList) {
-        each$8(dirtyList || ecIns._componentsViews, function(componentView) {
+        each$d(dirtyList || ecIns._componentsViews, function(componentView) {
           var componentModel = componentView.__model;
           clearStates(componentModel, componentView);
           componentView.render(componentModel, ecModel, api, payload);
@@ -34363,7 +34543,7 @@ var ECharts = (
             otherChart[CONNECT_STATUS_KEY] = status;
           }
         }
-        each$8(eventActionMap, function(actionType, eventType) {
+        each$d(eventActionMap, function(actionType, eventType) {
           chart._messageCenter.on(eventType, function(event) {
             if (connectedGroups[chart.group] && chart[CONNECT_STATUS_KEY] !== CONNECT_STATUS_PENDING) {
               if (event && event.escapeConnect) {
@@ -34371,13 +34551,13 @@ var ECharts = (
               }
               var action_1 = chart.makeActionFromEvent(event);
               var otherCharts_1 = [];
-              each$8(instances, function(otherChart) {
+              each$d(instances, function(otherChart) {
                 if (otherChart !== chart && otherChart.group === chart.group) {
                   otherCharts_1.push(otherChart);
                 }
               });
               updateConnectedChartsStatus(otherCharts_1, CONNECT_STATUS_PENDING);
-              each$8(otherCharts_1, function(otherChart) {
+              each$d(otherCharts_1, function(otherChart) {
                 if (otherChart[CONNECT_STATUS_KEY] !== CONNECT_STATUS_UPDATING) {
                   otherChart.dispatchAction(action_1);
                 }
@@ -34464,7 +34644,7 @@ function registerAction(actionInfo, eventName, action) {
     action = eventName;
     eventName = "";
   }
-  var actionType = isObject$3(actionInfo) ? actionInfo.type : [actionInfo, actionInfo = {
+  var actionType = isObject$4(actionInfo) ? actionInfo.type : [actionInfo, actionInfo = {
     event: eventName
   }][0];
   actionInfo.event = (actionInfo.event || actionType).toLowerCase();
@@ -34492,7 +34672,7 @@ function registerVisual(priority, visualTask) {
 }
 var registeredTasks = [];
 function normalizeRegister(targetList, priority, fn, defaultPriority, visualType) {
-  if (isFunction$1(priority) || isObject$3(priority)) {
+  if (isFunction$1(priority) || isObject$4(priority)) {
     fn = priority;
     priority = defaultPriority;
   }
@@ -34730,7 +34910,7 @@ function summarizeDimensions(data, schema) {
   var defaultedLabel = [];
   var defaultedTooltip = [];
   var userOutputEncode = {};
-  each$8(data.dimensions, function(dimName) {
+  each$d(data.dimensions, function(dimName) {
     var dimItem = data.getDimensionInfo(dimName);
     var coordDim = dimItem.coordDim;
     if (coordDim) {
@@ -34927,7 +35107,7 @@ function createDimNameMap(dimsDef) {
   var dataDimNameMap = createHashMap();
   for (var i = 0; i < (dimsDef || []).length; i++) {
     var dimDefItemRaw = dimsDef[i];
-    var userDimName = isObject$3(dimDefItemRaw) ? dimDefItemRaw.name : dimDefItemRaw;
+    var userDimName = isObject$4(dimDefItemRaw) ? dimDefItemRaw.name : dimDefItemRaw;
     if (userDimName != null && dataDimNameMap.get(userDimName) == null) {
       dataDimNameMap.set(userDimName, i);
     }
@@ -34941,7 +35121,7 @@ function ensureSourceDimNameMap(source) {
 function shouldOmitUnusedDimensions(dimCount) {
   return dimCount > 30;
 }
-var isObject$1 = isObject$3;
+var isObject$2 = isObject$4;
 var map = map$1;
 var CtorInt32Array = typeof Int32Array === "undefined" ? Array : Int32Array;
 var ID_PREFIX = "e\0\0";
@@ -35027,7 +35207,7 @@ var SeriesData = (
       this._invertedIndicesMap = invertedIndicesMap;
       if (this._dimOmitted) {
         var dimIdxToName_1 = this._dimIdxToName = createHashMap();
-        each$8(dimensionNames, function(dimName) {
+        each$d(dimensionNames, function(dimName) {
           dimIdxToName_1.set(dimensionInfos[dimName].storeDimIndex, dimName);
         });
       }
@@ -35206,7 +35386,7 @@ var SeriesData = (
       return this._calculationInfo[key];
     };
     SeriesData2.prototype.setCalculationInfo = function(key, value) {
-      isObject$1(key) ? extend(this._calculationInfo, key) : this._calculationInfo[key] = value;
+      isObject$2(key) ? extend(this._calculationInfo, key) : this._calculationInfo[key] = value;
     };
     SeriesData2.prototype.getName = function(idx) {
       var rawIndex = this.getRawIndex(idx);
@@ -35262,7 +35442,7 @@ var SeriesData = (
     SeriesData2.prototype.getValues = function(dimensions, idx) {
       var _this = this;
       var store = this._store;
-      return isArray$1(dimensions) ? store.getValues(map(dimensions, function(dim) {
+      return isArray$2(dimensions) ? store.getValues(map(dimensions, function(dim) {
         return _this._getStoreDimIndex(dim);
       }), idx) : store.getValues(dimensions);
     };
@@ -35325,7 +35505,7 @@ var SeriesData = (
       var _this = this;
       var innerRange = {};
       var dims = keys(range);
-      each$8(dims, function(dim) {
+      each$d(dims, function(dim) {
         var dimIdx = _this._getStoreDimIndex(dim);
         innerRange[dimIdx] = range[dim];
       });
@@ -35389,7 +35569,7 @@ var SeriesData = (
     };
     SeriesData2.prototype.setVisual = function(kvObj, val) {
       this._visual = this._visual || {};
-      if (isObject$1(kvObj)) {
+      if (isObject$2(kvObj)) {
         extend(this._visual, kvObj);
       } else {
         this._visual[kvObj] = val;
@@ -35415,9 +35595,9 @@ var SeriesData = (
       var val = itemVisual[key];
       if (val == null) {
         val = this.getVisual(key);
-        if (isArray$1(val)) {
+        if (isArray$2(val)) {
           val = val.slice();
-        } else if (isObject$1(val)) {
+        } else if (isObject$2(val)) {
           val = extend({}, val);
         }
         itemVisual[key] = val;
@@ -35427,7 +35607,7 @@ var SeriesData = (
     SeriesData2.prototype.setItemVisual = function(idx, key, value) {
       var itemVisual = this._itemVisuals[idx] || {};
       this._itemVisuals[idx] = itemVisual;
-      if (isObject$1(key)) {
+      if (isObject$2(key)) {
         extend(itemVisual, key);
       } else {
         itemVisual[key] = value;
@@ -35438,7 +35618,7 @@ var SeriesData = (
       this._itemVisuals = [];
     };
     SeriesData2.prototype.setLayout = function(key, val) {
-      isObject$1(key) ? extend(this._layout, key) : this._layout[key] = val;
+      isObject$2(key) ? extend(this._layout, key) : this._layout[key] = val;
     };
     SeriesData2.prototype.getLayout = function(key) {
       return this._layout[key];
@@ -35461,7 +35641,7 @@ var SeriesData = (
       return this._graphicEls[idx];
     };
     SeriesData2.prototype.eachItemGraphicEl = function(cb, context) {
-      each$8(this._graphicEls, function(el, idx) {
+      each$d(this._graphicEls, function(el, idx) {
         if (el) {
           cb && cb.call(context, el, idx);
         }
@@ -35490,7 +35670,7 @@ var SeriesData = (
     SeriesData2.internalField = function() {
       prepareInvertedIndex = function(data) {
         var invertedIndicesMap = data._invertedIndicesMap;
-        each$8(invertedIndicesMap, function(invertedIndices, dim) {
+        each$d(invertedIndicesMap, function(invertedIndices, dim) {
           var dimInfo = data._dimInfos[dim];
           var ordinalMeta = dimInfo.ordinalMeta;
           var store = data._store;
@@ -35519,7 +35699,7 @@ var SeriesData = (
         return id;
       };
       normalizeDimensions = function(dimensions) {
-        if (!isArray$1(dimensions)) {
+        if (!isArray$2(dimensions)) {
           dimensions = dimensions != null ? [dimensions] : [];
         }
         return dimensions;
@@ -35530,13 +35710,13 @@ var SeriesData = (
         return list;
       };
       transferProperties = function(target, source) {
-        each$8(TRANSFERABLE_PROPERTIES.concat(source.__wrappedMethods || []), function(propName) {
+        each$d(TRANSFERABLE_PROPERTIES.concat(source.__wrappedMethods || []), function(propName) {
           if (source.hasOwnProperty(propName)) {
             target[propName] = source[propName];
           }
         });
         target.__wrappedMethods = source.__wrappedMethods;
-        each$8(CLONE_PROPERTIES, function(propName) {
+        each$d(CLONE_PROPERTIES, function(propName) {
           target[propName] = clone$4(source[propName]);
         });
         target._calculationInfo = extend({}, source._calculationInfo);
@@ -35595,7 +35775,7 @@ function prepareSeriesDataSchema(source, opt) {
     var idx = indicesMap[dimIdx];
     if (idx < 0) {
       var dimDefItemRaw = dimsDef[dimIdx];
-      var dimDefItem = isObject$3(dimDefItemRaw) ? dimDefItemRaw : {
+      var dimDefItem = isObject$4(dimDefItemRaw) ? dimDefItemRaw : {
         name: dimDefItemRaw
       };
       var resultItem2 = new SeriesDimensionDefine$1();
@@ -35625,7 +35805,7 @@ function prepareSeriesDataSchema(source, opt) {
       return;
     }
     var validDataDims = encodeDefMap.set(coordDim2, []);
-    each$8(dataDims, function(resultDimIdxOrName, idx) {
+    each$d(dataDims, function(resultDimIdxOrName, idx) {
       var resultDimIdx2 = isString$3(resultDimIdxOrName) ? dataDimNameMap.get(resultDimIdxOrName) : resultDimIdxOrName;
       if (resultDimIdx2 != null && resultDimIdx2 < dimCount) {
         validDataDims[idx] = resultDimIdx2;
@@ -35634,7 +35814,7 @@ function prepareSeriesDataSchema(source, opt) {
     });
   });
   var availDimIdx = 0;
-  each$8(sysDims, function(sysDimItemRaw) {
+  each$d(sysDims, function(sysDimItemRaw) {
     var coordDim2;
     var sysDimItemDimsDef;
     var sysDimItemOtherDims;
@@ -35666,7 +35846,7 @@ function prepareSeriesDataSchema(source, opt) {
         availDimIdx < dimCount && dataDims.push(availDimIdx++);
       }
     }
-    each$8(dataDims, function(resultDimIdx2, coordDimIndex) {
+    each$d(dataDims, function(resultDimIdx2, coordDimIndex) {
       var resultItem2 = getResultItem(resultDimIdx2);
       if (isUsingSourceDimensionsDef && sysDimItem.type != null) {
         resultItem2.type = sysDimItem.type;
@@ -35674,7 +35854,7 @@ function prepareSeriesDataSchema(source, opt) {
       applyDim(defaults(resultItem2, sysDimItem), coordDim2, coordDimIndex);
       if (resultItem2.name == null && sysDimItemDimsDef) {
         var sysDimItemDimsDefItem = sysDimItemDimsDef[coordDimIndex];
-        !isObject$3(sysDimItemDimsDefItem) && (sysDimItemDimsDefItem = {
+        !isObject$4(sysDimItemDimsDefItem) && (sysDimItemDimsDefItem = {
           name: sysDimItemDimsDefItem
         });
         resultItem2.name = resultItem2.displayName = sysDimItemDimsDefItem.name;
@@ -35720,7 +35900,7 @@ function prepareSeriesDataSchema(source, opt) {
       }
     }
   } else {
-    each$8(resultList, function(resultItem2) {
+    each$d(resultList, function(resultItem2) {
       ifNoNameFillWithCoordName(resultItem2);
     });
     resultList.sort(function(item0, item1) {
@@ -35750,9 +35930,9 @@ function removeDuplication(result) {
 }
 function getDimCount(source, sysDims, dimsDef, optDimCount) {
   var dimCount = Math.max(source.dimensionsDetectedCount || 1, sysDims.length, dimsDef.length, optDimCount || 0);
-  each$8(sysDims, function(sysDimItem) {
+  each$d(sysDims, function(sysDimItem) {
     var sysDimItemDimsDef;
-    if (isObject$3(sysDimItem) && (sysDimItemDimsDef = sysDimItem.dimsDef)) {
+    if (isObject$4(sysDimItem) && (sysDimItemDimsDef = sysDimItem.dimsDef)) {
       dimCount = Math.max(dimCount, sysDimItemDimsDef.length);
     }
   });
@@ -35838,7 +36018,7 @@ var fetchers = {
     var ecModel = seriesModel.ecModel;
     var parallelModel = ecModel.getComponent("parallel", seriesModel.get("parallelIndex"));
     var coordSysDims = result.coordSysDims = parallelModel.dimensions.slice();
-    each$8(parallelModel.parallelAxisIndex, function(axisIndex, index) {
+    each$d(parallelModel.parallelAxisIndex, function(axisIndex, index) {
       var axisModel = ecModel.getComponent("parallelAxis", axisIndex);
       var axisDim = coordSysDims[index];
       axisMap.set(axisDim, axisModel);
@@ -35873,7 +36053,7 @@ function enableDataStack(seriesModel, dimensionsInput, opt) {
   var stackedDimInfo;
   var stackResultDimension;
   var stackedOverDimension;
-  each$8(dimensionDefineList, function(dimensionInfo, index) {
+  each$d(dimensionDefineList, function(dimensionInfo, index) {
     if (isString$3(dimensionInfo)) {
       dimensionDefineList[index] = dimensionInfo = {
         name: dimensionInfo
@@ -35900,7 +36080,7 @@ function enableDataStack(seriesModel, dimensionsInput, opt) {
     var stackedDimCoordDim_1 = stackedDimInfo.coordDim;
     var stackedDimType = stackedDimInfo.type;
     var stackedDimCoordIndex_1 = 0;
-    each$8(dimensionDefineList, function(dimensionInfo) {
+    each$d(dimensionDefineList, function(dimensionInfo) {
       if (dimensionInfo.coordDim === stackedDimCoordDim_1) {
         stackedDimCoordIndex_1++;
       }
@@ -35979,7 +36159,7 @@ function getCoordSysDimDefs(seriesModel, coordSysInfo) {
 function injectOrdinalMeta(dimInfoList, createInvertedIndices, coordSysInfo) {
   var firstCategoryDimIndex;
   var hasNameEncode;
-  coordSysInfo && each$8(dimInfoList, function(dimInfo, dimIndex) {
+  coordSysInfo && each$d(dimInfoList, function(dimInfo, dimIndex) {
     var coordDim = dimInfo.coordDim;
     var categoryAxisModel = coordSysInfo.categoryAxisMap.get(coordDim);
     if (categoryAxisModel) {
@@ -36047,7 +36227,7 @@ function createSeriesData(sourceRaw, seriesModel, opt) {
 function isNeedCompleteOrdinalData(source) {
   if (source.sourceFormat === SOURCE_FORMAT_ORIGINAL) {
     var sampleItem = firstDataNotNull(source.data || []);
-    return !isArray$1(getDataItemValue(sampleItem));
+    return !isArray$2(getDataItemValue(sampleItem));
   }
 }
 function firstDataNotNull(arr) {
@@ -36156,7 +36336,7 @@ var OrdinalMeta = (
   }()
 );
 function getName(obj) {
-  if (isObject$3(obj) && obj.value != null) {
+  if (isObject$4(obj) && obj.value != null) {
     return obj.value;
   } else {
     return obj + "";
@@ -36233,10 +36413,10 @@ var OrdinalScale = (
       if (!ordinalMeta) {
         ordinalMeta = new OrdinalMeta$1({});
       }
-      if (isArray$1(ordinalMeta)) {
+      if (isArray$2(ordinalMeta)) {
         ordinalMeta = new OrdinalMeta$1({
           categories: map$1(ordinalMeta, function(item) {
-            return isObject$3(item) ? item.value : item;
+            return isObject$4(item) ? item.value : item;
           })
         });
       }
@@ -36526,7 +36706,7 @@ const IntervalScale$1 = IntervalScale;
 var supportFloat32Array = typeof Float32Array !== "undefined";
 var Float32ArrayCtor = !supportFloat32Array ? Array : Float32Array;
 function createFloat32Array(arg) {
-  if (isArray$1(arg)) {
+  if (isArray$2(arg)) {
     return supportFloat32Array ? new Float32Array(arg) : arg;
   }
   return new Float32ArrayCtor(arg);
@@ -36573,7 +36753,7 @@ function prepareLayoutBarSeries(seriesType2, ecModel) {
 }
 function getValueAxesMinGaps(barSeries) {
   var axisValues = {};
-  each$8(barSeries, function(seriesModel) {
+  each$d(barSeries, function(seriesModel) {
     var cartesian = seriesModel.coordinateSystem;
     var baseAxis = cartesian.getBaseAxis();
     if (baseAxis.type !== "time" && baseAxis.type !== "value") {
@@ -36616,7 +36796,7 @@ function getValueAxesMinGaps(barSeries) {
 function makeColumnLayout(barSeries) {
   var axisMinGaps = getValueAxesMinGaps(barSeries);
   var seriesInfoList = [];
-  each$8(barSeries, function(seriesModel) {
+  each$d(barSeries, function(seriesModel) {
     var cartesian = seriesModel.coordinateSystem;
     var baseAxis = cartesian.getBaseAxis();
     var axisExtent = baseAxis.getExtent();
@@ -36659,7 +36839,7 @@ function makeColumnLayout(barSeries) {
 }
 function doCalBarWidthAndOffset(seriesInfoList) {
   var columnsMap = {};
-  each$8(seriesInfoList, function(seriesInfo, idx) {
+  each$d(seriesInfoList, function(seriesInfo, idx) {
     var axisKey = seriesInfo.axisKey;
     var bandWidth = seriesInfo.bandWidth;
     var columnsOnAxis = columnsMap[axisKey] || {
@@ -36696,7 +36876,7 @@ function doCalBarWidthAndOffset(seriesInfoList) {
     barCategoryGap != null && (columnsOnAxis.categoryGap = barCategoryGap);
   });
   var result = {};
-  each$8(columnsMap, function(columnsOnAxis, coordSysName) {
+  each$d(columnsMap, function(columnsOnAxis, coordSysName) {
     result[coordSysName] = {};
     var stacks = columnsOnAxis.stacks;
     var bandWidth = columnsOnAxis.bandWidth;
@@ -36711,7 +36891,7 @@ function doCalBarWidthAndOffset(seriesInfoList) {
     var autoWidthCount = columnsOnAxis.autoWidthCount;
     var autoWidth = (remainedWidth - categoryGap) / (autoWidthCount + (autoWidthCount - 1) * barGapPercent);
     autoWidth = Math.max(autoWidth, 0);
-    each$8(stacks, function(column) {
+    each$d(stacks, function(column) {
       var maxWidth = column.maxWidth;
       var minWidth = column.minWidth;
       if (!column.width) {
@@ -36744,7 +36924,7 @@ function doCalBarWidthAndOffset(seriesInfoList) {
     autoWidth = Math.max(autoWidth, 0);
     var widthSum = 0;
     var lastColumn;
-    each$8(stacks, function(column, idx) {
+    each$d(stacks, function(column, idx) {
       if (!column.width) {
         column.width = autoWidth;
       }
@@ -36755,7 +36935,7 @@ function doCalBarWidthAndOffset(seriesInfoList) {
       widthSum -= lastColumn.width * barGapPercent;
     }
     var offset2 = -widthSum / 2;
-    each$8(stacks, function(column, stackId) {
+    each$d(stacks, function(column, stackId) {
       result[coordSysName][stackId] = result[coordSysName][stackId] || {
         bandWidth,
         offset: offset2,
@@ -36778,7 +36958,7 @@ function retrieveColumnLayout(barWidthAndOffset, axis, seriesModel) {
 function layout$2(seriesType2, ecModel) {
   var seriesModels = prepareLayoutBarSeries(seriesType2, ecModel);
   var barWidthAndOffset = makeColumnLayout(seriesModels);
-  each$8(seriesModels, function(seriesModel) {
+  each$d(seriesModels, function(seriesModel) {
     var data = seriesModel.getData();
     var cartesian = seriesModel.coordinateSystem;
     var baseAxis = cartesian.getBaseAxis();
@@ -37421,7 +37601,7 @@ var ScaleRawExtentInfo = (
         this._axisDataLen = model.getCategories().length;
       } else {
         var boundaryGap = model.get("boundaryGap");
-        var boundaryGapArr = isArray$1(boundaryGap) ? boundaryGap : [boundaryGap || 0, boundaryGap || 0];
+        var boundaryGapArr = isArray$2(boundaryGap) ? boundaryGap : [boundaryGap || 0, boundaryGap || 0];
         if (typeof boundaryGapArr[0] === "boolean" || typeof boundaryGapArr[1] === "boolean") {
           this._boundaryGapInner = [0, 0];
         } else {
@@ -37518,7 +37698,7 @@ function getScaleExtent(scale2, model) {
   if (ecModel && scaleType === "time") {
     var barSeriesModels = prepareLayoutBarSeries("bar", ecModel);
     var isBaseAxisAndHasBarSeries_1 = false;
-    each$8(barSeriesModels, function(seriesModel) {
+    each$d(barSeriesModels, function(seriesModel) {
       isBaseAxisAndHasBarSeries_1 = isBaseAxisAndHasBarSeries_1 || seriesModel.getBaseAxis() === model.axis;
     });
     if (isBaseAxisAndHasBarSeries_1) {
@@ -37547,11 +37727,11 @@ function adjustScaleForOverflow(min3, max3, model, barWidthAndOffset) {
     };
   }
   var minOverflow = Infinity;
-  each$8(barsOnCurrentAxis, function(item) {
+  each$d(barsOnCurrentAxis, function(item) {
     minOverflow = Math.min(item.offset, minOverflow);
   });
   var maxOverflow = -Infinity;
-  each$8(barsOnCurrentAxis, function(item) {
+  each$d(barsOnCurrentAxis, function(item) {
     maxOverflow = Math.max(item.offset + item.width, maxOverflow);
   });
   minOverflow = Math.abs(minOverflow);
@@ -37703,14 +37883,14 @@ function shouldShowAllLabels(axis) {
 }
 function getDataDimensionsOnAxis(data, axisDim) {
   var dataDimMap = {};
-  each$8(data.mapDimensionsAll(axisDim), function(dataDim) {
+  each$d(data.mapDimensionsAll(axisDim), function(dataDim) {
     dataDimMap[getStackedDimension(data, dataDim)] = true;
   });
   return keys(dataDimMap);
 }
 function unionAxisExtentFromData(dataExtent, data, axisDim) {
   if (data) {
-    each$8(getDataDimensionsOnAxis(data, axisDim), function(dim) {
+    each$d(getDataDimensionsOnAxis(data, axisDim), function(dim) {
       var seriesExtent = data.getApproximateExtent(dim);
       seriesExtent[0] < dataExtent[0] && (dataExtent[0] = seriesExtent[0]);
       seriesExtent[1] > dataExtent[1] && (dataExtent[1] = seriesExtent[1]);
@@ -37773,8 +37953,8 @@ var extensionRegisters = {
   }
 };
 function use(ext) {
-  if (isArray$1(ext)) {
-    each$8(ext, function(singleExt) {
+  if (isArray$2(ext)) {
+    each$d(ext, function(singleExt) {
       use(singleExt);
     });
     return;
@@ -37992,7 +38172,7 @@ function makeLabelsByCustomizedCategoryInterval(axis, categoryInterval, onlyTick
   var ordinalScale = axis.scale;
   var labelFormatter = makeLabelFormatter(axis);
   var result = [];
-  each$8(ordinalScale.getTicks(), function(tick) {
+  each$d(ordinalScale.getTicks(), function(tick) {
     var rawLabel = ordinalScale.getLabel(tick);
     var tickValue = tick.value;
     if (categoryInterval(tick.value, rawLabel)) {
@@ -38044,7 +38224,7 @@ var Axis = (
         extent3 = extent3.slice();
         fixExtentWithBands(extent3, scale2.count());
       }
-      return linearMap(data, NORMALIZED_EXTENT, extent3, clamp2);
+      return linearMap$2(data, NORMALIZED_EXTENT, extent3, clamp2);
     };
     Axis2.prototype.coordToData = function(coord, clamp2) {
       var extent3 = this._extent;
@@ -38053,7 +38233,7 @@ var Axis = (
         extent3 = extent3.slice();
         fixExtentWithBands(extent3, scale2.count());
       }
-      var t = linearMap(coord, extent3, NORMALIZED_EXTENT, clamp2);
+      var t = linearMap$2(coord, extent3, NORMALIZED_EXTENT, clamp2);
       return this.scale.scale(t);
     };
     Axis2.prototype.pointToData = function(point, clamp2) {
@@ -38140,7 +38320,7 @@ function fixOnBandTicksCoords(axis, ticksCoords, alignWithLabel, clamp2) {
   } else {
     var crossLen = ticksCoords[ticksLen - 1].tickValue - ticksCoords[0].tickValue;
     var shift_1 = (ticksCoords[ticksLen - 1].coord - ticksCoords[0].coord) / crossLen;
-    each$8(ticksCoords, function(ticksItem) {
+    each$d(ticksCoords, function(ticksItem) {
       ticksItem.coord -= shift_1 / 2;
     });
     var dataExtent = axis.scale.getExtent();
@@ -38151,23 +38331,23 @@ function fixOnBandTicksCoords(axis, ticksCoords, alignWithLabel, clamp2) {
     ticksCoords.push(last2);
   }
   var inverse = axisExtent[0] > axisExtent[1];
-  if (littleThan(ticksCoords[0].coord, axisExtent[0])) {
+  if (littleThan2(ticksCoords[0].coord, axisExtent[0])) {
     clamp2 ? ticksCoords[0].coord = axisExtent[0] : ticksCoords.shift();
   }
-  if (clamp2 && littleThan(axisExtent[0], ticksCoords[0].coord)) {
+  if (clamp2 && littleThan2(axisExtent[0], ticksCoords[0].coord)) {
     ticksCoords.unshift({
       coord: axisExtent[0]
     });
   }
-  if (littleThan(axisExtent[1], last2.coord)) {
+  if (littleThan2(axisExtent[1], last2.coord)) {
     clamp2 ? last2.coord = axisExtent[1] : ticksCoords.pop();
   }
-  if (clamp2 && littleThan(last2.coord, axisExtent[1])) {
+  if (clamp2 && littleThan2(last2.coord, axisExtent[1])) {
     ticksCoords.push({
       coord: axisExtent[1]
     });
   }
-  function littleThan(a, b2) {
+  function littleThan2(a, b2) {
     a = round$1(a);
     b2 = round$1(b2);
     return inverse ? a > b2 : a < b2;
@@ -38308,7 +38488,7 @@ var Layer = function(_super) {
     dpr2 = dpr2 || devicePixelRatio;
     if (typeof id === "string") {
       dom = createDom(id, painter, dpr2);
-    } else if (isObject$3(id)) {
+    } else if (isObject$4(id)) {
       dom = id;
       id = dom.id;
     }
@@ -38534,7 +38714,7 @@ var Layer = function(_super) {
     if (!repaintRects || haveMotionBLur) {
       doClear(0, 0, width, height);
     } else if (repaintRects.length) {
-      each$8(repaintRects, function(rect) {
+      each$d(repaintRects, function(rect) {
         doClear(rect.x * dpr2, rect.y * dpr2, rect.width * dpr2, rect.height * dpr2);
       });
     }
@@ -38822,7 +39002,7 @@ var CanvasPainter = function() {
       _loop_1(k2);
     }
     if (env$1.wxa) {
-      each$8(this._layers, function(layer2) {
+      each$d(this._layers, function(layer2) {
         if (layer2 && layer2.ctx && layer2.ctx.draw) {
           layer2.ctx.draw();
         }
@@ -39022,7 +39202,7 @@ var CanvasPainter = function() {
   };
   CanvasPainter2.prototype.setBackgroundColor = function(backgroundColor2) {
     this._backgroundColor = backgroundColor2;
-    each$8(this._layers, function(layer) {
+    each$d(this._layers, function(layer) {
       layer.setUnpainted();
     });
   };
@@ -39142,7 +39322,7 @@ var CanvasPainter = function() {
   return CanvasPainter2;
 }();
 const CanvasPainter$1 = CanvasPainter;
-function install$l(registers) {
+function install$p(registers) {
   registers.registerPainter("canvas", CanvasPainter$1);
 }
 var LineSeriesModel = (
@@ -39261,7 +39441,7 @@ function getDefaultLabel(data, dataIndex) {
 }
 function getDefaultInterpolatedLabel(data, interpolatedValue) {
   var labelDims = data.mapDimensionsAll("defaultedLabel");
-  if (!isArray$1(interpolatedValue)) {
+  if (!isArray$2(interpolatedValue)) {
     return interpolatedValue + "";
   }
   var vals = [];
@@ -39513,7 +39693,7 @@ function symbolNeedsDraw(data, point, idx, opt) {
   return point && !isNaN(point[0]) && !isNaN(point[1]) && !(opt.isIgnore && opt.isIgnore(idx)) && !(opt.clipShape && !opt.clipShape.contain(point[0], point[1])) && data.getItemVisual(idx, "symbol") !== "none";
 }
 function normalizeUpdateOpt(opt) {
-  if (opt != null && !isObject$3(opt)) {
+  if (opt != null && !isObject$4(opt)) {
     opt = {
       isIgnore: opt
     };
@@ -39838,8 +40018,8 @@ function lineAnimationDiff(oldData, newData, oldStackedOnPoints, newStackedOnPoi
     status: sortedStatus
   };
 }
-var mathMin$2 = Math.min;
-var mathMax$2 = Math.max;
+var mathMin$3 = Math.min;
+var mathMax$3 = Math.max;
 function isPointNull$1(x2, y2) {
   return isNaN(x2) || isNaN(y2);
 }
@@ -39941,18 +40121,18 @@ function drawSegment(ctx, points2, start2, segLen, allLen, dir, smooth, smoothMo
             cpy1 = y2 - vy * smooth * (1 - ratioNextSeg);
             nextCpx0 = x2 + vx * smooth * ratioNextSeg;
             nextCpy0 = y2 + vy * smooth * ratioNextSeg;
-            nextCpx0 = mathMin$2(nextCpx0, mathMax$2(nextX, x2));
-            nextCpy0 = mathMin$2(nextCpy0, mathMax$2(nextY, y2));
-            nextCpx0 = mathMax$2(nextCpx0, mathMin$2(nextX, x2));
-            nextCpy0 = mathMax$2(nextCpy0, mathMin$2(nextY, y2));
+            nextCpx0 = mathMin$3(nextCpx0, mathMax$3(nextX, x2));
+            nextCpy0 = mathMin$3(nextCpy0, mathMax$3(nextY, y2));
+            nextCpx0 = mathMax$3(nextCpx0, mathMin$3(nextX, x2));
+            nextCpy0 = mathMax$3(nextCpy0, mathMin$3(nextY, y2));
             vx = nextCpx0 - x2;
             vy = nextCpy0 - y2;
             cpx1 = x2 - vx * lenPrevSeg / lenNextSeg;
             cpy1 = y2 - vy * lenPrevSeg / lenNextSeg;
-            cpx1 = mathMin$2(cpx1, mathMax$2(prevX, x2));
-            cpy1 = mathMin$2(cpy1, mathMax$2(prevY, y2));
-            cpx1 = mathMax$2(cpx1, mathMin$2(prevX, x2));
-            cpy1 = mathMax$2(cpy1, mathMin$2(prevY, y2));
+            cpx1 = mathMin$3(cpx1, mathMax$3(prevX, x2));
+            cpy1 = mathMin$3(cpy1, mathMax$3(prevY, y2));
+            cpx1 = mathMax$3(cpx1, mathMin$3(prevX, x2));
+            cpy1 = mathMax$3(cpy1, mathMin$3(prevY, y2));
             vx = x2 - cpx1;
             vy = y2 - cpy1;
             nextCpx0 = x2 + vx * lenNextSeg / lenPrevSeg;
@@ -40408,7 +40588,7 @@ function getVisualGradient(data, coordSys, api) {
   if (coordSpan < 1e-3) {
     return "transparent";
   }
-  each$8(colorStopsInRange, function(stop2) {
+  each$d(colorStopsInRange, function(stop2) {
     stop2.offset = (stop2.coord - minCoord) / coordSpan;
   });
   colorStopsInRange.push({
@@ -40440,7 +40620,7 @@ function getIsIgnoreFunc(seriesModel, data, coordSys) {
   }
   var categoryDataDim = data.mapDimension(categoryAxis2.dim);
   var labelMap = {};
-  each$8(categoryAxis2.getViewLabels(), function(labelItem) {
+  each$d(categoryAxis2.getViewLabels(), function(labelItem) {
     var ordinalNumber = categoryAxis2.scale.getRawOrdinalNumber(labelItem.tickValue);
     labelMap[ordinalNumber] = 1;
   });
@@ -41299,7 +41479,7 @@ function dataSample(seriesType2) {
     }
   };
 }
-function install$k(registers) {
+function install$o(registers) {
   registers.registerChartView(LineView$1);
   registers.registerSeriesModel(LineSeries);
   registers.registerLayout(pointsLayout("line", true));
@@ -41335,7 +41515,7 @@ var BaseBarSeriesModel = (
       if (coordSys && coordSys.clampData) {
         var pt_1 = coordSys.dataToPoint(coordSys.clampData(value));
         if (startingAtTick) {
-          each$8(coordSys.getAxes(), function(axis, idx) {
+          each$d(coordSys.getAxes(), function(axis, idx) {
             if (axis.type === "category") {
               var tickCoords = axis.getTicksCoords();
               var tickIdx = coordSys.clampData(value)[idx];
@@ -41601,7 +41781,7 @@ function setSectorTextRotation(sector, textPosition, positionMapping, rotateType
       rotation: rotateType
     });
     return;
-  } else if (isArray$1(textPosition)) {
+  } else if (isArray$2(textPosition)) {
     sector.setTextConfig({
       rotation: 0
     });
@@ -41649,8 +41829,8 @@ function adjustAngleDistanceX(angle, distance2, isEnd2) {
 function adjustAngleDistanceY(angle, distance2, isEnd2) {
   return distance2 * Math.cos(angle) * (isEnd2 ? 1 : -1);
 }
-var mathMax$1 = Math.max;
-var mathMin$1 = Math.min;
+var mathMax$2 = Math.max;
+var mathMin$2 = Math.min;
 function getClipArea(coord, data) {
   var coordSysClipArea = coord.getArea && coord.getArea();
   if (isCoordinateSystemType(coord, "cartesian2d")) {
@@ -42020,10 +42200,10 @@ var clip = {
     }
     var coordSysX2 = coordSysBoundingRect.x + coordSysBoundingRect.width;
     var coordSysY2 = coordSysBoundingRect.y + coordSysBoundingRect.height;
-    var x2 = mathMax$1(layout2.x, coordSysBoundingRect.x);
-    var x22 = mathMin$1(layout2.x + layout2.width, coordSysX2);
-    var y2 = mathMax$1(layout2.y, coordSysBoundingRect.y);
-    var y22 = mathMin$1(layout2.y + layout2.height, coordSysY2);
+    var x2 = mathMax$2(layout2.x, coordSysBoundingRect.x);
+    var x22 = mathMin$2(layout2.x + layout2.width, coordSysX2);
+    var y2 = mathMax$2(layout2.y, coordSysBoundingRect.y);
+    var y22 = mathMin$2(layout2.y + layout2.height, coordSysY2);
     var xClipped = x22 < x2;
     var yClipped = y22 < y2;
     layout2.x = xClipped && x2 > coordSysX2 ? x22 : x2;
@@ -42047,8 +42227,8 @@ var clip = {
       layout2.r = layout2.r0;
       layout2.r0 = tmp;
     }
-    var r = mathMin$1(layout2.r, coordSysClipArea.r);
-    var r0 = mathMax$1(layout2.r0, coordSysClipArea.r0);
+    var r = mathMin$2(layout2.r, coordSysClipArea.r);
+    var r0 = mathMax$2(layout2.r0, coordSysClipArea.r0);
     layout2.r = r;
     layout2.r0 = r0;
     var clipped = r - r0 < 0;
@@ -42240,7 +42420,7 @@ function updateStyle(el, data, dataIndex, itemModel, layout2, seriesModel, isHor
   if (isZeroOnPolar(layout2)) {
     el.style.fill = "none";
     el.style.stroke = "none";
-    each$8(el.states, function(state) {
+    each$d(el.states, function(state) {
       if (state.style) {
         state.style.fill = state.style.stroke = "none";
       }
@@ -42399,7 +42579,7 @@ function createBackgroundEl(coord, isHorizontalOrRadial, layout2) {
   });
 }
 const BarView$1 = BarView;
-function install$j(registers) {
+function install$n(registers) {
   registers.registerChartView(BarView$1);
   registers.registerSeriesModel(BarSeries);
   registers.registerLayout(registers.PRIORITY.VISUAL.LAYOUT, curry$1(layout$2, "bar"));
@@ -42422,7 +42602,7 @@ function install$j(registers) {
   });
 }
 function createSeriesDataSimply(seriesModel, opt, nameList) {
-  opt = isArray$1(opt) && {
+  opt = isArray$2(opt) && {
     coordDimensions: opt
   } || extend({
     encodeDefine: seriesModel.getEncode()
@@ -42880,7 +43060,7 @@ var CartesianAxisModel = (
   }(ComponentModel$1)
 );
 mixin(CartesianAxisModel, AxisModelCommonMixin);
-var defaultOption = {
+var defaultOption$1 = {
   show: true,
   // zlevel: 0,
   z: 0,
@@ -42979,7 +43159,7 @@ var categoryAxis = merge({
   axisLabel: {
     interval: "auto"
   }
-}, defaultOption);
+}, defaultOption$1);
 var valueAxis = merge({
   boundaryGap: [0, 0],
   axisLine: {
@@ -43012,7 +43192,7 @@ var valueAxis = merge({
       width: 1
     }
   }
-}, defaultOption);
+}, defaultOption$1);
 var timeAxis = merge({
   splitNumber: 6,
   axisLabel: {
@@ -43045,7 +43225,7 @@ var AXIS_TYPES = {
   log: 1
 };
 function axisModelCreator(registers, axisName, BaseAxisModelClass, extraDefaultOption) {
-  each$8(AXIS_TYPES, function(v, axisType) {
+  each$d(AXIS_TYPES, function(v, axisType) {
     var defaultOption2 = merge(merge({}, axisDefault[axisType], true), extraDefaultOption, true);
     var AxisModel = (
       /** @class */
@@ -43324,7 +43504,7 @@ function findAxisModels(seriesModel) {
     xAxisModel: null,
     yAxisModel: null
   };
-  each$8(axisModelMap, function(v, key) {
+  each$d(axisModelMap, function(v, key) {
     var axisType = key.replace(/Model$/, "");
     var axisModel = seriesModel.getReferringComponents(axisType, SINGLE_REFERRING).models[0];
     axisModelMap[key] = axisModel;
@@ -43450,7 +43630,7 @@ var Grid = (
             alignTo = axisNeedsAlign.pop();
             niceScaleExtent(alignTo.scale, alignTo.model);
           }
-          each$8(axisNeedsAlign, function(axis2) {
+          each$d(axisNeedsAlign, function(axis2) {
             alignScaleTicks(axis2.scale, axis2.model, alignTo.scale);
           });
         }
@@ -43458,10 +43638,10 @@ var Grid = (
       updateAxisTicks(axesMap.x);
       updateAxisTicks(axesMap.y);
       var onZeroRecords = {};
-      each$8(axesMap.x, function(xAxis) {
+      each$d(axesMap.x, function(xAxis) {
         fixAxisOnZero(axesMap, "y", xAxis, onZeroRecords);
       });
-      each$8(axesMap.y, function(yAxis) {
+      each$d(axesMap.y, function(yAxis) {
         fixAxisOnZero(axesMap, "x", yAxis, onZeroRecords);
       });
       this.resize(this.model, api);
@@ -43477,7 +43657,7 @@ var Grid = (
       var axesList = this._axesList;
       adjustAxes();
       if (isContainLabel) {
-        each$8(axesList, function(axis) {
+        each$d(axesList, function(axis) {
           if (!axis.model.get(["axisLabel", "inside"])) {
             var labelUnionRect = estimateLabelUnionRect(axis);
             if (labelUnionRect) {
@@ -43494,11 +43674,11 @@ var Grid = (
         });
         adjustAxes();
       }
-      each$8(this._coordsList, function(coord) {
+      each$d(this._coordsList, function(coord) {
         coord.calcAffineTransform();
       });
       function adjustAxes() {
-        each$8(axesList, function(axis) {
+        each$d(axesList, function(axis) {
           var isHorizontal = axis.isHorizontal();
           var extent3 = isHorizontal ? [0, gridRect.width] : [0, gridRect.height];
           var idx = axis.inverse ? 1 : 0;
@@ -43521,7 +43701,7 @@ var Grid = (
         var key = "x" + xAxisIndex + "y" + yAxisIndex;
         return this._coordsMap[key];
       }
-      if (isObject$3(xAxisIndex)) {
+      if (isObject$4(xAxisIndex)) {
         yAxisIndex = xAxisIndex.yAxisIndex;
         xAxisIndex = xAxisIndex.xAxisIndex;
       }
@@ -43601,8 +43781,8 @@ var Grid = (
         return;
       }
       this._axesMap = axesMap;
-      each$8(axesMap.x, function(xAxis, xAxisIndex) {
-        each$8(axesMap.y, function(yAxis, yAxisIndex) {
+      each$d(axesMap.x, function(xAxis, xAxisIndex) {
+        each$d(axesMap.y, function(yAxis, yAxisIndex) {
           var key = "x" + xAxisIndex + "y" + yAxisIndex;
           var cartesian = new Cartesian2D(key);
           cartesian.master = _this;
@@ -43644,7 +43824,7 @@ var Grid = (
       }
     };
     Grid2.prototype._updateScale = function(ecModel, gridModel) {
-      each$8(this._axesList, function(axis) {
+      each$d(this._axesList, function(axis) {
         axis.scale.setExtent(Infinity, -Infinity);
         if (axis.type === "category") {
           var categorySortInfo = axis.model.get("categorySortInfo");
@@ -43668,7 +43848,7 @@ var Grid = (
         }
       }, this);
       function unionExtent(data, axis) {
-        each$8(getDataDimensionsOnAxis(data, axis.dim), function(dim) {
+        each$d(getDataDimensionsOnAxis(data, axis.dim), function(dim) {
           axis.scale.unionExtentFromData(data, dim);
         });
       }
@@ -43676,7 +43856,7 @@ var Grid = (
     Grid2.prototype.getTooltipAxes = function(dim) {
       var baseAxes = [];
       var otherAxes = [];
-      each$8(this.getCartesians(), function(cartesian) {
+      each$d(this.getCartesians(), function(cartesian) {
         var baseAxis = dim != null && dim !== "auto" ? cartesian.getAxis(dim) : cartesian.getBaseAxis();
         var otherAxis = cartesian.getOtherAxis(baseAxis);
         indexOf(baseAxes, baseAxis) < 0 && baseAxes.push(baseAxis);
@@ -43887,7 +44067,7 @@ var builders = {
       var arrowOffset = normalizeSymbolOffset(axisModel.get(["axisLine", "symbolOffset"]) || 0, arrowSize);
       var symbolWidth_1 = arrowSize[0];
       var symbolHeight_1 = arrowSize[1];
-      each$8([{
+      each$d([{
         rotate: opt.rotation + Math.PI / 2,
         offset: arrowOffset[0],
         r: 0
@@ -44182,14 +44362,14 @@ function buildAxisLabel(group, transformGroup, axisModel, opt) {
   var labelEls = [];
   var silent = AxisBuilder.isLabelSilent(axisModel);
   var triggerEvent2 = axisModel.get("triggerEvent");
-  each$8(labels, function(labelItem, index) {
+  each$d(labels, function(labelItem, index) {
     var tickValue = axis.scale.type === "ordinal" ? axis.scale.getRawOrdinalNumber(labelItem.tickValue) : labelItem.tickValue;
     var formattedLabel = labelItem.formattedLabel;
     var rawLabel = labelItem.rawLabel;
     var itemLabelModel = labelModel;
     if (rawCategoryData && rawCategoryData[tickValue]) {
       var rawCategoryItem = rawCategoryData[tickValue];
-      if (isObject$3(rawCategoryItem) && rawCategoryItem.textStyle) {
+      if (isObject$4(rawCategoryItem) && rawCategoryItem.textStyle) {
         itemLabelModel = new Model$1(rawCategoryItem.textStyle, labelModel, axisModel.ecModel);
       }
     }
@@ -44271,7 +44451,7 @@ function collectAxesInfo(result, ecModel, api) {
   var globalAxisPointerModel = ecModel.getComponent("axisPointer");
   var linksOption = globalAxisPointerModel.get("link", true) || [];
   var linkGroups = [];
-  each$8(api.getCoordinateSystems(), function(coordSys) {
+  each$d(api.getCoordinateSystems(), function(coordSys) {
     if (!coordSys.axisPointerEnabled) {
       return;
     }
@@ -44280,16 +44460,16 @@ function collectAxesInfo(result, ecModel, api) {
     result.coordSysMap[coordSysKey] = coordSys;
     var coordSysModel = coordSys.model;
     var baseTooltipModel = coordSysModel.getModel("tooltip", globalTooltipModel);
-    each$8(coordSys.getAxes(), curry$1(saveTooltipAxisInfo, false, null));
+    each$d(coordSys.getAxes(), curry$1(saveTooltipAxisInfo, false, null));
     if (coordSys.getTooltipAxes && globalTooltipModel && baseTooltipModel.get("show")) {
       var triggerAxis = baseTooltipModel.get("trigger") === "axis";
       var cross = baseTooltipModel.get(["axisPointer", "type"]) === "cross";
       var tooltipAxes = coordSys.getTooltipAxes(baseTooltipModel.get(["axisPointer", "axis"]));
       if (triggerAxis || cross) {
-        each$8(tooltipAxes.baseAxes, curry$1(saveTooltipAxisInfo, cross ? "cross" : true, triggerAxis));
+        each$d(tooltipAxes.baseAxes, curry$1(saveTooltipAxisInfo, cross ? "cross" : true, triggerAxis));
       }
       if (cross) {
-        each$8(tooltipAxes.otherAxes, curry$1(saveTooltipAxisInfo, "cross", false));
+        each$d(tooltipAxes.otherAxes, curry$1(saveTooltipAxisInfo, "cross", false));
       }
     }
     function saveTooltipAxisInfo(fromTooltip, triggerTooltip, axis) {
@@ -44335,7 +44515,7 @@ function makeAxisPointerModel(axis, baseTooltipModel, globalAxisPointerModel, ec
   var tooltipAxisPointerModel = baseTooltipModel.getModel("axisPointer");
   var fields = ["type", "snap", "lineStyle", "shadowStyle", "label", "animation", "animationDurationUpdate", "animationEasingUpdate", "z"];
   var volatileOption = {};
-  each$8(fields, function(field) {
+  each$d(fields, function(field) {
     volatileOption[field] = clone$4(tooltipAxisPointerModel.get(field));
   });
   volatileOption.snap = axis.type !== "category" && !!triggerTooltip;
@@ -44362,7 +44542,7 @@ function collectSeriesInfo(result, ecModel) {
     if (!coordSys || seriesTooltipTrigger === "none" || seriesTooltipTrigger === false || seriesTooltipTrigger === "item" || seriesTooltipShow === false || seriesModel.get(["axisPointer", "show"], true) === false) {
       return;
     }
-    each$8(result.coordSysAxesInfo[makeKey(coordSys.model)], function(axisInfo) {
+    each$d(result.coordSysAxesInfo[makeKey(coordSys.model)], function(axisInfo) {
       var axis = axisInfo.axis;
       if (coordSys.getAxis(axis.dim) === axis) {
         axisInfo.seriesModels.push(seriesModel);
@@ -44383,7 +44563,7 @@ function getLinkGroupIndex(linksOption, axis) {
   }
 }
 function checkPropInLink(linkPropValue, axisPropValue) {
-  return linkPropValue === "all" || isArray$1(linkPropValue) && indexOf(linkPropValue, axisPropValue) >= 0 || linkPropValue === axisPropValue;
+  return linkPropValue === "all" || isArray$2(linkPropValue) && indexOf(linkPropValue, axisPropValue) >= 0 || linkPropValue === axisPropValue;
 }
 function fixValue(axisModel) {
   var axisInfo = getAxisInfo$1(axisModel);
@@ -44513,7 +44693,7 @@ function rectCoordAxisBuildSplitArea(axisView, axisGroup, axisModel, gridModel) 
   }
   var prev = axis.toGlobalCoord(ticksCoords[0].coord);
   var areaStyle = areaStyleModel.getAreaStyle();
-  areaColors = isArray$1(areaColors) ? areaColors : [areaColors];
+  areaColors = isArray$2(areaColors) ? areaColors : [areaColors];
   for (var i = 1; i < ticksCoords.length; i++) {
     var tickCoord = axis.toGlobalCoord(ticksCoords[i].coord);
     var x2 = void 0;
@@ -44589,9 +44769,9 @@ var CartesianAxisView = (
           return false;
         }
       }, layout2));
-      each$8(axisBuilderAttrs, axisBuilder.add, axisBuilder);
+      each$d(axisBuilderAttrs, axisBuilder.add, axisBuilder);
       this._axisGroup.add(axisBuilder.getGroup());
-      each$8(selfBuilderAttrs, function(name) {
+      each$d(selfBuilderAttrs, function(name) {
         if (axisModel.get([name, "show"])) {
           axisElementBuilders[name](this, this._axisGroup, axisModel, gridModel);
         }
@@ -44618,7 +44798,7 @@ var axisElementBuilders = {
     var splitLineModel = axisModel.getModel("splitLine");
     var lineStyleModel = splitLineModel.getModel("lineStyle");
     var lineColors = lineStyleModel.get("color");
-    lineColors = isArray$1(lineColors) ? lineColors : [lineColors];
+    lineColors = isArray$2(lineColors) ? lineColors : [lineColors];
     var gridRect = gridModel.coordinateSystem.getRect();
     var isHorizontal = axis.isHorizontal();
     var lineCount = 0;
@@ -44766,7 +44946,7 @@ var extraOption = {
   // gridId: '',
   offset: 0
 };
-function install$i(registers) {
+function install$m(registers) {
   registers.registerComponentView(GridView);
   registers.registerComponentModel(GridModel$1);
   registers.registerCoordinateSystem("cartesian2d", Grid$1);
@@ -44780,8 +44960,8 @@ function install$i(registers) {
     }
   });
 }
-function install$h(registers) {
-  use(install$i);
+function install$l(registers) {
+  use(install$m);
   registers.registerSeriesModel(ScatterSeriesModel$1);
   registers.registerChartView(ScatterView$1);
   registers.registerLayout(pointsLayout("scatter"));
@@ -44982,6 +45162,367 @@ function onIrrelevantElement(e2, api, targetCoordSysModel) {
   var coordSys = model && model.coordinateSystem;
   return model && model !== targetCoordSysModel && !IRRELEVANT_EXCLUDES.hasOwnProperty(model.mainType) && coordSys && coordSys.model !== targetCoordSysModel;
 }
+var each$a = each$d;
+var isObject$1 = isObject$4;
+var CATEGORY_DEFAULT_VISUAL_INDEX = -1;
+var VisualMapping = (
+  /** @class */
+  function() {
+    function VisualMapping2(option) {
+      var mappingMethod = option.mappingMethod;
+      var visualType = option.type;
+      var thisOption = this.option = clone$4(option);
+      this.type = visualType;
+      this.mappingMethod = mappingMethod;
+      this._normalizeData = normalizers[mappingMethod];
+      var visualHandler = VisualMapping2.visualHandlers[visualType];
+      this.applyVisual = visualHandler.applyVisual;
+      this.getColorMapper = visualHandler.getColorMapper;
+      this._normalizedToVisual = visualHandler._normalizedToVisual[mappingMethod];
+      if (mappingMethod === "piecewise") {
+        normalizeVisualRange(thisOption);
+        preprocessForPiecewise(thisOption);
+      } else if (mappingMethod === "category") {
+        thisOption.categories ? preprocessForSpecifiedCategory(thisOption) : normalizeVisualRange(thisOption, true);
+      } else {
+        assert(mappingMethod !== "linear" || thisOption.dataExtent);
+        normalizeVisualRange(thisOption);
+      }
+    }
+    VisualMapping2.prototype.mapValueToVisual = function(value) {
+      var normalized = this._normalizeData(value);
+      return this._normalizedToVisual(normalized, value);
+    };
+    VisualMapping2.prototype.getNormalizer = function() {
+      return bind$1(this._normalizeData, this);
+    };
+    VisualMapping2.listVisualTypes = function() {
+      return keys(VisualMapping2.visualHandlers);
+    };
+    VisualMapping2.isValidType = function(visualType) {
+      return VisualMapping2.visualHandlers.hasOwnProperty(visualType);
+    };
+    VisualMapping2.eachVisual = function(visual, callback, context) {
+      if (isObject$4(visual)) {
+        each$d(visual, callback, context);
+      } else {
+        callback.call(context, visual);
+      }
+    };
+    VisualMapping2.mapVisual = function(visual, callback, context) {
+      var isPrimary;
+      var newVisual = isArray$2(visual) ? [] : isObject$4(visual) ? {} : (isPrimary = true, null);
+      VisualMapping2.eachVisual(visual, function(v, key) {
+        var newVal = callback.call(context, v, key);
+        isPrimary ? newVisual = newVal : newVisual[key] = newVal;
+      });
+      return newVisual;
+    };
+    VisualMapping2.retrieveVisuals = function(obj) {
+      var ret = {};
+      var hasVisual;
+      obj && each$a(VisualMapping2.visualHandlers, function(h2, visualType) {
+        if (obj.hasOwnProperty(visualType)) {
+          ret[visualType] = obj[visualType];
+          hasVisual = true;
+        }
+      });
+      return hasVisual ? ret : null;
+    };
+    VisualMapping2.prepareVisualTypes = function(visualTypes) {
+      if (isArray$2(visualTypes)) {
+        visualTypes = visualTypes.slice();
+      } else if (isObject$1(visualTypes)) {
+        var types_1 = [];
+        each$a(visualTypes, function(item, type) {
+          types_1.push(type);
+        });
+        visualTypes = types_1;
+      } else {
+        return [];
+      }
+      visualTypes.sort(function(type1, type2) {
+        return type2 === "color" && type1 !== "color" && type1.indexOf("color") === 0 ? 1 : -1;
+      });
+      return visualTypes;
+    };
+    VisualMapping2.dependsOn = function(visualType1, visualType2) {
+      return visualType2 === "color" ? !!(visualType1 && visualType1.indexOf(visualType2) === 0) : visualType1 === visualType2;
+    };
+    VisualMapping2.findPieceIndex = function(value, pieceList, findClosestWhenOutside) {
+      var possibleI;
+      var abs2 = Infinity;
+      for (var i = 0, len2 = pieceList.length; i < len2; i++) {
+        var pieceValue = pieceList[i].value;
+        if (pieceValue != null) {
+          if (pieceValue === value || isString$3(pieceValue) && pieceValue === value + "") {
+            return i;
+          }
+          findClosestWhenOutside && updatePossible(pieceValue, i);
+        }
+      }
+      for (var i = 0, len2 = pieceList.length; i < len2; i++) {
+        var piece = pieceList[i];
+        var interval = piece.interval;
+        var close_1 = piece.close;
+        if (interval) {
+          if (interval[0] === -Infinity) {
+            if (littleThan(close_1[1], value, interval[1])) {
+              return i;
+            }
+          } else if (interval[1] === Infinity) {
+            if (littleThan(close_1[0], interval[0], value)) {
+              return i;
+            }
+          } else if (littleThan(close_1[0], interval[0], value) && littleThan(close_1[1], value, interval[1])) {
+            return i;
+          }
+          findClosestWhenOutside && updatePossible(interval[0], i);
+          findClosestWhenOutside && updatePossible(interval[1], i);
+        }
+      }
+      if (findClosestWhenOutside) {
+        return value === Infinity ? pieceList.length - 1 : value === -Infinity ? 0 : possibleI;
+      }
+      function updatePossible(val, index) {
+        var newAbs = Math.abs(val - value);
+        if (newAbs < abs2) {
+          abs2 = newAbs;
+          possibleI = index;
+        }
+      }
+    };
+    VisualMapping2.visualHandlers = {
+      color: {
+        applyVisual: makeApplyVisual("color"),
+        getColorMapper: function() {
+          var thisOption = this.option;
+          return bind$1(thisOption.mappingMethod === "category" ? function(value, isNormalized) {
+            !isNormalized && (value = this._normalizeData(value));
+            return doMapCategory.call(this, value);
+          } : function(value, isNormalized, out2) {
+            var returnRGBArray = !!out2;
+            !isNormalized && (value = this._normalizeData(value));
+            out2 = fastLerp(value, thisOption.parsedVisual, out2);
+            return returnRGBArray ? out2 : stringify(out2, "rgba");
+          }, this);
+        },
+        _normalizedToVisual: {
+          linear: function(normalized) {
+            return stringify(fastLerp(normalized, this.option.parsedVisual), "rgba");
+          },
+          category: doMapCategory,
+          piecewise: function(normalized, value) {
+            var result = getSpecifiedVisual.call(this, value);
+            if (result == null) {
+              result = stringify(fastLerp(normalized, this.option.parsedVisual), "rgba");
+            }
+            return result;
+          },
+          fixed: doMapFixed
+        }
+      },
+      colorHue: makePartialColorVisualHandler(function(color, value) {
+        return modifyHSL(color, value);
+      }),
+      colorSaturation: makePartialColorVisualHandler(function(color, value) {
+        return modifyHSL(color, null, value);
+      }),
+      colorLightness: makePartialColorVisualHandler(function(color, value) {
+        return modifyHSL(color, null, null, value);
+      }),
+      colorAlpha: makePartialColorVisualHandler(function(color, value) {
+        return modifyAlpha(color, value);
+      }),
+      decal: {
+        applyVisual: makeApplyVisual("decal"),
+        _normalizedToVisual: {
+          linear: null,
+          category: doMapCategory,
+          piecewise: null,
+          fixed: null
+        }
+      },
+      opacity: {
+        applyVisual: makeApplyVisual("opacity"),
+        _normalizedToVisual: createNormalizedToNumericVisual([0, 1])
+      },
+      liftZ: {
+        applyVisual: makeApplyVisual("liftZ"),
+        _normalizedToVisual: {
+          linear: doMapFixed,
+          category: doMapFixed,
+          piecewise: doMapFixed,
+          fixed: doMapFixed
+        }
+      },
+      symbol: {
+        applyVisual: function(value, getter, setter) {
+          var symbolCfg = this.mapValueToVisual(value);
+          setter("symbol", symbolCfg);
+        },
+        _normalizedToVisual: {
+          linear: doMapToArray,
+          category: doMapCategory,
+          piecewise: function(normalized, value) {
+            var result = getSpecifiedVisual.call(this, value);
+            if (result == null) {
+              result = doMapToArray.call(this, normalized);
+            }
+            return result;
+          },
+          fixed: doMapFixed
+        }
+      },
+      symbolSize: {
+        applyVisual: makeApplyVisual("symbolSize"),
+        _normalizedToVisual: createNormalizedToNumericVisual([0, 1])
+      }
+    };
+    return VisualMapping2;
+  }()
+);
+function preprocessForPiecewise(thisOption) {
+  var pieceList = thisOption.pieceList;
+  thisOption.hasSpecialVisual = false;
+  each$d(pieceList, function(piece, index) {
+    piece.originIndex = index;
+    if (piece.visual != null) {
+      thisOption.hasSpecialVisual = true;
+    }
+  });
+}
+function preprocessForSpecifiedCategory(thisOption) {
+  var categories = thisOption.categories;
+  var categoryMap = thisOption.categoryMap = {};
+  var visual = thisOption.visual;
+  each$a(categories, function(cate, index) {
+    categoryMap[cate] = index;
+  });
+  if (!isArray$2(visual)) {
+    var visualArr_1 = [];
+    if (isObject$4(visual)) {
+      each$a(visual, function(v, cate) {
+        var index = categoryMap[cate];
+        visualArr_1[index != null ? index : CATEGORY_DEFAULT_VISUAL_INDEX] = v;
+      });
+    } else {
+      visualArr_1[CATEGORY_DEFAULT_VISUAL_INDEX] = visual;
+    }
+    visual = setVisualToOption(thisOption, visualArr_1);
+  }
+  for (var i = categories.length - 1; i >= 0; i--) {
+    if (visual[i] == null) {
+      delete categoryMap[categories[i]];
+      categories.pop();
+    }
+  }
+}
+function normalizeVisualRange(thisOption, isCategory2) {
+  var visual = thisOption.visual;
+  var visualArr = [];
+  if (isObject$4(visual)) {
+    each$a(visual, function(v) {
+      visualArr.push(v);
+    });
+  } else if (visual != null) {
+    visualArr.push(visual);
+  }
+  var doNotNeedPair = {
+    color: 1,
+    symbol: 1
+  };
+  if (!isCategory2 && visualArr.length === 1 && !doNotNeedPair.hasOwnProperty(thisOption.type)) {
+    visualArr[1] = visualArr[0];
+  }
+  setVisualToOption(thisOption, visualArr);
+}
+function makePartialColorVisualHandler(applyValue) {
+  return {
+    applyVisual: function(value, getter, setter) {
+      var colorChannel = this.mapValueToVisual(value);
+      setter("color", applyValue(getter("color"), colorChannel));
+    },
+    _normalizedToVisual: createNormalizedToNumericVisual([0, 1])
+  };
+}
+function doMapToArray(normalized) {
+  var visual = this.option.visual;
+  return visual[Math.round(linearMap$2(normalized, [0, 1], [0, visual.length - 1], true))] || {};
+}
+function makeApplyVisual(visualType) {
+  return function(value, getter, setter) {
+    setter(visualType, this.mapValueToVisual(value));
+  };
+}
+function doMapCategory(normalized) {
+  var visual = this.option.visual;
+  return visual[this.option.loop && normalized !== CATEGORY_DEFAULT_VISUAL_INDEX ? normalized % visual.length : normalized];
+}
+function doMapFixed() {
+  return this.option.visual[0];
+}
+function createNormalizedToNumericVisual(sourceExtent) {
+  return {
+    linear: function(normalized) {
+      return linearMap$2(normalized, sourceExtent, this.option.visual, true);
+    },
+    category: doMapCategory,
+    piecewise: function(normalized, value) {
+      var result = getSpecifiedVisual.call(this, value);
+      if (result == null) {
+        result = linearMap$2(normalized, sourceExtent, this.option.visual, true);
+      }
+      return result;
+    },
+    fixed: doMapFixed
+  };
+}
+function getSpecifiedVisual(value) {
+  var thisOption = this.option;
+  var pieceList = thisOption.pieceList;
+  if (thisOption.hasSpecialVisual) {
+    var pieceIndex = VisualMapping.findPieceIndex(value, pieceList);
+    var piece = pieceList[pieceIndex];
+    if (piece && piece.visual) {
+      return piece.visual[this.type];
+    }
+  }
+}
+function setVisualToOption(thisOption, visualArr) {
+  thisOption.visual = visualArr;
+  if (thisOption.type === "color") {
+    thisOption.parsedVisual = map$1(visualArr, function(item) {
+      var color = parse$2(item);
+      if (!color && false) {
+        warn$1("'" + item + "' is an illegal color, fallback to '#000000'", true);
+      }
+      return color || [0, 0, 0, 1];
+    });
+  }
+  return visualArr;
+}
+var normalizers = {
+  linear: function(value) {
+    return linearMap$2(value, this.option.dataExtent, [0, 1], true);
+  },
+  piecewise: function(value) {
+    var pieceList = this.option.pieceList;
+    var pieceIndex = VisualMapping.findPieceIndex(value, pieceList, true);
+    if (pieceIndex != null) {
+      return linearMap$2(pieceIndex, [0, pieceList.length - 1], [0, 1], true);
+    }
+  },
+  category: function(value) {
+    var index = this.option.categories ? this.option.categoryMap[value] : value;
+    return index == null ? CATEGORY_DEFAULT_VISUAL_INDEX : index;
+  },
+  fixed: noop$1
+};
+function littleThan(close, a, b2) {
+  return close ? a <= b2 : a < b2;
+}
+const VisualMapping$1 = VisualMapping;
 var straightLineProto = Line$3.prototype;
 var bezierCurveProto = BezierCurve$1.prototype;
 var StraightLineShape = (
@@ -45111,7 +45652,7 @@ var Line = (
         }
       }, seriesModel, idx);
       this.add(line);
-      each$8(SYMBOL_CATEGORIES, function(symbolCategory) {
+      each$d(SYMBOL_CATEGORIES, function(symbolCategory) {
         var symbol = createSymbol(symbolCategory, lineData, idx);
         this.add(symbol);
         this[makeSymbolTypeKey(symbolCategory)] = lineData.getItemVisual(idx, symbolCategory);
@@ -45127,7 +45668,7 @@ var Line = (
       };
       setLinePoints(target.shape, linePoints);
       updateProps$1(line, target, seriesModel, idx);
-      each$8(SYMBOL_CATEGORIES, function(symbolCategory) {
+      each$d(SYMBOL_CATEGORIES, function(symbolCategory) {
         var symbolType = lineData.getItemVisual(idx, symbolCategory);
         var key = makeSymbolTypeKey(symbolCategory);
         if (this[key] !== symbolType) {
@@ -45171,7 +45712,7 @@ var Line = (
       line.ensureState("emphasis").style = emphasisLineStyle;
       line.ensureState("blur").style = blurLineStyle;
       line.ensureState("select").style = selectLineStyle;
-      each$8(SYMBOL_CATEGORIES, function(symbolCategory) {
+      each$d(SYMBOL_CATEGORIES, function(symbolCategory) {
         var symbol = this.childOfName(symbolCategory);
         if (symbol) {
           symbol.setColor(visualColor);
@@ -45213,7 +45754,7 @@ var Line = (
         label.__verticalAlign = label.style.verticalAlign;
         label.__position = labelNormalModel.get("position") || "middle";
         var distance2 = labelNormalModel.get("distance");
-        if (!isArray$1(distance2)) {
+        if (!isArray$2(distance2)) {
           distance2 = [distance2, distance2];
         }
         label.__labelDistance = distance2;
@@ -45542,8 +46083,8 @@ function restrict(value, extend2) {
   return Math.min(extend2[1] != null ? extend2[1] : Infinity, Math.max(extend2[0] != null ? extend2[0] : -Infinity, value));
 }
 var BRUSH_PANEL_GLOBAL = true;
-var mathMin = Math.min;
-var mathMax = Math.max;
+var mathMin$1 = Math.min;
+var mathMax$1 = Math.max;
 var mathPow = Math.pow;
 var COVER_Z = 1e4;
 var UNSELECT_THRESHOLD = 6;
@@ -45588,7 +46129,7 @@ var BrushController = (
       _this._zr = zr;
       _this.group = new Group$3();
       _this._uid = "brushController_" + baseUID++;
-      each$8(pointerHandlers, function(handler, eventName) {
+      each$d(pointerHandlers, function(handler, eventName) {
         this._handlers[eventName] = bind$1(handler, this);
       }, _this);
       return _this;
@@ -45603,7 +46144,7 @@ var BrushController = (
       if (!this._enableGlobalPan) {
         take(zr, MUTEX_RESOURCE_KEY, this._uid);
       }
-      each$8(this._handlers, function(handler, eventName) {
+      each$d(this._handlers, function(handler, eventName) {
         zr.on(eventName, handler);
       });
       this._brushType = brushOption.brushType;
@@ -45612,7 +46153,7 @@ var BrushController = (
     BrushController2.prototype._doDisableBrush = function() {
       var zr = this._zr;
       release(zr, MUTEX_RESOURCE_KEY, this._uid);
-      each$8(this._handlers, function(handler, eventName) {
+      each$d(this._handlers, function(handler, eventName) {
         zr.off(eventName, handler);
       });
       this._brushType = this._brushOption = null;
@@ -45620,7 +46161,7 @@ var BrushController = (
     BrushController2.prototype.setPanels = function(panelOpts) {
       if (panelOpts && panelOpts.length) {
         var panels_1 = this._panels = {};
-        each$8(panelOpts, function(panelOpts2) {
+        each$d(panelOpts, function(panelOpts2) {
           panels_1[panelOpts2.panelId] = clone$4(panelOpts2);
         });
       } else {
@@ -45729,7 +46270,7 @@ function getPanelByPoint(controller, e2, localCursorPoint) {
   }
   var panel;
   var transform3 = controller._transform;
-  each$8(panels, function(pn) {
+  each$d(panels, function(pn) {
     pn.isTargetByCursor(e2, localCursorPoint, transform3) && (panel = pn);
   });
   return panel;
@@ -45745,7 +46286,7 @@ function getPanelByCover(controller, cover) {
 function clearCovers(controller) {
   var covers = controller._covers;
   var originalLength = covers.length;
-  each$8(covers, function(cover) {
+  each$d(covers, function(cover) {
     controller.group.remove(cover);
   }, controller);
   covers.length = 0;
@@ -45797,7 +46338,7 @@ function createBaseRectCover(rectRangeConverter, controller, brushOption, edgeNa
       isEnd: true
     })
   }));
-  each$8(edgeNameSequences, function(nameSequence) {
+  each$d(edgeNameSequences, function(nameSequence) {
     cover.add(new Rect$2({
       name: nameSequence.join(""),
       style: {
@@ -45816,7 +46357,7 @@ function createBaseRectCover(rectRangeConverter, controller, brushOption, edgeNa
 }
 function updateBaseRect(controller, cover, localRange, brushOption) {
   var lineWidth = brushOption.brushStyle.lineWidth || 0;
-  var handleSize = mathMax(lineWidth, MIN_RESIZE_LINE_WIDTH);
+  var handleSize = mathMax$1(lineWidth, MIN_RESIZE_LINE_WIDTH);
   var x2 = localRange[0][0];
   var y2 = localRange[1][0];
   var xa = x2 - lineWidth / 2;
@@ -45850,7 +46391,7 @@ function updateCommon(controller, cover) {
     silent: !transformable,
     cursor: transformable ? "move" : "default"
   });
-  each$8([["w"], ["e"], ["n"], ["s"], ["s", "e"], ["s", "w"], ["n", "e"], ["n", "w"]], function(nameSequence) {
+  each$d([["w"], ["e"], ["n"], ["s"], ["s", "e"], ["s", "w"], ["n", "e"], ["n", "w"]], function(nameSequence) {
     var el = cover.childOfName(nameSequence.join(""));
     var globalDir = nameSequence.length === 1 ? getGlobalDirection1(controller, nameSequence[0]) : getGlobalDirection2(controller, nameSequence);
     el && el.attr({
@@ -45870,8 +46411,8 @@ function makeStyle(brushOption) {
   }, brushOption.brushStyle);
 }
 function formatRectRange(x2, y2, x22, y22) {
-  var min3 = [mathMin(x2, x22), mathMin(y2, y22)];
-  var max3 = [mathMax(x2, x22), mathMax(y2, y22)];
+  var min3 = [mathMin$1(x2, x22), mathMin$1(y2, y22)];
+  var max3 = [mathMax$1(x2, x22), mathMax$1(y2, y22)];
   return [
     [min3[0], max3[0]],
     [min3[1], max3[1]]
@@ -45906,7 +46447,7 @@ function driftRect(rectRangeConverter, controller, cover, dirNameSequence, dx, d
   var brushOption = cover.__brushOption;
   var rectRange = rectRangeConverter.toRectRange(brushOption.range);
   var localDelta = toLocalDelta(controller, dx, dy);
-  each$8(dirNameSequence, function(dirName) {
+  each$d(dirNameSequence, function(dirName) {
     var ind = DIRECTION_MAP[dirName];
     rectRange[ind[0]][ind[1]] += localDelta[ind[0]];
   });
@@ -45919,7 +46460,7 @@ function driftRect(rectRangeConverter, controller, cover, dirNameSequence, dx, d
 function driftPolygon(controller, cover, dx, dy) {
   var range = cover.__brushOption.range;
   var localDelta = toLocalDelta(controller, dx, dy);
-  each$8(range, function(point) {
+  each$d(range, function(point) {
     point[0] += localDelta[0];
     point[1] += localDelta[1];
   });
@@ -45939,10 +46480,10 @@ function clipByPanel(controller, cover, data) {
   return panel && panel !== BRUSH_PANEL_GLOBAL ? panel.clipPath(data, controller._transform) : clone$4(data);
 }
 function pointsToRect(points2) {
-  var xmin = mathMin(points2[0][0], points2[1][0]);
-  var ymin = mathMin(points2[0][1], points2[1][1]);
-  var xmax = mathMax(points2[0][0], points2[1][0]);
-  var ymax = mathMax(points2[0][1], points2[1][1]);
+  var xmin = mathMin$1(points2[0][0], points2[1][0]);
+  var ymin = mathMin$1(points2[0][1], points2[1][1]);
+  var xmax = mathMax$1(points2[0][0], points2[1][0]);
+  var ymax = mathMax$1(points2[0][1], points2[1][1]);
   return {
     x: xmin,
     y: ymin,
@@ -46140,8 +46681,8 @@ function getLineRenderer(xyIndex) {
     },
     getCreatingRange: function(localTrack) {
       var ends = getTrackEnds(localTrack);
-      var min3 = mathMin(ends[0][xyIndex], ends[1][xyIndex]);
-      var max3 = mathMax(ends[0][xyIndex], ends[1][xyIndex]);
+      var min3 = mathMin$1(ends[0][xyIndex], ends[1][xyIndex]);
+      var max3 = mathMax$1(ends[0][xyIndex], ends[1][xyIndex]);
       return [min3, max3];
     },
     updateCoverShape: function(controller, cover, localRange, brushOption) {
@@ -46219,12 +46760,12 @@ var WhiskerBoxCommonMixin = (
       var data = option.data;
       if (data && addOrdinal) {
         var newOptionData_1 = [];
-        each$8(data, function(item, index) {
+        each$d(data, function(item, index) {
           var newItem;
-          if (isArray$1(item)) {
+          if (isArray$2(item)) {
             newItem = item.slice();
             item.unshift(index);
-          } else if (isArray$1(item.value)) {
+          } else if (isArray$2(item.value)) {
             newItem = extend({}, item);
             newItem.value = newItem.value.slice();
             item.value.unshift(index);
@@ -46448,16 +46989,16 @@ function transInit(points2, dim, itemLayout) {
   });
 }
 const BoxplotView$1 = BoxplotView;
-var each$5 = each$8;
+var each$9 = each$d;
 function boxplotLayout(ecModel) {
   var groupResult = groupSeriesByAxis(ecModel);
-  each$5(groupResult, function(groupItem) {
+  each$9(groupResult, function(groupItem) {
     var seriesModels = groupItem.seriesModels;
     if (!seriesModels.length) {
       return;
     }
     calculateBase(groupItem);
-    each$5(seriesModels, function(seriesModel, idx) {
+    each$9(seriesModels, function(seriesModel, idx) {
       layoutSingleSeries(seriesModel, groupItem.boxOffsetList[idx], groupItem.boxWidthList[idx]);
     });
   });
@@ -46492,15 +47033,15 @@ function calculateBase(groupItem) {
     bandWidth = baseAxis.getBandWidth();
   } else {
     var maxDataCount_1 = 0;
-    each$5(seriesModels, function(seriesModel) {
+    each$9(seriesModels, function(seriesModel) {
       maxDataCount_1 = Math.max(maxDataCount_1, seriesModel.getData().count());
     });
     var extent3 = baseAxis.getExtent();
     bandWidth = Math.abs(extent3[1] - extent3[0]) / maxDataCount_1;
   }
-  each$5(seriesModels, function(seriesModel) {
+  each$9(seriesModels, function(seriesModel) {
     var boxWidthBound = seriesModel.get("boxWidth");
-    if (!isArray$1(boxWidthBound)) {
+    if (!isArray$2(boxWidthBound)) {
       boxWidthBound = [boxWidthBound, boxWidthBound];
     }
     boundList.push([parsePercent(boxWidthBound[0], bandWidth) || 0, parsePercent(boxWidthBound[1], bandWidth) || 0]);
@@ -46509,7 +47050,7 @@ function calculateBase(groupItem) {
   var boxGap = availableWidth / seriesCount * 0.3;
   var boxWidth = (availableWidth - boxGap * (seriesCount - 1)) / seriesCount;
   var base2 = boxWidth / 2 - availableWidth / 2;
-  each$5(seriesModels, function(seriesModel, idx) {
+  each$9(seriesModels, function(seriesModel, idx) {
     boxOffsetList.push(base2);
     base2 += boxGap + boxWidth;
     boxWidthList.push(Math.min(Math.max(boxWidth, boundList[idx][0]), boundList[idx][1]));
@@ -46582,7 +47123,7 @@ function prepareBoxplotData(rawData, opt) {
   var boundIQR = opt.boundIQR;
   var useExtreme = boundIQR === "none" || boundIQR === 0;
   for (var i = 0; i < rawData.length; i++) {
-    var ascList = asc$1(rawData[i].slice());
+    var ascList = asc$2(rawData[i].slice());
     var Q1 = quantile$2(ascList, 0.25);
     var Q2 = quantile$2(ascList, 0.5);
     var Q3 = quantile$2(ascList, 0.75);
@@ -46626,11 +47167,386 @@ var boxplotTransform = {
     }];
   }
 };
-function install$g(registers) {
+function install$k(registers) {
   registers.registerSeriesModel(BoxplotSeriesModel$1);
   registers.registerChartView(BoxplotView$1);
   registers.registerLayout(boxplotLayout);
   registers.registerTransform(boxplotTransform);
+}
+var GRADIENT_LEVELS = 256;
+var HeatmapLayer = (
+  /** @class */
+  function() {
+    function HeatmapLayer2() {
+      this.blurSize = 30;
+      this.pointSize = 20;
+      this.maxOpacity = 1;
+      this.minOpacity = 0;
+      this._gradientPixels = {
+        inRange: null,
+        outOfRange: null
+      };
+      var canvas = platformApi.createCanvas();
+      this.canvas = canvas;
+    }
+    HeatmapLayer2.prototype.update = function(data, width, height, normalize2, colorFunc, isInRange) {
+      var brush2 = this._getBrush();
+      var gradientInRange = this._getGradient(colorFunc, "inRange");
+      var gradientOutOfRange = this._getGradient(colorFunc, "outOfRange");
+      var r = this.pointSize + this.blurSize;
+      var canvas = this.canvas;
+      var ctx = canvas.getContext("2d");
+      var len2 = data.length;
+      canvas.width = width;
+      canvas.height = height;
+      for (var i = 0; i < len2; ++i) {
+        var p2 = data[i];
+        var x2 = p2[0];
+        var y2 = p2[1];
+        var value = p2[2];
+        var alpha = normalize2(value);
+        ctx.globalAlpha = alpha;
+        ctx.drawImage(brush2, x2 - r, y2 - r);
+      }
+      if (!canvas.width || !canvas.height) {
+        return canvas;
+      }
+      var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      var pixels = imageData.data;
+      var offset2 = 0;
+      var pixelLen = pixels.length;
+      var minOpacity = this.minOpacity;
+      var maxOpacity = this.maxOpacity;
+      var diffOpacity = maxOpacity - minOpacity;
+      while (offset2 < pixelLen) {
+        var alpha = pixels[offset2 + 3] / 256;
+        var gradientOffset = Math.floor(alpha * (GRADIENT_LEVELS - 1)) * 4;
+        if (alpha > 0) {
+          var gradient = isInRange(alpha) ? gradientInRange : gradientOutOfRange;
+          alpha > 0 && (alpha = alpha * diffOpacity + minOpacity);
+          pixels[offset2++] = gradient[gradientOffset];
+          pixels[offset2++] = gradient[gradientOffset + 1];
+          pixels[offset2++] = gradient[gradientOffset + 2];
+          pixels[offset2++] = gradient[gradientOffset + 3] * alpha * 256;
+        } else {
+          offset2 += 4;
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+      return canvas;
+    };
+    HeatmapLayer2.prototype._getBrush = function() {
+      var brushCanvas = this._brushCanvas || (this._brushCanvas = platformApi.createCanvas());
+      var r = this.pointSize + this.blurSize;
+      var d = r * 2;
+      brushCanvas.width = d;
+      brushCanvas.height = d;
+      var ctx = brushCanvas.getContext("2d");
+      ctx.clearRect(0, 0, d, d);
+      ctx.shadowOffsetX = d;
+      ctx.shadowBlur = this.blurSize;
+      ctx.shadowColor = "#000";
+      ctx.beginPath();
+      ctx.arc(-r, r, this.pointSize, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+      return brushCanvas;
+    };
+    HeatmapLayer2.prototype._getGradient = function(colorFunc, state) {
+      var gradientPixels = this._gradientPixels;
+      var pixelsSingleState = gradientPixels[state] || (gradientPixels[state] = new Uint8ClampedArray(256 * 4));
+      var color = [0, 0, 0, 0];
+      var off = 0;
+      for (var i = 0; i < 256; i++) {
+        colorFunc[state](i / 255, true, color);
+        pixelsSingleState[off++] = color[0];
+        pixelsSingleState[off++] = color[1];
+        pixelsSingleState[off++] = color[2];
+        pixelsSingleState[off++] = color[3];
+      }
+      return pixelsSingleState;
+    };
+    return HeatmapLayer2;
+  }()
+);
+const HeatmapLayer$1 = HeatmapLayer;
+function getIsInPiecewiseRange(dataExtent, pieceList, selected) {
+  var dataSpan = dataExtent[1] - dataExtent[0];
+  pieceList = map$1(pieceList, function(piece) {
+    return {
+      interval: [(piece.interval[0] - dataExtent[0]) / dataSpan, (piece.interval[1] - dataExtent[0]) / dataSpan]
+    };
+  });
+  var len2 = pieceList.length;
+  var lastIndex = 0;
+  return function(val) {
+    var i;
+    for (i = lastIndex; i < len2; i++) {
+      var interval = pieceList[i].interval;
+      if (interval[0] <= val && val <= interval[1]) {
+        lastIndex = i;
+        break;
+      }
+    }
+    if (i === len2) {
+      for (i = lastIndex - 1; i >= 0; i--) {
+        var interval = pieceList[i].interval;
+        if (interval[0] <= val && val <= interval[1]) {
+          lastIndex = i;
+          break;
+        }
+      }
+    }
+    return i >= 0 && i < len2 && selected[i];
+  };
+}
+function getIsInContinuousRange(dataExtent, range) {
+  var dataSpan = dataExtent[1] - dataExtent[0];
+  range = [(range[0] - dataExtent[0]) / dataSpan, (range[1] - dataExtent[0]) / dataSpan];
+  return function(val) {
+    return val >= range[0] && val <= range[1];
+  };
+}
+function isGeoCoordSys(coordSys) {
+  var dimensions = coordSys.dimensions;
+  return dimensions[0] === "lng" && dimensions[1] === "lat";
+}
+var HeatmapView = (
+  /** @class */
+  function(_super) {
+    __extends(HeatmapView2, _super);
+    function HeatmapView2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = HeatmapView2.type;
+      return _this;
+    }
+    HeatmapView2.prototype.render = function(seriesModel, ecModel, api) {
+      var visualMapOfThisSeries;
+      ecModel.eachComponent("visualMap", function(visualMap) {
+        visualMap.eachTargetSeries(function(targetSeries) {
+          if (targetSeries === seriesModel) {
+            visualMapOfThisSeries = visualMap;
+          }
+        });
+      });
+      this._progressiveEls = null;
+      this.group.removeAll();
+      var coordSys = seriesModel.coordinateSystem;
+      if (coordSys.type === "cartesian2d" || coordSys.type === "calendar") {
+        this._renderOnCartesianAndCalendar(seriesModel, api, 0, seriesModel.getData().count());
+      } else if (isGeoCoordSys(coordSys)) {
+        this._renderOnGeo(coordSys, seriesModel, visualMapOfThisSeries, api);
+      }
+    };
+    HeatmapView2.prototype.incrementalPrepareRender = function(seriesModel, ecModel, api) {
+      this.group.removeAll();
+    };
+    HeatmapView2.prototype.incrementalRender = function(params, seriesModel, ecModel, api) {
+      var coordSys = seriesModel.coordinateSystem;
+      if (coordSys) {
+        if (isGeoCoordSys(coordSys)) {
+          this.render(seriesModel, ecModel, api);
+        } else {
+          this._progressiveEls = [];
+          this._renderOnCartesianAndCalendar(seriesModel, api, params.start, params.end, true);
+        }
+      }
+    };
+    HeatmapView2.prototype.eachRendered = function(cb) {
+      traverseElements(this._progressiveEls || this.group, cb);
+    };
+    HeatmapView2.prototype._renderOnCartesianAndCalendar = function(seriesModel, api, start2, end2, incremental) {
+      var coordSys = seriesModel.coordinateSystem;
+      var isCartesian2d = isCoordinateSystemType(coordSys, "cartesian2d");
+      var width;
+      var height;
+      var xAxisExtent;
+      var yAxisExtent;
+      if (isCartesian2d) {
+        var xAxis = coordSys.getAxis("x");
+        var yAxis = coordSys.getAxis("y");
+        width = xAxis.getBandWidth() + 0.5;
+        height = yAxis.getBandWidth() + 0.5;
+        xAxisExtent = xAxis.scale.getExtent();
+        yAxisExtent = yAxis.scale.getExtent();
+      }
+      var group = this.group;
+      var data = seriesModel.getData();
+      var emphasisStyle = seriesModel.getModel(["emphasis", "itemStyle"]).getItemStyle();
+      var blurStyle = seriesModel.getModel(["blur", "itemStyle"]).getItemStyle();
+      var selectStyle = seriesModel.getModel(["select", "itemStyle"]).getItemStyle();
+      var borderRadius = seriesModel.get(["itemStyle", "borderRadius"]);
+      var labelStatesModels = getLabelStatesModels(seriesModel);
+      var emphasisModel = seriesModel.getModel("emphasis");
+      var focus = emphasisModel.get("focus");
+      var blurScope = emphasisModel.get("blurScope");
+      var emphasisDisabled = emphasisModel.get("disabled");
+      var dataDims = isCartesian2d ? [data.mapDimension("x"), data.mapDimension("y"), data.mapDimension("value")] : [data.mapDimension("time"), data.mapDimension("value")];
+      for (var idx = start2; idx < end2; idx++) {
+        var rect = void 0;
+        var style2 = data.getItemVisual(idx, "style");
+        if (isCartesian2d) {
+          var dataDimX = data.get(dataDims[0], idx);
+          var dataDimY = data.get(dataDims[1], idx);
+          if (isNaN(data.get(dataDims[2], idx)) || isNaN(dataDimX) || isNaN(dataDimY) || dataDimX < xAxisExtent[0] || dataDimX > xAxisExtent[1] || dataDimY < yAxisExtent[0] || dataDimY > yAxisExtent[1]) {
+            continue;
+          }
+          var point = coordSys.dataToPoint([dataDimX, dataDimY]);
+          rect = new Rect$2({
+            shape: {
+              x: point[0] - width / 2,
+              y: point[1] - height / 2,
+              width,
+              height
+            },
+            style: style2
+          });
+        } else {
+          if (isNaN(data.get(dataDims[1], idx))) {
+            continue;
+          }
+          rect = new Rect$2({
+            z2: 1,
+            shape: coordSys.dataToRect([data.get(dataDims[0], idx)]).contentShape,
+            style: style2
+          });
+        }
+        if (data.hasItemOption) {
+          var itemModel = data.getItemModel(idx);
+          var emphasisModel_1 = itemModel.getModel("emphasis");
+          emphasisStyle = emphasisModel_1.getModel("itemStyle").getItemStyle();
+          blurStyle = itemModel.getModel(["blur", "itemStyle"]).getItemStyle();
+          selectStyle = itemModel.getModel(["select", "itemStyle"]).getItemStyle();
+          borderRadius = itemModel.get(["itemStyle", "borderRadius"]);
+          focus = emphasisModel_1.get("focus");
+          blurScope = emphasisModel_1.get("blurScope");
+          emphasisDisabled = emphasisModel_1.get("disabled");
+          labelStatesModels = getLabelStatesModels(itemModel);
+        }
+        rect.shape.r = borderRadius;
+        var rawValue = seriesModel.getRawValue(idx);
+        var defaultText = "-";
+        if (rawValue && rawValue[2] != null) {
+          defaultText = rawValue[2] + "";
+        }
+        setLabelStyle(rect, labelStatesModels, {
+          labelFetcher: seriesModel,
+          labelDataIndex: idx,
+          defaultOpacity: style2.opacity,
+          defaultText
+        });
+        rect.ensureState("emphasis").style = emphasisStyle;
+        rect.ensureState("blur").style = blurStyle;
+        rect.ensureState("select").style = selectStyle;
+        toggleHoverEmphasis(rect, focus, blurScope, emphasisDisabled);
+        rect.incremental = incremental;
+        if (incremental) {
+          rect.states.emphasis.hoverLayer = true;
+        }
+        group.add(rect);
+        data.setItemGraphicEl(idx, rect);
+        if (this._progressiveEls) {
+          this._progressiveEls.push(rect);
+        }
+      }
+    };
+    HeatmapView2.prototype._renderOnGeo = function(geo, seriesModel, visualMapModel, api) {
+      var inRangeVisuals = visualMapModel.targetVisuals.inRange;
+      var outOfRangeVisuals = visualMapModel.targetVisuals.outOfRange;
+      var data = seriesModel.getData();
+      var hmLayer = this._hmLayer || this._hmLayer || new HeatmapLayer$1();
+      hmLayer.blurSize = seriesModel.get("blurSize");
+      hmLayer.pointSize = seriesModel.get("pointSize");
+      hmLayer.minOpacity = seriesModel.get("minOpacity");
+      hmLayer.maxOpacity = seriesModel.get("maxOpacity");
+      var rect = geo.getViewRect().clone();
+      var roamTransform = geo.getRoamTransform();
+      rect.applyTransform(roamTransform);
+      var x2 = Math.max(rect.x, 0);
+      var y2 = Math.max(rect.y, 0);
+      var x22 = Math.min(rect.width + rect.x, api.getWidth());
+      var y22 = Math.min(rect.height + rect.y, api.getHeight());
+      var width = x22 - x2;
+      var height = y22 - y2;
+      var dims = [data.mapDimension("lng"), data.mapDimension("lat"), data.mapDimension("value")];
+      var points2 = data.mapArray(dims, function(lng, lat, value) {
+        var pt = geo.dataToPoint([lng, lat]);
+        pt[0] -= x2;
+        pt[1] -= y2;
+        pt.push(value);
+        return pt;
+      });
+      var dataExtent = visualMapModel.getExtent();
+      var isInRange = visualMapModel.type === "visualMap.continuous" ? getIsInContinuousRange(dataExtent, visualMapModel.option.range) : getIsInPiecewiseRange(dataExtent, visualMapModel.getPieceList(), visualMapModel.option.selected);
+      hmLayer.update(points2, width, height, inRangeVisuals.color.getNormalizer(), {
+        inRange: inRangeVisuals.color.getColorMapper(),
+        outOfRange: outOfRangeVisuals.color.getColorMapper()
+      }, isInRange);
+      var img = new ZRImage$1({
+        style: {
+          width,
+          height,
+          x: x2,
+          y: y2,
+          image: hmLayer.canvas
+        },
+        silent: true
+      });
+      this.group.add(img);
+    };
+    HeatmapView2.type = "heatmap";
+    return HeatmapView2;
+  }(ChartView$1)
+);
+const HeatmapView$1 = HeatmapView;
+var HeatmapSeriesModel = (
+  /** @class */
+  function(_super) {
+    __extends(HeatmapSeriesModel2, _super);
+    function HeatmapSeriesModel2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = HeatmapSeriesModel2.type;
+      return _this;
+    }
+    HeatmapSeriesModel2.prototype.getInitialData = function(option, ecModel) {
+      return createSeriesData(null, this, {
+        generateCoord: "value"
+      });
+    };
+    HeatmapSeriesModel2.prototype.preventIncremental = function() {
+      var coordSysCreator = CoordinateSystem.get(this.get("coordinateSystem"));
+      if (coordSysCreator && coordSysCreator.dimensions) {
+        return coordSysCreator.dimensions[0] === "lng" && coordSysCreator.dimensions[1] === "lat";
+      }
+    };
+    HeatmapSeriesModel2.type = "series.heatmap";
+    HeatmapSeriesModel2.dependencies = ["grid", "geo", "calendar"];
+    HeatmapSeriesModel2.defaultOption = {
+      coordinateSystem: "cartesian2d",
+      // zlevel: 0,
+      z: 2,
+      // Cartesian coordinate system
+      // xAxisIndex: 0,
+      // yAxisIndex: 0,
+      // Geo coordinate system
+      geoIndex: 0,
+      blurSize: 30,
+      pointSize: 20,
+      maxOpacity: 1,
+      minOpacity: 0,
+      select: {
+        itemStyle: {
+          borderColor: "#212121"
+        }
+      }
+    };
+    return HeatmapSeriesModel2;
+  }(SeriesModel$1)
+);
+const HeatmapSeriesModel$1 = HeatmapSeriesModel;
+function install$j(registers) {
+  registers.registerChartView(HeatmapView$1);
+  registers.registerSeriesModel(HeatmapSeriesModel$1);
 }
 var STYLE_VISUAL_TYPE = {
   color: "fill",
@@ -46882,7 +47798,7 @@ function convertFromEC4CompatibleStyle(hostStyle, elType, isNormal) {
     hasOwn$1(srcStyle, "textDistance") && (textConfig.distance = srcStyle.textDistance);
   }
   convertEC4CompatibleRichItem(textContentStyle, hostStyle);
-  each$8(textContentStyle.rich, function(richItem) {
+  each$d(textContentStyle.rich, function(richItem) {
     convertEC4CompatibleRichItem(richItem, richItem);
   });
   return {
@@ -46936,7 +47852,7 @@ function convertToEC4StyleForCustomSerise(itemStl, txStl, txCfg) {
   }
   out2.text = txStl.text;
   out2.rich = txStl.rich;
-  each$8(txStl.rich, function(richItem) {
+  each$d(txStl.rich, function(richItem) {
     convertToEC4RichItem(richItem, richItem);
   });
   return out2;
@@ -47024,7 +47940,7 @@ function applyUpdateTransition(el, elOption, animatableModel, opts) {
   if (hasAnimation) {
     if (isInit) {
       var enterFromProps_1 = {};
-      each$8(ELEMENT_ANIMATABLE_PROPS, function(propName) {
+      each$d(ELEMENT_ANIMATABLE_PROPS, function(propName) {
         var prop = propName ? elOption[propName] : elOption;
         if (prop && prop.enterFrom) {
           if (propName) {
@@ -47307,8 +48223,8 @@ function applyKeyframeAnimation(el, animationOpts, animatableModel) {
   if (!animatableModel.isAnimationEnabled() || !animationOpts) {
     return;
   }
-  if (isArray$1(animationOpts)) {
-    each$8(animationOpts, function(singleAnimationOpts) {
+  if (isArray$2(animationOpts)) {
+    each$d(animationOpts, function(singleAnimationOpts) {
       applyKeyframeAnimation(el, singleAnimationOpts, animatableModel);
     });
     return;
@@ -47323,7 +48239,7 @@ function applyKeyframeAnimation(el, animationOpts, animatableModel) {
     return;
   }
   var stateToRestore = getStateToRestore(el);
-  each$8(ELEMENT_ANIMATABLE_PROPS, function(targetPropName) {
+  each$d(ELEMENT_ANIMATABLE_PROPS, function(targetPropName) {
     if (targetPropName && !el[targetPropName]) {
       return;
     }
@@ -47331,7 +48247,7 @@ function applyKeyframeAnimation(el, animationOpts, animatableModel) {
     keyframes.sort(function(a, b2) {
       return a.percent - b2.percent;
     });
-    each$8(keyframes, function(kf) {
+    each$d(keyframes, function(kf) {
       var animators = el.animators;
       var kfValues = targetPropName ? kf[targetPropName] : kf;
       if (!kfValues) {
@@ -47357,7 +48273,7 @@ function applyKeyframeAnimation(el, animationOpts, animatableModel) {
       }
       targetPropName && (stateToRestore[targetPropName] = stateToRestore[targetPropName] || {});
       var savedTarget = targetPropName ? stateToRestore[targetPropName] : stateToRestore;
-      each$8(propKeys, function(key) {
+      each$d(propKeys, function(key) {
         savedTarget[key] = ((targetPropName ? el[targetPropName] : el) || {})[key];
       });
       animator.whenWithKeys(duration * kf.percent, kfValues, propKeys, kf.easing);
@@ -47772,7 +48688,7 @@ function makeRenderItem(customSeries, data, ecModel, api) {
 }
 function wrapEncodeDef(data) {
   var encodeDef = {};
-  each$8(data.dimensions, function(dimName) {
+  each$d(data.dimensions, function(dimName) {
     var dimInfo = data.getDimensionInfo(dimName);
     if (!dimInfo.isExtraCoord) {
       var coordDim = dimInfo.coordDim;
@@ -48008,7 +48924,7 @@ function getPathData(shape) {
 function hasOwnPathData(shape) {
   return shape && (hasOwn$1(shape, "pathData") || hasOwn$1(shape, "d"));
 }
-function install$f(registers) {
+function install$i(registers) {
   registers.registerChartView(CustomChartView$1);
   registers.registerSeriesModel(CustomSeriesModel$1);
 }
@@ -48163,7 +49079,7 @@ var BaseAxisPointer = (
       updateMandatoryProps(handle, axisPointerModel, false);
       handle.setStyle(handleModel.getItemStyle(null, ["color", "borderColor", "borderWidth", "opacity", "shadowColor", "shadowBlur", "shadowOffsetX", "shadowOffsetY"]));
       var handleSize = handleModel.get("size");
-      if (!isArray$1(handleSize)) {
+      if (!isArray$2(handleSize)) {
         handleSize = [handleSize, handleSize];
       }
       handle.scaleX = handleSize[0] / 2;
@@ -48254,9 +49170,9 @@ function updateProps(animationModel, moveAnimation, el, props) {
   }
 }
 function propsEqual(lastProps, newProps) {
-  if (isObject$3(lastProps) && isObject$3(newProps)) {
+  if (isObject$4(lastProps) && isObject$4(newProps)) {
     var equals_1 = true;
-    each$8(newProps, function(item, key) {
+    each$d(newProps, function(item, key) {
       equals_1 = equals_1 && propsEqual(lastProps[key], item);
     });
     return !!equals_1;
@@ -48365,7 +49281,7 @@ function getValueLabel(value, axis, ecModel, seriesDataIndices, opt) {
       axisIndex: axis.index,
       seriesData: []
     };
-    each$8(seriesDataIndices, function(idxItem) {
+    each$d(seriesDataIndices, function(idxItem) {
       var series = ecModel.getSeriesByIndex(idxItem.seriesIndex);
       var dataIndex = idxItem.dataIndexInside;
       var dataParams = series && series.getDataParams(dataIndex);
@@ -48581,7 +49497,7 @@ var AxisPointerModel = (
 );
 const AxisPointerModel$1 = AxisPointerModel;
 var inner$7 = makeInner();
-var each$4 = each$8;
+var each$8 = each$d;
 function register(key, api, handler) {
   if (env$1.node) {
     return;
@@ -48603,7 +49519,7 @@ function initGlobalListeners(zr, api) {
   function useHandler(eventType, cb) {
     zr.on(eventType, function(e2) {
       var dis = makeDispatchAction$1(api);
-      each$4(inner$7(zr).records, function(record) {
+      each$8(inner$7(zr).records, function(record) {
         record && cb(record, e2, dis.dispatchAction);
       });
       dispatchTooltipFinally(dis.pendings, api);
@@ -48704,7 +49620,7 @@ function findPointFromSeries(finder, ecModel) {
   }
   var data = seriesModel.getData();
   var dataIndex = queryDataIndex(data, finder);
-  if (dataIndex == null || dataIndex < 0 || isArray$1(dataIndex)) {
+  if (dataIndex == null || dataIndex < 0 || isArray$2(dataIndex)) {
     return {
       point: []
     };
@@ -48772,9 +49688,9 @@ function axisTrigger(payload, ecModel, api) {
     showPointer: curry$1(showPointer, showValueMap),
     showTooltip: curry$1(showTooltip, dataByCoordSys)
   };
-  each$8(coordSysAxesInfo.coordSysMap, function(coordSys, coordSysKey) {
+  each$d(coordSysAxesInfo.coordSysMap, function(coordSys, coordSysKey) {
     var coordSysContainsPoint = isIllegalPoint || coordSys.containPoint(point);
-    each$8(coordSysAxesInfo.coordSysAxesInfo[coordSysKey], function(axisInfo, key) {
+    each$d(coordSysAxesInfo.coordSysAxesInfo[coordSysKey], function(axisInfo, key) {
       var axis = axisInfo.axis;
       var inputAxisInfo = findInputAxisInfo(inputAxesInfo, axisInfo);
       if (!shouldHide && coordSysContainsPoint && (!inputAxesInfo || inputAxisInfo)) {
@@ -48787,10 +49703,10 @@ function axisTrigger(payload, ecModel, api) {
     });
   });
   var linkTriggers = {};
-  each$8(axesInfo, function(tarAxisInfo, tarKey) {
+  each$d(axesInfo, function(tarAxisInfo, tarKey) {
     var linkGroup = tarAxisInfo.linkGroup;
     if (linkGroup && !showValueMap[tarKey]) {
-      each$8(linkGroup.axesInfo, function(srcAxisInfo, srcKey) {
+      each$d(linkGroup.axesInfo, function(srcAxisInfo, srcKey) {
         var srcValItem = showValueMap[srcKey];
         if (srcAxisInfo !== tarAxisInfo && srcValItem) {
           var val = srcValItem.value;
@@ -48800,7 +49716,7 @@ function axisTrigger(payload, ecModel, api) {
       });
     }
   });
-  each$8(linkTriggers, function(val, tarKey) {
+  each$d(linkTriggers, function(val, tarKey) {
     processOnAxis(axesInfo[tarKey], val, updaters, true, outputPayload);
   });
   updateModelActually(showValueMap, axesInfo, outputPayload);
@@ -48838,7 +49754,7 @@ function buildPayloadsBySeries(value, axisInfo) {
   var payloadBatch = [];
   var minDist = Number.MAX_VALUE;
   var minDiff = -1;
-  each$8(axisInfo.seriesModels, function(series, idx) {
+  each$d(axisInfo.seriesModels, function(series, idx) {
     var dataDim = series.getData().mapDimensionsAll(dim);
     var seriesNestestValue;
     var dataIndices;
@@ -48872,7 +49788,7 @@ function buildPayloadsBySeries(value, axisInfo) {
         snapToValue = seriesNestestValue;
         payloadBatch.length = 0;
       }
-      each$8(dataIndices, function(dataIndex) {
+      each$d(dataIndices, function(dataIndex) {
         payloadBatch.push({
           seriesIndex: series.seriesIndex,
           dataIndexInside: dataIndex,
@@ -48932,7 +49848,7 @@ function showTooltip(dataByCoordSys, axisInfo, payloadInfo, value) {
 }
 function updateModelActually(showValueMap, axesInfo, outputPayload) {
   var outputAxesInfo = outputPayload.axesInfo = [];
-  each$8(axesInfo, function(axisInfo, key) {
+  each$d(axesInfo, function(axisInfo, key) {
     var option = axisInfo.axisPointerModel.option;
     var valItem = showValueMap[key];
     if (valItem) {
@@ -48975,19 +49891,19 @@ function dispatchHighDownActually(axesInfo, dispatchAction2, api) {
   var highDownKey = "axisPointerLastHighlights";
   var lastHighlights = inner$6(zr)[highDownKey] || {};
   var newHighlights = inner$6(zr)[highDownKey] = {};
-  each$8(axesInfo, function(axisInfo, key) {
+  each$d(axesInfo, function(axisInfo, key) {
     var option = axisInfo.axisPointerModel.option;
-    option.status === "show" && each$8(option.seriesDataIndices, function(batchItem) {
+    option.status === "show" && each$d(option.seriesDataIndices, function(batchItem) {
       var key2 = batchItem.seriesIndex + " | " + batchItem.dataIndex;
       newHighlights[key2] = batchItem;
     });
   });
   var toHighlight = [];
   var toDownplay = [];
-  each$8(lastHighlights, function(batchItem, key) {
+  each$d(lastHighlights, function(batchItem, key) {
     !newHighlights[key] && toDownplay.push(batchItem);
   });
-  each$8(newHighlights, function(batchItem, key) {
+  each$d(newHighlights, function(batchItem, key) {
     !lastHighlights[key] && toHighlight.push(batchItem);
   });
   toDownplay.length && api.dispatchAction({
@@ -49025,7 +49941,7 @@ function makeMapperParam(axisInfo) {
 function illegalPoint(point) {
   return !point || point[0] == null || isNaN(point[0]) || point[1] == null || isNaN(point[1]);
 }
-function install$e(registers) {
+function install$h(registers) {
   AxisView$1.registerAxisPointerClass("CartesianAxisPointer", CartesianAxisPointer$1);
   registers.registerComponentModel(AxisPointerModel$1);
   registers.registerComponentView(AxisPointerView$1);
@@ -49033,7 +49949,7 @@ function install$e(registers) {
     if (option) {
       (!option.axisPointer || option.axisPointer.length === 0) && (option.axisPointer = {});
       var link = option.axisPointer.link;
-      if (link && !isArray$1(link)) {
+      if (link && !isArray$2(link)) {
         option.axisPointer.link = [link];
       }
     }
@@ -49047,9 +49963,9 @@ function install$e(registers) {
     update: ":updateAxisPointer"
   }, axisTrigger);
 }
-function install$d(registers) {
-  use(install$i);
-  use(install$e);
+function install$g(registers) {
+  use(install$m);
+  use(install$h);
 }
 var DATA_ZOOM_AXIS_DIMENSIONS = ["x", "y", "radius", "angle", "single"];
 var SERIES_COORDS = ["cartesian2d", "polar", "singleAxis"];
@@ -49179,7 +50095,7 @@ var DataZoomModel = (
       this._setDefaultThrottle(inputRawOption);
       this._updateRangeUse(inputRawOption);
       var settledOption = this.settledOption;
-      each$8([["start", "startValue"], ["end", "endValue"]], function(names, index) {
+      each$d([["start", "startValue"], ["end", "endValue"]], function(names, index) {
         if (this._rangePropMode[index] === "value") {
           thisOption[names[0]] = settledOption[names[0]] = null;
         }
@@ -49205,14 +50121,14 @@ var DataZoomModel = (
     };
     DataZoomModel2.prototype._fillSpecifiedTargetAxis = function(targetAxisIndexMap) {
       var hasAxisSpecified = false;
-      each$8(DATA_ZOOM_AXIS_DIMENSIONS, function(axisDim) {
+      each$d(DATA_ZOOM_AXIS_DIMENSIONS, function(axisDim) {
         var refering = this.getReferringComponents(getAxisMainType(axisDim), MULTIPLE_REFERRING);
         if (!refering.specified) {
           return;
         }
         hasAxisSpecified = true;
         var axisInfo = new DataZoomAxisInfo();
-        each$8(refering.models, function(axisModel) {
+        each$d(refering.models, function(axisModel) {
           axisInfo.add(axisModel.componentIndex);
         });
         targetAxisIndexMap.set(axisDim, axisInfo);
@@ -49249,7 +50165,7 @@ var DataZoomModel = (
         needAuto = false;
         if (axisDim2 === "x" || axisDim2 === "y") {
           var gridModel_1 = axisModel.getReferringComponents("grid", SINGLE_REFERRING).models[0];
-          gridModel_1 && each$8(axisModels2, function(axModel) {
+          gridModel_1 && each$d(axisModels2, function(axModel) {
             if (axisModel.componentIndex !== axModel.componentIndex && gridModel_1 === axModel.getReferringComponents("grid", SINGLE_REFERRING).models[0]) {
               axisInfo.add(axModel.componentIndex);
             }
@@ -49257,7 +50173,7 @@ var DataZoomModel = (
         }
       }
       if (needAuto) {
-        each$8(DATA_ZOOM_AXIS_DIMENSIONS, function(axisDim2) {
+        each$d(DATA_ZOOM_AXIS_DIMENSIONS, function(axisDim2) {
           if (!needAuto) {
             return;
           }
@@ -49295,7 +50211,7 @@ var DataZoomModel = (
     DataZoomModel2.prototype._updateRangeUse = function(inputRawOption) {
       var rangePropMode = this._rangePropMode;
       var rangeModeInOption = this.get("rangeMode");
-      each$8([["start", "startValue"], ["end", "endValue"]], function(names, index) {
+      each$d([["start", "startValue"], ["end", "endValue"]], function(names, index) {
         var percentSpecified = inputRawOption[names[0]] != null;
         var valueSpecified = inputRawOption[names[1]] != null;
         if (percentSpecified && !valueSpecified) {
@@ -49323,7 +50239,7 @@ var DataZoomModel = (
     };
     DataZoomModel2.prototype.eachTargetAxis = function(callback, context) {
       this._targetAxisInfoMap.each(function(axisInfo, axisDim) {
-        each$8(axisInfo.indexList, function(axisIndex) {
+        each$d(axisInfo.indexList, function(axisIndex) {
           callback.call(context, axisDim, axisIndex);
         });
       });
@@ -49343,7 +50259,7 @@ var DataZoomModel = (
     DataZoomModel2.prototype.setRawRange = function(opt) {
       var thisOption = this.option;
       var settledOption = this.settledOption;
-      each$8([["start", "startValue"], ["end", "endValue"]], function(names) {
+      each$d([["start", "startValue"], ["end", "endValue"]], function(names) {
         if (opt[names[0]] != null || opt[names[1]] != null) {
           thisOption[names[0]] = settledOption[names[0]] = opt[names[0]];
           thisOption[names[1]] = settledOption[names[1]] = opt[names[1]];
@@ -49353,7 +50269,7 @@ var DataZoomModel = (
     };
     DataZoomModel2.prototype.setCalculatedRange = function(opt) {
       var option = this.option;
-      each$8(["start", "startValue", "end", "endValue"], function(name) {
+      each$d(["start", "startValue", "end", "endValue"], function(name) {
         option[name] = opt[name];
       });
     };
@@ -49414,7 +50330,7 @@ var DataZoomModel = (
 );
 function retrieveRawOption(option) {
   var ret = {};
-  each$8(["start", "end", "startValue", "endValue", "throttle"], function(name) {
+  each$d(["start", "end", "startValue", "endValue", "throttle"], function(name) {
     option.hasOwnProperty(name) && (ret[name] = option[name]);
   });
   return ret;
@@ -49467,8 +50383,8 @@ var SelectDataZoomView = (
   }(DataZoomView$1)
 );
 const SelectZoomView = SelectDataZoomView;
-var each$3 = each$8;
-var asc = asc$1;
+var each$7 = each$d;
+var asc$1 = asc$2;
 var AxisProxy = (
   /** @class */
   function() {
@@ -49515,29 +50431,29 @@ var AxisProxy = (
       var percentWindow = [];
       var valueWindow = [];
       var hasPropModeValue;
-      each$3(["start", "end"], function(prop, idx) {
+      each$7(["start", "end"], function(prop, idx) {
         var boundPercent = opt[prop];
         var boundValue = opt[prop + "Value"];
         if (rangePropMode[idx] === "percent") {
           boundPercent == null && (boundPercent = percentExtent[idx]);
-          boundValue = scale2.parse(linearMap(boundPercent, percentExtent, dataExtent));
+          boundValue = scale2.parse(linearMap$2(boundPercent, percentExtent, dataExtent));
         } else {
           hasPropModeValue = true;
           boundValue = boundValue == null ? dataExtent[idx] : scale2.parse(boundValue);
-          boundPercent = linearMap(boundValue, dataExtent, percentExtent);
+          boundPercent = linearMap$2(boundValue, dataExtent, percentExtent);
         }
         valueWindow[idx] = boundValue == null || isNaN(boundValue) ? dataExtent[idx] : boundValue;
         percentWindow[idx] = boundPercent == null || isNaN(boundPercent) ? percentExtent[idx] : boundPercent;
       });
-      asc(valueWindow);
-      asc(percentWindow);
+      asc$1(valueWindow);
+      asc$1(percentWindow);
       var spans = this._minMaxSpan;
       hasPropModeValue ? restrictSet(valueWindow, percentWindow, dataExtent, percentExtent, false) : restrictSet(percentWindow, valueWindow, percentExtent, dataExtent, true);
       function restrictSet(fromWindow, toWindow, fromExtent, toExtent, toValue) {
         var suffix = toValue ? "Span" : "ValueSpan";
         sliderMove(0, fromWindow, fromExtent, "all", spans["min" + suffix], spans["max" + suffix]);
         for (var i = 0; i < 2; i++) {
-          toWindow[i] = linearMap(fromWindow[i], fromExtent, toExtent, true);
+          toWindow[i] = linearMap$2(fromWindow[i], fromExtent, toExtent, true);
           toValue && (toWindow[i] = scale2.parse(toWindow[i]));
         }
       }
@@ -49569,7 +50485,7 @@ var AxisProxy = (
       if (filterMode === "none") {
         return;
       }
-      each$3(seriesModels, function(seriesModel) {
+      each$7(seriesModels, function(seriesModel) {
         var seriesData = seriesModel.getData();
         var dataDims = seriesData.mapDimensionsAll(axisDim);
         if (!dataDims.length) {
@@ -49599,7 +50515,7 @@ var AxisProxy = (
             return hasValue && leftOut && rightOut;
           });
         } else {
-          each$3(dataDims, function(dim) {
+          each$7(dataDims, function(dim) {
             if (filterMode === "empty") {
               seriesModel.setData(seriesData = seriesData.map(dim, function(value) {
                 return !isInWindow(value) ? NaN : value;
@@ -49611,7 +50527,7 @@ var AxisProxy = (
             }
           });
         }
-        each$3(dataDims, function(dim) {
+        each$7(dataDims, function(dim) {
           seriesData.setApproximateExtent(valueWindow, dim);
         });
       });
@@ -49623,14 +50539,14 @@ var AxisProxy = (
       var minMaxSpan = this._minMaxSpan = {};
       var dataZoomModel = this._dataZoomModel;
       var dataExtent = this._dataExtent;
-      each$3(["min", "max"], function(minMax) {
+      each$7(["min", "max"], function(minMax) {
         var percentSpan = dataZoomModel.get(minMax + "Span");
         var valueSpan = dataZoomModel.get(minMax + "ValueSpan");
         valueSpan != null && (valueSpan = this.getAxisModel().axis.scale.parse(valueSpan));
         if (valueSpan != null) {
-          percentSpan = linearMap(dataExtent[0] + valueSpan, dataExtent, [0, 100], true);
+          percentSpan = linearMap$2(dataExtent[0] + valueSpan, dataExtent, [0, 100], true);
         } else if (percentSpan != null) {
-          valueSpan = linearMap(percentSpan, [0, 100], dataExtent, true) - dataExtent[0];
+          valueSpan = linearMap$2(percentSpan, [0, 100], dataExtent, true) - dataExtent[0];
         }
         minMaxSpan[minMax + "Span"] = percentSpan;
         minMaxSpan[minMax + "ValueSpan"] = valueSpan;
@@ -49659,7 +50575,7 @@ var AxisProxy = (
 );
 function calculateDataExtent(axisProxy, axisDim, seriesModels) {
   var dataExtent = [Infinity, -Infinity];
-  each$3(seriesModels, function(seriesModel) {
+  each$7(seriesModels, function(seriesModel) {
     unionAxisExtentFromData(dataExtent, seriesModel.getData(), axisDim);
   });
   var axisModel = axisProxy.getAxisModel();
@@ -49691,8 +50607,8 @@ var dataZoomProcessor = {
       }
     });
     var seriesModelMap = createHashMap();
-    each$8(proxyList, function(axisProxy) {
-      each$8(axisProxy.getTargetSeriesModels(), function(seriesModel) {
+    each$d(proxyList, function(axisProxy) {
+      each$d(axisProxy.getTargetSeriesModels(), function(seriesModel) {
         seriesModelMap.set(seriesModel.uid, seriesModel);
       });
     });
@@ -49729,7 +50645,7 @@ const dataZoomProcessor$1 = dataZoomProcessor;
 function installDataZoomAction(registers) {
   registers.registerAction("dataZoom", function(payload, ecModel) {
     var effectedModels = findEffectedDataZooms(ecModel, payload);
-    each$8(effectedModels, function(dataZoomModel) {
+    each$d(effectedModels, function(dataZoomModel) {
       dataZoomModel.setRawRange({
         start: payload.start,
         end: payload.end,
@@ -49739,22 +50655,22 @@ function installDataZoomAction(registers) {
     });
   });
 }
-var installed = false;
-function installCommon(registers) {
-  if (installed) {
+var installed$1 = false;
+function installCommon$1(registers) {
+  if (installed$1) {
     return;
   }
-  installed = true;
+  installed$1 = true;
   registers.registerProcessor(registers.PRIORITY.PROCESSOR.FILTER, dataZoomProcessor$1);
   installDataZoomAction(registers);
   registers.registerSubTypeDefaulter("dataZoom", function() {
     return "slider";
   });
 }
-function install$c(registers) {
+function install$f(registers) {
   registers.registerComponentModel(SelectZoomModel);
   registers.registerComponentView(SelectZoomView);
-  installCommon(registers);
+  installCommon$1(registers);
 }
 var ToolboxFeature = (
   /** @class */
@@ -49783,7 +50699,7 @@ var ToolboxModel = (
     ToolboxModel2.prototype.optionUpdated = function() {
       _super.prototype.optionUpdated.apply(this, arguments);
       var ecModel = this.ecModel;
-      each$8(this.option.feature, function(featureOpt, featureName) {
+      each$d(this.option.feature, function(featureOpt, featureName) {
         var Feature = getFeature(featureName);
         if (Feature) {
           if (Feature.getDefaultOption) {
@@ -49882,7 +50798,7 @@ var ToolboxView = (
       var featureOpts = toolboxModel.get("feature") || {};
       var features2 = this._features || (this._features = {});
       var featureNames = [];
-      each$8(featureOpts, function(opt, name) {
+      each$d(featureOpts, function(opt, name) {
         featureNames.push(name);
       });
       new DataDiffer$1(this._featureNames || [], featureNames).add(processFeature).update(processFeature).remove(curry$1(processFeature, null)).execute();
@@ -49965,7 +50881,7 @@ var ToolboxView = (
           titlesMap = titles;
         }
         var iconPaths = featureModel.iconPaths = {};
-        each$8(iconsMap, function(iconStr, iconName) {
+        each$d(iconsMap, function(iconStr, iconName) {
           var path = createIcon(iconStr, {}, {
             x: -itemSize / 2,
             y: -itemSize / 2,
@@ -50049,18 +50965,18 @@ var ToolboxView = (
       });
     };
     ToolboxView2.prototype.updateView = function(toolboxModel, ecModel, api, payload) {
-      each$8(this._features, function(feature) {
+      each$d(this._features, function(feature) {
         feature instanceof ToolboxFeature && feature.updateView && feature.updateView(feature.model, ecModel, api, payload);
       });
     };
     ToolboxView2.prototype.remove = function(ecModel, api) {
-      each$8(this._features, function(feature) {
+      each$d(this._features, function(feature) {
         feature instanceof ToolboxFeature && feature.remove && feature.remove(ecModel, api);
       });
       this.group.removeAll();
     };
     ToolboxView2.prototype.dispose = function(ecModel, api) {
-      each$8(this._features, function(feature) {
+      each$d(this._features, function(feature) {
         feature instanceof ToolboxFeature && feature.dispose && feature.dispose(ecModel, api);
       });
     };
@@ -50174,7 +51090,7 @@ var MagicType = (
       var model = this.model;
       var availableIcons = model.get("icon");
       var icons = {};
-      each$8(model.get("type"), function(type) {
+      each$d(model.get("type"), function(type) {
         if (availableIcons[type]) {
           icons[type] = availableIcons[type];
         }
@@ -50233,9 +51149,9 @@ var MagicType = (
           }
         }
       };
-      each$8(radioTypes, function(radio) {
+      each$d(radioTypes, function(radio) {
         if (indexOf(radio, type) >= 0) {
-          each$8(radio, function(item) {
+          each$d(radio, function(item) {
             model.setIconStatus(item, "normal");
           });
         }
@@ -50354,7 +51270,7 @@ function groupSeries(ecModel) {
 }
 function assembleSeriesWithCategoryAxis(groups) {
   var tables = [];
-  each$8(groups, function(group, key) {
+  each$d(groups, function(group, key) {
     var categoryAxis2 = group.categoryAxis;
     var valueAxis2 = group.valueAxis;
     var valueAxisDim = valueAxis2.dim;
@@ -50362,7 +51278,7 @@ function assembleSeriesWithCategoryAxis(groups) {
       return series.name;
     }));
     var columns = [categoryAxis2.model.getCategories()];
-    each$8(group.series, function(series) {
+    each$d(group.series, function(series) {
       var rawData = series.getRawData();
       columns.push(series.getRawData().mapArray(rawData.mapDimension(valueAxisDim), function(val) {
         return val;
@@ -50480,7 +51396,7 @@ function parseContents(str, blockMetaList) {
   var newOption = {
     series: []
   };
-  each$8(blocks, function(block, idx) {
+  each$d(blocks, function(block, idx) {
     if (isTSVFormat(block)) {
       var result = parseTSVContents(block);
       var blockMeta = blockMetaList[idx];
@@ -50629,8 +51545,8 @@ var DataView = (
 function tryMergeDataOption(newData, originalData) {
   return map$1(newData, function(newVal, idx) {
     var original = originalData && originalData[idx];
-    if (isObject$3(original) && !isArray$1(original)) {
-      var newValIsObject = isObject$3(newVal) && !isArray$1(newVal);
+    if (isObject$4(original) && !isArray$2(original)) {
+      var newValIsObject = isObject$4(newVal) && !isArray$2(newVal);
       if (!newValIsObject) {
         newVal = {
           value: newVal
@@ -50651,7 +51567,7 @@ registerAction({
   update: "prepareAndUpdate"
 }, function(payload, ecModel) {
   var newSeriesOptList = [];
-  each$8(payload.newOption.series, function(seriesOpt) {
+  each$d(payload.newOption.series, function(seriesOpt) {
     var seriesModel = ecModel.getSeriesByName(seriesOpt.name)[0];
     if (!seriesModel) {
       newSeriesOptList.push(extend({
@@ -50671,11 +51587,11 @@ registerAction({
   }, payload.newOption));
 });
 const DataView$1 = DataView;
-var each$2 = each$8;
+var each$6 = each$d;
 var inner$5 = makeInner();
 function push(ecModel, newSnapshot) {
   var storedSnapshots = getStoreSnapshots(ecModel);
-  each$2(newSnapshot, function(batchItem, dataZoomId) {
+  each$6(newSnapshot, function(batchItem, dataZoomId) {
     var i = storedSnapshots.length - 1;
     for (; i >= 0; i--) {
       var snapshot = storedSnapshots[i];
@@ -50706,7 +51622,7 @@ function pop(ecModel) {
   var head = storedSnapshots[storedSnapshots.length - 1];
   storedSnapshots.length > 1 && storedSnapshots.pop();
   var snapshot = {};
-  each$2(head, function(batchItem, dataZoomId) {
+  each$6(head, function(batchItem, dataZoomId) {
     for (var i = storedSnapshots.length - 1; i >= 0; i--) {
       batchItem = storedSnapshots[i][dataZoomId];
       if (batchItem) {
@@ -50772,7 +51688,7 @@ var BrushTargetManager = (
       var _this = this;
       this._targetInfoList = [];
       var foundCpts = parseFinder(ecModel, finder);
-      each$8(targetInfoBuilders, function(builder, type) {
+      each$d(targetInfoBuilders, function(builder, type) {
         if (!opt || !opt.include || indexOf(opt.include, type) >= 0) {
           builder(foundCpts, _this._targetInfoList);
         }
@@ -50793,10 +51709,10 @@ var BrushTargetManager = (
       return areas;
     };
     BrushTargetManager2.prototype.matchOutputRanges = function(areas, ecModel, cb) {
-      each$8(areas, function(area) {
+      each$d(areas, function(area) {
         var targetInfo = this.findTargetInfo(area, ecModel);
         if (targetInfo && targetInfo !== true) {
-          each$8(targetInfo.coordSyses, function(coordSys) {
+          each$d(targetInfo.coordSyses, function(coordSys) {
             var result = coordConvert[area.brushType](1, coordSys, area.range, true);
             cb(area, result.values, coordSys, ecModel);
           });
@@ -50804,7 +51720,7 @@ var BrushTargetManager = (
       }, this);
     };
     BrushTargetManager2.prototype.setInputRanges = function(areas, ecModel) {
-      each$8(areas, function(area) {
+      each$d(areas, function(area) {
         var targetInfo = this.findTargetInfo(area, ecModel);
         area.range = area.range || [];
         if (targetInfo && targetInfo !== true) {
@@ -50874,17 +51790,17 @@ var targetInfoBuilders = {
     if (!xAxisModels && !yAxisModels && !gridModels) {
       return;
     }
-    each$8(xAxisModels, function(axisModel) {
+    each$d(xAxisModels, function(axisModel) {
       var gridModel = axisModel.axis.grid.model;
       gridModelMap.set(gridModel.id, gridModel);
       xAxesHas[gridModel.id] = true;
     });
-    each$8(yAxisModels, function(axisModel) {
+    each$d(yAxisModels, function(axisModel) {
       var gridModel = axisModel.axis.grid.model;
       gridModelMap.set(gridModel.id, gridModel);
       yAxesHas[gridModel.id] = true;
     });
-    each$8(gridModels, function(gridModel) {
+    each$d(gridModels, function(gridModel) {
       gridModelMap.set(gridModel.id, gridModel);
       xAxesHas[gridModel.id] = true;
       yAxesHas[gridModel.id] = true;
@@ -50892,7 +51808,7 @@ var targetInfoBuilders = {
     gridModelMap.each(function(gridModel) {
       var grid = gridModel.coordinateSystem;
       var cartesians = [];
-      each$8(grid.getCartesians(), function(cartesian, index) {
+      each$d(grid.getCartesians(), function(cartesian, index) {
         if (indexOf(xAxisModels, cartesian.getAxis("x").model) >= 0 || indexOf(yAxisModels, cartesian.getAxis("y").model) >= 0) {
           cartesians.push(cartesian);
         }
@@ -50911,7 +51827,7 @@ var targetInfoBuilders = {
     });
   },
   geo: function(foundCpts, targetInfoList) {
-    each$8(foundCpts.geoModels, function(geoModel) {
+    each$d(foundCpts.geoModels, function(geoModel) {
       var coordSys = geoModel.coordinateSystem;
       targetInfoList.push({
         panelId: "geo--" + geoModel.id,
@@ -51019,7 +51935,7 @@ function getSize(xyMinMax) {
   return xyMinMax ? [xyMinMax[0][1] - xyMinMax[0][0], xyMinMax[1][1] - xyMinMax[1][0]] : [NaN, NaN];
 }
 const BrushTargetManager$1 = BrushTargetManager;
-var each$1 = each$8;
+var each$5 = each$d;
 var DATA_ZOOM_ID_BASE = makeInternalComponentId("toolbox-dataZoom_");
 var DataZoomFeature = (
   /** @class */
@@ -51101,7 +52017,7 @@ var DataZoomFeature = (
     };
     DataZoomFeature2.prototype._dispatchZoomAction = function(snapshot) {
       var batch = [];
-      each$1(snapshot, function(batchItem, dataZoomId) {
+      each$5(snapshot, function(batchItem, dataZoomId) {
         batch.push(clone$4(batchItem));
       });
       batch.length && this.api.dispatchAction({
@@ -51190,10 +52106,10 @@ registerInternalOptionCreator("dataZoom", function(ecModel) {
   var dzOptions = [];
   var finder = makeAxisFinder(dzFeatureModel);
   var finderResult = parseFinder$1(ecModel, finder);
-  each$1(finderResult.xAxisModels, function(axisModel) {
+  each$5(finderResult.xAxisModels, function(axisModel) {
     return buildInternalOptions(axisModel, "xAxis", "xAxisIndex");
   });
-  each$1(finderResult.yAxisModels, function(axisModel) {
+  each$5(finderResult.yAxisModels, function(axisModel) {
     return buildInternalOptions(axisModel, "yAxis", "yAxisIndex");
   });
   function buildInternalOptions(axisModel, axisMainType, axisIndexPropName) {
@@ -51212,7 +52128,7 @@ registerInternalOptionCreator("dataZoom", function(ecModel) {
   return dzOptions;
 });
 const DataZoom = DataZoomFeature;
-function install$b(registers) {
+function install$e(registers) {
   registers.registerComponentModel(ToolboxModel$1);
   registers.registerComponentView(ToolboxView$1);
   registerFeature("saveAsImage", SaveAsImage$1);
@@ -51220,7 +52136,7 @@ function install$b(registers) {
   registerFeature("dataView", DataView$1);
   registerFeature("dataZoom", DataZoom);
   registerFeature("restore", Restore);
-  use(install$c);
+  use(install$f);
 }
 var TooltipModel = (
   /** @class */
@@ -51401,7 +52317,7 @@ function assembleFont(textStyleModel) {
   var shadowOffsetX = textStyleModel.get("textShadowOffsetX") || 0;
   var shadowOffsetY = textStyleModel.get("textShadowOffsetY") || 0;
   shadowColor && shadowBlur && cssText.push("text-shadow:" + shadowOffsetX + "px " + shadowOffsetY + "px " + shadowBlur + "px " + shadowColor);
-  each$8(["decoration", "align"], function(name) {
+  each$d(["decoration", "align"], function(name) {
     var val = textStyleModel.get(name);
     val && cssText.push("text-" + name + ":" + val);
   });
@@ -51423,7 +52339,7 @@ function assembleCssText(tooltipModel, enableTransition, onlyFade) {
   if (backgroundColor2) {
     cssText.push("background-color:" + backgroundColor2);
   }
-  each$8(["width", "color", "radius"], function(name) {
+  each$d(["width", "color", "radius"], function(name) {
     var borderName = "border-" + name;
     var camelCase = toCamelCase(borderName);
     var val = tooltipModel.get(camelCase);
@@ -51544,7 +52460,7 @@ var TooltipHTMLContent = (
         el.innerHTML = content + arrow;
       } else if (content) {
         el.innerHTML = "";
-        if (!isArray$1(content)) {
+        if (!isArray$2(content)) {
           content = [content];
         }
         for (var i = 0; i < content.length; i++) {
@@ -51572,7 +52488,7 @@ var TooltipHTMLContent = (
       if (styleCoord[0] != null && styleCoord[1] != null) {
         var style_1 = this.el.style;
         var transforms = assembleTransform(styleCoord[0], styleCoord[1]);
-        each$8(transforms, function(transform3) {
+        each$d(transforms, function(transform3) {
           style_1[transform3[0]] = transform3[1];
         });
       }
@@ -51637,7 +52553,7 @@ var TooltipRichContent = (
     };
     TooltipRichContent2.prototype.setContent = function(content, markupStyleCreator, tooltipModel, borderColor, arrowPosition) {
       var _this = this;
-      if (isObject$3(content)) {
+      if (isObject$4(content)) {
         throwError("");
       }
       if (this.el) {
@@ -51659,10 +52575,10 @@ var TooltipRichContent = (
         },
         z: tooltipModel.get("z")
       });
-      each$8(["backgroundColor", "borderRadius", "shadowColor", "shadowBlur", "shadowOffsetX", "shadowOffsetY"], function(propName) {
+      each$d(["backgroundColor", "borderRadius", "shadowColor", "shadowBlur", "shadowOffsetX", "shadowOffsetY"], function(propName) {
         _this.el.style[propName] = tooltipModel.get(propName);
       });
-      each$8(["textShadowBlur", "textShadowOffsetX", "textShadowOffsetY"], function(propName) {
+      each$d(["textShadowBlur", "textShadowOffsetX", "textShadowOffsetY"], function(propName) {
         _this.el.style[propName] = textStyleModel.get(propName) || 0;
       });
       this._zr.add(this.el);
@@ -52000,8 +52916,8 @@ var TooltipView = (
       });
       var markupTextArrLegacy = [];
       var markupStyleCreator = new TooltipMarkupStyleCreator();
-      each$8(dataByCoordSys, function(itemCoordSys) {
-        each$8(itemCoordSys.dataByAxis, function(axisItem) {
+      each$d(dataByCoordSys, function(itemCoordSys) {
+        each$d(itemCoordSys.dataByAxis, function(axisItem) {
           var axisModel = ecModel.getComponent(axisItem.axisDim + "Axis", axisItem.axisIndex);
           var axisValue = axisItem.value;
           if (!axisModel || axisValue == null) {
@@ -52015,7 +52931,7 @@ var TooltipView = (
             blocks: []
           });
           articleMarkup.blocks.push(axisSectionMarkup);
-          each$8(axisItem.seriesDataIndices, function(idxItem) {
+          each$d(axisItem.seriesDataIndices, function(idxItem) {
             var series = ecModel.getSeriesByIndex(idxItem.seriesIndex);
             var dataIndex = idxItem.dataIndexInside;
             var cbParams = series.getDataParams(dataIndex);
@@ -52153,7 +53069,7 @@ var TooltipView = (
       if (formatter) {
         if (isString$3(formatter)) {
           var useUTC = tooltipModel.ecModel.get("useUTC");
-          var params0 = isArray$1(params) ? params[0] : params;
+          var params0 = isArray$2(params) ? params[0] : params;
           var isTimeAxis = params0 && params0.axisType && params0.axisType.indexOf("time") >= 0;
           html = formatter;
           if (isTimeAxis) {
@@ -52178,12 +53094,12 @@ var TooltipView = (
       this._updatePosition(tooltipModel, positionExpr, x2, y2, tooltipContent, params, el);
     };
     TooltipView2.prototype._getNearestPoint = function(point, tooltipDataParams, trigger2, borderColor) {
-      if (trigger2 === "axis" || isArray$1(tooltipDataParams)) {
+      if (trigger2 === "axis" || isArray$2(tooltipDataParams)) {
         return {
           color: borderColor || (this._renderMode === "html" ? "#fff" : "none")
         };
       }
-      if (!isArray$1(tooltipDataParams)) {
+      if (!isArray$2(tooltipDataParams)) {
         return {
           color: borderColor || tooltipDataParams.color || tooltipDataParams.borderColor
         };
@@ -52204,10 +53120,10 @@ var TooltipView = (
           contentSize: contentSize.slice()
         });
       }
-      if (isArray$1(positionExpr)) {
+      if (isArray$2(positionExpr)) {
         x2 = parsePercent(positionExpr[0], viewWidth);
         y2 = parsePercent(positionExpr[1], viewHeight);
-      } else if (isObject$3(positionExpr)) {
+      } else if (isObject$4(positionExpr)) {
         var boxLayoutPosition = positionExpr;
         boxLayoutPosition.width = contentSize[0];
         boxLayoutPosition.height = contentSize[1];
@@ -52241,21 +53157,21 @@ var TooltipView = (
       var lastCoordSys = this._lastDataByCoordSys;
       var lastCbParamsList = this._cbParamsList;
       var contentNotChanged = !!lastCoordSys && lastCoordSys.length === dataByCoordSys.length;
-      contentNotChanged && each$8(lastCoordSys, function(lastItemCoordSys, indexCoordSys) {
+      contentNotChanged && each$d(lastCoordSys, function(lastItemCoordSys, indexCoordSys) {
         var lastDataByAxis = lastItemCoordSys.dataByAxis || [];
         var thisItemCoordSys = dataByCoordSys[indexCoordSys] || {};
         var thisDataByAxis = thisItemCoordSys.dataByAxis || [];
         contentNotChanged = contentNotChanged && lastDataByAxis.length === thisDataByAxis.length;
-        contentNotChanged && each$8(lastDataByAxis, function(lastItem, indexAxis) {
+        contentNotChanged && each$d(lastDataByAxis, function(lastItem, indexAxis) {
           var thisItem = thisDataByAxis[indexAxis] || {};
           var lastIndices = lastItem.seriesDataIndices || [];
           var newIndices = thisItem.seriesDataIndices || [];
           contentNotChanged = contentNotChanged && lastItem.value === thisItem.value && lastItem.axisType === thisItem.axisType && lastItem.axisId === thisItem.axisId && lastIndices.length === newIndices.length;
-          contentNotChanged && each$8(lastIndices, function(lastIdxItem, j2) {
+          contentNotChanged && each$d(lastIndices, function(lastIdxItem, j2) {
             var newIdxItem = newIndices[j2];
             contentNotChanged = contentNotChanged && lastIdxItem.seriesIndex === newIdxItem.seriesIndex && lastIdxItem.dataIndex === newIdxItem.dataIndex;
           });
-          lastCbParamsList && each$8(lastItem.seriesDataIndices, function(idxItem) {
+          lastCbParamsList && each$d(lastItem.seriesDataIndices, function(idxItem) {
             var seriesIdx = idxItem.seriesIndex;
             var cbParams = cbParamsList[seriesIdx];
             var lastCbParams = lastCbParamsList[seriesIdx];
@@ -52415,8 +53331,8 @@ function findComponentReference(payload, ecModel, api) {
   }
 }
 const TooltipView$1 = TooltipView;
-function install$a(registers) {
-  use(install$e);
+function install$d(registers) {
+  use(install$h);
   registers.registerComponentModel(TooltipModel$1);
   registers.registerComponentView(TooltipView$1);
   registers.registerAction({
@@ -52429,6 +53345,98 @@ function install$a(registers) {
     event: "hideTip",
     update: "tooltip:manuallyHideTip"
   }, noop$1);
+}
+var each$4 = each$d;
+function hasKeys(obj) {
+  if (obj) {
+    for (var name_1 in obj) {
+      if (obj.hasOwnProperty(name_1)) {
+        return true;
+      }
+    }
+  }
+}
+function createVisualMappings(option, stateList, supplementVisualOption) {
+  var visualMappings = {};
+  each$4(stateList, function(state) {
+    var mappings = visualMappings[state] = createMappings();
+    each$4(option[state], function(visualData, visualType) {
+      if (!VisualMapping$1.isValidType(visualType)) {
+        return;
+      }
+      var mappingOption = {
+        type: visualType,
+        visual: visualData
+      };
+      supplementVisualOption && supplementVisualOption(mappingOption, state);
+      mappings[visualType] = new VisualMapping$1(mappingOption);
+      if (visualType === "opacity") {
+        mappingOption = clone$4(mappingOption);
+        mappingOption.type = "colorAlpha";
+        mappings.__hidden.__alphaForOpacity = new VisualMapping$1(mappingOption);
+      }
+    });
+  });
+  return visualMappings;
+  function createMappings() {
+    var Creater = function() {
+    };
+    Creater.prototype.__hidden = Creater.prototype;
+    var obj = new Creater();
+    return obj;
+  }
+}
+function replaceVisualOption(thisOption, newOption, keys2) {
+  var has2;
+  each$d(keys2, function(key) {
+    if (newOption.hasOwnProperty(key) && hasKeys(newOption[key])) {
+      has2 = true;
+    }
+  });
+  has2 && each$d(keys2, function(key) {
+    if (newOption.hasOwnProperty(key) && hasKeys(newOption[key])) {
+      thisOption[key] = clone$4(newOption[key]);
+    } else {
+      delete thisOption[key];
+    }
+  });
+}
+function incrementalApplyVisual(stateList, visualMappings, getValueState, dim) {
+  var visualTypesMap = {};
+  each$d(stateList, function(state) {
+    var visualTypes = VisualMapping$1.prepareVisualTypes(visualMappings[state]);
+    visualTypesMap[state] = visualTypes;
+  });
+  return {
+    progress: function progress(params, data) {
+      var dimIndex;
+      if (dim != null) {
+        dimIndex = data.getDimensionIndex(dim);
+      }
+      function getVisual(key) {
+        return getItemVisualFromData(data, dataIndex, key);
+      }
+      function setVisual(key, value2) {
+        setItemVisualFromData(data, dataIndex, key, value2);
+      }
+      var dataIndex;
+      var store = data.getStore();
+      while ((dataIndex = params.next()) != null) {
+        var rawDataItem = data.getRawDataItem(dataIndex);
+        if (rawDataItem && rawDataItem.visualMap === false) {
+          continue;
+        }
+        var value = dim != null ? store.get(dimIndex, dataIndex) : dataIndex;
+        var valueState = getValueState(value);
+        var mappings = visualMappings[valueState];
+        var visualTypes = visualTypesMap[valueState];
+        for (var i = 0, len2 = visualTypes.length; i < len2; i++) {
+          var type = visualTypes[i];
+          mappings[type] && mappings[type].applyVisual(value, getVisual, setVisual);
+        }
+      }
+    }
+  };
 }
 var TitleModel = (
   /** @class */
@@ -52596,7 +53604,7 @@ var TitleView = (
     return TitleView2;
   }(ComponentView$1)
 );
-function install$9(registers) {
+function install$c(registers) {
   registers.registerComponentModel(TitleModel);
   registers.registerComponentView(TitleView);
 }
@@ -52604,7 +53612,7 @@ function checkMarkerInSeries(seriesOpts, markerType) {
   if (!seriesOpts) {
     return false;
   }
-  var seriesOptArr = isArray$1(seriesOpts) ? seriesOpts : [seriesOpts];
+  var seriesOptArr = isArray$2(seriesOpts) ? seriesOpts : [seriesOpts];
   for (var idx = 0; idx < seriesOptArr.length; idx++) {
     if (seriesOptArr[idx] && seriesOptArr[idx][markerType]) {
       return true;
@@ -52654,7 +53662,7 @@ var MarkerModel = (
             if (isInit) {
               fillLabel(markerOpt);
             }
-            each$8(markerOpt.data, function(item) {
+            each$d(markerOpt.data, function(item) {
               if (item instanceof Array) {
                 fillLabel(item[0]);
                 fillLabel(item[1]);
@@ -52787,7 +53795,7 @@ function dataTransform(seriesModel, item) {
   var data = seriesModel.getData();
   var coordSys = seriesModel.coordinateSystem;
   var dims = coordSys.dimensions;
-  if (!hasXAndY(item) && !isArray$1(item.coord) && coordSys) {
+  if (!hasXAndY(item) && !isArray$2(item.coord) && coordSys) {
     var axisInfo = getAxisInfo(item, data, coordSys, seriesModel);
     item = clone$4(item);
     if (item.type && markerTypeCalculator[item.type] && axisInfo.baseAxis && axisInfo.valueAxis) {
@@ -52894,7 +53902,7 @@ var MarkerView = (
     };
     MarkerView2.prototype.toggleBlurSeries = function(seriesModelList, isBlur) {
       var _this = this;
-      each$8(seriesModelList, function(seriesModel) {
+      each$d(seriesModelList, function(seriesModel) {
         var markerModel = MarkerModel$1.getMarkerModelFromSeries(seriesModel, _this.type);
         if (markerModel) {
           var data = markerModel.getData();
@@ -53041,7 +54049,7 @@ function createData(coordSys, seriesModel, mpModel) {
   return mpData;
 }
 const MarkPointView$1 = MarkPointView;
-function install$8(registers) {
+function install$b(registers) {
   registers.registerComponentModel(MarkPointModel$1);
   registers.registerComponentView(MarkPointView$1);
   registers.registerPreprocessor(function(opt) {
@@ -53100,7 +54108,7 @@ var inner$2 = makeInner();
 var markLineTransform = function(seriesModel, coordSys, mlModel, item) {
   var data = seriesModel.getData();
   var itemArray;
-  if (!isArray$1(item)) {
+  if (!isArray$2(item)) {
     var mlType = item.type;
     if (mlType === "min" || mlType === "max" || mlType === "average" || mlType === "median" || item.xAxis != null || item.yAxis != null) {
       var valueAxis2 = void 0;
@@ -53246,16 +54254,16 @@ var MarkLineView = (
       var symbolSize = mlModel.get("symbolSize");
       var symbolRotate = mlModel.get("symbolRotate");
       var symbolOffset = mlModel.get("symbolOffset");
-      if (!isArray$1(symbolType)) {
+      if (!isArray$2(symbolType)) {
         symbolType = [symbolType, symbolType];
       }
-      if (!isArray$1(symbolSize)) {
+      if (!isArray$2(symbolSize)) {
         symbolSize = [symbolSize, symbolSize];
       }
-      if (!isArray$1(symbolRotate)) {
+      if (!isArray$2(symbolRotate)) {
         symbolRotate = [symbolRotate, symbolRotate];
       }
-      if (!isArray$1(symbolOffset)) {
+      if (!isArray$2(symbolOffset)) {
         symbolOffset = [symbolOffset, symbolOffset];
       }
       mlData.from.each(function(idx) {
@@ -53356,7 +54364,7 @@ function createList$1(coordSys, seriesModel, mlModel) {
   };
 }
 const MarkLineView$1 = MarkLineView;
-function install$7(registers) {
+function install$a(registers) {
   registers.registerComponentModel(MarkLineModel$1);
   registers.registerComponentView(MarkLineView$1);
   registers.registerPreprocessor(function(opt) {
@@ -53560,8 +54568,8 @@ var MarkAreaView = (
         var yAxisExtent = yAxisScale.getExtent();
         var xPointExtent = [xAxisScale.parse(areaData.get("x0", idx)), xAxisScale.parse(areaData.get("x1", idx))];
         var yPointExtent = [yAxisScale.parse(areaData.get("y0", idx)), yAxisScale.parse(areaData.get("y1", idx))];
-        asc$1(xPointExtent);
-        asc$1(yPointExtent);
+        asc$2(xPointExtent);
+        asc$2(yPointExtent);
         var overlapped = !(xAxisExtent[0] > xPointExtent[1] || xAxisExtent[1] < xPointExtent[0] || yAxisExtent[0] > yPointExtent[1] || yAxisExtent[1] < yPointExtent[0]);
         var allClipped = !overlapped;
         areaData.setItemLayout(idx, {
@@ -53682,7 +54690,7 @@ function createList(coordSys, seriesModel, maModel) {
   return areaData;
 }
 const MarkAreaView$1 = MarkAreaView;
-function install$6(registers) {
+function install$9(registers) {
   registers.registerComponentModel(MarkAreaModel$1);
   registers.registerComponentView(MarkAreaView$1);
   registers.registerPreprocessor(function(opt) {
@@ -53739,8 +54747,8 @@ var LegendModel = (
       if (selector === true) {
         selector = option.selector = ["all", "inverse"];
       }
-      if (isArray$1(selector)) {
-        each$8(selector, function(item, index) {
+      if (isArray$2(selector)) {
+        each$d(selector, function(item, index) {
           isString$3(item) && (item = {
             type: item
           });
@@ -53816,7 +54824,7 @@ var LegendModel = (
       var selectedMode = this.get("selectedMode");
       if (selectedMode === "single") {
         var data = this._data;
-        each$8(data, function(dataItem) {
+        each$d(data, function(dataItem) {
           selected[dataItem.get("name")] = false;
         });
       }
@@ -53837,14 +54845,14 @@ var LegendModel = (
     LegendModel2.prototype.allSelect = function() {
       var data = this._data;
       var selected = this.option.selected;
-      each$8(data, function(dataItem) {
+      each$d(data, function(dataItem) {
         selected[dataItem.get("name", true)] = true;
       });
     };
     LegendModel2.prototype.inverseSelect = function() {
       var data = this._data;
       var selected = this.option.selected;
-      each$8(data, function(dataItem) {
+      each$d(data, function(dataItem) {
         var name = dataItem.get("name", true);
         if (!selected.hasOwnProperty(name)) {
           selected[name] = true;
@@ -53946,7 +54954,7 @@ var LegendModel = (
 );
 const LegendModel$1 = LegendModel;
 var curry = curry$1;
-var each = each$8;
+var each$3 = each$d;
 var Group$1 = Group$3;
 var LegendView = (
   /** @class */
@@ -54017,7 +55025,7 @@ var LegendView = (
       ecModel.eachRawSeries(function(seriesModel) {
         !seriesModel.get("legendHoverLink") && excludeSeriesId.push(seriesModel.id);
       });
-      each(legendModel.getData(), function(legendItemModel, dataIndex) {
+      each$3(legendModel.getData(), function(legendItemModel, dataIndex) {
         var name = legendItemModel.get("name");
         if (!this.newlineDisabled && (name === "" || name === "\n")) {
           var g = new Group$1();
@@ -54070,7 +55078,7 @@ var LegendView = (
     };
     LegendView2.prototype._createSelector = function(selector, legendModel, api, orient, selectorPosition) {
       var selectorGroup = this.getSelectorGroup();
-      each(selector, function createSelectorButton(selectorItem) {
+      each$3(selector, function createSelectorButton(selectorItem) {
         var type = selectorItem.type;
         var labelText = new ZRText$1({
           style: {
@@ -54233,7 +55241,7 @@ function getLegendStyle(iconType, legendItemModel, lineVisualStyle, itemVisualSt
     if (style2.lineWidth === "auto") {
       style2.lineWidth = visualStyle.lineWidth > 0 ? 2 : 0;
     }
-    each(style2, function(propVal, propName) {
+    each$3(style2, function(propVal, propName) {
       style2[propName] === "inherit" && (style2[propName] = visualStyle[propName]);
     });
   }
@@ -54353,7 +55361,7 @@ function legendSelectActionHandler(methodName, payload, ecModel) {
       isSelected = legendModel.isSelected(payload.name);
     }
     var legendData = legendModel.getData();
-    each$8(legendData, function(model) {
+    each$d(legendData, function(model) {
       var name = model.get("name");
       if (name === "\n" || name === "") {
         return;
@@ -54380,7 +55388,7 @@ function installLegendAction(registers) {
   registers.registerAction("legendSelect", "legendselected", curry$1(legendSelectActionHandler, "select"));
   registers.registerAction("legendUnSelect", "legendunselected", curry$1(legendSelectActionHandler, "unSelect"));
 }
-function install$5(registers) {
+function install$8(registers) {
   registers.registerComponentModel(LegendModel$1);
   registers.registerComponentView(LegendView$1);
   registers.registerProcessor(registers.PRIORITY.PROCESSOR.SERIES_FILTER, legendFilter);
@@ -54473,7 +55481,7 @@ var ScrollableLegendView = (
       _super.prototype.renderInner.call(this, itemAlign, legendModel, ecModel, api, selector, orient, selectorPosition);
       var controllerGroup = this._controllerGroup;
       var pageIconSize = legendModel.get("pageIconSize", true);
-      var pageIconSizeArr = isArray$1(pageIconSize) ? pageIconSize : [pageIconSize, pageIconSize];
+      var pageIconSizeArr = isArray$2(pageIconSize) ? pageIconSize : [pageIconSize, pageIconSize];
       createPageButton("pagePrev", 0);
       var pageTextStyleModel = legendModel.getModel("pageTextStyle");
       controllerGroup.add(new ZRText$1({
@@ -54626,7 +55634,7 @@ var ScrollableLegendView = (
     };
     ScrollableLegendView2.prototype._updatePageInfoView = function(legendModel, pageInfo) {
       var controllerGroup = this._controllerGroup;
-      each$8(["pagePrev", "pageNext"], function(name) {
+      each$d(["pagePrev", "pageNext"], function(name) {
         var key = name + "DataIndex";
         var canJump = pageInfo[key] != null;
         var icon = controllerGroup.childOfName(name);
@@ -54759,15 +55767,15 @@ function installScrollableLegendAction(registers) {
     });
   });
 }
-function install$4(registers) {
-  use(install$5);
+function install$7(registers) {
+  use(install$8);
   registers.registerComponentModel(ScrollableLegendModel$1);
   registers.registerComponentView(ScrollableLegendView$1);
   installScrollableLegendAction(registers);
 }
-function install$3(registers) {
-  use(install$5);
-  use(install$4);
+function install$6(registers) {
+  use(install$8);
+  use(install$7);
 }
 var InsideZoomModel = (
   /** @class */
@@ -54835,7 +55843,7 @@ function createCoordSysRecord(api, coordSysModel) {
     controller: null
   };
   var controller = coordSysRecord.controller = new RoamController$1(api.getZr());
-  each$8(["pan", "zoom", "scrollMove"], function(eventName) {
+  each$d(["pan", "zoom", "scrollMove"], function(eventName) {
     controller.on(eventName, function(event) {
       var batch = [];
       coordSysRecord.dataZoomInfoMap.each(function(dzInfo) {
@@ -54913,7 +55921,7 @@ function installDataZoomRoamProcessor(registers) {
       subType: "inside"
     }, function(dataZoomModel) {
       var dzReferCoordSysWrap = collectReferCoordSysModelInfo(dataZoomModel);
-      each$8(dzReferCoordSysWrap.infoList, function(dzCoordSysInfo) {
+      each$d(dzReferCoordSysWrap.infoList, function(dzCoordSysInfo) {
         var coordSysUid = dzCoordSysInfo.model.uid;
         var coordSysRecord = coordSysRecordMap.get(coordSysUid) || coordSysRecordMap.set(coordSysUid, createCoordSysRecord(api, dzCoordSysInfo.model));
         var dataZoomInfoMap = coordSysRecord.dataZoomInfoMap || (coordSysRecord.dataZoomInfoMap = createHashMap());
@@ -55084,8 +56092,8 @@ var getDirectionInfo = {
   }
 };
 const InsideZoomView$1 = InsideZoomView;
-function install$2(registers) {
-  installCommon(registers);
+function install$5(registers) {
+  installCommon$1(registers);
   registers.registerComponentModel(InsideZoomModel$1);
   registers.registerComponentView(InsideZoomView$1);
   installDataZoomRoamProcessor(registers);
@@ -55268,7 +56276,7 @@ var SliderZoomView = (
         height: coordRect.height
       };
       var layoutParams = getLayoutParams(dataZoomModel.option);
-      each$8(["right", "top", "width", "height"], function(name) {
+      each$d(["right", "top", "width", "height"], function(name) {
         if (layoutParams[name] === "ph") {
           layoutParams[name] = positionInfo[name];
         }
@@ -55390,7 +56398,7 @@ var SliderZoomView = (
             return;
           }
           var isEmpty = value == null || isNaN(value) || value === "";
-          var otherCoord = isEmpty ? 0 : linearMap(value, otherDataExtent_1, otherShadowExtent_1, true);
+          var otherCoord = isEmpty ? 0 : linearMap$2(value, otherDataExtent_1, otherShadowExtent_1, true);
           if (isEmpty && !lastIsEmpty_1 && index) {
             areaPoints_1.push([areaPoints_1[areaPoints_1.length - 1][0], 0]);
             linePoints_1.push([linePoints_1[linePoints_1.length - 1][0], 0]);
@@ -55451,7 +56459,7 @@ var SliderZoomView = (
       var ecModel = this.ecModel;
       dataZoomModel.eachTargetAxis(function(axisDim, axisIndex) {
         var seriesModels = dataZoomModel.getAxisProxy(axisDim, axisIndex).getTargetSeriesModels();
-        each$8(seriesModels, function(seriesModel) {
+        each$d(seriesModels, function(seriesModel) {
           if (result) {
             return;
           }
@@ -55515,14 +56523,14 @@ var SliderZoomView = (
           fill: "rgba(0,0,0,0)"
         }
       }));
-      each$8([0, 1], function(handleIndex) {
+      each$d([0, 1], function(handleIndex) {
         var iconStr = dataZoomModel.get("handleIcon");
         if (!symbolBuildProxies[iconStr] && iconStr.indexOf("path://") < 0 && iconStr.indexOf("image://") < 0) {
           iconStr = "path://" + iconStr;
         }
         var path = createSymbol$1(iconStr, -1, 0, 2, 2, null, true);
         path.attr({
-          cursor: getCursor(this._orient),
+          cursor: getCursor$1(this._orient),
           draggable: true,
           drift: bind$1(this._onDragMove, this, handleIndex),
           ondragend: bind$1(this._onDragEnd, this),
@@ -55596,7 +56604,7 @@ var SliderZoomView = (
       }
       actualMoveZone.attr({
         draggable: true,
-        cursor: getCursor(this._orient),
+        cursor: getCursor$1(this._orient),
         drift: bind$1(this._onDragMove, this, "all"),
         ondragstart: bind$1(this._showDataInfo, this, true),
         ondragend: bind$1(this._onDragEnd, this),
@@ -55607,7 +56615,7 @@ var SliderZoomView = (
     SliderZoomView2.prototype._resetInterval = function() {
       var range = this._range = this.dataZoomModel.getPercentRange();
       var viewExtent = this._getViewExtent();
-      this._handleEnds = [linearMap(range[0], [0, 100], viewExtent, true), linearMap(range[1], [0, 100], viewExtent, true)];
+      this._handleEnds = [linearMap$2(range[0], [0, 100], viewExtent, true), linearMap$2(range[1], [0, 100], viewExtent, true)];
     };
     SliderZoomView2.prototype._updateInterval = function(handleIndex, delta) {
       var dataZoomModel = this.dataZoomModel;
@@ -55615,17 +56623,17 @@ var SliderZoomView = (
       var viewExtend = this._getViewExtent();
       var minMaxSpan = dataZoomModel.findRepresentativeAxisProxy().getMinMaxSpan();
       var percentExtent = [0, 100];
-      sliderMove(delta, handleEnds, viewExtend, dataZoomModel.get("zoomLock") ? "all" : handleIndex, minMaxSpan.minSpan != null ? linearMap(minMaxSpan.minSpan, percentExtent, viewExtend, true) : null, minMaxSpan.maxSpan != null ? linearMap(minMaxSpan.maxSpan, percentExtent, viewExtend, true) : null);
+      sliderMove(delta, handleEnds, viewExtend, dataZoomModel.get("zoomLock") ? "all" : handleIndex, minMaxSpan.minSpan != null ? linearMap$2(minMaxSpan.minSpan, percentExtent, viewExtend, true) : null, minMaxSpan.maxSpan != null ? linearMap$2(minMaxSpan.maxSpan, percentExtent, viewExtend, true) : null);
       var lastRange = this._range;
-      var range = this._range = asc$1([linearMap(handleEnds[0], viewExtend, percentExtent, true), linearMap(handleEnds[1], viewExtend, percentExtent, true)]);
+      var range = this._range = asc$2([linearMap$2(handleEnds[0], viewExtend, percentExtent, true), linearMap$2(handleEnds[1], viewExtend, percentExtent, true)]);
       return !lastRange || lastRange[0] !== range[0] || lastRange[1] !== range[1];
     };
     SliderZoomView2.prototype._updateView = function(nonRealtime) {
       var displaybles = this._displayables;
       var handleEnds = this._handleEnds;
-      var handleInterval = asc$1(handleEnds.slice());
+      var handleInterval = asc$2(handleEnds.slice());
       var size2 = this._size;
-      each$8([0, 1], function(handleIndex) {
+      each$d([0, 1], function(handleIndex) {
         var handle = displaybles.handles[handleIndex];
         var handleHeight = this._handleHeight;
         handle.attr({
@@ -55689,7 +56697,7 @@ var SliderZoomView = (
           labelTexts = [this._formatLabel(dataInterval[0], axis), this._formatLabel(dataInterval[1], axis)];
         }
       }
-      var orderedHandleEnds = asc$1(this._handleEnds.slice());
+      var orderedHandleEnds = asc$2(this._handleEnds.slice());
       setLabel.call(this, 0);
       setLabel.call(this, 1);
       function setLabel(handleIndex) {
@@ -55778,7 +56786,7 @@ var SliderZoomView = (
       }
       var viewExtend = this._getViewExtent();
       var percentExtent = [0, 100];
-      this._range = asc$1([linearMap(brushShape.x, viewExtend, percentExtent, true), linearMap(brushShape.x + brushShape.width, viewExtend, percentExtent, true)]);
+      this._range = asc$2([linearMap$2(brushShape.x, viewExtend, percentExtent, true), linearMap$2(brushShape.x + brushShape.width, viewExtend, percentExtent, true)]);
       this._handleEnds = [brushShape.x, brushShape.x + brushShape.width];
       this._updateView();
       this._dispatchZoomAction(false);
@@ -55857,13 +56865,1790 @@ function getOtherDim(thisDim) {
   };
   return map2[thisDim];
 }
-function getCursor(orient) {
+function getCursor$1(orient) {
   return orient === "vertical" ? "ns-resize" : "ew-resize";
 }
 const SliderZoomView$1 = SliderZoomView;
-function install$1(registers) {
+function install$4(registers) {
   registers.registerComponentModel(SliderZoomModel$1);
   registers.registerComponentView(SliderZoomView$1);
+  installCommon$1(registers);
+}
+function install$3(registers) {
+  use(install$5);
+  use(install$4);
+}
+var visualDefault = {
+  /**
+   * @public
+   */
+  get: function(visualType, key, isCategory2) {
+    var value = clone$4((defaultOption[visualType] || {})[key]);
+    return isCategory2 ? isArray$2(value) ? value[value.length - 1] : value : value;
+  }
+};
+var defaultOption = {
+  color: {
+    active: ["#006edd", "#e0ffff"],
+    inactive: ["rgba(0,0,0,0)"]
+  },
+  colorHue: {
+    active: [0, 360],
+    inactive: [0, 0]
+  },
+  colorSaturation: {
+    active: [0.3, 1],
+    inactive: [0, 0]
+  },
+  colorLightness: {
+    active: [0.9, 0.5],
+    inactive: [0, 0]
+  },
+  colorAlpha: {
+    active: [0.3, 1],
+    inactive: [0, 0]
+  },
+  opacity: {
+    active: [0.3, 1],
+    inactive: [0, 0]
+  },
+  symbol: {
+    active: ["circle", "roundRect", "diamond"],
+    inactive: ["none"]
+  },
+  symbolSize: {
+    active: [10, 50],
+    inactive: [0, 0]
+  }
+};
+const visualDefault$1 = visualDefault;
+var mapVisual = VisualMapping$1.mapVisual;
+var eachVisual = VisualMapping$1.eachVisual;
+var isArray$1 = isArray$2;
+var each$2 = each$d;
+var asc = asc$2;
+var linearMap$1 = linearMap$2;
+var VisualMapModel = (
+  /** @class */
+  function(_super) {
+    __extends(VisualMapModel2, _super);
+    function VisualMapModel2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = VisualMapModel2.type;
+      _this.stateList = ["inRange", "outOfRange"];
+      _this.replacableOptionKeys = ["inRange", "outOfRange", "target", "controller", "color"];
+      _this.layoutMode = {
+        type: "box",
+        ignoreSize: true
+      };
+      _this.dataBound = [-Infinity, Infinity];
+      _this.targetVisuals = {};
+      _this.controllerVisuals = {};
+      return _this;
+    }
+    VisualMapModel2.prototype.init = function(option, parentModel, ecModel) {
+      this.mergeDefaultAndTheme(option, ecModel);
+    };
+    VisualMapModel2.prototype.optionUpdated = function(newOption, isInit) {
+      var thisOption = this.option;
+      !isInit && replaceVisualOption(thisOption, newOption, this.replacableOptionKeys);
+      this.textStyleModel = this.getModel("textStyle");
+      this.resetItemSize();
+      this.completeVisualOption();
+    };
+    VisualMapModel2.prototype.resetVisual = function(supplementVisualOption) {
+      var stateList = this.stateList;
+      supplementVisualOption = bind$1(supplementVisualOption, this);
+      this.controllerVisuals = createVisualMappings(this.option.controller, stateList, supplementVisualOption);
+      this.targetVisuals = createVisualMappings(this.option.target, stateList, supplementVisualOption);
+    };
+    VisualMapModel2.prototype.getItemSymbol = function() {
+      return null;
+    };
+    VisualMapModel2.prototype.getTargetSeriesIndices = function() {
+      var optionSeriesIndex = this.option.seriesIndex;
+      var seriesIndices = [];
+      if (optionSeriesIndex == null || optionSeriesIndex === "all") {
+        this.ecModel.eachSeries(function(seriesModel, index) {
+          seriesIndices.push(index);
+        });
+      } else {
+        seriesIndices = normalizeToArray(optionSeriesIndex);
+      }
+      return seriesIndices;
+    };
+    VisualMapModel2.prototype.eachTargetSeries = function(callback, context) {
+      each$d(this.getTargetSeriesIndices(), function(seriesIndex) {
+        var seriesModel = this.ecModel.getSeriesByIndex(seriesIndex);
+        if (seriesModel) {
+          callback.call(context, seriesModel);
+        }
+      }, this);
+    };
+    VisualMapModel2.prototype.isTargetSeries = function(seriesModel) {
+      var is = false;
+      this.eachTargetSeries(function(model) {
+        model === seriesModel && (is = true);
+      });
+      return is;
+    };
+    VisualMapModel2.prototype.formatValueText = function(value, isCategory2, edgeSymbols) {
+      var option = this.option;
+      var precision = option.precision;
+      var dataBound = this.dataBound;
+      var formatter = option.formatter;
+      var isMinMax;
+      edgeSymbols = edgeSymbols || ["<", ">"];
+      if (isArray$2(value)) {
+        value = value.slice();
+        isMinMax = true;
+      }
+      var textValue = isCategory2 ? value : isMinMax ? [toFixed(value[0]), toFixed(value[1])] : toFixed(value);
+      if (isString$3(formatter)) {
+        return formatter.replace("{value}", isMinMax ? textValue[0] : textValue).replace("{value2}", isMinMax ? textValue[1] : textValue);
+      } else if (isFunction$1(formatter)) {
+        return isMinMax ? formatter(value[0], value[1]) : formatter(value);
+      }
+      if (isMinMax) {
+        if (value[0] === dataBound[0]) {
+          return edgeSymbols[0] + " " + textValue[1];
+        } else if (value[1] === dataBound[1]) {
+          return edgeSymbols[1] + " " + textValue[0];
+        } else {
+          return textValue[0] + " - " + textValue[1];
+        }
+      } else {
+        return textValue;
+      }
+      function toFixed(val) {
+        return val === dataBound[0] ? "min" : val === dataBound[1] ? "max" : (+val).toFixed(Math.min(precision, 20));
+      }
+    };
+    VisualMapModel2.prototype.resetExtent = function() {
+      var thisOption = this.option;
+      var extent3 = asc([thisOption.min, thisOption.max]);
+      this._dataExtent = extent3;
+    };
+    VisualMapModel2.prototype.getDataDimensionIndex = function(data) {
+      var optDim = this.option.dimension;
+      if (optDim != null) {
+        return data.getDimensionIndex(optDim);
+      }
+      var dimNames = data.dimensions;
+      for (var i = dimNames.length - 1; i >= 0; i--) {
+        var dimName = dimNames[i];
+        var dimInfo = data.getDimensionInfo(dimName);
+        if (!dimInfo.isCalculationCoord) {
+          return dimInfo.storeDimIndex;
+        }
+      }
+    };
+    VisualMapModel2.prototype.getExtent = function() {
+      return this._dataExtent.slice();
+    };
+    VisualMapModel2.prototype.completeVisualOption = function() {
+      var ecModel = this.ecModel;
+      var thisOption = this.option;
+      var base2 = {
+        inRange: thisOption.inRange,
+        outOfRange: thisOption.outOfRange
+      };
+      var target = thisOption.target || (thisOption.target = {});
+      var controller = thisOption.controller || (thisOption.controller = {});
+      merge(target, base2);
+      merge(controller, base2);
+      var isCategory2 = this.isCategory();
+      completeSingle.call(this, target);
+      completeSingle.call(this, controller);
+      completeInactive.call(this, target, "inRange", "outOfRange");
+      completeController.call(this, controller);
+      function completeSingle(base3) {
+        if (isArray$1(thisOption.color) && !base3.inRange) {
+          base3.inRange = {
+            color: thisOption.color.slice().reverse()
+          };
+        }
+        base3.inRange = base3.inRange || {
+          color: ecModel.get("gradientColor")
+        };
+      }
+      function completeInactive(base3, stateExist, stateAbsent) {
+        var optExist = base3[stateExist];
+        var optAbsent = base3[stateAbsent];
+        if (optExist && !optAbsent) {
+          optAbsent = base3[stateAbsent] = {};
+          each$2(optExist, function(visualData, visualType) {
+            if (!VisualMapping$1.isValidType(visualType)) {
+              return;
+            }
+            var defa = visualDefault$1.get(visualType, "inactive", isCategory2);
+            if (defa != null) {
+              optAbsent[visualType] = defa;
+              if (visualType === "color" && !optAbsent.hasOwnProperty("opacity") && !optAbsent.hasOwnProperty("colorAlpha")) {
+                optAbsent.opacity = [0, 0];
+              }
+            }
+          });
+        }
+      }
+      function completeController(controller2) {
+        var symbolExists = (controller2.inRange || {}).symbol || (controller2.outOfRange || {}).symbol;
+        var symbolSizeExists = (controller2.inRange || {}).symbolSize || (controller2.outOfRange || {}).symbolSize;
+        var inactiveColor = this.get("inactiveColor");
+        var itemSymbol = this.getItemSymbol();
+        var defaultSymbol = itemSymbol || "roundRect";
+        each$2(this.stateList, function(state) {
+          var itemSize = this.itemSize;
+          var visuals = controller2[state];
+          if (!visuals) {
+            visuals = controller2[state] = {
+              color: isCategory2 ? inactiveColor : [inactiveColor]
+            };
+          }
+          if (visuals.symbol == null) {
+            visuals.symbol = symbolExists && clone$4(symbolExists) || (isCategory2 ? defaultSymbol : [defaultSymbol]);
+          }
+          if (visuals.symbolSize == null) {
+            visuals.symbolSize = symbolSizeExists && clone$4(symbolSizeExists) || (isCategory2 ? itemSize[0] : [itemSize[0], itemSize[0]]);
+          }
+          visuals.symbol = mapVisual(visuals.symbol, function(symbol) {
+            return symbol === "none" ? defaultSymbol : symbol;
+          });
+          var symbolSize = visuals.symbolSize;
+          if (symbolSize != null) {
+            var max_1 = -Infinity;
+            eachVisual(symbolSize, function(value) {
+              value > max_1 && (max_1 = value);
+            });
+            visuals.symbolSize = mapVisual(symbolSize, function(value) {
+              return linearMap$1(value, [0, max_1], [0, itemSize[0]], true);
+            });
+          }
+        }, this);
+      }
+    };
+    VisualMapModel2.prototype.resetItemSize = function() {
+      this.itemSize = [parseFloat(this.get("itemWidth")), parseFloat(this.get("itemHeight"))];
+    };
+    VisualMapModel2.prototype.isCategory = function() {
+      return !!this.option.categories;
+    };
+    VisualMapModel2.prototype.setSelected = function(selected) {
+    };
+    VisualMapModel2.prototype.getSelected = function() {
+      return null;
+    };
+    VisualMapModel2.prototype.getValueState = function(value) {
+      return null;
+    };
+    VisualMapModel2.prototype.getVisualMeta = function(getColorVisual2) {
+      return null;
+    };
+    VisualMapModel2.type = "visualMap";
+    VisualMapModel2.dependencies = ["series"];
+    VisualMapModel2.defaultOption = {
+      show: true,
+      // zlevel: 0,
+      z: 4,
+      seriesIndex: "all",
+      min: 0,
+      max: 200,
+      left: 0,
+      right: null,
+      top: null,
+      bottom: 0,
+      itemWidth: null,
+      itemHeight: null,
+      inverse: false,
+      orient: "vertical",
+      backgroundColor: "rgba(0,0,0,0)",
+      borderColor: "#ccc",
+      contentColor: "#5793f3",
+      inactiveColor: "#aaa",
+      borderWidth: 0,
+      padding: 5,
+      // 接受数组分别设定上右下左边距，同css
+      textGap: 10,
+      precision: 0,
+      textStyle: {
+        color: "#333"
+        // 值域文字颜色
+      }
+    };
+    return VisualMapModel2;
+  }(ComponentModel$1)
+);
+const VisualMapModel$1 = VisualMapModel;
+var DEFAULT_BAR_BOUND = [20, 140];
+var ContinuousModel = (
+  /** @class */
+  function(_super) {
+    __extends(ContinuousModel2, _super);
+    function ContinuousModel2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = ContinuousModel2.type;
+      return _this;
+    }
+    ContinuousModel2.prototype.optionUpdated = function(newOption, isInit) {
+      _super.prototype.optionUpdated.apply(this, arguments);
+      this.resetExtent();
+      this.resetVisual(function(mappingOption) {
+        mappingOption.mappingMethod = "linear";
+        mappingOption.dataExtent = this.getExtent();
+      });
+      this._resetRange();
+    };
+    ContinuousModel2.prototype.resetItemSize = function() {
+      _super.prototype.resetItemSize.apply(this, arguments);
+      var itemSize = this.itemSize;
+      (itemSize[0] == null || isNaN(itemSize[0])) && (itemSize[0] = DEFAULT_BAR_BOUND[0]);
+      (itemSize[1] == null || isNaN(itemSize[1])) && (itemSize[1] = DEFAULT_BAR_BOUND[1]);
+    };
+    ContinuousModel2.prototype._resetRange = function() {
+      var dataExtent = this.getExtent();
+      var range = this.option.range;
+      if (!range || range.auto) {
+        dataExtent.auto = 1;
+        this.option.range = dataExtent;
+      } else if (isArray$2(range)) {
+        if (range[0] > range[1]) {
+          range.reverse();
+        }
+        range[0] = Math.max(range[0], dataExtent[0]);
+        range[1] = Math.min(range[1], dataExtent[1]);
+      }
+    };
+    ContinuousModel2.prototype.completeVisualOption = function() {
+      _super.prototype.completeVisualOption.apply(this, arguments);
+      each$d(this.stateList, function(state) {
+        var symbolSize = this.option.controller[state].symbolSize;
+        if (symbolSize && symbolSize[0] !== symbolSize[1]) {
+          symbolSize[0] = symbolSize[1] / 3;
+        }
+      }, this);
+    };
+    ContinuousModel2.prototype.setSelected = function(selected) {
+      this.option.range = selected.slice();
+      this._resetRange();
+    };
+    ContinuousModel2.prototype.getSelected = function() {
+      var dataExtent = this.getExtent();
+      var dataInterval = asc$2((this.get("range") || []).slice());
+      dataInterval[0] > dataExtent[1] && (dataInterval[0] = dataExtent[1]);
+      dataInterval[1] > dataExtent[1] && (dataInterval[1] = dataExtent[1]);
+      dataInterval[0] < dataExtent[0] && (dataInterval[0] = dataExtent[0]);
+      dataInterval[1] < dataExtent[0] && (dataInterval[1] = dataExtent[0]);
+      return dataInterval;
+    };
+    ContinuousModel2.prototype.getValueState = function(value) {
+      var range = this.option.range;
+      var dataExtent = this.getExtent();
+      return (range[0] <= dataExtent[0] || range[0] <= value) && (range[1] >= dataExtent[1] || value <= range[1]) ? "inRange" : "outOfRange";
+    };
+    ContinuousModel2.prototype.findTargetDataIndices = function(range) {
+      var result = [];
+      this.eachTargetSeries(function(seriesModel) {
+        var dataIndices = [];
+        var data = seriesModel.getData();
+        data.each(this.getDataDimensionIndex(data), function(value, dataIndex) {
+          range[0] <= value && value <= range[1] && dataIndices.push(dataIndex);
+        }, this);
+        result.push({
+          seriesId: seriesModel.id,
+          dataIndex: dataIndices
+        });
+      }, this);
+      return result;
+    };
+    ContinuousModel2.prototype.getVisualMeta = function(getColorVisual2) {
+      var oVals = getColorStopValues(this, "outOfRange", this.getExtent());
+      var iVals = getColorStopValues(this, "inRange", this.option.range.slice());
+      var stops = [];
+      function setStop(value, valueState) {
+        stops.push({
+          value,
+          color: getColorVisual2(value, valueState)
+        });
+      }
+      var iIdx = 0;
+      var oIdx = 0;
+      var iLen = iVals.length;
+      var oLen = oVals.length;
+      for (; oIdx < oLen && (!iVals.length || oVals[oIdx] <= iVals[0]); oIdx++) {
+        if (oVals[oIdx] < iVals[iIdx]) {
+          setStop(oVals[oIdx], "outOfRange");
+        }
+      }
+      for (var first = 1; iIdx < iLen; iIdx++, first = 0) {
+        first && stops.length && setStop(iVals[iIdx], "outOfRange");
+        setStop(iVals[iIdx], "inRange");
+      }
+      for (var first = 1; oIdx < oLen; oIdx++) {
+        if (!iVals.length || iVals[iVals.length - 1] < oVals[oIdx]) {
+          if (first) {
+            stops.length && setStop(stops[stops.length - 1].value, "outOfRange");
+            first = 0;
+          }
+          setStop(oVals[oIdx], "outOfRange");
+        }
+      }
+      var stopsLen = stops.length;
+      return {
+        stops,
+        outerColors: [stopsLen ? stops[0].color : "transparent", stopsLen ? stops[stopsLen - 1].color : "transparent"]
+      };
+    };
+    ContinuousModel2.type = "visualMap.continuous";
+    ContinuousModel2.defaultOption = inheritDefaultOption(VisualMapModel$1.defaultOption, {
+      align: "auto",
+      calculable: false,
+      hoverLink: true,
+      realtime: true,
+      handleIcon: "path://M-11.39,9.77h0a3.5,3.5,0,0,1-3.5,3.5h-22a3.5,3.5,0,0,1-3.5-3.5h0a3.5,3.5,0,0,1,3.5-3.5h22A3.5,3.5,0,0,1-11.39,9.77Z",
+      handleSize: "120%",
+      handleStyle: {
+        borderColor: "#fff",
+        borderWidth: 1
+      },
+      indicatorIcon: "circle",
+      indicatorSize: "50%",
+      indicatorStyle: {
+        borderColor: "#fff",
+        borderWidth: 2,
+        shadowBlur: 2,
+        shadowOffsetX: 1,
+        shadowOffsetY: 1,
+        shadowColor: "rgba(0,0,0,0.2)"
+      }
+      // emphasis: {
+      //     handleStyle: {
+      //         shadowBlur: 3,
+      //         shadowOffsetX: 1,
+      //         shadowOffsetY: 1,
+      //         shadowColor: 'rgba(0,0,0,0.2)'
+      //     }
+      // }
+    });
+    return ContinuousModel2;
+  }(VisualMapModel$1)
+);
+function getColorStopValues(visualMapModel, valueState, dataExtent) {
+  if (dataExtent[0] === dataExtent[1]) {
+    return dataExtent.slice();
+  }
+  var count2 = 200;
+  var step = (dataExtent[1] - dataExtent[0]) / count2;
+  var value = dataExtent[0];
+  var stopValues = [];
+  for (var i = 0; i <= count2 && value < dataExtent[1]; i++) {
+    stopValues.push(value);
+    value += step;
+  }
+  stopValues.push(dataExtent[1]);
+  return stopValues;
+}
+const ContinuousModel$1 = ContinuousModel;
+var VisualMapView = (
+  /** @class */
+  function(_super) {
+    __extends(VisualMapView2, _super);
+    function VisualMapView2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = VisualMapView2.type;
+      _this.autoPositionValues = {
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
+      };
+      return _this;
+    }
+    VisualMapView2.prototype.init = function(ecModel, api) {
+      this.ecModel = ecModel;
+      this.api = api;
+    };
+    VisualMapView2.prototype.render = function(visualMapModel, ecModel, api, payload) {
+      this.visualMapModel = visualMapModel;
+      if (visualMapModel.get("show") === false) {
+        this.group.removeAll();
+        return;
+      }
+      this.doRender(visualMapModel, ecModel, api, payload);
+    };
+    VisualMapView2.prototype.renderBackground = function(group) {
+      var visualMapModel = this.visualMapModel;
+      var padding = normalizeCssArray(visualMapModel.get("padding") || 0);
+      var rect = group.getBoundingRect();
+      group.add(new Rect$2({
+        z2: -1,
+        silent: true,
+        shape: {
+          x: rect.x - padding[3],
+          y: rect.y - padding[0],
+          width: rect.width + padding[3] + padding[1],
+          height: rect.height + padding[0] + padding[2]
+        },
+        style: {
+          fill: visualMapModel.get("backgroundColor"),
+          stroke: visualMapModel.get("borderColor"),
+          lineWidth: visualMapModel.get("borderWidth")
+        }
+      }));
+    };
+    VisualMapView2.prototype.getControllerVisual = function(targetValue, visualCluster, opts) {
+      opts = opts || {};
+      var forceState = opts.forceState;
+      var visualMapModel = this.visualMapModel;
+      var visualObj = {};
+      if (visualCluster === "color") {
+        var defaultColor = visualMapModel.get("contentColor");
+        visualObj.color = defaultColor;
+      }
+      function getter(key) {
+        return visualObj[key];
+      }
+      function setter(key, value) {
+        visualObj[key] = value;
+      }
+      var mappings = visualMapModel.controllerVisuals[forceState || visualMapModel.getValueState(targetValue)];
+      var visualTypes = VisualMapping$1.prepareVisualTypes(mappings);
+      each$d(visualTypes, function(type) {
+        var visualMapping = mappings[type];
+        if (opts.convertOpacityToAlpha && type === "opacity") {
+          type = "colorAlpha";
+          visualMapping = mappings.__alphaForOpacity;
+        }
+        if (VisualMapping$1.dependsOn(type, visualCluster)) {
+          visualMapping && visualMapping.applyVisual(targetValue, getter, setter);
+        }
+      });
+      return visualObj[visualCluster];
+    };
+    VisualMapView2.prototype.positionGroup = function(group) {
+      var model = this.visualMapModel;
+      var api = this.api;
+      positionElement(group, model.getBoxLayoutParams(), {
+        width: api.getWidth(),
+        height: api.getHeight()
+      });
+    };
+    VisualMapView2.prototype.doRender = function(visualMapModel, ecModel, api, payload) {
+    };
+    VisualMapView2.type = "visualMap";
+    return VisualMapView2;
+  }(ComponentView$1)
+);
+const VisualMapView$1 = VisualMapView;
+var paramsSet = [["left", "right", "width"], ["top", "bottom", "height"]];
+function getItemAlign(visualMapModel, api, itemSize) {
+  var modelOption = visualMapModel.option;
+  var itemAlign = modelOption.align;
+  if (itemAlign != null && itemAlign !== "auto") {
+    return itemAlign;
+  }
+  var ecSize = {
+    width: api.getWidth(),
+    height: api.getHeight()
+  };
+  var realIndex = modelOption.orient === "horizontal" ? 1 : 0;
+  var reals = paramsSet[realIndex];
+  var fakeValue = [0, null, 10];
+  var layoutInput = {};
+  for (var i = 0; i < 3; i++) {
+    layoutInput[paramsSet[1 - realIndex][i]] = fakeValue[i];
+    layoutInput[reals[i]] = i === 2 ? itemSize[0] : modelOption[reals[i]];
+  }
+  var rParam = [["x", "width", 3], ["y", "height", 0]][realIndex];
+  var rect = getLayoutRect(layoutInput, ecSize, modelOption.padding);
+  return reals[(rect.margin[rParam[2]] || 0) + rect[rParam[0]] + rect[rParam[1]] * 0.5 < ecSize[rParam[1]] * 0.5 ? 0 : 1];
+}
+function makeHighDownBatch(batch, visualMapModel) {
+  each$d(batch || [], function(batchItem) {
+    if (batchItem.dataIndex != null) {
+      batchItem.dataIndexInside = batchItem.dataIndex;
+      batchItem.dataIndex = null;
+    }
+    batchItem.highlightKey = "visualMap" + (visualMapModel ? visualMapModel.componentIndex : "");
+  });
+  return batch;
+}
+var linearMap = linearMap$2;
+var each$1 = each$d;
+var mathMin = Math.min;
+var mathMax = Math.max;
+var HOVER_LINK_SIZE = 12;
+var HOVER_LINK_OUT = 6;
+var ContinuousView = (
+  /** @class */
+  function(_super) {
+    __extends(ContinuousView2, _super);
+    function ContinuousView2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = ContinuousView2.type;
+      _this._shapes = {};
+      _this._dataInterval = [];
+      _this._handleEnds = [];
+      _this._hoverLinkDataIndices = [];
+      return _this;
+    }
+    ContinuousView2.prototype.doRender = function(visualMapModel, ecModel, api, payload) {
+      this._api = api;
+      if (!payload || payload.type !== "selectDataRange" || payload.from !== this.uid) {
+        this._buildView();
+      }
+    };
+    ContinuousView2.prototype._buildView = function() {
+      this.group.removeAll();
+      var visualMapModel = this.visualMapModel;
+      var thisGroup = this.group;
+      this._orient = visualMapModel.get("orient");
+      this._useHandle = visualMapModel.get("calculable");
+      this._resetInterval();
+      this._renderBar(thisGroup);
+      var dataRangeText = visualMapModel.get("text");
+      this._renderEndsText(thisGroup, dataRangeText, 0);
+      this._renderEndsText(thisGroup, dataRangeText, 1);
+      this._updateView(true);
+      this.renderBackground(thisGroup);
+      this._updateView();
+      this._enableHoverLinkToSeries();
+      this._enableHoverLinkFromSeries();
+      this.positionGroup(thisGroup);
+    };
+    ContinuousView2.prototype._renderEndsText = function(group, dataRangeText, endsIndex) {
+      if (!dataRangeText) {
+        return;
+      }
+      var text = dataRangeText[1 - endsIndex];
+      text = text != null ? text + "" : "";
+      var visualMapModel = this.visualMapModel;
+      var textGap = visualMapModel.get("textGap");
+      var itemSize = visualMapModel.itemSize;
+      var barGroup = this._shapes.mainGroup;
+      var position = this._applyTransform([itemSize[0] / 2, endsIndex === 0 ? -textGap : itemSize[1] + textGap], barGroup);
+      var align = this._applyTransform(endsIndex === 0 ? "bottom" : "top", barGroup);
+      var orient = this._orient;
+      var textStyleModel = this.visualMapModel.textStyleModel;
+      this.group.add(new ZRText$1({
+        style: createTextStyle(textStyleModel, {
+          x: position[0],
+          y: position[1],
+          verticalAlign: orient === "horizontal" ? "middle" : align,
+          align: orient === "horizontal" ? align : "center",
+          text
+        })
+      }));
+    };
+    ContinuousView2.prototype._renderBar = function(targetGroup) {
+      var visualMapModel = this.visualMapModel;
+      var shapes = this._shapes;
+      var itemSize = visualMapModel.itemSize;
+      var orient = this._orient;
+      var useHandle = this._useHandle;
+      var itemAlign = getItemAlign(visualMapModel, this.api, itemSize);
+      var mainGroup = shapes.mainGroup = this._createBarGroup(itemAlign);
+      var gradientBarGroup = new Group$3();
+      mainGroup.add(gradientBarGroup);
+      gradientBarGroup.add(shapes.outOfRange = createPolygon());
+      gradientBarGroup.add(shapes.inRange = createPolygon(null, useHandle ? getCursor(this._orient) : null, bind$1(this._dragHandle, this, "all", false), bind$1(this._dragHandle, this, "all", true)));
+      gradientBarGroup.setClipPath(new Rect$2({
+        shape: {
+          x: 0,
+          y: 0,
+          width: itemSize[0],
+          height: itemSize[1],
+          r: 3
+        }
+      }));
+      var textRect = visualMapModel.textStyleModel.getTextRect("国");
+      var textSize = mathMax(textRect.width, textRect.height);
+      if (useHandle) {
+        shapes.handleThumbs = [];
+        shapes.handleLabels = [];
+        shapes.handleLabelPoints = [];
+        this._createHandle(visualMapModel, mainGroup, 0, itemSize, textSize, orient);
+        this._createHandle(visualMapModel, mainGroup, 1, itemSize, textSize, orient);
+      }
+      this._createIndicator(visualMapModel, mainGroup, itemSize, textSize, orient);
+      targetGroup.add(mainGroup);
+    };
+    ContinuousView2.prototype._createHandle = function(visualMapModel, mainGroup, handleIndex, itemSize, textSize, orient) {
+      var onDrift = bind$1(this._dragHandle, this, handleIndex, false);
+      var onDragEnd = bind$1(this._dragHandle, this, handleIndex, true);
+      var handleSize = parsePercent$1(visualMapModel.get("handleSize"), itemSize[0]);
+      var handleThumb = createSymbol$1(visualMapModel.get("handleIcon"), -handleSize / 2, -handleSize / 2, handleSize, handleSize, null, true);
+      var cursor = getCursor(this._orient);
+      handleThumb.attr({
+        cursor,
+        draggable: true,
+        drift: onDrift,
+        ondragend: onDragEnd,
+        onmousemove: function(e2) {
+          stop(e2.event);
+        }
+      });
+      handleThumb.x = itemSize[0] / 2;
+      handleThumb.useStyle(visualMapModel.getModel("handleStyle").getItemStyle());
+      handleThumb.setStyle({
+        strokeNoScale: true,
+        strokeFirst: true
+      });
+      handleThumb.style.lineWidth *= 2;
+      handleThumb.ensureState("emphasis").style = visualMapModel.getModel(["emphasis", "handleStyle"]).getItemStyle();
+      setAsHighDownDispatcher(handleThumb, true);
+      mainGroup.add(handleThumb);
+      var textStyleModel = this.visualMapModel.textStyleModel;
+      var handleLabel = new ZRText$1({
+        cursor,
+        draggable: true,
+        drift: onDrift,
+        onmousemove: function(e2) {
+          stop(e2.event);
+        },
+        ondragend: onDragEnd,
+        style: createTextStyle(textStyleModel, {
+          x: 0,
+          y: 0,
+          text: ""
+        })
+      });
+      handleLabel.ensureState("blur").style = {
+        opacity: 0.1
+      };
+      handleLabel.stateTransition = {
+        duration: 200
+      };
+      this.group.add(handleLabel);
+      var handleLabelPoint = [handleSize, 0];
+      var shapes = this._shapes;
+      shapes.handleThumbs[handleIndex] = handleThumb;
+      shapes.handleLabelPoints[handleIndex] = handleLabelPoint;
+      shapes.handleLabels[handleIndex] = handleLabel;
+    };
+    ContinuousView2.prototype._createIndicator = function(visualMapModel, mainGroup, itemSize, textSize, orient) {
+      var scale2 = parsePercent$1(visualMapModel.get("indicatorSize"), itemSize[0]);
+      var indicator = createSymbol$1(visualMapModel.get("indicatorIcon"), -scale2 / 2, -scale2 / 2, scale2, scale2, null, true);
+      indicator.attr({
+        cursor: "move",
+        invisible: true,
+        silent: true,
+        x: itemSize[0] / 2
+      });
+      var indicatorStyle = visualMapModel.getModel("indicatorStyle").getItemStyle();
+      if (indicator instanceof ZRImage$1) {
+        var pathStyle = indicator.style;
+        indicator.useStyle(extend({
+          // TODO other properties like x, y ?
+          image: pathStyle.image,
+          x: pathStyle.x,
+          y: pathStyle.y,
+          width: pathStyle.width,
+          height: pathStyle.height
+        }, indicatorStyle));
+      } else {
+        indicator.useStyle(indicatorStyle);
+      }
+      mainGroup.add(indicator);
+      var textStyleModel = this.visualMapModel.textStyleModel;
+      var indicatorLabel = new ZRText$1({
+        silent: true,
+        invisible: true,
+        style: createTextStyle(textStyleModel, {
+          x: 0,
+          y: 0,
+          text: ""
+        })
+      });
+      this.group.add(indicatorLabel);
+      var indicatorLabelPoint = [(orient === "horizontal" ? textSize / 2 : HOVER_LINK_OUT) + itemSize[0] / 2, 0];
+      var shapes = this._shapes;
+      shapes.indicator = indicator;
+      shapes.indicatorLabel = indicatorLabel;
+      shapes.indicatorLabelPoint = indicatorLabelPoint;
+      this._firstShowIndicator = true;
+    };
+    ContinuousView2.prototype._dragHandle = function(handleIndex, isEnd2, dx, dy) {
+      if (!this._useHandle) {
+        return;
+      }
+      this._dragging = !isEnd2;
+      if (!isEnd2) {
+        var vertex = this._applyTransform([dx, dy], this._shapes.mainGroup, true);
+        this._updateInterval(handleIndex, vertex[1]);
+        this._hideIndicator();
+        this._updateView();
+      }
+      if (isEnd2 === !this.visualMapModel.get("realtime")) {
+        this.api.dispatchAction({
+          type: "selectDataRange",
+          from: this.uid,
+          visualMapId: this.visualMapModel.id,
+          selected: this._dataInterval.slice()
+        });
+      }
+      if (isEnd2) {
+        !this._hovering && this._clearHoverLinkToSeries();
+      } else if (useHoverLinkOnHandle(this.visualMapModel)) {
+        this._doHoverLinkToSeries(this._handleEnds[handleIndex], false);
+      }
+    };
+    ContinuousView2.prototype._resetInterval = function() {
+      var visualMapModel = this.visualMapModel;
+      var dataInterval = this._dataInterval = visualMapModel.getSelected();
+      var dataExtent = visualMapModel.getExtent();
+      var sizeExtent = [0, visualMapModel.itemSize[1]];
+      this._handleEnds = [linearMap(dataInterval[0], dataExtent, sizeExtent, true), linearMap(dataInterval[1], dataExtent, sizeExtent, true)];
+    };
+    ContinuousView2.prototype._updateInterval = function(handleIndex, delta) {
+      delta = delta || 0;
+      var visualMapModel = this.visualMapModel;
+      var handleEnds = this._handleEnds;
+      var sizeExtent = [0, visualMapModel.itemSize[1]];
+      sliderMove(
+        delta,
+        handleEnds,
+        sizeExtent,
+        handleIndex,
+        // cross is forbiden
+        0
+      );
+      var dataExtent = visualMapModel.getExtent();
+      this._dataInterval = [linearMap(handleEnds[0], sizeExtent, dataExtent, true), linearMap(handleEnds[1], sizeExtent, dataExtent, true)];
+    };
+    ContinuousView2.prototype._updateView = function(forSketch) {
+      var visualMapModel = this.visualMapModel;
+      var dataExtent = visualMapModel.getExtent();
+      var shapes = this._shapes;
+      var outOfRangeHandleEnds = [0, visualMapModel.itemSize[1]];
+      var inRangeHandleEnds = forSketch ? outOfRangeHandleEnds : this._handleEnds;
+      var visualInRange = this._createBarVisual(this._dataInterval, dataExtent, inRangeHandleEnds, "inRange");
+      var visualOutOfRange = this._createBarVisual(dataExtent, dataExtent, outOfRangeHandleEnds, "outOfRange");
+      shapes.inRange.setStyle({
+        fill: visualInRange.barColor
+        // opacity: visualInRange.opacity
+      }).setShape("points", visualInRange.barPoints);
+      shapes.outOfRange.setStyle({
+        fill: visualOutOfRange.barColor
+        // opacity: visualOutOfRange.opacity
+      }).setShape("points", visualOutOfRange.barPoints);
+      this._updateHandle(inRangeHandleEnds, visualInRange);
+    };
+    ContinuousView2.prototype._createBarVisual = function(dataInterval, dataExtent, handleEnds, forceState) {
+      var opts = {
+        forceState,
+        convertOpacityToAlpha: true
+      };
+      var colorStops = this._makeColorGradient(dataInterval, opts);
+      var symbolSizes = [this.getControllerVisual(dataInterval[0], "symbolSize", opts), this.getControllerVisual(dataInterval[1], "symbolSize", opts)];
+      var barPoints = this._createBarPoints(handleEnds, symbolSizes);
+      return {
+        barColor: new LinearGradient$1(0, 0, 0, 1, colorStops),
+        barPoints,
+        handlesColor: [colorStops[0].color, colorStops[colorStops.length - 1].color]
+      };
+    };
+    ContinuousView2.prototype._makeColorGradient = function(dataInterval, opts) {
+      var sampleNumber = 100;
+      var colorStops = [];
+      var step = (dataInterval[1] - dataInterval[0]) / sampleNumber;
+      colorStops.push({
+        color: this.getControllerVisual(dataInterval[0], "color", opts),
+        offset: 0
+      });
+      for (var i = 1; i < sampleNumber; i++) {
+        var currValue = dataInterval[0] + step * i;
+        if (currValue > dataInterval[1]) {
+          break;
+        }
+        colorStops.push({
+          color: this.getControllerVisual(currValue, "color", opts),
+          offset: i / sampleNumber
+        });
+      }
+      colorStops.push({
+        color: this.getControllerVisual(dataInterval[1], "color", opts),
+        offset: 1
+      });
+      return colorStops;
+    };
+    ContinuousView2.prototype._createBarPoints = function(handleEnds, symbolSizes) {
+      var itemSize = this.visualMapModel.itemSize;
+      return [[itemSize[0] - symbolSizes[0], handleEnds[0]], [itemSize[0], handleEnds[0]], [itemSize[0], handleEnds[1]], [itemSize[0] - symbolSizes[1], handleEnds[1]]];
+    };
+    ContinuousView2.prototype._createBarGroup = function(itemAlign) {
+      var orient = this._orient;
+      var inverse = this.visualMapModel.get("inverse");
+      return new Group$3(orient === "horizontal" && !inverse ? {
+        scaleX: itemAlign === "bottom" ? 1 : -1,
+        rotation: Math.PI / 2
+      } : orient === "horizontal" && inverse ? {
+        scaleX: itemAlign === "bottom" ? -1 : 1,
+        rotation: -Math.PI / 2
+      } : orient === "vertical" && !inverse ? {
+        scaleX: itemAlign === "left" ? 1 : -1,
+        scaleY: -1
+      } : {
+        scaleX: itemAlign === "left" ? 1 : -1
+      });
+    };
+    ContinuousView2.prototype._updateHandle = function(handleEnds, visualInRange) {
+      if (!this._useHandle) {
+        return;
+      }
+      var shapes = this._shapes;
+      var visualMapModel = this.visualMapModel;
+      var handleThumbs = shapes.handleThumbs;
+      var handleLabels = shapes.handleLabels;
+      var itemSize = visualMapModel.itemSize;
+      var dataExtent = visualMapModel.getExtent();
+      each$1([0, 1], function(handleIndex) {
+        var handleThumb = handleThumbs[handleIndex];
+        handleThumb.setStyle("fill", visualInRange.handlesColor[handleIndex]);
+        handleThumb.y = handleEnds[handleIndex];
+        var val = linearMap(handleEnds[handleIndex], [0, itemSize[1]], dataExtent, true);
+        var symbolSize = this.getControllerVisual(val, "symbolSize");
+        handleThumb.scaleX = handleThumb.scaleY = symbolSize / itemSize[0];
+        handleThumb.x = itemSize[0] - symbolSize / 2;
+        var textPoint = applyTransform(shapes.handleLabelPoints[handleIndex], getTransform$1(handleThumb, this.group));
+        handleLabels[handleIndex].setStyle({
+          x: textPoint[0],
+          y: textPoint[1],
+          text: visualMapModel.formatValueText(this._dataInterval[handleIndex]),
+          verticalAlign: "middle",
+          align: this._orient === "vertical" ? this._applyTransform("left", shapes.mainGroup) : "center"
+        });
+      }, this);
+    };
+    ContinuousView2.prototype._showIndicator = function(cursorValue, textValue, rangeSymbol, halfHoverLinkSize) {
+      var visualMapModel = this.visualMapModel;
+      var dataExtent = visualMapModel.getExtent();
+      var itemSize = visualMapModel.itemSize;
+      var sizeExtent = [0, itemSize[1]];
+      var shapes = this._shapes;
+      var indicator = shapes.indicator;
+      if (!indicator) {
+        return;
+      }
+      indicator.attr("invisible", false);
+      var opts = {
+        convertOpacityToAlpha: true
+      };
+      var color = this.getControllerVisual(cursorValue, "color", opts);
+      var symbolSize = this.getControllerVisual(cursorValue, "symbolSize");
+      var y2 = linearMap(cursorValue, dataExtent, sizeExtent, true);
+      var x2 = itemSize[0] - symbolSize / 2;
+      var oldIndicatorPos = {
+        x: indicator.x,
+        y: indicator.y
+      };
+      indicator.y = y2;
+      indicator.x = x2;
+      var textPoint = applyTransform(shapes.indicatorLabelPoint, getTransform$1(indicator, this.group));
+      var indicatorLabel = shapes.indicatorLabel;
+      indicatorLabel.attr("invisible", false);
+      var align = this._applyTransform("left", shapes.mainGroup);
+      var orient = this._orient;
+      var isHorizontal = orient === "horizontal";
+      indicatorLabel.setStyle({
+        text: (rangeSymbol ? rangeSymbol : "") + visualMapModel.formatValueText(textValue),
+        verticalAlign: isHorizontal ? align : "middle",
+        align: isHorizontal ? "center" : align
+      });
+      var indicatorNewProps = {
+        x: x2,
+        y: y2,
+        style: {
+          fill: color
+        }
+      };
+      var labelNewProps = {
+        style: {
+          x: textPoint[0],
+          y: textPoint[1]
+        }
+      };
+      if (visualMapModel.ecModel.isAnimationEnabled() && !this._firstShowIndicator) {
+        var animationCfg = {
+          duration: 100,
+          easing: "cubicInOut",
+          additive: true
+        };
+        indicator.x = oldIndicatorPos.x;
+        indicator.y = oldIndicatorPos.y;
+        indicator.animateTo(indicatorNewProps, animationCfg);
+        indicatorLabel.animateTo(labelNewProps, animationCfg);
+      } else {
+        indicator.attr(indicatorNewProps);
+        indicatorLabel.attr(labelNewProps);
+      }
+      this._firstShowIndicator = false;
+      var handleLabels = this._shapes.handleLabels;
+      if (handleLabels) {
+        for (var i = 0; i < handleLabels.length; i++) {
+          this._api.enterBlur(handleLabels[i]);
+        }
+      }
+    };
+    ContinuousView2.prototype._enableHoverLinkToSeries = function() {
+      var self2 = this;
+      this._shapes.mainGroup.on("mousemove", function(e2) {
+        self2._hovering = true;
+        if (!self2._dragging) {
+          var itemSize = self2.visualMapModel.itemSize;
+          var pos = self2._applyTransform([e2.offsetX, e2.offsetY], self2._shapes.mainGroup, true, true);
+          pos[1] = mathMin(mathMax(0, pos[1]), itemSize[1]);
+          self2._doHoverLinkToSeries(pos[1], 0 <= pos[0] && pos[0] <= itemSize[0]);
+        }
+      }).on("mouseout", function() {
+        self2._hovering = false;
+        !self2._dragging && self2._clearHoverLinkToSeries();
+      });
+    };
+    ContinuousView2.prototype._enableHoverLinkFromSeries = function() {
+      var zr = this.api.getZr();
+      if (this.visualMapModel.option.hoverLink) {
+        zr.on("mouseover", this._hoverLinkFromSeriesMouseOver, this);
+        zr.on("mouseout", this._hideIndicator, this);
+      } else {
+        this._clearHoverLinkFromSeries();
+      }
+    };
+    ContinuousView2.prototype._doHoverLinkToSeries = function(cursorPos, hoverOnBar) {
+      var visualMapModel = this.visualMapModel;
+      var itemSize = visualMapModel.itemSize;
+      if (!visualMapModel.option.hoverLink) {
+        return;
+      }
+      var sizeExtent = [0, itemSize[1]];
+      var dataExtent = visualMapModel.getExtent();
+      cursorPos = mathMin(mathMax(sizeExtent[0], cursorPos), sizeExtent[1]);
+      var halfHoverLinkSize = getHalfHoverLinkSize(visualMapModel, dataExtent, sizeExtent);
+      var hoverRange = [cursorPos - halfHoverLinkSize, cursorPos + halfHoverLinkSize];
+      var cursorValue = linearMap(cursorPos, sizeExtent, dataExtent, true);
+      var valueRange = [linearMap(hoverRange[0], sizeExtent, dataExtent, true), linearMap(hoverRange[1], sizeExtent, dataExtent, true)];
+      hoverRange[0] < sizeExtent[0] && (valueRange[0] = -Infinity);
+      hoverRange[1] > sizeExtent[1] && (valueRange[1] = Infinity);
+      if (hoverOnBar) {
+        if (valueRange[0] === -Infinity) {
+          this._showIndicator(cursorValue, valueRange[1], "< ", halfHoverLinkSize);
+        } else if (valueRange[1] === Infinity) {
+          this._showIndicator(cursorValue, valueRange[0], "> ", halfHoverLinkSize);
+        } else {
+          this._showIndicator(cursorValue, cursorValue, "≈ ", halfHoverLinkSize);
+        }
+      }
+      var oldBatch = this._hoverLinkDataIndices;
+      var newBatch = [];
+      if (hoverOnBar || useHoverLinkOnHandle(visualMapModel)) {
+        newBatch = this._hoverLinkDataIndices = visualMapModel.findTargetDataIndices(valueRange);
+      }
+      var resultBatches = compressBatches(oldBatch, newBatch);
+      this._dispatchHighDown("downplay", makeHighDownBatch(resultBatches[0], visualMapModel));
+      this._dispatchHighDown("highlight", makeHighDownBatch(resultBatches[1], visualMapModel));
+    };
+    ContinuousView2.prototype._hoverLinkFromSeriesMouseOver = function(e2) {
+      var ecData;
+      findEventDispatcher(e2.target, function(target) {
+        var currECData = getECData(target);
+        if (currECData.dataIndex != null) {
+          ecData = currECData;
+          return true;
+        }
+      }, true);
+      if (!ecData) {
+        return;
+      }
+      var dataModel = this.ecModel.getSeriesByIndex(ecData.seriesIndex);
+      var visualMapModel = this.visualMapModel;
+      if (!visualMapModel.isTargetSeries(dataModel)) {
+        return;
+      }
+      var data = dataModel.getData(ecData.dataType);
+      var value = data.getStore().get(visualMapModel.getDataDimensionIndex(data), ecData.dataIndex);
+      if (!isNaN(value)) {
+        this._showIndicator(value, value);
+      }
+    };
+    ContinuousView2.prototype._hideIndicator = function() {
+      var shapes = this._shapes;
+      shapes.indicator && shapes.indicator.attr("invisible", true);
+      shapes.indicatorLabel && shapes.indicatorLabel.attr("invisible", true);
+      var handleLabels = this._shapes.handleLabels;
+      if (handleLabels) {
+        for (var i = 0; i < handleLabels.length; i++) {
+          this._api.leaveBlur(handleLabels[i]);
+        }
+      }
+    };
+    ContinuousView2.prototype._clearHoverLinkToSeries = function() {
+      this._hideIndicator();
+      var indices = this._hoverLinkDataIndices;
+      this._dispatchHighDown("downplay", makeHighDownBatch(indices, this.visualMapModel));
+      indices.length = 0;
+    };
+    ContinuousView2.prototype._clearHoverLinkFromSeries = function() {
+      this._hideIndicator();
+      var zr = this.api.getZr();
+      zr.off("mouseover", this._hoverLinkFromSeriesMouseOver);
+      zr.off("mouseout", this._hideIndicator);
+    };
+    ContinuousView2.prototype._applyTransform = function(vertex, element, inverse, global2) {
+      var transform3 = getTransform$1(element, global2 ? null : this.group);
+      return isArray$2(vertex) ? applyTransform(vertex, transform3, inverse) : transformDirection(vertex, transform3, inverse);
+    };
+    ContinuousView2.prototype._dispatchHighDown = function(type, batch) {
+      batch && batch.length && this.api.dispatchAction({
+        type,
+        batch
+      });
+    };
+    ContinuousView2.prototype.dispose = function() {
+      this._clearHoverLinkFromSeries();
+      this._clearHoverLinkToSeries();
+    };
+    ContinuousView2.prototype.remove = function() {
+      this._clearHoverLinkFromSeries();
+      this._clearHoverLinkToSeries();
+    };
+    ContinuousView2.type = "visualMap.continuous";
+    return ContinuousView2;
+  }(VisualMapView$1)
+);
+function createPolygon(points2, cursor, onDrift, onDragEnd) {
+  return new Polygon$1({
+    shape: {
+      points: points2
+    },
+    draggable: !!onDrift,
+    cursor,
+    drift: onDrift,
+    onmousemove: function(e2) {
+      stop(e2.event);
+    },
+    ondragend: onDragEnd
+  });
+}
+function getHalfHoverLinkSize(visualMapModel, dataExtent, sizeExtent) {
+  var halfHoverLinkSize = HOVER_LINK_SIZE / 2;
+  var hoverLinkDataSize = visualMapModel.get("hoverLinkDataSize");
+  if (hoverLinkDataSize) {
+    halfHoverLinkSize = linearMap(hoverLinkDataSize, dataExtent, sizeExtent, true) / 2;
+  }
+  return halfHoverLinkSize;
+}
+function useHoverLinkOnHandle(visualMapModel) {
+  var hoverLinkOnHandle = visualMapModel.get("hoverLinkOnHandle");
+  return !!(hoverLinkOnHandle == null ? visualMapModel.get("realtime") : hoverLinkOnHandle);
+}
+function getCursor(orient) {
+  return orient === "vertical" ? "ns-resize" : "ew-resize";
+}
+const ContinuousView$1 = ContinuousView;
+var visualMapActionInfo = {
+  type: "selectDataRange",
+  event: "dataRangeSelected",
+  // FIXME use updateView appears wrong
+  update: "update"
+};
+var visualMapActionHander = function(payload, ecModel) {
+  ecModel.eachComponent({
+    mainType: "visualMap",
+    query: payload
+  }, function(model) {
+    model.setSelected(payload.selected);
+  });
+};
+var visualMapEncodingHandlers = [
+  {
+    createOnAllSeries: true,
+    reset: function(seriesModel, ecModel) {
+      var resetDefines = [];
+      ecModel.eachComponent("visualMap", function(visualMapModel) {
+        var pipelineContext = seriesModel.pipelineContext;
+        if (!visualMapModel.isTargetSeries(seriesModel) || pipelineContext && pipelineContext.large) {
+          return;
+        }
+        resetDefines.push(incrementalApplyVisual(visualMapModel.stateList, visualMapModel.targetVisuals, bind$1(visualMapModel.getValueState, visualMapModel), visualMapModel.getDataDimensionIndex(seriesModel.getData())));
+      });
+      return resetDefines;
+    }
+  },
+  // Only support color.
+  {
+    createOnAllSeries: true,
+    reset: function(seriesModel, ecModel) {
+      var data = seriesModel.getData();
+      var visualMetaList = [];
+      ecModel.eachComponent("visualMap", function(visualMapModel) {
+        if (visualMapModel.isTargetSeries(seriesModel)) {
+          var visualMeta = visualMapModel.getVisualMeta(bind$1(getColorVisual, null, seriesModel, visualMapModel)) || {
+            stops: [],
+            outerColors: []
+          };
+          var dimIdx = visualMapModel.getDataDimensionIndex(data);
+          if (dimIdx >= 0) {
+            visualMeta.dimension = dimIdx;
+            visualMetaList.push(visualMeta);
+          }
+        }
+      });
+      seriesModel.getData().setVisual("visualMeta", visualMetaList);
+    }
+  }
+];
+function getColorVisual(seriesModel, visualMapModel, value, valueState) {
+  var mappings = visualMapModel.targetVisuals[valueState];
+  var visualTypes = VisualMapping$1.prepareVisualTypes(mappings);
+  var resultVisual = {
+    color: getVisualFromData(seriesModel.getData(), "color")
+    // default color.
+  };
+  for (var i = 0, len2 = visualTypes.length; i < len2; i++) {
+    var type = visualTypes[i];
+    var mapping = mappings[type === "opacity" ? "__alphaForOpacity" : type];
+    mapping && mapping.applyVisual(value, getVisual, setVisual);
+  }
+  return resultVisual.color;
+  function getVisual(key) {
+    return resultVisual[key];
+  }
+  function setVisual(key, value2) {
+    resultVisual[key] = value2;
+  }
+}
+var each = each$d;
+function visualMapPreprocessor(option) {
+  var visualMap = option && option.visualMap;
+  if (!isArray$2(visualMap)) {
+    visualMap = visualMap ? [visualMap] : [];
+  }
+  each(visualMap, function(opt) {
+    if (!opt) {
+      return;
+    }
+    if (has(opt, "splitList") && !has(opt, "pieces")) {
+      opt.pieces = opt.splitList;
+      delete opt.splitList;
+    }
+    var pieces = opt.pieces;
+    if (pieces && isArray$2(pieces)) {
+      each(pieces, function(piece) {
+        if (isObject$4(piece)) {
+          if (has(piece, "start") && !has(piece, "min")) {
+            piece.min = piece.start;
+          }
+          if (has(piece, "end") && !has(piece, "max")) {
+            piece.max = piece.end;
+          }
+        }
+      });
+    }
+  });
+}
+function has(obj, name) {
+  return obj && obj.hasOwnProperty && obj.hasOwnProperty(name);
+}
+var installed = false;
+function installCommon(registers) {
+  if (installed) {
+    return;
+  }
+  installed = true;
+  registers.registerSubTypeDefaulter("visualMap", function(option) {
+    return !option.categories && (!(option.pieces ? option.pieces.length > 0 : option.splitNumber > 0) || option.calculable) ? "continuous" : "piecewise";
+  });
+  registers.registerAction(visualMapActionInfo, visualMapActionHander);
+  each$d(visualMapEncodingHandlers, function(handler) {
+    registers.registerVisual(registers.PRIORITY.VISUAL.COMPONENT, handler);
+  });
+  registers.registerPreprocessor(visualMapPreprocessor);
+}
+function install$2(registers) {
+  registers.registerComponentModel(ContinuousModel$1);
+  registers.registerComponentView(ContinuousView$1);
+  installCommon(registers);
+}
+var PiecewiseModel = (
+  /** @class */
+  function(_super) {
+    __extends(PiecewiseModel2, _super);
+    function PiecewiseModel2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = PiecewiseModel2.type;
+      _this._pieceList = [];
+      return _this;
+    }
+    PiecewiseModel2.prototype.optionUpdated = function(newOption, isInit) {
+      _super.prototype.optionUpdated.apply(this, arguments);
+      this.resetExtent();
+      var mode2 = this._mode = this._determineMode();
+      this._pieceList = [];
+      resetMethods[this._mode].call(this, this._pieceList);
+      this._resetSelected(newOption, isInit);
+      var categories = this.option.categories;
+      this.resetVisual(function(mappingOption, state) {
+        if (mode2 === "categories") {
+          mappingOption.mappingMethod = "category";
+          mappingOption.categories = clone$4(categories);
+        } else {
+          mappingOption.dataExtent = this.getExtent();
+          mappingOption.mappingMethod = "piecewise";
+          mappingOption.pieceList = map$1(this._pieceList, function(piece) {
+            piece = clone$4(piece);
+            if (state !== "inRange") {
+              piece.visual = null;
+            }
+            return piece;
+          });
+        }
+      });
+    };
+    PiecewiseModel2.prototype.completeVisualOption = function() {
+      var option = this.option;
+      var visualTypesInPieces = {};
+      var visualTypes = VisualMapping$1.listVisualTypes();
+      var isCategory2 = this.isCategory();
+      each$d(option.pieces, function(piece) {
+        each$d(visualTypes, function(visualType) {
+          if (piece.hasOwnProperty(visualType)) {
+            visualTypesInPieces[visualType] = 1;
+          }
+        });
+      });
+      each$d(visualTypesInPieces, function(v, visualType) {
+        var exists = false;
+        each$d(this.stateList, function(state) {
+          exists = exists || has2(option, state, visualType) || has2(option.target, state, visualType);
+        }, this);
+        !exists && each$d(this.stateList, function(state) {
+          (option[state] || (option[state] = {}))[visualType] = visualDefault$1.get(visualType, state === "inRange" ? "active" : "inactive", isCategory2);
+        });
+      }, this);
+      function has2(obj, state, visualType) {
+        return obj && obj[state] && obj[state].hasOwnProperty(visualType);
+      }
+      _super.prototype.completeVisualOption.apply(this, arguments);
+    };
+    PiecewiseModel2.prototype._resetSelected = function(newOption, isInit) {
+      var thisOption = this.option;
+      var pieceList = this._pieceList;
+      var selected = (isInit ? thisOption : newOption).selected || {};
+      thisOption.selected = selected;
+      each$d(pieceList, function(piece, index) {
+        var key = this.getSelectedMapKey(piece);
+        if (!selected.hasOwnProperty(key)) {
+          selected[key] = true;
+        }
+      }, this);
+      if (thisOption.selectedMode === "single") {
+        var hasSel_1 = false;
+        each$d(pieceList, function(piece, index) {
+          var key = this.getSelectedMapKey(piece);
+          if (selected[key]) {
+            hasSel_1 ? selected[key] = false : hasSel_1 = true;
+          }
+        }, this);
+      }
+    };
+    PiecewiseModel2.prototype.getItemSymbol = function() {
+      return this.get("itemSymbol");
+    };
+    PiecewiseModel2.prototype.getSelectedMapKey = function(piece) {
+      return this._mode === "categories" ? piece.value + "" : piece.index + "";
+    };
+    PiecewiseModel2.prototype.getPieceList = function() {
+      return this._pieceList;
+    };
+    PiecewiseModel2.prototype._determineMode = function() {
+      var option = this.option;
+      return option.pieces && option.pieces.length > 0 ? "pieces" : this.option.categories ? "categories" : "splitNumber";
+    };
+    PiecewiseModel2.prototype.setSelected = function(selected) {
+      this.option.selected = clone$4(selected);
+    };
+    PiecewiseModel2.prototype.getValueState = function(value) {
+      var index = VisualMapping$1.findPieceIndex(value, this._pieceList);
+      return index != null ? this.option.selected[this.getSelectedMapKey(this._pieceList[index])] ? "inRange" : "outOfRange" : "outOfRange";
+    };
+    PiecewiseModel2.prototype.findTargetDataIndices = function(pieceIndex) {
+      var result = [];
+      var pieceList = this._pieceList;
+      this.eachTargetSeries(function(seriesModel) {
+        var dataIndices = [];
+        var data = seriesModel.getData();
+        data.each(this.getDataDimensionIndex(data), function(value, dataIndex) {
+          var pIdx = VisualMapping$1.findPieceIndex(value, pieceList);
+          pIdx === pieceIndex && dataIndices.push(dataIndex);
+        }, this);
+        result.push({
+          seriesId: seriesModel.id,
+          dataIndex: dataIndices
+        });
+      }, this);
+      return result;
+    };
+    PiecewiseModel2.prototype.getRepresentValue = function(piece) {
+      var representValue;
+      if (this.isCategory()) {
+        representValue = piece.value;
+      } else {
+        if (piece.value != null) {
+          representValue = piece.value;
+        } else {
+          var pieceInterval = piece.interval || [];
+          representValue = pieceInterval[0] === -Infinity && pieceInterval[1] === Infinity ? 0 : (pieceInterval[0] + pieceInterval[1]) / 2;
+        }
+      }
+      return representValue;
+    };
+    PiecewiseModel2.prototype.getVisualMeta = function(getColorVisual2) {
+      if (this.isCategory()) {
+        return;
+      }
+      var stops = [];
+      var outerColors = ["", ""];
+      var visualMapModel = this;
+      function setStop(interval, valueState) {
+        var representValue = visualMapModel.getRepresentValue({
+          interval
+        });
+        if (!valueState) {
+          valueState = visualMapModel.getValueState(representValue);
+        }
+        var color = getColorVisual2(representValue, valueState);
+        if (interval[0] === -Infinity) {
+          outerColors[0] = color;
+        } else if (interval[1] === Infinity) {
+          outerColors[1] = color;
+        } else {
+          stops.push({
+            value: interval[0],
+            color
+          }, {
+            value: interval[1],
+            color
+          });
+        }
+      }
+      var pieceList = this._pieceList.slice();
+      if (!pieceList.length) {
+        pieceList.push({
+          interval: [-Infinity, Infinity]
+        });
+      } else {
+        var edge = pieceList[0].interval[0];
+        edge !== -Infinity && pieceList.unshift({
+          interval: [-Infinity, edge]
+        });
+        edge = pieceList[pieceList.length - 1].interval[1];
+        edge !== Infinity && pieceList.push({
+          interval: [edge, Infinity]
+        });
+      }
+      var curr = -Infinity;
+      each$d(pieceList, function(piece) {
+        var interval = piece.interval;
+        if (interval) {
+          interval[0] > curr && setStop([curr, interval[0]], "outOfRange");
+          setStop(interval.slice());
+          curr = interval[1];
+        }
+      }, this);
+      return {
+        stops,
+        outerColors
+      };
+    };
+    PiecewiseModel2.type = "visualMap.piecewise";
+    PiecewiseModel2.defaultOption = inheritDefaultOption(VisualMapModel$1.defaultOption, {
+      selected: null,
+      minOpen: false,
+      maxOpen: false,
+      align: "auto",
+      itemWidth: 20,
+      itemHeight: 14,
+      itemSymbol: "roundRect",
+      pieces: null,
+      categories: null,
+      splitNumber: 5,
+      selectedMode: "multiple",
+      itemGap: 10,
+      hoverLink: true
+      // Enable hover highlight.
+    });
+    return PiecewiseModel2;
+  }(VisualMapModel$1)
+);
+var resetMethods = {
+  splitNumber: function(outPieceList) {
+    var thisOption = this.option;
+    var precision = Math.min(thisOption.precision, 20);
+    var dataExtent = this.getExtent();
+    var splitNumber = thisOption.splitNumber;
+    splitNumber = Math.max(parseInt(splitNumber, 10), 1);
+    thisOption.splitNumber = splitNumber;
+    var splitStep = (dataExtent[1] - dataExtent[0]) / splitNumber;
+    while (+splitStep.toFixed(precision) !== splitStep && precision < 5) {
+      precision++;
+    }
+    thisOption.precision = precision;
+    splitStep = +splitStep.toFixed(precision);
+    if (thisOption.minOpen) {
+      outPieceList.push({
+        interval: [-Infinity, dataExtent[0]],
+        close: [0, 0]
+      });
+    }
+    for (var index = 0, curr = dataExtent[0]; index < splitNumber; curr += splitStep, index++) {
+      var max3 = index === splitNumber - 1 ? dataExtent[1] : curr + splitStep;
+      outPieceList.push({
+        interval: [curr, max3],
+        close: [1, 1]
+      });
+    }
+    if (thisOption.maxOpen) {
+      outPieceList.push({
+        interval: [dataExtent[1], Infinity],
+        close: [0, 0]
+      });
+    }
+    reformIntervals(outPieceList);
+    each$d(outPieceList, function(piece, index2) {
+      piece.index = index2;
+      piece.text = this.formatValueText(piece.interval);
+    }, this);
+  },
+  categories: function(outPieceList) {
+    var thisOption = this.option;
+    each$d(thisOption.categories, function(cate) {
+      outPieceList.push({
+        text: this.formatValueText(cate, true),
+        value: cate
+      });
+    }, this);
+    normalizeReverse(thisOption, outPieceList);
+  },
+  pieces: function(outPieceList) {
+    var thisOption = this.option;
+    each$d(thisOption.pieces, function(pieceListItem, index) {
+      if (!isObject$4(pieceListItem)) {
+        pieceListItem = {
+          value: pieceListItem
+        };
+      }
+      var item = {
+        text: "",
+        index
+      };
+      if (pieceListItem.label != null) {
+        item.text = pieceListItem.label;
+      }
+      if (pieceListItem.hasOwnProperty("value")) {
+        var value = item.value = pieceListItem.value;
+        item.interval = [value, value];
+        item.close = [1, 1];
+      } else {
+        var interval = item.interval = [];
+        var close_1 = item.close = [0, 0];
+        var closeList = [1, 0, 1];
+        var infinityList = [-Infinity, Infinity];
+        var useMinMax = [];
+        for (var lg = 0; lg < 2; lg++) {
+          var names = [["gte", "gt", "min"], ["lte", "lt", "max"]][lg];
+          for (var i = 0; i < 3 && interval[lg] == null; i++) {
+            interval[lg] = pieceListItem[names[i]];
+            close_1[lg] = closeList[i];
+            useMinMax[lg] = i === 2;
+          }
+          interval[lg] == null && (interval[lg] = infinityList[lg]);
+        }
+        useMinMax[0] && interval[1] === Infinity && (close_1[0] = 0);
+        useMinMax[1] && interval[0] === -Infinity && (close_1[1] = 0);
+        if (interval[0] === interval[1] && close_1[0] && close_1[1]) {
+          item.value = interval[0];
+        }
+      }
+      item.visual = VisualMapping$1.retrieveVisuals(pieceListItem);
+      outPieceList.push(item);
+    }, this);
+    normalizeReverse(thisOption, outPieceList);
+    reformIntervals(outPieceList);
+    each$d(outPieceList, function(piece) {
+      var close = piece.close;
+      var edgeSymbols = [["<", "≤"][close[1]], [">", "≥"][close[0]]];
+      piece.text = piece.text || this.formatValueText(piece.value != null ? piece.value : piece.interval, false, edgeSymbols);
+    }, this);
+  }
+};
+function normalizeReverse(thisOption, pieceList) {
+  var inverse = thisOption.inverse;
+  if (thisOption.orient === "vertical" ? !inverse : inverse) {
+    pieceList.reverse();
+  }
+}
+const PiecewiseModel$1 = PiecewiseModel;
+var PiecewiseVisualMapView = (
+  /** @class */
+  function(_super) {
+    __extends(PiecewiseVisualMapView2, _super);
+    function PiecewiseVisualMapView2() {
+      var _this = _super !== null && _super.apply(this, arguments) || this;
+      _this.type = PiecewiseVisualMapView2.type;
+      return _this;
+    }
+    PiecewiseVisualMapView2.prototype.doRender = function() {
+      var thisGroup = this.group;
+      thisGroup.removeAll();
+      var visualMapModel = this.visualMapModel;
+      var textGap = visualMapModel.get("textGap");
+      var textStyleModel = visualMapModel.textStyleModel;
+      var textFont = textStyleModel.getFont();
+      var textFill = textStyleModel.getTextColor();
+      var itemAlign = this._getItemAlign();
+      var itemSize = visualMapModel.itemSize;
+      var viewData = this._getViewData();
+      var endsText = viewData.endsText;
+      var showLabel = retrieve(visualMapModel.get("showLabel", true), !endsText);
+      endsText && this._renderEndsText(thisGroup, endsText[0], itemSize, showLabel, itemAlign);
+      each$d(viewData.viewPieceList, function(item) {
+        var piece = item.piece;
+        var itemGroup = new Group$3();
+        itemGroup.onclick = bind$1(this._onItemClick, this, piece);
+        this._enableHoverLink(itemGroup, item.indexInModelPieceList);
+        var representValue = visualMapModel.getRepresentValue(piece);
+        this._createItemSymbol(itemGroup, representValue, [0, 0, itemSize[0], itemSize[1]]);
+        if (showLabel) {
+          var visualState = this.visualMapModel.getValueState(representValue);
+          itemGroup.add(new ZRText$1({
+            style: {
+              x: itemAlign === "right" ? -textGap : itemSize[0] + textGap,
+              y: itemSize[1] / 2,
+              text: piece.text,
+              verticalAlign: "middle",
+              align: itemAlign,
+              font: textFont,
+              fill: textFill,
+              opacity: visualState === "outOfRange" ? 0.5 : 1
+            }
+          }));
+        }
+        thisGroup.add(itemGroup);
+      }, this);
+      endsText && this._renderEndsText(thisGroup, endsText[1], itemSize, showLabel, itemAlign);
+      box(visualMapModel.get("orient"), thisGroup, visualMapModel.get("itemGap"));
+      this.renderBackground(thisGroup);
+      this.positionGroup(thisGroup);
+    };
+    PiecewiseVisualMapView2.prototype._enableHoverLink = function(itemGroup, pieceIndex) {
+      var _this = this;
+      itemGroup.on("mouseover", function() {
+        return onHoverLink("highlight");
+      }).on("mouseout", function() {
+        return onHoverLink("downplay");
+      });
+      var onHoverLink = function(method) {
+        var visualMapModel = _this.visualMapModel;
+        visualMapModel.option.hoverLink && _this.api.dispatchAction({
+          type: method,
+          batch: makeHighDownBatch(visualMapModel.findTargetDataIndices(pieceIndex), visualMapModel)
+        });
+      };
+    };
+    PiecewiseVisualMapView2.prototype._getItemAlign = function() {
+      var visualMapModel = this.visualMapModel;
+      var modelOption = visualMapModel.option;
+      if (modelOption.orient === "vertical") {
+        return getItemAlign(visualMapModel, this.api, visualMapModel.itemSize);
+      } else {
+        var align = modelOption.align;
+        if (!align || align === "auto") {
+          align = "left";
+        }
+        return align;
+      }
+    };
+    PiecewiseVisualMapView2.prototype._renderEndsText = function(group, text, itemSize, showLabel, itemAlign) {
+      if (!text) {
+        return;
+      }
+      var itemGroup = new Group$3();
+      var textStyleModel = this.visualMapModel.textStyleModel;
+      itemGroup.add(new ZRText$1({
+        style: createTextStyle(textStyleModel, {
+          x: showLabel ? itemAlign === "right" ? itemSize[0] : 0 : itemSize[0] / 2,
+          y: itemSize[1] / 2,
+          verticalAlign: "middle",
+          align: showLabel ? itemAlign : "center",
+          text
+        })
+      }));
+      group.add(itemGroup);
+    };
+    PiecewiseVisualMapView2.prototype._getViewData = function() {
+      var visualMapModel = this.visualMapModel;
+      var viewPieceList = map$1(visualMapModel.getPieceList(), function(piece, index) {
+        return {
+          piece,
+          indexInModelPieceList: index
+        };
+      });
+      var endsText = visualMapModel.get("text");
+      var orient = visualMapModel.get("orient");
+      var inverse = visualMapModel.get("inverse");
+      if (orient === "horizontal" ? inverse : !inverse) {
+        viewPieceList.reverse();
+      } else if (endsText) {
+        endsText = endsText.slice().reverse();
+      }
+      return {
+        viewPieceList,
+        endsText
+      };
+    };
+    PiecewiseVisualMapView2.prototype._createItemSymbol = function(group, representValue, shapeParam) {
+      group.add(createSymbol$1(
+        // symbol will be string
+        this.getControllerVisual(representValue, "symbol"),
+        shapeParam[0],
+        shapeParam[1],
+        shapeParam[2],
+        shapeParam[3],
+        // color will be string
+        this.getControllerVisual(representValue, "color")
+      ));
+    };
+    PiecewiseVisualMapView2.prototype._onItemClick = function(piece) {
+      var visualMapModel = this.visualMapModel;
+      var option = visualMapModel.option;
+      var selectedMode = option.selectedMode;
+      if (!selectedMode) {
+        return;
+      }
+      var selected = clone$4(option.selected);
+      var newKey = visualMapModel.getSelectedMapKey(piece);
+      if (selectedMode === "single" || selectedMode === true) {
+        selected[newKey] = true;
+        each$d(selected, function(o, key) {
+          selected[key] = key === newKey;
+        });
+      } else {
+        selected[newKey] = !selected[newKey];
+      }
+      this.api.dispatchAction({
+        type: "selectDataRange",
+        from: this.uid,
+        visualMapId: this.visualMapModel.id,
+        selected
+      });
+    };
+    PiecewiseVisualMapView2.type = "visualMap.piecewise";
+    return PiecewiseVisualMapView2;
+  }(VisualMapView$1)
+);
+const PiecewiseView = PiecewiseVisualMapView;
+function install$1(registers) {
+  registers.registerComponentModel(PiecewiseModel$1);
+  registers.registerComponentView(PiecewiseView);
   installCommon(registers);
 }
 function install(registers) {
@@ -65721,9 +68506,9 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["WIPs by columns"]);
         },
-        "avg-time-by-columns": (ctx) => {
+        "time-by-columns": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Average times by columns"]);
+          return _normalize(["Bottleneck search"]);
         },
         "lead-time-distributions": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -65997,36 +68782,60 @@ const messages = {
         }
       }
     },
-    "avg-time-by-columns": {
+    "time-by-columns": {
       "tab": {
-        "percent": (ctx) => {
+        "q0": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Percents"]);
+          return _normalize(["Minimums"]);
         },
-        "day": (ctx) => {
+        "q2": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Days"]);
+          return _normalize(["Medians"]);
+        },
+        "q3": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["75 percentiles"]);
+        },
+        "q4": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Maximums"]);
+        },
+        "avg": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Averages"]);
         }
       },
-      "yAxis": {
+      "xAxis": {
         "throughput": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Throughput, 1/period"]);
         },
-        "name": {
-          "percent": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["% time in column for released issues"]);
-          },
-          "day": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Time in column for released issues"]);
-          }
+        "columns": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Time in column, days"]);
         }
       },
-      "title": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Average time by columns for released issues: ", _interpolate(_named("title"))]);
+      "title": {
+        "q0": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Minimums of time by columns for released issues: ", _interpolate(_named("title"))]);
+        },
+        "q2": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Medians of time by columns for released issues: ", _interpolate(_named("title"))]);
+        },
+        "q3": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["75 percentiles of time by columns for released issues: ", _interpolate(_named("title"))]);
+        },
+        "q4": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Maximums of time by columns for released issues: ", _interpolate(_named("title"))]);
+        },
+        "avg": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Averages of time by columns for released issues: ", _interpolate(_named("title"))]);
+        }
       },
       "help": {
         "text": (ctx) => {
@@ -66043,12 +68852,6 @@ const messages = {
           "name": (ctx) => {
             const { normalize: _normalize } = ctx;
             return _normalize(["Throughput"]);
-          }
-        },
-        "lead-throughput": {
-          "name": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Lead throughput"]);
           }
         },
         "cycle-throughput": {
@@ -66901,9 +69704,9 @@ const messages = {
           const { normalize: _normalize } = ctx;
           return _normalize(["WIP по колонкам"]);
         },
-        "avg-time-by-columns": (ctx) => {
+        "time-by-columns": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Среднее время по колонкам"]);
+          return _normalize(["Поиск узких мест"]);
         },
         "lead-time-distributions": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -67177,36 +69980,60 @@ const messages = {
         }
       }
     },
-    "avg-time-by-columns": {
+    "time-by-columns": {
       "tab": {
-        "percent": (ctx) => {
+        "q0": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Проценты"]);
+          return _normalize(["Минимумы"]);
         },
-        "day": (ctx) => {
+        "q2": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Дни"]);
+          return _normalize(["Медианы"]);
+        },
+        "q3": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["75 процентиль"]);
+        },
+        "q4": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Максимумы"]);
+        },
+        "avg": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Средние"]);
         }
       },
-      "yAxis": {
+      "xAxis": {
         "throughput": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Проп. спос., 1/период"]);
         },
-        "name": {
-          "percent": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Процент времени в колонке для завершенных задач"]);
-          },
-          "day": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Время в колонке для завершенных задач, дни"]);
-          }
+        "columns": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время в колонке, дни"]);
         }
       },
-      "title": (ctx) => {
-        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-        return _normalize(["Среднее время по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+      "title": {
+        "q0": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Минимумы времени по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+        },
+        "q2": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Медианы времени по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+        },
+        "q3": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["75 процентиль времени по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+        },
+        "q4": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Максимумы времени по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+        },
+        "avg": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Средние времена по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+        }
       },
       "help": {
         "text": (ctx) => {
@@ -67223,12 +70050,6 @@ const messages = {
           "name": (ctx) => {
             const { normalize: _normalize } = ctx;
             return _normalize(["Пропускная способность"]);
-          }
-        },
-        "lead-throughput": {
-          "name": (ctx) => {
-            const { normalize: _normalize } = ctx;
-            return _normalize(["Пропускная способность в поставке"]);
           }
         },
         "cycle-throughput": {
@@ -73326,8 +76147,11 @@ const KanbanStat = {
       ps.leadVals = timeLead;
       ps.waste = calcStat(timeWaste);
       ps.times = {};
+      ps.timeStats = {};
       for (const id in tmp.columns) {
-        ps.times[id] = mean(...timesCols[id]) / dayShift;
+        const colTimes = timesCols[id].map((v) => v / dayShift);
+        ps.times[id] = mean(...colTimes);
+        ps.timeStats[id] = quantile(colTimes, [0, 0.25, 0.5, 0.75, 1]);
       }
       let tLead = sum(...timeLead);
       if (tLead) {
@@ -73355,6 +76179,7 @@ const KanbanStat = {
       ps.wastePercent = NaN;
       ps.effPercent = NaN;
       ps.times = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
+      ps.timeStats = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, [NaN, NaN, NaN, NaN, NaN]]));
       ps.timesPercent = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
     }
     this.periodStat.push(ps);
@@ -74166,9 +76991,9 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64);
 }
 const WIPsChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$8, [["render", _sfc_render$7]]);
-const AvgTimesChart_vue_vue_type_style_index_0_lang = "";
+const TimesChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$7 = {
-  name: "AvgTimesChart",
+  name: "TimesChart",
   components: {
     VChart: S
   },
@@ -74176,23 +77001,15 @@ const _sfc_main$7 = {
     title: String,
     periodStat: Array,
     columns: Array,
-    selectedColumns: Array
+    selectedColumns: Array,
+    conf: Object
   },
   data: function() {
     return {
-      selected: "perc"
+      selected: "q3"
     };
   },
-  methods: {
-    yAxisName: function() {
-      switch (this.selected) {
-        case "perc":
-          return this.$t("avg-time-by-columns.yAxis.name.percent");
-        default:
-          return this.$t("avg-time-by-columns.yAxis.name.day");
-      }
-    }
-  },
+  methods: {},
   watch: {},
   computed: {
     xAxisMin() {
@@ -74218,10 +77035,10 @@ const _sfc_main$7 = {
       }
     },
     option() {
-      let opts = {
+      return {
         animation: true,
         title: {
-          text: this.$t("avg-time-by-columns.title", { title: this.title }),
+          text: this.$t("time-by-columns.title." + this.selected, { title: this.title }),
           left: "center"
         },
         toolbox: {
@@ -74235,11 +77052,12 @@ const _sfc_main$7 = {
         axisPointer: {
           link: [
             {
-              xAxisIndex: "all"
+              yAxisIndex: "all"
             }
           ]
         },
         tooltip: {
+          show: false,
           axisPointer: {
             show: true
           }
@@ -74249,92 +77067,65 @@ const _sfc_main$7 = {
         },
         grid: [
           {
-            top: "10%",
-            height: "68%"
+            right: "10%",
+            width: "68%",
+            bottom: "20%"
           },
           {
-            bottom: "10%",
-            height: "10%"
-          }
-        ],
-        xAxis: [
-          {
-            axisLabel: {
-              show: false
-            },
-            boundaryGap: false,
-            gridIndex: 0,
-            axisPointer: {
-              show: true,
-              snap: true,
-              label: {
-                formatter: function(value) {
-                  if (value == null ? void 0 : value.value) {
-                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
-                  } else {
-                    return "";
-                  }
-                }
-              }
-            },
-            type: "time",
-            min: this.xAxisMin,
-            max: this.xAxisMax
-          },
-          {
-            gridIndex: 1,
-            boundaryGap: [0, "100%"],
-            nameLocation: "middle",
-            nameGap: "30",
-            axisPointer: {
-              show: true,
-              triggerTooltip: false,
-              label: {
-                formatter: function(value) {
-                  if (value == null ? void 0 : value.value) {
-                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
-                  } else {
-                    return "";
-                  }
-                }
-              }
-            },
-            axisLabel: {
-              hideOverlap: true,
-              formatter: function(value) {
-                if (value) {
-                  return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
-                } else {
-                  return "";
-                }
-              }
-            },
-            min: this.xAxisMin,
-            max: this.xAxisMax
+            left: "10%",
+            width: "10%",
+            bottom: "20%"
           }
         ],
         yAxis: [
           {
-            name: this.yAxisName(),
-            nameLocation: "middle",
-            nameGap: "30",
-            minInterval: 1,
+            gridIndex: 0,
+            type: "category",
             axisPointer: {
               show: true,
-              triggerTooltip: false
-            },
-            axisLabel: {
-              hideOverlap: true,
-              formatter: function(value) {
-                return value ? value.toFixed(0) : "";
+              snap: true,
+              label: {
+                show: false
               }
             },
-            min: 0
+            axisLabel: {
+              show: false
+            },
+            data: this.categories
           },
           {
             gridIndex: 1,
-            boundaryGap: [0, "100%"],
-            name: this.$t("avg-time-by-columns.yAxis.throughput"),
+            type: "category",
+            axisPointer: {
+              show: true,
+              snap: true,
+              label: {}
+            },
+            axisLabel: {
+              show: true
+            },
+            data: this.categories
+          }
+        ],
+        xAxis: [
+          {
+            gridIndex: 0,
+            name: this.$t("time-by-columns.xAxis.columns"),
+            nameGap: "10",
+            type: "category",
+            axisPointer: {
+              show: true,
+              triggerTooltip: false
+            },
+            axisLabel: {
+              hideOverlap: false,
+              rotate: 30
+            },
+            data: this.columnsData
+          },
+          {
+            gridIndex: 1,
+            name: this.$t("time-by-columns.xAxis.throughput"),
             nameLocation: "middle",
             nameGap: "30",
             axisPointer: {
@@ -74342,57 +77133,192 @@ const _sfc_main$7 = {
               triggerTooltip: false
             },
             axisLabel: {
-              hideOverlap: true,
-              formatter: function(value) {
-                return value ? value.toFixed(0) : "";
-              }
+              hideOverlap: true
             },
             min: 0,
             max: "dataMax"
           }
         ],
+        visualMap: {
+          calculable: true,
+          orient: "horizontal",
+          right: "5%",
+          bottom: "5%",
+          seriesIndex: 0,
+          dimension: 2,
+          min: this.heatMapSeriesDataMin,
+          max: this.heatMapSeriesDataMax
+        },
         series: this.series
       };
-      if (this.selected === "perc") {
-        opts.yAxis[0].max = 100;
-      }
-      return opts;
     },
-    series() {
-      let res = [];
-      for (let i = 0; i < this.columns.length; i++) {
-        const id = this.columns[i].id;
-        if (this.selectedColumns.includes(id)) {
-          let ser = {
-            name: this.columns[i].name,
-            type: "line",
-            stack: "times",
-            smooth: true,
-            smoothMonotone: "x",
-            areaStyle: {
-              origin: "auto"
-            },
-            data: []
-          };
-          for (let item of this.periodStat) {
-            if (item.throughput > 0) {
-              ser.data.push([
-                item.date,
-                ((this.selected === "perc" ? item.timesPercent[id] : item.times[id]) || 0).toFixed(2)
-              ]);
-            }
-          }
-          res.push(ser);
+    categories: function() {
+      this.periodStat.map((item) => new Date(item.date).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" }));
+    },
+    columnsData: function() {
+      return this.columns.filter((value) => this.selectedColumns.includes(value.id)).map((item) => item.name);
+    },
+    heatMapSeriesData: function() {
+      function calcTime(item, id, selected) {
+        switch (selected) {
+          case "q0":
+            return item.timeStats[id][0];
+          case "q1":
+            return item.timeStats[id][1];
+          case "q2":
+            return item.timeStats[id][2];
+          case "q3":
+            return item.timeStats[id][3];
+          case "q4":
+            return item.timeStats[id][4];
+          case "avg":
+            return item.times[id];
+          default:
+            return NaN;
         }
       }
+      let data = {
+        value: [],
+        min: NaN,
+        max: NaN
+      };
+      for (let i = 0; i < this.columns.length; i++) {
+        const id = this.columns[i].id;
+        const prevColumnWait = i > 0 && this.conf.wait.includes(this.columns[i - 1].id);
+        const columnWait = this.conf.wait.includes(id);
+        if (this.selectedColumns.includes(id)) {
+          for (let item of this.periodStat) {
+            const time = calcTime(item, id, this.selected);
+            if (item.throughput > 0 && time !== null && time !== void 0) {
+              data.value.push({
+                value: [
+                  this.columns[i].name,
+                  new Date(item.date).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" }),
+                  time,
+                  columnWait,
+                  prevColumnWait
+                ],
+                label: {
+                  position: columnWait ? "insideRight" : "inside"
+                }
+              });
+              data.min = min(data.min, time);
+              data.max = max(data.max, time);
+            }
+          }
+        }
+      }
+      return data;
+    },
+    heatMapSeriesDataMin: function() {
+      return this.heatMapSeriesData.min;
+    },
+    heatMapSeriesDataMax: function() {
+      return this.heatMapSeriesData.max;
+    },
+    series() {
+      let serHeatMap = {
+        type: "custom",
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        data: this.heatMapSeriesData.value,
+        label: {
+          show: true
+        },
+        renderItem: function(params, api) {
+          const valX = api.value(0);
+          const valY = api.value(1);
+          const val = api.value(2);
+          const columnWait = api.value(3);
+          const prevColumnWait = api.value(4);
+          const [w2, h2] = api.size([0, 1]);
+          const startPoint = api.coord([valX, valY]);
+          let x2;
+          let width;
+          let r;
+          if (columnWait) {
+            if (prevColumnWait) {
+              x2 = startPoint[0] - w2 * 0.5;
+              width = w2;
+              r = 0;
+            } else {
+              x2 = startPoint[0] - w2 * 0.1;
+              width = w2 * 0.6;
+              r = [1e3, 0, 0, 1e3];
+            }
+          } else if (prevColumnWait) {
+            x2 = startPoint[0] - w2 * 0.5;
+            width = w2 * 0.9;
+            r = [0, 1e3, 1e3, 0];
+          } else {
+            x2 = startPoint[0] - w2 * 0.4;
+            width = w2 * 0.8;
+            r = [1e3, 1e3, 1e3, 1e3];
+          }
+          let rect = {
+            x: x2,
+            y: startPoint[1] - h2 * 0.4,
+            width,
+            height: h2 * 0.8
+          };
+          let textRect = {
+            x: startPoint[0] - w2 * 0.5,
+            y: startPoint[1] - h2 * 0.5,
+            height: h2,
+            width: w2
+          };
+          const clipRect = {
+            x: params.coordSys.x,
+            y: params.coordSys.y,
+            width: params.coordSys.width,
+            height: params.coordSys.height
+          };
+          const rectShape = clipRectByRect(rect, clipRect);
+          rectShape.r = r;
+          const textRectShape = clipRectByRect(textRect, clipRect);
+          function luma(colorVal) {
+            if (colorVal === void 0) {
+              return 255;
+            }
+            let rgb = typeof colorVal === "string" ? parse$2(colorVal) : colorVal;
+            return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+          }
+          return {
+            type: "group",
+            children: [
+              {
+                type: "rect",
+                shape: rectShape,
+                ignore: !rectShape,
+                style: {
+                  fill: api.visual("color")
+                }
+              },
+              {
+                type: "rect",
+                shape: textRectShape,
+                ignore: !textRectShape,
+                style: {
+                  fill: "transparent",
+                  text: !Number.isNaN(val) ? val.toFixed(0) : "",
+                  textFill: luma(api.visual("color")) >= 165 ? "#000" : "#fff",
+                  textVerticalAlign: "middle",
+                  textAlign: columnWait ? "right" : "center",
+                  textPosition: columnWait ? "insideRight" : ""
+                }
+              }
+            ]
+          };
+        }
+      };
       let serThroughput = {
-        name: this.$t("avg-time-by-columns.series.throughput.name"),
+        name: this.$t("time-by-columns.series.throughput.name"),
         type: "bar",
         xAxisIndex: 1,
         yAxisIndex: 1,
         label: {
           show: true,
-          position: "top"
+          position: "right"
         },
         barMaxWidth: "15%",
         barMinWidth: 10,
@@ -74402,7 +77328,7 @@ const _sfc_main$7 = {
         data: []
       };
       let serCycleThroughput = {
-        name: this.$t("avg-time-by-columns.series.cycle-throughput.name"),
+        name: this.$t("time-by-columns.series.cycle-throughput.name"),
         type: "bar",
         xAxisIndex: 1,
         yAxisIndex: 1,
@@ -74419,11 +77345,18 @@ const _sfc_main$7 = {
       };
       let showCycleThroughput = false;
       for (let item of this.periodStat) {
-        serThroughput.data.push([item.date, item.throughput]);
-        serCycleThroughput.data.push([item.date, item.cycleThroughput]);
+        serThroughput.data.push([
+          item.throughput,
+          new Date(item.date).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" })
+        ]);
+        serCycleThroughput.data.push([
+          item.cycleThroughput,
+          new Date(item.date).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" })
+        ]);
         showCycleThroughput || (showCycleThroughput = item.throughput !== item.cycleThroughput);
       }
-      res.push(serThroughput);
+      let res = [serHeatMap, serThroughput];
+      res.push();
       if (showCycleThroughput) {
         res.push(serCycleThroughput);
       }
@@ -74431,7 +77364,7 @@ const _sfc_main$7 = {
     }
   }
 };
-const _hoisted_1$7 = { class: "avg-times-chart-selector" };
+const _hoisted_1$7 = { class: "times-chart-selector" };
 const _hoisted_2$3 = { style: { "height": "100%", "clear": "both" } };
 const _hoisted_3$3 = ["title", "href"];
 function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
@@ -74439,30 +77372,42 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock(Fragment, null, [
     createBaseVNode("div", _hoisted_1$7, [
       createBaseVNode("div", {
-        class: normalizeClass(["avg-times-chart-selector-item", { "avg-times-chart-selector-item-selected": _ctx.selected === "perc" }]),
-        onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "perc")
-      }, toDisplayString$1(_ctx.$t("avg-time-by-columns.tab.percent")), 3),
+        class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.selected === "q0" }]),
+        onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "q0")
+      }, toDisplayString$1(_ctx.$t("time-by-columns.tab.q0")), 3),
       createBaseVNode("div", {
-        class: normalizeClass(["avg-times-chart-selector-item", { "avg-times-chart-selector-item-selected": _ctx.selected === "time" }]),
-        onClick: _cache[1] || (_cache[1] = ($event) => _ctx.selected = "time")
-      }, toDisplayString$1(_ctx.$t("avg-time-by-columns.tab.day")), 3)
+        class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.selected === "q2" }]),
+        onClick: _cache[1] || (_cache[1] = ($event) => _ctx.selected = "q2")
+      }, toDisplayString$1(_ctx.$t("time-by-columns.tab.q2")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.selected === "q3" }]),
+        onClick: _cache[2] || (_cache[2] = ($event) => _ctx.selected = "q3")
+      }, toDisplayString$1(_ctx.$t("time-by-columns.tab.q3")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.selected === "q4" }]),
+        onClick: _cache[3] || (_cache[3] = ($event) => _ctx.selected = "q4")
+      }, toDisplayString$1(_ctx.$t("time-by-columns.tab.q4")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.selected === "avg" }]),
+        onClick: _cache[4] || (_cache[4] = ($event) => _ctx.selected = "avg")
+      }, toDisplayString$1(_ctx.$t("time-by-columns.tab.avg")), 3)
     ]),
     createBaseVNode("div", _hoisted_2$3, [
       createVNode(_component_v_chart, {
-        class: "AvgTimesChart",
+        class: "TimesChart",
         option: $options.option,
         autoresize: ""
       }, null, 8, ["option"])
     ]),
     createBaseVNode("a", {
       class: "icon-info-down",
-      title: _ctx.$t("avg-time-by-columns.help.text"),
-      href: _ctx.$t("avg-time-by-columns.help.link"),
+      title: _ctx.$t("time-by-columns.help.text"),
+      href: _ctx.$t("time-by-columns.help.link"),
       target: "_blank"
     }, " ‽ ", 8, _hoisted_3$3)
   ], 64);
 }
-const AvgTimesChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$7, [["render", _sfc_render$6]]);
+const TimesChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$7, [["render", _sfc_render$6]]);
 const _sfc_main$6 = {
   name: "MainStatChart",
   components: {
@@ -76233,7 +79178,7 @@ const loadingMaxSteps = 80;
 const __default__ = {
   components: {
     WIPsChart,
-    AvgTimesChart,
+    TimesChart,
     MainStatChart,
     StatByWIPChart,
     ModalsContainer: No,
@@ -76733,18 +79678,20 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
   __name: "App",
   setup(__props) {
     use([
-      install$l,
-      install$j,
-      install$k,
-      install$d,
-      install$9,
-      install$a,
-      install,
-      install$b,
-      install$h,
+      install$p,
+      install$n,
+      install$o,
       install$g,
-      install$f,
-      install$3
+      install$c,
+      install$d,
+      install$3,
+      install$e,
+      install$l,
+      install$k,
+      install$i,
+      install$j,
+      install,
+      install$6
     ]);
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock(Fragment, null, [
@@ -76832,15 +79779,16 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
               }, 8, ["name"]),
               createVNode(unref(Tab), {
                 id: "tabs-avg-times",
-                name: _ctx.$t("app.tabs.avg-time-by-columns")
+                name: _ctx.$t("app.tabs.time-by-columns")
               }, {
                 default: withCtx(() => [
-                  createVNode(AvgTimesChart, {
+                  createVNode(TimesChart, {
                     title: _ctx.kanbanBoardConfig.name,
                     "period-stat": _ctx.periodStat,
                     columns: _ctx.columns,
-                    "selected-columns": _ctx.conf.lead
-                  }, null, 8, ["title", "period-stat", "columns", "selected-columns"])
+                    "selected-columns": _ctx.conf.lead,
+                    conf: _ctx.conf
+                  }, null, 8, ["title", "period-stat", "columns", "selected-columns", "conf"])
                 ]),
                 _: 1
               }, 8, ["name"]),
@@ -76926,9 +79874,9 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
 });
 const main = "";
 const style = "";
-use(install$7);
-use(install$8);
-use(install$6);
+use(install$a);
+use(install$b);
+use(install$9);
 const app = createApp(_sfc_main, {
   queryString: window.location.hash.substring(1)
 });

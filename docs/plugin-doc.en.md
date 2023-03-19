@@ -104,12 +104,12 @@ idle due to lack of work.
 
 Here you can evaluate the trends and range of lead and cycle times.
 
-### Average times by columns
+### Bottleneck search
 
-Readings, on average, performed tasks in each of the columns.
-Assess where tasks spend the most time in the production process.
+Heat map of the time that the tasks spent in each of the columns.
 
-You can view both percentage and absolute values to evaluate the dynamics.
+The wait columns are merged with the columns that follow them, 
+because the time to wait before the bottleneck is a meaningful indicator.
 
 ### Lead time distributions
 
