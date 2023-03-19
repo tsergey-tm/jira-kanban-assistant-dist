@@ -68840,11 +68840,11 @@ const messages = {
       "help": {
         "text": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["This screen shows the time that spent in the columns the tasks completed in the period.\nYou can choose both the ratio to the delivery time and absolute values."]);
+          return _normalize(["This screen shows the time that spent in the columns the tasks completed in the period."]);
         },
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#average-times-by-columns"]);
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#bottleneck-search"]);
         }
       },
       "series": {
@@ -70038,11 +70038,11 @@ const messages = {
       "help": {
         "text": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["На этом экране представлено время, которые провели в колонках завершенные в периоде задачи.\nМожно выбрать как отношение к времени поставки, так и абсолютные значения."]);
+          return _normalize(["На этом экране представлено время, которые провели в колонках завершенные в периоде задачи."]);
         },
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%81%D1%80%D0%B5%D0%B4%D0%BD%D0%B5%D0%B5-%D0%B2%D1%80%D0%B5%D0%BC%D1%8F-%D0%BF%D0%BE-%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BA%D0%B0%D0%BC"]);
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BF%D0%BE%D0%B8%D1%81%D0%BA-%D1%83%D0%B7%D0%BA%D0%B8%D1%85-%D0%BC%D0%B5%D1%81%D1%82"]);
         }
       },
       "series": {
