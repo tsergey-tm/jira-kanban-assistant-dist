@@ -59070,7 +59070,7 @@ var S = defineComponent({ name: "echarts", props: O(O({ option: Object, theme: {
   return e2.ref = "root", e2.class = e2.class ? ["echarts"].concat(e2.class) : "echarts", h("x-vue-echarts", e2);
 } });
 const NameProgressBar_vue_vue_type_style_index_0_scoped_adea8f9f_lang = "";
-const _export_sfc$1 = (sfc, props) => {
+const _export_sfc = (sfc, props) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
     target[key] = val;
@@ -59113,7 +59113,7 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
     createBaseVNode("span", _hoisted_1$g, toDisplayString$1($props.title), 1)
   ], 4);
 }
-const NameProgressBar = /* @__PURE__ */ _export_sfc$1(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-adea8f9f"]]);
+const NameProgressBar = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-adea8f9f"]]);
 class LuxonError extends Error {
 }
 class InvalidDateTimeError extends LuxonError {
@@ -71906,7 +71906,7 @@ const _sfc_main$f = {
   }
 };
 const _hoisted_1$f = { class: "triage-selector" };
-const _hoisted_2$9 = { style: { "clear": "both" } };
+const _hoisted_2$a = { style: { "clear": "both" } };
 const _hoisted_3$9 = { key: 0 };
 const _hoisted_4$6 = {
   key: 1,
@@ -71949,7 +71949,7 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[1] || (_cache[1] = ($event) => _ctx.selected = "cycle")
       }, toDisplayString$1(_ctx.$t("triage.tab.name", { col: $options.cycleTriageColName })), 3)
     ]),
-    createBaseVNode("div", _hoisted_2$9, [
+    createBaseVNode("div", _hoisted_2$a, [
       !Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("div", _hoisted_3$9, toDisplayString$1($options.triageTable), 1)) : createCommentVNode("", true),
       Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$6, [
         createBaseVNode("thead", null, [
@@ -72069,7 +72069,7 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_28)
   ], 64);
 }
-const TriageTable = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["render", _sfc_render$e]]);
+const TriageTable = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e]]);
 function sum$1(x2) {
   if (x2.length === 0) {
     return 0;
@@ -72778,7 +72778,7 @@ const _sfc_main$e = {
 };
 const _withScopeId$1 = (n2) => (pushScopeId("data-v-d27db0c2"), n2 = n2(), popScopeId(), n2);
 const _hoisted_1$e = { class: "lead-cycle-times-chart-selector" };
-const _hoisted_2$8 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "lead-cycle-times-chart-selector-space" }, "   ", -1));
+const _hoisted_2$9 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "lead-cycle-times-chart-selector-space" }, "   ", -1));
 const _hoisted_3$8 = { style: { "height": "100%", "clear": "both" } };
 const _hoisted_4$5 = ["title", "href"];
 function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
@@ -72793,7 +72793,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
         class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.typeSelected === "cycle" }]),
         onClick: _cache[1] || (_cache[1] = ($event) => _ctx.typeSelected = "cycle")
       }, toDisplayString$1(_ctx.$t("lead-cycle-times-chart.tab.cycle")), 3),
-      _hoisted_2$8,
+      _hoisted_2$9,
       createBaseVNode("div", {
         class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.aggrSelected === "perc" }]),
         onClick: _cache[2] || (_cache[2] = ($event) => _ctx.aggrSelected = "perc")
@@ -72818,7 +72818,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_4$5)
   ], 64);
 }
-const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-d27db0c2"]]);
+const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-d27db0c2"]]);
 const JiraFilters_vue_vue_type_style_index_0_scoped_dc5a911c_lang = "";
 const _sfc_main$d = {
   name: "JiraFilters",
@@ -72839,11 +72839,11 @@ const _sfc_main$d = {
   }
 };
 const _hoisted_1$d = { class: "jira-filters-box" };
-const _hoisted_2$7 = { class: "jira-filter-box-title" };
+const _hoisted_2$8 = { class: "jira-filter-box-title" };
 const _hoisted_3$7 = ["onClick"];
 function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", _hoisted_1$d, [
-    createBaseVNode("div", _hoisted_2$7, toDisplayString$1($props.title) + ":", 1),
+    createBaseVNode("div", _hoisted_2$8, toDisplayString$1($props.title) + ":", 1),
     (openBlock(true), createElementBlock(Fragment, null, renderList($props.filters, (filter2) => {
       return openBlock(), createElementBlock("div", {
         class: normalizeClass(["jira-filter-box-item", { "jira-filter-box-item-selected": $props.selectedFilters.includes(filter2.id) }]),
@@ -72853,7 +72853,7 @@ function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
     }), 128))
   ]);
 }
-const JiraFilters = /* @__PURE__ */ _export_sfc$1(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-dc5a911c"]]);
+const JiraFilters = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-dc5a911c"]]);
 const JiraColumnStatus_vue_vue_type_style_index_0_scoped_7d723413_lang = "";
 const _sfc_main$c = {
   name: "JiraColumnStatus",
@@ -72962,7 +72962,7 @@ const _sfc_main$c = {
 };
 const _withScopeId = (n2) => (pushScopeId("data-v-7d723413"), n2 = n2(), popScopeId(), n2);
 const _hoisted_1$c = { class: "jira-columns-box" };
-const _hoisted_2$6 = { class: "jira-columns-box-title" };
+const _hoisted_2$7 = { class: "jira-columns-box-title" };
 const _hoisted_3$6 = { class: "jira-columns-box-table" };
 const _hoisted_4$4 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
 const _hoisted_5$3 = { class: "jira-columns-box-table-header" };
@@ -72979,7 +72979,7 @@ const _hoisted_15$1 = { class: "jira-columns-box-table-header" };
 const _hoisted_16$1 = ["onClick"];
 function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", _hoisted_1$c, [
-    createBaseVNode("div", _hoisted_2$6, toDisplayString$1($props.title) + ":", 1),
+    createBaseVNode("div", _hoisted_2$7, toDisplayString$1($props.title) + ":", 1),
     createBaseVNode("table", _hoisted_3$6, [
       createBaseVNode("thead", null, [
         createBaseVNode("tr", null, [
@@ -73065,7 +73065,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-const JiraColumnStatus = /* @__PURE__ */ _export_sfc$1(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-7d723413"]]);
+const JiraColumnStatus = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-7d723413"]]);
 var _a;
 const isClient = typeof window !== "undefined";
 const isString = (val) => typeof val === "string";
@@ -75403,7 +75403,7 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
     [vModelSelect, _ctx.$i18n.locale]
   ]);
 }
-const LanguageSwitcher = /* @__PURE__ */ _export_sfc$1(_sfc_main$b, [["render", _sfc_render$a]]);
+const LanguageSwitcher = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a]]);
 const AppConfig_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$a = {
   name: "AppConfig",
@@ -75623,7 +75623,7 @@ const _sfc_main$a = {
   }
 };
 const _hoisted_1$a = { class: "app-config-option-dialog" };
-const _hoisted_2$5 = { class: "app-config-option-header" };
+const _hoisted_2$6 = { class: "app-config-option-header" };
 const _hoisted_3$5 = { class: "app-config-locale" };
 const _hoisted_4$3 = { class: "app-config-buttons" };
 const _hoisted_5$2 = ["value"];
@@ -75664,7 +75664,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   }, {
     default: withCtx(() => [
       createBaseVNode("div", _hoisted_1$a, [
-        createBaseVNode("div", _hoisted_2$5, toDisplayString$1(_ctx.$t("app-config.title")), 1),
+        createBaseVNode("div", _hoisted_2$6, toDisplayString$1(_ctx.$t("app-config.title")), 1),
         createBaseVNode("div", _hoisted_3$5, [
           createVNode(_component_i18n_t, { keypath: "app-config.locale" }, {
             default: withCtx(() => [
@@ -75833,7 +75833,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
   }, 8, ["modelValue"]);
 }
-const AppConfig = /* @__PURE__ */ _export_sfc$1(_sfc_main$a, [["render", _sfc_render$9]]);
+const AppConfig = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9]]);
 const dayShift = 24 * 60 * 60 * 1e3;
 function nanStat() {
   return {
@@ -76801,7 +76801,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_1$9)
   ], 64);
 }
-const TotalWIPChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$9, [["render", _sfc_render$8]]);
+const TotalWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
 const WIPsChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$8 = {
   name: "WIPsChart",
@@ -76948,7 +76948,7 @@ const _sfc_main$8 = {
   }
 };
 const _hoisted_1$8 = { class: "wips-chart-selector" };
-const _hoisted_2$4 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_2$5 = { style: { "height": "100%", "clear": "both" } };
 const _hoisted_3$4 = ["title", "href"];
 function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
@@ -76975,7 +76975,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[4] || (_cache[4] = ($event) => _ctx.selected = "min")
       }, toDisplayString$1(_ctx.$t("wip-by-columns.tab.min")), 3)
     ]),
-    createBaseVNode("div", _hoisted_2$4, [
+    createBaseVNode("div", _hoisted_2$5, [
       createVNode(_component_v_chart, {
         class: "WIPsChart",
         option: $options.option,
@@ -76990,7 +76990,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_3$4)
   ], 64);
 }
-const WIPsChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$8, [["render", _sfc_render$7]]);
+const WIPsChart = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7]]);
 const TimesChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$7 = {
   name: "TimesChart",
@@ -77365,7 +77365,7 @@ const _sfc_main$7 = {
   }
 };
 const _hoisted_1$7 = { class: "times-chart-selector" };
-const _hoisted_2$3 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_2$4 = { style: { "height": "100%", "clear": "both" } };
 const _hoisted_3$3 = ["title", "href"];
 function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
@@ -77392,7 +77392,7 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[4] || (_cache[4] = ($event) => _ctx.selected = "avg")
       }, toDisplayString$1(_ctx.$t("time-by-columns.tab.avg")), 3)
     ]),
-    createBaseVNode("div", _hoisted_2$3, [
+    createBaseVNode("div", _hoisted_2$4, [
       createVNode(_component_v_chart, {
         class: "TimesChart",
         option: $options.option,
@@ -77407,7 +77407,7 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_3$3)
   ], 64);
 }
-const TimesChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$7, [["render", _sfc_render$6]]);
+const TimesChart = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6]]);
 const _sfc_main$6 = {
   name: "MainStatChart",
   components: {
@@ -77859,7 +77859,7 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_1$6)
   ], 64);
 }
-const MainStatChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$6, [["render", _sfc_render$5]]);
+const MainStatChart = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5]]);
 const _sfc_main$5 = {
   name: "StatByWIPChart",
   components: {
@@ -78195,7 +78195,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_1$5)
   ], 64);
 }
-const StatByWIPChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$5, [["render", _sfc_render$4]]);
+const StatByWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4]]);
 const ControlChart_vue_vue_type_style_index_0_scoped_9d8eea50_lang = "";
 const _sfc_main$4 = {
   name: "ControlChart",
@@ -78506,7 +78506,7 @@ const _sfc_main$4 = {
   }
 };
 const _hoisted_1$4 = { class: "control-chart-issues-config" };
-const _hoisted_2$2 = { class: "control-chart-issues-table" };
+const _hoisted_2$3 = { class: "control-chart-issues-table" };
 const _hoisted_3$2 = { class: "control-chart-issues-table-head" };
 const _hoisted_4$2 = ["innerHTML"];
 const _hoisted_5$1 = { class: "control-chart-issues-winners" };
@@ -78546,7 +78546,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
         _: 1
       })
     ]),
-    createBaseVNode("table", _hoisted_2$2, [
+    createBaseVNode("table", _hoisted_2$3, [
       createBaseVNode("thead", null, [
         createBaseVNode("tr", null, [
           (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.issuesView.dataColumns, (col) => {
@@ -78592,7 +78592,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_7)
   ], 64);
 }
-const ControlChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-9d8eea50"]]);
+const ControlChart = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-9d8eea50"]]);
 const LeadTimeDistributionChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$3 = {
   name: "LeadTimeDistributionChart",
@@ -78839,7 +78839,7 @@ const _sfc_main$3 = {
   }
 };
 const _hoisted_1$3 = { class: "ltds-chart-selector" };
-const _hoisted_2$1 = { class: "ltds-chart-selector" };
+const _hoisted_2$2 = { class: "ltds-chart-selector" };
 const _hoisted_3$1 = ["onClick"];
 const _hoisted_4$1 = { style: { "height": "90%", "clear": "both" } };
 const _hoisted_5 = ["title", "href"];
@@ -78856,7 +78856,7 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[1] || (_cache[1] = ($event) => _ctx.leadCycleSelected = "cycle")
       }, toDisplayString$1(_ctx.$t("lead-time-distributions.tab.cycle")), 3)
     ]),
-    createBaseVNode("div", _hoisted_2$1, [
+    createBaseVNode("div", _hoisted_2$2, [
       (openBlock(true), createElementBlock(Fragment, null, renderList($options.groups, (group) => {
         return openBlock(), createElementBlock("div", {
           class: normalizeClass(["ltds-chart-selector-item", { "ltds-chart-selector-item-selected": _ctx.selected === group }]),
@@ -78879,103 +78879,7 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_5)
   ], 64);
 }
-const LeadTimeDistributionChart = /* @__PURE__ */ _export_sfc$1(_sfc_main$3, [["render", _sfc_render$2]]);
-var _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
-const _sfc_main$1 = {
-  name: "Tab",
-  props: {
-    panelClass: {
-      type: String,
-      default: "tabs-component-panel"
-    },
-    id: {
-      type: String,
-      default: null
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    prefix: {
-      type: String,
-      default: ""
-    },
-    suffix: {
-      type: String,
-      default: ""
-    },
-    isDisabled: {
-      type: Boolean,
-      default: false
-    }
-  },
-  setup(props) {
-    const isActive = ref(false);
-    const tabsProvider = inject("tabsProvider");
-    const addTab = inject("addTab");
-    const updateTab = inject("updateTab");
-    const deleteTab = inject("deleteTab");
-    const header = props.prefix + props.name + props.suffix;
-    const computedId = props.id ? props.id : props.name.toLowerCase().replace(/ /g, "-");
-    const hash = computed(() => "#" + (!props.isDisabled ? computedId : ""));
-    watch(
-      () => tabsProvider.activeTabHash,
-      () => {
-        isActive.value = hash.value === tabsProvider.activeTabHash;
-      }
-    );
-    watch(() => Object.assign({}, props), () => {
-      updateTab(computedId, {
-        name: props.name,
-        header: props.prefix + props.name + props.suffix,
-        isDisabled: props.isDisabled,
-        hash: hash.value,
-        index: tabsProvider.tabs.length,
-        computedId
-      });
-    });
-    onBeforeMount(() => {
-      addTab({
-        name: props.name,
-        header,
-        isDisabled: props.isDisabled,
-        hash: hash.value,
-        index: tabsProvider.tabs.length,
-        computedId
-      });
-    });
-    onBeforeUnmount(() => {
-      deleteTab(computedId);
-    });
-    return {
-      header,
-      computedId,
-      hash,
-      isActive
-    };
-  }
-};
-const _hoisted_1$1 = ["data-tab-id", "aria-hidden"];
-function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
-  return withDirectives((openBlock(), createElementBlock("section", {
-    ref: "tab",
-    "data-tab-id": $setup.computedId,
-    "aria-hidden": !$setup.isActive,
-    class: normalizeClass($props.panelClass),
-    role: "tabpanel"
-  }, [
-    renderSlot(_ctx.$slots, "default")
-  ], 10, _hoisted_1$1)), [
-    [vShow, $setup.isActive]
-  ]);
-}
-var Tab = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render$1]]);
+const LeadTimeDistributionChart = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2]]);
 class ExpiringStorage {
   get(key) {
     const cached = JSON.parse(
@@ -78997,7 +78901,7 @@ class ExpiringStorage {
     localStorage.setItem(key, JSON.stringify({ value, expires }));
   }
 }
-var expiringStorage = new ExpiringStorage();
+const expiringStorage = new ExpiringStorage();
 const _sfc_main$2 = {
   props: {
     cacheLifetime: {
@@ -79132,8 +79036,9 @@ const _sfc_main$2 = {
     };
   }
 };
-const _hoisted_1$2 = ["aria-controls", "aria-selected", "href", "onClick", "innerHTML"];
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$2 = ["onClick"];
+const _hoisted_2$1 = ["aria-controls", "aria-selected", "href", "onClick", "innerHTML"];
+function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", {
     class: normalizeClass($props.wrapperClass)
   }, [
@@ -79145,18 +79050,19 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         return openBlock(), createElementBlock("li", {
           key: i,
           class: normalizeClass([$props.navItemClass, tab.isDisabled ? $props.navItemDisabledClass : "", tab.isActive ? $props.navItemActiveClass : !tab.isDisabled ? $props.navItemInactiveClass : ""]),
+          onClick: ($event) => $setup.selectTab(tab.hash, $event),
           role: "presentation"
         }, [
           createBaseVNode("a", {
             role: "tab",
             class: normalizeClass([$props.navItemLinkClass, tab.isDisabled ? $props.navItemLinkDisabledClass : "", tab.isActive ? $props.navItemLinkActiveClass : !tab.isDisabled ? $props.navItemLinkInactiveClass : ""]),
-            "aria-controls": tab.hash,
+            "aria-controls": tab.paneId,
             "aria-selected": tab.isActive,
             href: tab.hash,
             onClick: ($event) => $setup.selectTab(tab.hash, $event),
             innerHTML: tab.header
-          }, null, 10, _hoisted_1$2)
-        ], 2);
+          }, null, 10, _hoisted_2$1)
+        ], 10, _hoisted_1$2);
       }), 128))
     ], 2),
     createBaseVNode("div", {
@@ -79166,7 +79072,101 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     ], 2)
   ], 2);
 }
-var Tabs = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render]]);
+const Tabs = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1]]);
+const _sfc_main$1 = {
+  name: "Tab",
+  props: {
+    panelClass: {
+      type: String,
+      default: "tabs-component-panel"
+    },
+    id: {
+      type: String,
+      default: null
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    prefix: {
+      type: String,
+      default: ""
+    },
+    suffix: {
+      type: String,
+      default: ""
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+  setup(props) {
+    const isActive = ref(false);
+    const tabsProvider = inject("tabsProvider");
+    const addTab = inject("addTab");
+    const updateTab = inject("updateTab");
+    const deleteTab = inject("deleteTab");
+    const header = props.prefix + props.name + props.suffix;
+    const computedId = props.id ? props.id : props.name.toLowerCase().replace(/ /g, "-");
+    const paneId = computedId + "-pane";
+    const hash = computed(() => "#" + (!props.isDisabled ? computedId : ""));
+    watch(
+      () => tabsProvider.activeTabHash,
+      () => {
+        isActive.value = hash.value === tabsProvider.activeTabHash;
+      }
+    );
+    watch(() => Object.assign({}, props), () => {
+      updateTab(computedId, {
+        name: props.name,
+        header: props.prefix + props.name + props.suffix,
+        isDisabled: props.isDisabled,
+        hash: hash.value,
+        index: tabsProvider.tabs.length,
+        computedId,
+        paneId
+      });
+    });
+    onBeforeMount(() => {
+      addTab({
+        name: props.name,
+        header,
+        isDisabled: props.isDisabled,
+        hash: hash.value,
+        index: tabsProvider.tabs.length,
+        computedId,
+        paneId
+      });
+    });
+    onBeforeUnmount(() => {
+      deleteTab(computedId);
+    });
+    return {
+      header,
+      computedId,
+      paneId,
+      hash,
+      isActive
+    };
+  }
+};
+const _hoisted_1$1 = ["id", "data-tab-id", "aria-hidden"];
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return withDirectives((openBlock(), createElementBlock("section", {
+    ref: "tab",
+    id: $setup.paneId,
+    "data-tab-id": $setup.computedId,
+    "aria-hidden": !$setup.isActive,
+    class: normalizeClass($props.panelClass),
+    role: "tabpanel"
+  }, [
+    renderSlot(_ctx.$slots, "default")
+  ], 10, _hoisted_1$1)), [
+    [vShow, $setup.isActive]
+  ]);
+}
+const Tab = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render]]);
 const _hoisted_1 = { style: { "clear": "left" } };
 const _hoisted_2 = { key: 0 };
 const _hoisted_3 = ["title", "href"];
@@ -79725,9 +79725,9 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
           ])) : createCommentVNode("", true)
         ]),
         _ctx.kanbanBoardConfig.name && _ctx.periodStat.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_4, [
-          createVNode(unref(Tabs), { options: { defaultTabHash: "tabs-main", useUrlFragment: false } }, {
+          createVNode(Tabs, { options: { defaultTabHash: "tabs-main", useUrlFragment: false } }, {
             default: withCtx(() => [
-              createVNode(unref(Tab), {
+              createVNode(Tab, {
                 id: "tabs-main",
                 name: _ctx.$t("app.tabs.main")
               }, {
@@ -79739,7 +79739,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                 ]),
                 _: 1
               }, 8, ["name"]),
-              createVNode(unref(Tab), {
+              createVNode(Tab, {
                 id: "tabs-total-wip",
                 name: _ctx.$t("app.tabs.total-wip")
               }, {
@@ -79751,7 +79751,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                 ]),
                 _: 1
               }, 8, ["name"]),
-              createVNode(unref(Tab), {
+              createVNode(Tab, {
                 id: "tabs-wips",
                 name: _ctx.$t("app.tabs.wip-by-columns")
               }, {
@@ -79765,7 +79765,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                 ]),
                 _: 1
               }, 8, ["name"]),
-              createVNode(unref(Tab), {
+              createVNode(Tab, {
                 id: "tabs-lead-cycle-times",
                 name: _ctx.$t("app.tabs.lead-cycle-times")
               }, {
@@ -79777,7 +79777,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                 ]),
                 _: 1
               }, 8, ["name"]),
-              createVNode(unref(Tab), {
+              createVNode(Tab, {
                 id: "tabs-avg-times",
                 name: _ctx.$t("app.tabs.time-by-columns")
               }, {
@@ -79792,7 +79792,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                 ]),
                 _: 1
               }, 8, ["name"]),
-              createVNode(unref(Tab), {
+              createVNode(Tab, {
                 id: "tabs-lead-time-distributions",
                 name: _ctx.$t("app.tabs.lead-time-distributions")
               }, {
@@ -79804,7 +79804,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                 ]),
                 _: 1
               }, 8, ["name"]),
-              createVNode(unref(Tab), {
+              createVNode(Tab, {
                 id: "tabs-long-times",
                 name: _ctx.$t("app.tabs.long-times")
               }, {
@@ -79820,7 +79820,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                 ]),
                 _: 1
               }, 8, ["name"]),
-              createVNode(unref(Tab), {
+              createVNode(Tab, {
                 id: "tabs-by-wip",
                 name: _ctx.$t("app.tabs.analyze-by-wip")
               }, {
@@ -79833,7 +79833,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                 ]),
                 _: 1
               }, 8, ["name"]),
-              _ctx.showTriage ? (openBlock(), createBlock(unref(Tab), {
+              _ctx.showTriage ? (openBlock(), createBlock(Tab, {
                 key: 0,
                 id: "tabs-triage",
                 name: _ctx.$t("app.tabs.triage")
