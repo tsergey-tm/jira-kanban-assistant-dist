@@ -68803,6 +68803,18 @@ const messages = {
         "avg": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Averages"]);
+        },
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Time in columns"]);
+        },
+        "wip": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["WIP"]);
+        },
+        "total": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Total time in WIP"]);
         }
       },
       "xAxis": {
@@ -68816,25 +68828,71 @@ const messages = {
         }
       },
       "title": {
-        "q0": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Minimums of time by columns for released issues: ", _interpolate(_named("title"))]);
+        "lead": {
+          "q0": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Minimums of time by columns for released issues: ", _interpolate(_named("title"))]);
+          },
+          "q2": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Medians of time by columns for released issues: ", _interpolate(_named("title"))]);
+          },
+          "q3": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["75 percentiles of time by columns for released issues: ", _interpolate(_named("title"))]);
+          },
+          "q4": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Maximums of time by columns for released issues: ", _interpolate(_named("title"))]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Averages of time by columns for released issues: ", _interpolate(_named("title"))]);
+          }
         },
-        "q2": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Medians of time by columns for released issues: ", _interpolate(_named("title"))]);
+        "wip": {
+          "q0": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Minimums of work in progress: ", _interpolate(_named("title"))]);
+          },
+          "q2": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Medians of work in progress: ", _interpolate(_named("title"))]);
+          },
+          "q3": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["75 percentiles of work in progress: ", _interpolate(_named("title"))]);
+          },
+          "q4": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Maximums of work in progress: ", _interpolate(_named("title"))]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Averages of work in progress: ", _interpolate(_named("title"))]);
+          }
         },
-        "q3": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["75 percentiles of time by columns for released issues: ", _interpolate(_named("title"))]);
-        },
-        "q4": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Maximums of time by columns for released issues: ", _interpolate(_named("title"))]);
-        },
-        "avg": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Averages of time by columns for released issues: ", _interpolate(_named("title"))]);
+        "total": {
+          "q0": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Minimums of total time in WIP: ", _interpolate(_named("title"))]);
+          },
+          "q2": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Medians of total time in WIP: ", _interpolate(_named("title"))]);
+          },
+          "q3": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["75 percentiles of total time in WIP: ", _interpolate(_named("title"))]);
+          },
+          "q4": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Maximums of total time in WIP: ", _interpolate(_named("title"))]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Averages of total time in WIP: ", _interpolate(_named("title"))]);
+          }
         }
       },
       "help": {
@@ -68858,6 +68916,24 @@ const messages = {
           "name": (ctx) => {
             const { normalize: _normalize } = ctx;
             return _normalize(["Cycle throughput"]);
+          }
+        },
+        "lead": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Time in columns, days"]);
+          }
+        },
+        "wip": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["WIP"]);
+          }
+        },
+        "total": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Total time of work in progress, days"]);
           }
         }
       }
@@ -70001,6 +70077,18 @@ const messages = {
         "avg": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Средние"]);
+        },
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время в колонке"]);
+        },
+        "wip": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Незавершенная работа"]);
+        },
+        "total": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Общий объём незавершенной работы"]);
         }
       },
       "xAxis": {
@@ -70014,25 +70102,71 @@ const messages = {
         }
       },
       "title": {
-        "q0": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Минимумы времени по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+        "lead": {
+          "q0": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Минимумы времени по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+          },
+          "q2": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Медианы времени по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+          },
+          "q3": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["75 процентиль времени по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+          },
+          "q4": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Максимумы времени по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Средние времена по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+          }
         },
-        "q2": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Медианы времени по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+        "wip": {
+          "q0": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Минимумы незавершенной работы: ", _interpolate(_named("title"))]);
+          },
+          "q2": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Медианы незавершенной работы: ", _interpolate(_named("title"))]);
+          },
+          "q3": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["75 процентиль незавершенной работы: ", _interpolate(_named("title"))]);
+          },
+          "q4": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Максимумы незавершенной работы: ", _interpolate(_named("title"))]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Средние незавершенной работы: ", _interpolate(_named("title"))]);
+          }
         },
-        "q3": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["75 процентиль времени по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
-        },
-        "q4": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Максимумы времени по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
-        },
-        "avg": (ctx) => {
-          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
-          return _normalize(["Средние времена по колонкам для завершенных задач: ", _interpolate(_named("title"))]);
+        "total": {
+          "q0": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Минимумы объёма незавершенной работы: ", _interpolate(_named("title"))]);
+          },
+          "q2": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Медианы  объёма незавершенной работы: ", _interpolate(_named("title"))]);
+          },
+          "q3": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["75 процентиль  объёма незавершенной работы: ", _interpolate(_named("title"))]);
+          },
+          "q4": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Максимумы  объёма незавершенной работы: ", _interpolate(_named("title"))]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+            return _normalize(["Средние  объёма незавершенной работы: ", _interpolate(_named("title"))]);
+          }
         }
       },
       "help": {
@@ -70056,6 +70190,24 @@ const messages = {
           "name": (ctx) => {
             const { normalize: _normalize } = ctx;
             return _normalize(["Пропускная способность в цикле"]);
+          }
+        },
+        "lead": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Время, проведённое в колонке, дни"]);
+          }
+        },
+        "wip": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Незавершенная работа, шт."]);
+          }
+        },
+        "total": {
+          "name": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Объём времени незавершенной работы, дни"]);
           }
         }
       }
@@ -71908,7 +72060,7 @@ const _sfc_main$f = {
 const _hoisted_1$f = { class: "triage-selector" };
 const _hoisted_2$a = { style: { "clear": "both" } };
 const _hoisted_3$9 = { key: 0 };
-const _hoisted_4$6 = {
+const _hoisted_4$7 = {
   key: 1,
   class: "triage-table"
 };
@@ -71951,7 +72103,7 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
     ]),
     createBaseVNode("div", _hoisted_2$a, [
       !Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("div", _hoisted_3$9, toDisplayString$1($options.triageTable), 1)) : createCommentVNode("", true),
-      Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$6, [
+      Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$7, [
         createBaseVNode("thead", null, [
           createBaseVNode("tr", null, [
             createBaseVNode("th", {
@@ -72780,7 +72932,7 @@ const _withScopeId$1 = (n2) => (pushScopeId("data-v-d27db0c2"), n2 = n2(), popSc
 const _hoisted_1$e = { class: "lead-cycle-times-chart-selector" };
 const _hoisted_2$9 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "lead-cycle-times-chart-selector-space" }, "   ", -1));
 const _hoisted_3$8 = { style: { "height": "100%", "clear": "both" } };
-const _hoisted_4$5 = ["title", "href"];
+const _hoisted_4$6 = ["title", "href"];
 function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
@@ -72815,7 +72967,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("lead-cycle-times-chart.help.text"),
       href: _ctx.$t("lead-cycle-times-chart.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_4$5)
+    }, " ‽ ", 8, _hoisted_4$6)
   ], 64);
 }
 const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-d27db0c2"]]);
@@ -72964,7 +73116,7 @@ const _withScopeId = (n2) => (pushScopeId("data-v-7d723413"), n2 = n2(), popScop
 const _hoisted_1$c = { class: "jira-columns-box" };
 const _hoisted_2$7 = { class: "jira-columns-box-title" };
 const _hoisted_3$6 = { class: "jira-columns-box-table" };
-const _hoisted_4$4 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
+const _hoisted_4$5 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
 const _hoisted_5$3 = { class: "jira-columns-box-table-header" };
 const _hoisted_6$2 = { class: "jira-columns-box-table-header" };
 const _hoisted_7$2 = ["onClick"];
@@ -72983,7 +73135,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     createBaseVNode("table", _hoisted_3$6, [
       createBaseVNode("thead", null, [
         createBaseVNode("tr", null, [
-          _hoisted_4$4,
+          _hoisted_4$5,
           (openBlock(true), createElementBlock(Fragment, null, renderList($props.columns, (column) => {
             return openBlock(), createElementBlock("td", _hoisted_5$3, toDisplayString$1(column.name), 1);
           }), 256))
@@ -75625,7 +75777,7 @@ const _sfc_main$a = {
 const _hoisted_1$a = { class: "app-config-option-dialog" };
 const _hoisted_2$6 = { class: "app-config-option-header" };
 const _hoisted_3$5 = { class: "app-config-locale" };
-const _hoisted_4$3 = { class: "app-config-buttons" };
+const _hoisted_4$4 = { class: "app-config-buttons" };
 const _hoisted_5$2 = ["value"];
 const _hoisted_6$1 = ["value"];
 const _hoisted_7$1 = ["value"];
@@ -75673,7 +75825,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
             _: 1
           })
         ]),
-        createBaseVNode("div", _hoisted_4$3, [
+        createBaseVNode("div", _hoisted_4$4, [
           createBaseVNode("input", {
             type: "button",
             value: _ctx.$t("app-config.button.apply"),
@@ -76146,12 +76298,10 @@ const KanbanStat = {
       ps.lead = calcStat(timeLead);
       ps.leadVals = timeLead;
       ps.waste = calcStat(timeWaste);
-      ps.times = {};
       ps.timeStats = {};
       for (const id in tmp.columns) {
         const colTimes = timesCols[id].map((v) => v / dayShift);
-        ps.times[id] = mean(...colTimes);
-        ps.timeStats[id] = quantile(colTimes, [0, 0.25, 0.5, 0.75, 1]);
+        ps.timeStats[id] = calcStat(colTimes);
       }
       let tLead = sum(...timeLead);
       if (tLead) {
@@ -76178,7 +76328,6 @@ const KanbanStat = {
       ps.cyclePercent = NaN;
       ps.wastePercent = NaN;
       ps.effPercent = NaN;
-      ps.times = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
       ps.timeStats = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, [NaN, NaN, NaN, NaN, NaN]]));
       ps.timesPercent = Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN]));
     }
@@ -77006,7 +77155,8 @@ const _sfc_main$7 = {
   },
   data: function() {
     return {
-      selected: "q3"
+      selected: "q3",
+      typeSelected: "lead"
     };
   },
   methods: {},
@@ -77038,7 +77188,7 @@ const _sfc_main$7 = {
       return {
         animation: true,
         title: {
-          text: this.$t("time-by-columns.title." + this.selected, { title: this.title }),
+          text: this.$t("time-by-columns.title." + this.typeSelected + "." + this.selected, { title: this.title }),
           left: "center"
         },
         toolbox: {
@@ -77110,7 +77260,6 @@ const _sfc_main$7 = {
         xAxis: [
           {
             gridIndex: 0,
-            name: this.$t("time-by-columns.xAxis.columns"),
             nameGap: "10",
             type: "category",
             axisPointer: {
@@ -77153,28 +77302,39 @@ const _sfc_main$7 = {
       };
     },
     categories: function() {
-      this.periodStat.map((item) => new Date(item.date).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" }));
+      let vals = this.periodStat.map((item) => new Date(item.date).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" }));
+      vals.reverse();
+      return vals;
     },
     columnsData: function() {
       return this.columns.filter((value) => this.selectedColumns.includes(value.id)).map((item) => item.name);
     },
     heatMapSeriesData: function() {
-      function calcTime(item, id, selected) {
+      function calcAggr(vals, selected) {
         switch (selected) {
           case "q0":
-            return item.timeStats[id][0];
+            return vals.min;
           case "q1":
-            return item.timeStats[id][1];
+            return vals.q1;
           case "q2":
-            return item.timeStats[id][2];
+            return vals.med;
           case "q3":
-            return item.timeStats[id][3];
+            return vals.q3;
           case "q4":
-            return item.timeStats[id][4];
+            return vals.max;
           case "avg":
-            return item.times[id];
+            return vals.avg;
           default:
             return NaN;
+        }
+      }
+      function calcTime(item, id, selected, typeSelected) {
+        if (typeSelected === "lead") {
+          return calcAggr(item.timeStats[id], selected);
+        } else if (typeSelected === "wip") {
+          return calcAggr(item.wip[id], selected);
+        } else {
+          return calcAggr(item.timeStats[id], selected) * calcAggr(item.wip[id], selected);
         }
       }
       let data = {
@@ -77188,7 +77348,7 @@ const _sfc_main$7 = {
         const columnWait = this.conf.wait.includes(id);
         if (this.selectedColumns.includes(id)) {
           for (let item of this.periodStat) {
-            const time = calcTime(item, id, this.selected);
+            const time = calcTime(item, id, this.selected, this.typeSelected);
             if (item.throughput > 0 && time !== null && time !== void 0) {
               data.value.push({
                 value: [
@@ -77219,11 +77379,15 @@ const _sfc_main$7 = {
     series() {
       let serHeatMap = {
         type: "custom",
+        name: this.$t("time-by-columns.series." + this.typeSelected + ".name"),
         xAxisIndex: 0,
         yAxisIndex: 0,
         data: this.heatMapSeriesData.value,
         label: {
           show: true
+        },
+        itemStyle: {
+          color: "rgba(191,0,0,0.75)"
         },
         renderItem: function(params, api) {
           const valX = api.value(0);
@@ -77365,34 +77529,48 @@ const _sfc_main$7 = {
   }
 };
 const _hoisted_1$7 = { class: "times-chart-selector" };
-const _hoisted_2$4 = { style: { "height": "100%", "clear": "both" } };
-const _hoisted_3$3 = ["title", "href"];
+const _hoisted_2$4 = /* @__PURE__ */ createBaseVNode("div", { class: "times-chart-selector-space" }, "   ", -1);
+const _hoisted_3$3 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_4$3 = ["title", "href"];
 function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
     createBaseVNode("div", _hoisted_1$7, [
       createBaseVNode("div", {
+        class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.typeSelected === "lead" }]),
+        onClick: _cache[0] || (_cache[0] = ($event) => _ctx.typeSelected = "lead")
+      }, toDisplayString$1(_ctx.$t("time-by-columns.tab.lead")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.typeSelected === "wip" }]),
+        onClick: _cache[1] || (_cache[1] = ($event) => _ctx.typeSelected = "wip")
+      }, toDisplayString$1(_ctx.$t("time-by-columns.tab.wip")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.typeSelected === "total" }]),
+        onClick: _cache[2] || (_cache[2] = ($event) => _ctx.typeSelected = "total")
+      }, toDisplayString$1(_ctx.$t("time-by-columns.tab.total")), 3),
+      _hoisted_2$4,
+      createBaseVNode("div", {
         class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.selected === "q0" }]),
-        onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "q0")
+        onClick: _cache[3] || (_cache[3] = ($event) => _ctx.selected = "q0")
       }, toDisplayString$1(_ctx.$t("time-by-columns.tab.q0")), 3),
       createBaseVNode("div", {
         class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.selected === "q2" }]),
-        onClick: _cache[1] || (_cache[1] = ($event) => _ctx.selected = "q2")
+        onClick: _cache[4] || (_cache[4] = ($event) => _ctx.selected = "q2")
       }, toDisplayString$1(_ctx.$t("time-by-columns.tab.q2")), 3),
       createBaseVNode("div", {
         class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.selected === "q3" }]),
-        onClick: _cache[2] || (_cache[2] = ($event) => _ctx.selected = "q3")
+        onClick: _cache[5] || (_cache[5] = ($event) => _ctx.selected = "q3")
       }, toDisplayString$1(_ctx.$t("time-by-columns.tab.q3")), 3),
       createBaseVNode("div", {
         class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.selected === "q4" }]),
-        onClick: _cache[3] || (_cache[3] = ($event) => _ctx.selected = "q4")
+        onClick: _cache[6] || (_cache[6] = ($event) => _ctx.selected = "q4")
       }, toDisplayString$1(_ctx.$t("time-by-columns.tab.q4")), 3),
       createBaseVNode("div", {
         class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.selected === "avg" }]),
-        onClick: _cache[4] || (_cache[4] = ($event) => _ctx.selected = "avg")
+        onClick: _cache[7] || (_cache[7] = ($event) => _ctx.selected = "avg")
       }, toDisplayString$1(_ctx.$t("time-by-columns.tab.avg")), 3)
     ]),
-    createBaseVNode("div", _hoisted_2$4, [
+    createBaseVNode("div", _hoisted_3$3, [
       createVNode(_component_v_chart, {
         class: "TimesChart",
         option: $options.option,
@@ -77404,7 +77582,7 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("time-by-columns.help.text"),
       href: _ctx.$t("time-by-columns.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_3$3)
+    }, " ‽ ", 8, _hoisted_4$3)
   ], 64);
 }
 const TimesChart = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6]]);

@@ -297,6 +297,11 @@
   float: left;
   clear: both;
 }
+.times-chart-selector-space {
+  float: left;
+  margin: 0.1rem 0.2rem;
+  padding: 0.2rem 0.4rem;
+}
 .times-chart-selector-item {
   float: left;
   margin: 0.1rem 0.2rem;
