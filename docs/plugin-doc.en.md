@@ -83,6 +83,14 @@ implement 30 periods, then I have a question for you: do you really need so
 much work in progress that you have already invested in, 
 that it will have to be done for more than a year?
 
+### Accumulated WIP
+
+On this screen, you can evaluate the accumulated work in days.
+
+This is the total number of days spent by all unfinished tasks on the board.
+In addition, the total number of days spent by all incomplete tasks 
+on the board is shown separately in the work and waiting columns.
+
 ### WIPs by columns
 
 It makes a little more sense than the total WIP.

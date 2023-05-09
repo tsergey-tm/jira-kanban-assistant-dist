@@ -59077,7 +59077,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const _sfc_main$g = {
+const _sfc_main$h = {
   name: "NameProgressBar",
   components: {
     VChart: S
@@ -59104,16 +59104,16 @@ const _sfc_main$g = {
     }
   }
 };
-const _hoisted_1$g = { class: "name-progressbar-name" };
-function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$h = { class: "name-progressbar-name" };
+function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", {
     class: "name-progressbar-box",
     style: normalizeStyle$1($options.progressLoadingStyle)
   }, [
-    createBaseVNode("span", _hoisted_1$g, toDisplayString$1($props.title), 1)
+    createBaseVNode("span", _hoisted_1$h, toDisplayString$1($props.title), 1)
   ], 4);
 }
-const NameProgressBar = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-adea8f9f"]]);
+const NameProgressBar = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-adea8f9f"]]);
 class LuxonError extends Error {
 }
 class InvalidDateTimeError extends LuxonError {
@@ -68529,6 +68529,10 @@ const messages = {
         "lead-cycle-times": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Lead & cycle times"]);
+        },
+        "accumulated-wip": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Accumulated WIP"]);
         }
       },
       "config-info": {
@@ -69743,6 +69747,50 @@ const messages = {
           return _normalize(["Averages"]);
         }
       }
+    },
+    "accumulated-wip": {
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["The amount of work in progress accumulated on the board.\nThe sum of days spent unfinished by issues in the work and waiting columns."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#accumulated-wip"]);
+        }
+      },
+      "title": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+        return _normalize(["Accumulated WIP: ", _interpolate(_named("title"))]);
+      },
+      "yAxis": {
+        "awipsum": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Total WIP, days"]);
+        },
+        "awipwork": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Work WIP, days"]);
+        },
+        "awipwaste": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Wasted WIP, days"]);
+        }
+      },
+      "series": {
+        "awipsum": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Sum of days spent in all columns"]);
+        },
+        "awipwork": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Sum of days spent in the work columns"]);
+        },
+        "awipwaste": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Sum of days spent in the waste columns"]);
+        }
+      }
     }
   },
   "ru": {
@@ -69803,6 +69851,10 @@ const messages = {
         "lead-cycle-times": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Время поставки и цикла"]);
+        },
+        "accumulated-wip": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Накопленный WIP"]);
         }
       },
       "config-info": {
@@ -71017,6 +71069,50 @@ const messages = {
           return _normalize(["Средние"]);
         }
       }
+    },
+    "accumulated-wip": {
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Накопленный на доске объем незавершенной работы.\nСумма дней, проведённых незавершенными задачами в колонках работы и ожидания."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BD%D0%B0%D0%BA%D0%BE%D0%BF%D0%BB%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9-wip"]);
+        }
+      },
+      "title": (ctx) => {
+        const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+        return _normalize(["Накопленный WIP: ", _interpolate(_named("title"))]);
+      },
+      "yAxis": {
+        "awipsum": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Общий WIP, дни"]);
+        },
+        "awipwork": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["WIP в работе, дни"]);
+        },
+        "awipwaste": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["WIP в ожидании, дни"]);
+        }
+      },
+      "series": {
+        "awipsum": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Сумма дней, проведённых задачами во всех колонках"]);
+        },
+        "awipwork": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Сумма дней, проведённых задачами в колонках работы"]);
+        },
+        "awipwaste": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Сумма дней, проведённых задачами в колонках ожидания"]);
+        }
+      }
     }
   }
 };
@@ -71053,7 +71149,7 @@ function getDefaultLocale() {
   return l2;
 }
 const TriageTable_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$f = {
+const _sfc_main$g = {
   name: "TriageTable",
   props: {
     title: String,
@@ -72057,7 +72153,7 @@ const _sfc_main$f = {
     }
   }
 };
-const _hoisted_1$f = { class: "triage-selector" };
+const _hoisted_1$g = { class: "triage-selector" };
 const _hoisted_2$a = { style: { "clear": "both" } };
 const _hoisted_3$9 = { key: 0 };
 const _hoisted_4$7 = {
@@ -72088,10 +72184,10 @@ const _hoisted_25 = ["innerHTML"];
 const _hoisted_26 = ["innerHTML"];
 const _hoisted_27 = ["innerHTML"];
 const _hoisted_28 = ["title", "href"];
-function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$f, [
+    createBaseVNode("div", _hoisted_1$g, [
       createBaseVNode("div", {
         class: normalizeClass(["triage-selector-item", { "triage-selector-item-selected": _ctx.selected === "lead" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "lead")
@@ -72221,7 +72317,7 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_28)
   ], 64);
 }
-const TriageTable = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e]]);
+const TriageTable = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f]]);
 function sum$1(x2) {
   if (x2.length === 0) {
     return 0;
@@ -72512,7 +72608,7 @@ function quantile(x2, p2) {
   }
 }
 const LeadCycleTimeChart_vue_vue_type_style_index_0_scoped_d27db0c2_lang = "";
-const _sfc_main$e = {
+const _sfc_main$f = {
   name: "LeadCycleTimeChart",
   components: {
     VChart: S
@@ -72929,14 +73025,14 @@ const _sfc_main$e = {
   }
 };
 const _withScopeId$1 = (n2) => (pushScopeId("data-v-d27db0c2"), n2 = n2(), popScopeId(), n2);
-const _hoisted_1$e = { class: "lead-cycle-times-chart-selector" };
+const _hoisted_1$f = { class: "lead-cycle-times-chart-selector" };
 const _hoisted_2$9 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "lead-cycle-times-chart-selector-space" }, "   ", -1));
 const _hoisted_3$8 = { style: { "height": "100%", "clear": "both" } };
 const _hoisted_4$6 = ["title", "href"];
-function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$e, [
+    createBaseVNode("div", _hoisted_1$f, [
       createBaseVNode("div", {
         class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.typeSelected === "lead" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.typeSelected = "lead")
@@ -72970,9 +73066,9 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_4$6)
   ], 64);
 }
-const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-d27db0c2"]]);
+const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-d27db0c2"]]);
 const JiraFilters_vue_vue_type_style_index_0_scoped_dc5a911c_lang = "";
-const _sfc_main$d = {
+const _sfc_main$e = {
   name: "JiraFilters",
   props: {
     title: String,
@@ -72990,11 +73086,11 @@ const _sfc_main$d = {
     }
   }
 };
-const _hoisted_1$d = { class: "jira-filters-box" };
+const _hoisted_1$e = { class: "jira-filters-box" };
 const _hoisted_2$8 = { class: "jira-filter-box-title" };
 const _hoisted_3$7 = ["onClick"];
-function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$d, [
+function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("div", _hoisted_1$e, [
     createBaseVNode("div", _hoisted_2$8, toDisplayString$1($props.title) + ":", 1),
     (openBlock(true), createElementBlock(Fragment, null, renderList($props.filters, (filter2) => {
       return openBlock(), createElementBlock("div", {
@@ -73005,9 +73101,9 @@ function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
     }), 128))
   ]);
 }
-const JiraFilters = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-dc5a911c"]]);
+const JiraFilters = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-dc5a911c"]]);
 const JiraColumnStatus_vue_vue_type_style_index_0_scoped_7d723413_lang = "";
-const _sfc_main$c = {
+const _sfc_main$d = {
   name: "JiraColumnStatus",
   props: {
     title: String,
@@ -73113,7 +73209,7 @@ const _sfc_main$c = {
   }
 };
 const _withScopeId = (n2) => (pushScopeId("data-v-7d723413"), n2 = n2(), popScopeId(), n2);
-const _hoisted_1$c = { class: "jira-columns-box" };
+const _hoisted_1$d = { class: "jira-columns-box" };
 const _hoisted_2$7 = { class: "jira-columns-box-title" };
 const _hoisted_3$6 = { class: "jira-columns-box-table" };
 const _hoisted_4$5 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
@@ -73129,8 +73225,8 @@ const _hoisted_13$1 = ["onClick"];
 const _hoisted_14$1 = { class: "jira-columns-box-table-header" };
 const _hoisted_15$1 = { class: "jira-columns-box-table-header" };
 const _hoisted_16$1 = ["onClick"];
-function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$c, [
+function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("div", _hoisted_1$d, [
     createBaseVNode("div", _hoisted_2$7, toDisplayString$1($props.title) + ":", 1),
     createBaseVNode("table", _hoisted_3$6, [
       createBaseVNode("thead", null, [
@@ -73217,7 +73313,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-const JiraColumnStatus = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-7d723413"]]);
+const JiraColumnStatus = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-7d723413"]]);
 var _a;
 const isClient = typeof window !== "undefined";
 const isString = (val) => typeof val === "string";
@@ -75528,7 +75624,7 @@ function F(e2, t, n2, d, r, s2) {
 }
 const y = /* @__PURE__ */ w(E, [["render", F]]);
 const VueSearchSelect = "";
-const _sfc_main$b = {
+const _sfc_main$c = {
   name: "LanguageSwitcher",
   data() {
     return {};
@@ -75539,8 +75635,8 @@ const _sfc_main$b = {
     }
   }
 };
-const _hoisted_1$b = ["value"];
-function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$c = ["value"];
+function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
   return withDirectives((openBlock(), createElementBlock("select", {
     onChange: _cache[0] || (_cache[0] = ($event) => $options.switchLanguage($event)),
     "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => _ctx.$i18n.locale = $event)
@@ -75549,15 +75645,15 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
       return openBlock(), createElementBlock("option", {
         key: `${locale}`,
         value: locale
-      }, toDisplayString$1(_ctx.$t(`locale.${locale}`)), 9, _hoisted_1$b);
+      }, toDisplayString$1(_ctx.$t(`locale.${locale}`)), 9, _hoisted_1$c);
     }), 128))
   ], 544)), [
     [vModelSelect, _ctx.$i18n.locale]
   ]);
 }
-const LanguageSwitcher = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a]]);
+const LanguageSwitcher = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b]]);
 const AppConfig_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$a = {
+const _sfc_main$b = {
   name: "AppConfig",
   props: {
     showConfigPanel: Object,
@@ -75774,7 +75870,7 @@ const _sfc_main$a = {
     }
   }
 };
-const _hoisted_1$a = { class: "app-config-option-dialog" };
+const _hoisted_1$b = { class: "app-config-option-dialog" };
 const _hoisted_2$6 = { class: "app-config-option-header" };
 const _hoisted_3$5 = { class: "app-config-locale" };
 const _hoisted_4$4 = { class: "app-config-buttons" };
@@ -75793,7 +75889,7 @@ const _hoisted_16 = { class: "app-config-buttons" };
 const _hoisted_17 = ["value"];
 const _hoisted_18 = ["value"];
 const _hoisted_19 = ["value"];
-function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_language_switcher = resolveComponent("language-switcher");
   const _component_i18n_t = resolveComponent("i18n-t");
   const _component_model_select = resolveComponent("model-select");
@@ -75815,7 +75911,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
     "swipe-to-close": "none"
   }, {
     default: withCtx(() => [
-      createBaseVNode("div", _hoisted_1$a, [
+      createBaseVNode("div", _hoisted_1$b, [
         createBaseVNode("div", _hoisted_2$6, toDisplayString$1(_ctx.$t("app-config.title")), 1),
         createBaseVNode("div", _hoisted_3$5, [
           createVNode(_component_i18n_t, { keypath: "app-config.locale" }, {
@@ -75985,7 +76081,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
   }, 8, ["modelValue"]);
 }
-const AppConfig = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9]]);
+const AppConfig = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a]]);
 const dayShift = 24 * 60 * 60 * 1e3;
 function nanStat() {
   return {
@@ -76072,6 +76168,9 @@ const KanbanStat = {
       issues: {},
       // WIP stats arrays by columns by days
       periodDayWIP: null,
+      // Accumulated WIP stats arrays by days (work, waste)
+      periodDayAWIPWork: null,
+      periodDayAWIPWaste: null,
       workColumns,
       waitColumns,
       readyColumns,
@@ -76122,6 +76221,8 @@ const KanbanStat = {
       for (const id in tmp.columns) {
         tmp.periodDayWIP[id] = [];
       }
+      tmp.periodDayAWIPWork = [];
+      tmp.periodDayAWIPWaste = [];
     }
     if (tmp.currentDayBoardTime == null) {
       for (const issueStat of Object.values(tmp.issues)) {
@@ -76148,6 +76249,17 @@ const KanbanStat = {
         }
       }
     }
+    let periodDayAWIPWork = 0;
+    let periodDayAWIPWaste = 0;
+    for (const issueStat of Object.values(tmp.issues)) {
+      if (!issueStat.periodChecked && !issueStat.dayChecked) {
+        let [_periodDayAWIPWork, _periodDayAWIPWaste] = this.calcAWIP(issueStat, tmp);
+        periodDayAWIPWork = sum(periodDayAWIPWork, _periodDayAWIPWork);
+        periodDayAWIPWaste = sum(periodDayAWIPWaste, _periodDayAWIPWaste);
+      }
+    }
+    tmp.periodDayAWIPWork.push(periodDayAWIPWork / dayShift);
+    tmp.periodDayAWIPWaste.push(periodDayAWIPWaste / dayShift);
     tmp.currentDayBoardTime = tmp.nextDayBoardTime;
     tmp.nextDayBoardTime += dayShift;
     if (!tmp.currentPeriodBoardTime) {
@@ -76158,6 +76270,22 @@ const KanbanStat = {
       tmp.currentPeriodBoardTime = tmp.currentDayBoardTime;
       this.calcNextPeriodBoardTime(tmp);
     }
+  },
+  calcAWIP(issueStat, tmp) {
+    let [_periodDayAWIPWork, _periodDayAWIPWaste] = [0, 0];
+    for (const id of tmp.workColumns) {
+      _periodDayAWIPWork = sum(_periodDayAWIPWork, issueStat.times[id]);
+    }
+    for (const id of tmp.waitColumns) {
+      _periodDayAWIPWaste = sum(_periodDayAWIPWaste, issueStat.times[id]);
+    }
+    if (tmp.workColumns.includes(issueStat.lastCol)) {
+      _periodDayAWIPWork = sum(_periodDayAWIPWork, tmp.nextDayBoardTime - issueStat.lastAct);
+    }
+    if (tmp.waitColumns.includes(issueStat.lastCol)) {
+      _periodDayAWIPWaste = sum(_periodDayAWIPWaste, tmp.nextDayBoardTime - issueStat.lastAct);
+    }
+    return [_periodDayAWIPWork, _periodDayAWIPWaste];
   },
   calcFirstLastBoardDay(tmp) {
     switch (tmp.periodType) {
@@ -76257,6 +76385,8 @@ const KanbanStat = {
       wips[ci] = calcStat(tmp.periodDayWIP[ci]);
     }
     let totalWips = calcStat(totalD);
+    let periodDayAWIPWork = calcStat(tmp.periodDayAWIPWork);
+    let periodDayAWIPWaste = calcStat(tmp.periodDayAWIPWaste);
     let timesCols = {};
     for (const id in tmp.columns) {
       timesCols[id] = [];
@@ -76290,7 +76420,9 @@ const KanbanStat = {
       wip: wips,
       totalWip: totalWips,
       throughput,
-      cycleThroughput
+      cycleThroughput,
+      AWIPWork: periodDayAWIPWork,
+      AWIPWaste: periodDayAWIPWaste
     };
     if (throughput) {
       ps.cycle = calcStat(timeCycle);
@@ -76455,7 +76587,7 @@ const KanbanStat = {
     return res;
   }
 };
-const _sfc_main$9 = {
+const _sfc_main$a = {
   name: "TotalWIPChart",
   components: {
     VChart: S
@@ -76933,8 +77065,8 @@ const _sfc_main$9 = {
     }
   }
 };
-const _hoisted_1$9 = ["title", "href"];
-function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$a = ["title", "href"];
+function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
     createVNode(_component_v_chart, {
@@ -76947,10 +77079,353 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("total-wip.help.text"),
       href: _ctx.$t("total-wip.help.link"),
       target: "_blank"
+    }, " ‽ ", 8, _hoisted_1$a)
+  ], 64);
+}
+const TotalWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9]]);
+const _sfc_main$9 = {
+  name: "AccumulatedWIPChart",
+  components: {
+    VChart: S
+  },
+  props: {
+    title: String,
+    periodStat: Array
+  },
+  data: function() {
+    return {
+      AWIPSum: [],
+      AWIPWork: [],
+      AWIPWaste: []
+    };
+  },
+  methods: {},
+  watch: {
+    periodStat: {
+      immediate: true,
+      deep: true,
+      handler(newVal) {
+        this.AWIPSum.splice(0);
+        this.AWIPWork.splice(0);
+        this.AWIPWaste.splice(0);
+        if (newVal) {
+          for (let item of newVal) {
+            this.AWIPWork.push({
+              name: "",
+              value: [
+                item.date,
+                item.AWIPWork.min.toFixed(1),
+                item.AWIPWork.q1.toFixed(1),
+                item.AWIPWork.med.toFixed(1),
+                item.AWIPWork.q3.toFixed(1),
+                item.AWIPWork.max.toFixed(1)
+              ]
+            });
+            this.AWIPWaste.push({
+              name: "",
+              value: [
+                item.date,
+                item.AWIPWaste.min.toFixed(1),
+                item.AWIPWaste.q1.toFixed(1),
+                item.AWIPWaste.med.toFixed(1),
+                item.AWIPWaste.q3.toFixed(1),
+                item.AWIPWaste.max.toFixed(1)
+              ]
+            });
+            this.AWIPSum.push({
+              name: "",
+              value: [
+                item.date,
+                (item.AWIPWork.min + item.AWIPWaste.min).toFixed(1),
+                (item.AWIPWork.q1 + item.AWIPWaste.q1).toFixed(1),
+                (item.AWIPWork.med + item.AWIPWaste.med).toFixed(1),
+                (item.AWIPWork.q3 + item.AWIPWaste.q3).toFixed(1),
+                (item.AWIPWork.max + item.AWIPWaste.max).toFixed(1)
+              ]
+            });
+          }
+        } else {
+          let d = new Date().getTime();
+          this.AWIPSum.push([d, 0]);
+          this.AWIPWork.push([d, 0]);
+          this.AWIPWaste.push([d, 0]);
+        }
+      }
+    }
+  },
+  computed: {
+    xAxisMin() {
+      let res = Number.MAX_VALUE;
+      for (let item of this.periodStat) {
+        res = Math.min(res, item.date);
+      }
+      if (res === Number.MAX_VALUE) {
+        return NaN;
+      } else {
+        return res - 6e4;
+      }
+    },
+    xAxisMax() {
+      let res = Number.MIN_VALUE;
+      for (let item of this.periodStat) {
+        res = Math.max(res, item.date);
+      }
+      if (res === Number.MIN_VALUE) {
+        return NaN;
+      } else {
+        return res + 6e4;
+      }
+    },
+    option() {
+      return {
+        animation: true,
+        title: {
+          text: this.$t("accumulated-wip.title", { title: this.title }),
+          left: "center"
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true
+            }
+          }
+        },
+        axisPointer: {
+          link: [
+            {
+              xAxisIndex: "all"
+            }
+          ]
+        },
+        tooltip: {
+          axisPointer: {
+            show: true
+          }
+        },
+        legend: {
+          top: "bottom"
+        },
+        grid: [
+          {
+            top: "10%",
+            height: "23%"
+          },
+          {
+            top: "38%",
+            height: "23%"
+          },
+          {
+            bottom: "10%",
+            height: "23%"
+          }
+        ],
+        xAxis: [
+          {
+            axisLabel: {
+              show: false
+            },
+            boundaryGap: false,
+            gridIndex: 0,
+            axisPointer: {
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
+                    return "";
+                  }
+                }
+              }
+            },
+            type: "time",
+            min: this.xAxisMin,
+            max: this.xAxisMax
+          },
+          {
+            axisLabel: {
+              show: false
+            },
+            boundaryGap: false,
+            gridIndex: 1,
+            axisPointer: {
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
+                    return "";
+                  }
+                }
+              }
+            },
+            type: "time",
+            min: this.xAxisMin,
+            max: this.xAxisMax
+          },
+          {
+            boundaryGap: false,
+            gridIndex: 2,
+            axisPointer: {
+              show: true,
+              snap: true,
+              label: {
+                formatter: function(value) {
+                  if (value == null ? void 0 : value.value) {
+                    return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                  } else {
+                    return "";
+                  }
+                }
+              }
+            },
+            axisLabel: {
+              hideOverlap: true,
+              formatter: function(value) {
+                if (value) {
+                  return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                } else {
+                  return "";
+                }
+              }
+            },
+            type: "time",
+            min: this.xAxisMin,
+            max: this.xAxisMax
+          }
+        ],
+        yAxis: [
+          {
+            gridIndex: 0,
+            name: this.$t("accumulated-wip.yAxis.awipsum"),
+            nameLocation: "middle",
+            nameGap: "55",
+            minInterval: 1,
+            axisPointer: {
+              show: true,
+              triggerTooltip: false
+            },
+            axisLabel: {
+              hideOverlap: true,
+              formatter: function(value) {
+                return value ? value.toFixed(0) : "";
+              }
+            }
+          },
+          {
+            gridIndex: 1,
+            name: this.$t("accumulated-wip.yAxis.awipwork"),
+            nameLocation: "middle",
+            nameGap: "55",
+            minInterval: 1,
+            axisPointer: {
+              show: true,
+              triggerTooltip: false
+            },
+            axisLabel: {
+              hideOverlap: true,
+              formatter: function(value) {
+                return value ? value.toFixed(0) : "";
+              }
+            }
+          },
+          {
+            gridIndex: 2,
+            name: this.$t("accumulated-wip.yAxis.awipwaste"),
+            nameLocation: "middle",
+            nameGap: "55",
+            minInterval: 1,
+            axisPointer: {
+              show: true,
+              triggerTooltip: false
+            },
+            axisLabel: {
+              hideOverlap: true,
+              formatter: function(value) {
+                return value ? value.toFixed(0) : "";
+              }
+            }
+          }
+        ],
+        series: [
+          {
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            id: "awipsumSeries",
+            name: this.$t("accumulated-wip.series.awipsum"),
+            type: "boxplot",
+            boxWidth: ["5%", "10%"],
+            encode: {
+              x: 0,
+              y: [1, 2, 3, 4, 5]
+            },
+            itemStyle: {
+              color: "rgba(191,128,255,0.75)",
+              borderColor: "rgb(80,32,128)"
+            },
+            data: this.AWIPSum
+          },
+          {
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            id: "awipworkSeries",
+            name: this.$t("accumulated-wip.series.awipwork"),
+            type: "boxplot",
+            boxWidth: ["5%", "10%"],
+            encode: {
+              x: 0,
+              y: [1, 2, 3, 4, 5]
+            },
+            itemStyle: {
+              color: "rgba(64,255,64,0.75)",
+              borderColor: "rgba(32,128,32,0.75)"
+            },
+            data: this.AWIPWork
+          },
+          {
+            xAxisIndex: 2,
+            yAxisIndex: 2,
+            id: "awipwasteSeries",
+            name: this.$t("accumulated-wip.series.awipwaste"),
+            type: "boxplot",
+            boxWidth: ["5%", "10%"],
+            encode: {
+              x: 0,
+              y: [1, 2, 3, 4, 5]
+            },
+            itemStyle: {
+              color: "rgba(230,230,57,0.75)",
+              borderColor: "rgba(128,128,32,0.75)"
+            },
+            data: this.AWIPWaste
+          }
+        ]
+      };
+    }
+  }
+};
+const _hoisted_1$9 = ["title", "href"];
+function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_v_chart = resolveComponent("v-chart");
+  return openBlock(), createElementBlock(Fragment, null, [
+    createVNode(_component_v_chart, {
+      class: "AccumulatedWIPChart",
+      option: $options.option,
+      autoresize: ""
+    }, null, 8, ["option"]),
+    createBaseVNode("a", {
+      class: "icon-info-down",
+      title: _ctx.$t("accumulated-wip.help.text"),
+      href: _ctx.$t("accumulated-wip.help.link"),
+      target: "_blank"
     }, " ‽ ", 8, _hoisted_1$9)
   ], 64);
 }
-const TotalWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
+const AccumulatedWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
 const WIPsChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$8 = {
   name: "WIPsChart",
@@ -79361,6 +79836,7 @@ const __default__ = {
     StatByWIPChart,
     ModalsContainer: No,
     TotalWIPChart,
+    AccumulatedWIPChart,
     AppConfig,
     JiraColumnStatus,
     ControlChart,
@@ -79923,6 +80399,18 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
               }, {
                 default: withCtx(() => [
                   createVNode(TotalWIPChart, {
+                    title: _ctx.kanbanBoardConfig.name,
+                    "period-stat": _ctx.periodStat
+                  }, null, 8, ["title", "period-stat"])
+                ]),
+                _: 1
+              }, 8, ["name"]),
+              createVNode(Tab, {
+                id: "tabs-accumulated-wip",
+                name: _ctx.$t("app.tabs.accumulated-wip")
+              }, {
+                default: withCtx(() => [
+                  createVNode(AccumulatedWIPChart, {
                     title: _ctx.kanbanBoardConfig.name,
                     "period-stat": _ctx.periodStat
                   }, null, 8, ["title", "period-stat"])
