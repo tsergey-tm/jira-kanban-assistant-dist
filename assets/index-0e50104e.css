@@ -365,12 +365,58 @@
 .jira-filter-box-title {
   padding: 0.2rem 0;
 }
+
+.summary-data-div[data-v-718f4f75] {
+  padding: 1em;
+  margin: 1em;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(40em, 1fr));
+  grid-gap: 1em;
+}
+.summary-data-cell[data-v-718f4f75] {
+  min-width: min-content;
+  min-height: min-content;
+  border-color: var(--color-main-4);
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 10px;
+  height: 100%;
+  width: 100%;
+  display: table;
+}
+.summary-data-cell legend[data-v-718f4f75] {
+  color: var(--color-main-4);
+  font-weight: bold;
+  padding: 0 0.5em;
+}
+table.summary-data-cell-table > tbody > tr > td[data-v-718f4f75] {
+  padding: 0 0.5em;
+}
+table.summary-data-cell-table > thead > tr > th[data-v-718f4f75] {
+  padding: 0 0.5em;
+}
+.align-left[data-v-718f4f75] {
+  text-align: left;
+}
+.align-center[data-v-718f4f75] {
+  text-align: center;
+}
+.align-right[data-v-718f4f75] {
+  text-align: right;
+}
+.split-row > td[data-v-718f4f75] {
+  border-top-color: var(--color-main-4-5);
+  border-top-style: dashed;
+  border-top-width: 1px;
+}
+
 /* semantic color variables for this project */
 :root {
   --color-main-1: #a862ea;
   --color-main-2: #6545a4;
   --color-main-3: #bf62ea;
   --color-main-4: #6383ea;
+  --color-main-4-5: rgba(99, 130, 235, 0.5);
   --color-main-5: #465ca4;
   --color-main-6: #eedffb;
   --color-main-7: #f6effd;
