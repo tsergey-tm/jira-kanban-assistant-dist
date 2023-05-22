@@ -68822,7 +68822,7 @@ const messages = {
         },
         "total": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Total time in WIP"]);
+          return _normalize(["Days spent on the board"]);
         }
       },
       "xAxis": {
@@ -70246,7 +70246,7 @@ const messages = {
         },
         "total": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Общий объём незавершенной работы"]);
+          return _normalize(["Накопленный объём незавершенной работы"]);
         }
       },
       "xAxis": {
@@ -76430,6 +76430,7 @@ const KanbanStat = {
       tmp.periodDayAWIPWork = [];
       tmp.periodDayAWIPWaste = [];
       tmp.periodDayAWIPSum = [];
+      tmp.periodDayAWIPCol = [];
     }
     if (tmp.currentDayBoardTime == null) {
       for (const issueStat of Object.values(tmp.issues)) {
@@ -76458,16 +76459,27 @@ const KanbanStat = {
     }
     let periodDayAWIPWork = 0;
     let periodDayAWIPWaste = 0;
+    let periodDayAWIPCol = {};
+    for (const ci in tmp.columns) {
+      periodDayAWIPCol[ci] = 0;
+    }
     for (const issueStat of Object.values(tmp.issues)) {
       if (!issueStat.periodChecked && !issueStat.dayChecked) {
-        let [_periodDayAWIPWork, _periodDayAWIPWaste] = this.calcAWIP(issueStat, tmp);
+        const [_periodDayAWIPWork, _periodDayAWIPWaste, _periodDayAWIPCol] = this.calcAWIP(issueStat, tmp);
         periodDayAWIPWork = sum(periodDayAWIPWork, _periodDayAWIPWork);
         periodDayAWIPWaste = sum(periodDayAWIPWaste, _periodDayAWIPWaste);
+        for (const ci in tmp.columns) {
+          periodDayAWIPCol[ci] = sum(periodDayAWIPCol[ci], _periodDayAWIPCol[ci]);
+        }
       }
     }
     tmp.periodDayAWIPWork.push(periodDayAWIPWork / dayShift);
     tmp.periodDayAWIPWaste.push(periodDayAWIPWaste / dayShift);
     tmp.periodDayAWIPSum.push((periodDayAWIPWork + periodDayAWIPWaste) / dayShift);
+    for (const ci in tmp.columns) {
+      periodDayAWIPCol[ci] = periodDayAWIPCol[ci] / dayShift;
+    }
+    tmp.periodDayAWIPCol.push(periodDayAWIPCol);
     tmp.currentDayBoardTime = tmp.nextDayBoardTime;
     tmp.nextDayBoardTime += dayShift;
     if (!tmp.currentPeriodBoardTime) {
@@ -76480,20 +76492,29 @@ const KanbanStat = {
     }
   },
   calcAWIP(issueStat, tmp) {
-    let [_periodDayAWIPWork, _periodDayAWIPWaste] = [0, 0];
-    for (const id of tmp.workColumns) {
-      _periodDayAWIPWork = sum(_periodDayAWIPWork, issueStat.times[id]);
+    let periodDayAWIPWork = 0;
+    let periodDayAWIPWaste = 0;
+    let periodDayAWIPCol = {};
+    for (const id in tmp.columns) {
+      periodDayAWIPCol[id] = 0;
     }
-    for (const id of tmp.waitColumns) {
-      _periodDayAWIPWaste = sum(_periodDayAWIPWaste, issueStat.times[id]);
+    for (const id of tmp.workColumns) {
+      periodDayAWIPWork = sum(periodDayAWIPWork, issueStat.times[id]);
     }
     if (tmp.workColumns.includes(issueStat.lastCol)) {
-      _periodDayAWIPWork = sum(_periodDayAWIPWork, tmp.nextDayBoardTime - issueStat.lastAct);
+      periodDayAWIPWork = sum(periodDayAWIPWork, tmp.nextDayBoardTime - issueStat.lastAct);
+    }
+    for (const id of tmp.waitColumns) {
+      periodDayAWIPWaste = sum(periodDayAWIPWaste, issueStat.times[id]);
     }
     if (tmp.waitColumns.includes(issueStat.lastCol)) {
-      _periodDayAWIPWaste = sum(_periodDayAWIPWaste, tmp.nextDayBoardTime - issueStat.lastAct);
+      periodDayAWIPWaste = sum(periodDayAWIPWaste, tmp.nextDayBoardTime - issueStat.lastAct);
     }
-    return [_periodDayAWIPWork, _periodDayAWIPWaste];
+    for (const id in tmp.columns) {
+      periodDayAWIPCol[id] = sum(periodDayAWIPCol[id], issueStat.times[id]);
+    }
+    periodDayAWIPCol[issueStat.lastCol] = sum(periodDayAWIPCol[issueStat.lastCol], tmp.nextDayBoardTime - issueStat.lastAct);
+    return [periodDayAWIPWork, periodDayAWIPWaste, periodDayAWIPCol];
   },
   calcFirstLastBoardDay(tmp) {
     switch (tmp.periodType) {
@@ -76596,6 +76617,14 @@ const KanbanStat = {
     let periodDayAWIPWork = calcStat(tmp.periodDayAWIPWork);
     let periodDayAWIPWaste = calcStat(tmp.periodDayAWIPWaste);
     let periodDayAWIPSum = calcStat(tmp.periodDayAWIPSum);
+    let periodDayAWIPCol = {};
+    for (const id in tmp.columns) {
+      let data = [];
+      for (const d of tmp.periodDayAWIPCol) {
+        data.push(d[id]);
+      }
+      periodDayAWIPCol[id] = calcStat(data);
+    }
     let timesCols = {};
     for (const id in tmp.columns) {
       timesCols[id] = [];
@@ -76634,9 +76663,11 @@ const KanbanStat = {
       AWIPWork: periodDayAWIPWork,
       AWIPWaste: periodDayAWIPWaste,
       AWIPSum: periodDayAWIPSum,
+      AWIPCols: periodDayAWIPCol,
       daysAWIPWork: tmp.periodDayAWIPWork,
       daysAWIPWaste: tmp.periodDayAWIPWaste,
-      daysAWIPSum: tmp.periodDayAWIPSum
+      daysAWIPSum: tmp.periodDayAWIPSum,
+      daysAWIPCol: tmp.periodDayAWIPCol
     };
     if (throughput) {
       ps.cycle = calcStat(timeCycle);
@@ -78023,7 +78054,7 @@ const _sfc_main$8 = {
         } else if (typeSelected === "wip") {
           return calcAggr(item.wip[id], selected);
         } else {
-          return calcAggr(item.timeStats[id], selected) * calcAggr(item.wip[id], selected);
+          return calcAggr(item.AWIPCols[id], selected);
         }
       }
       let data = {
