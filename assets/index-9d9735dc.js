@@ -77939,12 +77939,20 @@ const _sfc_main$8 = {
           {
             right: "10%",
             width: "68%",
-            bottom: "20%"
+            bottom: "20%",
+            height: "60%"
           },
           {
             left: "10%",
             width: "10%",
-            bottom: "20%"
+            bottom: "20%",
+            height: "60%"
+          },
+          {
+            right: "10%",
+            width: "68%",
+            top: "10%",
+            height: "10%"
           }
         ],
         yAxis: [
@@ -77975,6 +77983,18 @@ const _sfc_main$8 = {
               show: true
             },
             data: this.categories
+          },
+          {
+            gridIndex: 2,
+            type: "value",
+            axisPointer: {
+              show: false
+            },
+            axisLabel: {
+              show: true
+            },
+            min: "dataMin",
+            max: "dataMax"
           }
         ],
         xAxis: [
@@ -78006,6 +78026,18 @@ const _sfc_main$8 = {
             },
             min: 0,
             max: "dataMax"
+          },
+          {
+            gridIndex: 2,
+            name: "",
+            axisPointer: {
+              show: false,
+              triggerTooltip: false
+            },
+            axisLabel: {
+              show: false
+            },
+            data: this.columnsData
           }
         ],
         visualMap: {
@@ -78060,16 +78092,20 @@ const _sfc_main$8 = {
       let data = {
         value: [],
         min: NaN,
-        max: NaN
+        max: NaN,
+        mins: [],
+        maxs: []
       };
       for (let i = 0; i < this.columns.length; i++) {
         const id = this.columns[i].id;
         const prevColumnWait = i > 0 && this.conf.wait.includes(this.columns[i - 1].id);
         const columnWait = this.conf.wait.includes(id);
+        let minData = [];
+        let maxData = [];
         if (this.selectedColumns.includes(id)) {
           for (let item of this.periodStat) {
             const time = calcTime(item, id, this.selected, this.typeSelected);
-            if (item.throughput > 0 && time !== null && time !== void 0) {
+            if (time !== null && time !== void 0) {
               data.value.push({
                 value: [
                   this.columns[i].name,
@@ -78085,7 +78121,20 @@ const _sfc_main$8 = {
               data.min = min(data.min, time);
               data.max = max(data.max, time);
             }
+            const timeMin = calcTime(item, id, "q0", this.typeSelected);
+            if (timeMin !== null && timeMin !== void 0) {
+              minData.push(timeMin);
+            }
+            const timeMax = calcTime(item, id, "q4", this.typeSelected);
+            if (timeMax !== null && timeMax !== void 0) {
+              maxData.push(timeMax);
+            }
           }
+        }
+        if (minData.length > 0) {
+          const min$12 = min(...minData);
+          data.mins.push([this.columns[i].name, min$12]);
+          data.maxs.push([this.columns[i].name, max(...maxData) - min$12]);
         }
       }
       return data;
@@ -78228,6 +78277,40 @@ const _sfc_main$8 = {
         data: []
       };
       let showCycleThroughput = false;
+      let serMinSeries = {
+        type: "line",
+        xAxisIndex: 2,
+        yAxisIndex: 2,
+        symbol: "none",
+        connectNulls: true,
+        areaStyle: {
+          color: "transparent"
+        },
+        lineStyle: {
+          width: 0
+        },
+        smooth: true,
+        smoothMonotone: "x",
+        stack: "minmax",
+        data: this.heatMapSeriesData.mins
+      };
+      let serMaxSeries = {
+        type: "line",
+        xAxisIndex: 2,
+        yAxisIndex: 2,
+        symbol: "none",
+        connectNulls: true,
+        areaStyle: {
+          color: "rgba(89,89,89,0.75)"
+        },
+        lineStyle: {
+          width: 0
+        },
+        smooth: true,
+        smoothMonotone: "x",
+        stack: "minmax",
+        data: this.heatMapSeriesData.maxs
+      };
       for (let item of this.periodStat) {
         serThroughput.data.push([
           item.throughput,
@@ -78239,7 +78322,7 @@ const _sfc_main$8 = {
         ]);
         showCycleThroughput || (showCycleThroughput = item.throughput !== item.cycleThroughput);
       }
-      let res = [serHeatMap, serThroughput];
+      let res = [serHeatMap, serThroughput, serMinSeries, serMaxSeries];
       res.push();
       if (showCycleThroughput) {
         res.push(serCycleThroughput);
