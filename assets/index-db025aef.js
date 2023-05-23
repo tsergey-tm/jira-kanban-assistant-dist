@@ -81110,13 +81110,15 @@ const __default__ = {
         lctd.lead.count[lead]++;
         leadCnt++;
         leads.push(lead);
-        let cycle = Math.ceil(issueStat.cycle);
-        while (cycle >= lctd.cycle.count.length) {
-          lctd.cycle.count.push(0);
+        if (issueStat.cycle) {
+          let cycle = Math.ceil(issueStat.cycle);
+          while (cycle >= lctd.cycle.count.length) {
+            lctd.cycle.count.push(0);
+          }
+          lctd.cycle.count[cycle]++;
+          cycleCnt++;
+          cycles.push(cycle);
         }
-        lctd.cycle.count[cycle]++;
-        cycleCnt++;
-        cycles.push(cycle);
       }
       lctd.lead.percentiles = new Array(lctd.lead.count.length).fill(0);
       if (leadCnt > 0) {
