@@ -37,14 +37,18 @@
 }
 .triage-table-th {
   text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-table-border);
   padding: 0.2rem;
   font-weight: bold;
 }
 .triage-table-td {
   text-align: right;
   vertical-align: top;
-  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-table-border);
   padding: 0.3rem;
 }
 .triage-table-gray {
@@ -319,28 +323,32 @@
   padding: 0.2rem 0;
 }
 
-.ControlChart[data-v-9d8eea50] {
+.ControlChart[data-v-434f96bc] {
   height: 50%;
 }
-.control-chart-issues-config[data-v-9d8eea50] {
+.control-chart-issues-config[data-v-434f96bc] {
   padding: 0.2rem;
 }
-.control-chart-issues-table[data-v-9d8eea50] {
+.control-chart-issues-table[data-v-434f96bc] {
   border-collapse: collapse;
 }
-.control-chart-issues-table-head[data-v-9d8eea50] {
+.control-chart-issues-table-head[data-v-434f96bc] {
   text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-table-border);
   padding: 0.2rem;
   font-weight: bold;
 }
-.control-chart-issues-table-item[data-v-9d8eea50] {
+.control-chart-issues-table-item[data-v-434f96bc] {
   text-align: right;
   vertical-align: top;
-  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-table-border);
   padding: 0.2rem;
 }
-.control-chart-issues-winners[data-v-9d8eea50] {
+.control-chart-issues-winners[data-v-434f96bc] {
   padding: 1rem;
 }
 
@@ -366,14 +374,14 @@
   padding: 0.2rem 0;
 }
 
-.summary-data-div[data-v-718f4f75] {
+.summary-data-div[data-v-0840b8e0] {
   padding: 1em;
   margin: 1em;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(40em, 1fr));
   grid-gap: 1em;
 }
-.summary-data-cell[data-v-718f4f75] {
+.summary-data-cell[data-v-0840b8e0] {
   min-width: min-content;
   min-height: min-content;
   border-color: var(--color-main-4);
@@ -384,30 +392,36 @@
   width: 100%;
   display: table;
 }
-.summary-data-cell legend[data-v-718f4f75] {
+.summary-data-cell legend[data-v-0840b8e0] {
   color: var(--color-main-4);
   font-weight: bold;
   padding: 0 0.5em;
 }
-table.summary-data-cell-table > tbody > tr > td[data-v-718f4f75] {
+table.summary-data-cell-table > tbody > tr > td[data-v-0840b8e0] {
   padding: 0 0.5em;
 }
-table.summary-data-cell-table > thead > tr > th[data-v-718f4f75] {
+table.summary-data-cell-table > thead > tr > th[data-v-0840b8e0] {
   padding: 0 0.5em;
 }
-.align-left[data-v-718f4f75] {
+.align-left[data-v-0840b8e0] {
   text-align: left;
 }
-.align-center[data-v-718f4f75] {
+.align-center[data-v-0840b8e0] {
   text-align: center;
 }
-.align-right[data-v-718f4f75] {
+.align-right[data-v-0840b8e0] {
   text-align: right;
 }
-.split-row > td[data-v-718f4f75] {
+.split-row > td[data-v-0840b8e0] {
   border-top-color: var(--color-main-4-5);
   border-top-style: dashed;
   border-top-width: 1px;
+}
+.waste[data-v-0840b8e0] {
+  color: var(--color-waste);
+}
+.eff[data-v-0840b8e0] {
+  color: var(--color-eff);
 }
 
 /* semantic color variables for this project */
@@ -428,6 +442,7 @@ table.summary-data-cell-table > thead > tr > th[data-v-718f4f75] {
   --color-heading: #2c3e50;
   --color-text: #2c3e50;
   --color-text-white: #f2f2f2;
+  --color-table-border: rgba(0, 0, 0, 0.25);
 
   --color-button-bg: var(--color-main-6);
   --color-button-text: var(--color-main-3);
@@ -453,6 +468,9 @@ table.summary-data-cell-table > thead > tr > th[data-v-718f4f75] {
 
   --color-tabs-bg-sel-alt1: var(--color-main-7);
   --color-tabs-text-sel-alt1: var(--color-main-3);
+
+  --color-eff: rgb(40, 128, 0);
+  --color-waste: rgb(185, 55, 55);
 }
 *,
 *::before,

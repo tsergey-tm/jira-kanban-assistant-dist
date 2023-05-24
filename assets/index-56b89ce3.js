@@ -78672,6 +78672,9 @@ const _sfc_main$7 = {
           show: true,
           position: "bottom"
         },
+        itemStyle: {
+          color: "rgb(166,204,147)"
+        },
         xAxisIndex: 1,
         yAxisIndex: 1,
         data: []
@@ -78689,6 +78692,9 @@ const _sfc_main$7 = {
           show: true,
           position: "top"
         },
+        itemStyle: {
+          color: "rgb(230,115,115)"
+        },
         xAxisIndex: 1,
         yAxisIndex: 1,
         data: []
@@ -78704,6 +78710,9 @@ const _sfc_main$7 = {
         },
         areaStyle: {
           origin: "auto"
+        },
+        itemStyle: {
+          color: "#b6a2de"
         },
         data: []
       };
@@ -78785,6 +78794,9 @@ const _sfc_main$7 = {
           show: true,
           position: "top"
         },
+        itemStyle: {
+          color: "rgba(102,82,204,0.75)"
+        },
         xAxisIndex: 2,
         yAxisIndex: 2,
         data: []
@@ -78797,6 +78809,9 @@ const _sfc_main$7 = {
         label: {
           show: true,
           position: "bottom"
+        },
+        itemStyle: {
+          color: "rgb(119,198,230)"
         },
         xAxisIndex: 2,
         yAxisIndex: 2,
@@ -79177,7 +79192,7 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64);
 }
 const StatByWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5]]);
-const ControlChart_vue_vue_type_style_index_0_scoped_9d8eea50_lang = "";
+const ControlChart_vue_vue_type_style_index_0_scoped_434f96bc_lang = "";
 const _sfc_main$5 = {
   name: "ControlChart",
   components: {
@@ -79573,7 +79588,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_7$1)
   ], 64);
 }
-const ControlChart = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__scopeId", "data-v-9d8eea50"]]);
+const ControlChart = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__scopeId", "data-v-434f96bc"]]);
 const LeadTimeDistributionChart_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$4 = {
   name: "LeadTimeDistributionChart",
@@ -80148,7 +80163,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
   ]);
 }
 const Tab = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1]]);
-const SummaryPanel_vue_vue_type_style_index_0_scoped_718f4f75_lang = "";
+const SummaryPanel_vue_vue_type_style_index_0_scoped_0840b8e0_lang = "";
 const _sfc_main$1 = {
   name: "SummaryPanel",
   props: {
@@ -80228,10 +80243,10 @@ const _sfc_main$1 = {
       }
       let t = mean(...total2);
       return [
-        this.toL(100 - last2, 2) + " / " + this.toL(last2, 2),
-        this.toL(100 - prev, 2) + " / " + this.toL(prev, 2),
-        this.toL(100 - pprev, 2) + " / " + this.toL(pprev, 2),
-        this.toL(100 - t, 2) + " / " + this.toL(t, 2)
+        [this.toL(100 - last2, 2), this.toL(last2, 2)],
+        [this.toL(100 - prev, 2), this.toL(prev, 2)],
+        [this.toL(100 - pprev, 2), this.toL(pprev, 2)],
+        [this.toL(100 - t, 2), this.toL(t, 2)]
       ];
     },
     wipPeriods: function() {
@@ -80341,7 +80356,7 @@ const _sfc_main$1 = {
     }
   }
 };
-const _withScopeId = (n2) => (pushScopeId("data-v-718f4f75"), n2 = n2(), popScopeId(), n2);
+const _withScopeId = (n2) => (pushScopeId("data-v-0840b8e0"), n2 = n2(), popScopeId(), n2);
 const _hoisted_1$1 = { class: "summary-data-div" };
 const _hoisted_2$1 = { class: "summary-data-cell" };
 const _hoisted_3$1 = { class: "summary-data-cell-table" };
@@ -80403,55 +80418,63 @@ const _hoisted_49 = ["title"];
 const _hoisted_50 = { class: "split-row" };
 const _hoisted_51 = { class: "align-left" };
 const _hoisted_52 = { class: "align-right" };
-const _hoisted_53 = { class: "align-right" };
-const _hoisted_54 = { class: "align-right" };
+const _hoisted_53 = { class: "waste" };
+const _hoisted_54 = { class: "eff" };
 const _hoisted_55 = { class: "align-right" };
-const _hoisted_56 = { class: "summary-data-cell" };
-const _hoisted_57 = { class: "summary-data-cell-table" };
-const _hoisted_58 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("th", null, " ", -1));
-const _hoisted_59 = ["title"];
-const _hoisted_60 = ["title"];
-const _hoisted_61 = ["title"];
-const _hoisted_62 = ["title"];
-const _hoisted_63 = {
-  rowspan: "3",
-  class: "align-left"
-};
-const _hoisted_64 = ["title"];
-const _hoisted_65 = ["title"];
-const _hoisted_66 = ["title"];
+const _hoisted_56 = { class: "waste" };
+const _hoisted_57 = { class: "eff" };
+const _hoisted_58 = { class: "align-right" };
+const _hoisted_59 = { class: "waste" };
+const _hoisted_60 = { class: "eff" };
+const _hoisted_61 = { class: "align-right" };
+const _hoisted_62 = { class: "waste" };
+const _hoisted_63 = { class: "eff" };
+const _hoisted_64 = { class: "summary-data-cell" };
+const _hoisted_65 = { class: "summary-data-cell-table" };
+const _hoisted_66 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("th", null, " ", -1));
 const _hoisted_67 = ["title"];
 const _hoisted_68 = ["title"];
 const _hoisted_69 = ["title"];
 const _hoisted_70 = ["title"];
-const _hoisted_71 = ["title"];
+const _hoisted_71 = {
+  rowspan: "3",
+  class: "align-left"
+};
 const _hoisted_72 = ["title"];
 const _hoisted_73 = ["title"];
 const _hoisted_74 = ["title"];
 const _hoisted_75 = ["title"];
-const _hoisted_76 = { class: "split-row" };
-const _hoisted_77 = {
-  rowspan: "3",
-  class: "align-left"
-};
+const _hoisted_76 = ["title"];
+const _hoisted_77 = ["title"];
 const _hoisted_78 = ["title"];
 const _hoisted_79 = ["title"];
 const _hoisted_80 = ["title"];
 const _hoisted_81 = ["title"];
 const _hoisted_82 = ["title"];
 const _hoisted_83 = ["title"];
-const _hoisted_84 = ["title"];
-const _hoisted_85 = ["title"];
+const _hoisted_84 = { class: "split-row" };
+const _hoisted_85 = {
+  rowspan: "3",
+  class: "align-left"
+};
 const _hoisted_86 = ["title"];
 const _hoisted_87 = ["title"];
 const _hoisted_88 = ["title"];
 const _hoisted_89 = ["title"];
-const _hoisted_90 = { class: "split-row" };
-const _hoisted_91 = { class: "align-left" };
-const _hoisted_92 = { class: "align-right" };
-const _hoisted_93 = { class: "align-right" };
-const _hoisted_94 = { class: "align-right" };
+const _hoisted_90 = ["title"];
+const _hoisted_91 = ["title"];
+const _hoisted_92 = ["title"];
+const _hoisted_93 = ["title"];
+const _hoisted_94 = ["title"];
 const _hoisted_95 = ["title"];
+const _hoisted_96 = ["title"];
+const _hoisted_97 = ["title"];
+const _hoisted_98 = { class: "split-row" };
+const _hoisted_99 = { class: "align-left" };
+const _hoisted_100 = { class: "align-right" };
+const _hoisted_101 = { class: "align-right" };
+const _hoisted_102 = { class: "align-right" };
+const _hoisted_103 = ["title"];
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", _hoisted_1$1, [
     createBaseVNode("fieldset", _hoisted_2$1, [
@@ -80642,161 +80665,177 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
           ]),
           createBaseVNode("tr", _hoisted_50, [
             createBaseVNode("td", _hoisted_51, toDisplayString$1(_ctx.$t("summary-data.cell.wip.waste-eff")), 1),
-            createBaseVNode("td", _hoisted_52, toDisplayString$1(this.effWaste[0]), 1),
-            createBaseVNode("td", _hoisted_53, toDisplayString$1(this.effWaste[1]), 1),
-            createBaseVNode("td", _hoisted_54, toDisplayString$1(this.effWaste[2]), 1),
-            createBaseVNode("td", _hoisted_55, toDisplayString$1(this.effWaste[3]), 1)
+            createBaseVNode("td", _hoisted_52, [
+              createBaseVNode("span", _hoisted_53, toDisplayString$1(this.effWaste[0][0]), 1),
+              createTextVNode(" /  "),
+              createBaseVNode("span", _hoisted_54, toDisplayString$1(this.effWaste[0][1]), 1)
+            ]),
+            createBaseVNode("td", _hoisted_55, [
+              createBaseVNode("span", _hoisted_56, toDisplayString$1(this.effWaste[1][0]), 1),
+              createTextVNode(" /  "),
+              createBaseVNode("span", _hoisted_57, toDisplayString$1(this.effWaste[1][1]), 1)
+            ]),
+            createBaseVNode("td", _hoisted_58, [
+              createBaseVNode("span", _hoisted_59, toDisplayString$1(this.effWaste[2][0]), 1),
+              createTextVNode(" /  "),
+              createBaseVNode("span", _hoisted_60, toDisplayString$1(this.effWaste[2][1]), 1)
+            ]),
+            createBaseVNode("td", _hoisted_61, [
+              createBaseVNode("span", _hoisted_62, toDisplayString$1(this.effWaste[3][0]), 1),
+              createTextVNode(" /  "),
+              createBaseVNode("span", _hoisted_63, toDisplayString$1(this.effWaste[3][1]), 1)
+            ])
           ])
         ])
       ])
     ]),
-    createBaseVNode("fieldset", _hoisted_56, [
+    createBaseVNode("fieldset", _hoisted_64, [
       createBaseVNode("legend", null, toDisplayString$1(_ctx.$t("summary-data.cell.times.name")), 1),
-      createBaseVNode("table", _hoisted_57, [
+      createBaseVNode("table", _hoisted_65, [
         createBaseVNode("thead", null, [
           createBaseVNode("tr", null, [
-            _hoisted_58,
+            _hoisted_66,
             createBaseVNode("th", {
               title: _ctx.$t("summary-data.cell.head.last.title")
-            }, toDisplayString$1(_ctx.$t("summary-data.cell.head.last.name")), 9, _hoisted_59),
+            }, toDisplayString$1(_ctx.$t("summary-data.cell.head.last.name")), 9, _hoisted_67),
             createBaseVNode("th", {
               title: _ctx.$t("summary-data.cell.head.prev.title")
-            }, toDisplayString$1(_ctx.$t("summary-data.cell.head.prev.name")), 9, _hoisted_60),
+            }, toDisplayString$1(_ctx.$t("summary-data.cell.head.prev.name")), 9, _hoisted_68),
             createBaseVNode("th", {
               title: _ctx.$t("summary-data.cell.head.preprev.title")
-            }, toDisplayString$1(_ctx.$t("summary-data.cell.head.preprev.name")), 9, _hoisted_61),
+            }, toDisplayString$1(_ctx.$t("summary-data.cell.head.preprev.name")), 9, _hoisted_69),
             createBaseVNode("th", {
               title: _ctx.$t("summary-data.cell.head.total.title")
-            }, toDisplayString$1(_ctx.$t("summary-data.cell.head.total.name")), 9, _hoisted_62)
+            }, toDisplayString$1(_ctx.$t("summary-data.cell.head.total.name")), 9, _hoisted_70)
           ])
         ]),
         createBaseVNode("tbody", null, [
           createBaseVNode("tr", null, [
-            createBaseVNode("td", _hoisted_63, toDisplayString$1(_ctx.$t("summary-data.cell.times.lead")), 1),
+            createBaseVNode("td", _hoisted_71, toDisplayString$1(_ctx.$t("summary-data.cell.times.lead")), 1),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.max")
-            }, toDisplayString$1(this.leads[0].max), 9, _hoisted_64),
+            }, toDisplayString$1(this.leads[0].max), 9, _hoisted_72),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.max")
-            }, toDisplayString$1(this.leads[1].max), 9, _hoisted_65),
+            }, toDisplayString$1(this.leads[1].max), 9, _hoisted_73),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.max")
-            }, toDisplayString$1(this.leads[2].max), 9, _hoisted_66),
+            }, toDisplayString$1(this.leads[2].max), 9, _hoisted_74),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.max")
-            }, toDisplayString$1(this.leads[3].max), 9, _hoisted_67)
+            }, toDisplayString$1(this.leads[3].max), 9, _hoisted_75)
           ]),
           createBaseVNode("tr", null, [
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.med")
-            }, toDisplayString$1(this.leads[0].med), 9, _hoisted_68),
+            }, toDisplayString$1(this.leads[0].med), 9, _hoisted_76),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.med")
-            }, toDisplayString$1(this.leads[1].med), 9, _hoisted_69),
+            }, toDisplayString$1(this.leads[1].med), 9, _hoisted_77),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.med")
-            }, toDisplayString$1(this.leads[2].med), 9, _hoisted_70),
+            }, toDisplayString$1(this.leads[2].med), 9, _hoisted_78),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.med")
-            }, toDisplayString$1(this.leads[3].med), 9, _hoisted_71)
+            }, toDisplayString$1(this.leads[3].med), 9, _hoisted_79)
           ]),
           createBaseVNode("tr", null, [
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.min")
-            }, toDisplayString$1(this.leads[0].min), 9, _hoisted_72),
+            }, toDisplayString$1(this.leads[0].min), 9, _hoisted_80),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.min")
-            }, toDisplayString$1(this.leads[1].min), 9, _hoisted_73),
+            }, toDisplayString$1(this.leads[1].min), 9, _hoisted_81),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.min")
-            }, toDisplayString$1(this.leads[2].min), 9, _hoisted_74),
+            }, toDisplayString$1(this.leads[2].min), 9, _hoisted_82),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.min")
-            }, toDisplayString$1(this.leads[3].min), 9, _hoisted_75)
+            }, toDisplayString$1(this.leads[3].min), 9, _hoisted_83)
           ]),
-          createBaseVNode("tr", _hoisted_76, [
-            createBaseVNode("td", _hoisted_77, toDisplayString$1(_ctx.$t("summary-data.cell.times.cycle")), 1),
+          createBaseVNode("tr", _hoisted_84, [
+            createBaseVNode("td", _hoisted_85, toDisplayString$1(_ctx.$t("summary-data.cell.times.cycle")), 1),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.max")
-            }, toDisplayString$1(this.cycles[0].max), 9, _hoisted_78),
+            }, toDisplayString$1(this.cycles[0].max), 9, _hoisted_86),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.max")
-            }, toDisplayString$1(this.cycles[1].max), 9, _hoisted_79),
+            }, toDisplayString$1(this.cycles[1].max), 9, _hoisted_87),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.max")
-            }, toDisplayString$1(this.cycles[2].max), 9, _hoisted_80),
+            }, toDisplayString$1(this.cycles[2].max), 9, _hoisted_88),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.max")
-            }, toDisplayString$1(this.cycles[3].max), 9, _hoisted_81)
-          ]),
-          createBaseVNode("tr", null, [
-            createBaseVNode("td", {
-              class: "align-right",
-              title: _ctx.$t("summary-data.med")
-            }, toDisplayString$1(this.cycles[0].med), 9, _hoisted_82),
-            createBaseVNode("td", {
-              class: "align-right",
-              title: _ctx.$t("summary-data.med")
-            }, toDisplayString$1(this.cycles[1].med), 9, _hoisted_83),
-            createBaseVNode("td", {
-              class: "align-right",
-              title: _ctx.$t("summary-data.med")
-            }, toDisplayString$1(this.cycles[2].med), 9, _hoisted_84),
-            createBaseVNode("td", {
-              class: "align-right",
-              title: _ctx.$t("summary-data.med")
-            }, toDisplayString$1(this.cycles[3].med), 9, _hoisted_85)
+            }, toDisplayString$1(this.cycles[3].max), 9, _hoisted_89)
           ]),
           createBaseVNode("tr", null, [
             createBaseVNode("td", {
               class: "align-right",
-              title: _ctx.$t("summary-data.min")
-            }, toDisplayString$1(this.cycles[0].min), 9, _hoisted_86),
-            createBaseVNode("td", {
-              class: "align-right",
-              title: _ctx.$t("summary-data.min")
-            }, toDisplayString$1(this.cycles[1].min), 9, _hoisted_87),
-            createBaseVNode("td", {
-              class: "align-right",
-              title: _ctx.$t("summary-data.min")
-            }, toDisplayString$1(this.cycles[2].min), 9, _hoisted_88),
-            createBaseVNode("td", {
-              class: "align-right",
-              title: _ctx.$t("summary-data.min")
-            }, toDisplayString$1(this.cycles[3].min), 9, _hoisted_89)
-          ]),
-          createBaseVNode("tr", _hoisted_90, [
-            createBaseVNode("td", _hoisted_91, toDisplayString$1(_ctx.$t("summary-data.cell.times.throughput")), 1),
-            createBaseVNode("td", _hoisted_92, toDisplayString$1(this.throughputs[0]), 1),
-            createBaseVNode("td", _hoisted_93, toDisplayString$1(this.throughputs[1]), 1),
-            createBaseVNode("td", _hoisted_94, toDisplayString$1(this.throughputs[2]), 1),
+              title: _ctx.$t("summary-data.med")
+            }, toDisplayString$1(this.cycles[0].med), 9, _hoisted_90),
             createBaseVNode("td", {
               class: "align-right",
               title: _ctx.$t("summary-data.med")
-            }, toDisplayString$1(this.throughputs[3]), 9, _hoisted_95)
+            }, toDisplayString$1(this.cycles[1].med), 9, _hoisted_91),
+            createBaseVNode("td", {
+              class: "align-right",
+              title: _ctx.$t("summary-data.med")
+            }, toDisplayString$1(this.cycles[2].med), 9, _hoisted_92),
+            createBaseVNode("td", {
+              class: "align-right",
+              title: _ctx.$t("summary-data.med")
+            }, toDisplayString$1(this.cycles[3].med), 9, _hoisted_93)
+          ]),
+          createBaseVNode("tr", null, [
+            createBaseVNode("td", {
+              class: "align-right",
+              title: _ctx.$t("summary-data.min")
+            }, toDisplayString$1(this.cycles[0].min), 9, _hoisted_94),
+            createBaseVNode("td", {
+              class: "align-right",
+              title: _ctx.$t("summary-data.min")
+            }, toDisplayString$1(this.cycles[1].min), 9, _hoisted_95),
+            createBaseVNode("td", {
+              class: "align-right",
+              title: _ctx.$t("summary-data.min")
+            }, toDisplayString$1(this.cycles[2].min), 9, _hoisted_96),
+            createBaseVNode("td", {
+              class: "align-right",
+              title: _ctx.$t("summary-data.min")
+            }, toDisplayString$1(this.cycles[3].min), 9, _hoisted_97)
+          ]),
+          createBaseVNode("tr", _hoisted_98, [
+            createBaseVNode("td", _hoisted_99, toDisplayString$1(_ctx.$t("summary-data.cell.times.throughput")), 1),
+            createBaseVNode("td", _hoisted_100, toDisplayString$1(this.throughputs[0]), 1),
+            createBaseVNode("td", _hoisted_101, toDisplayString$1(this.throughputs[1]), 1),
+            createBaseVNode("td", _hoisted_102, toDisplayString$1(this.throughputs[2]), 1),
+            createBaseVNode("td", {
+              class: "align-right",
+              title: _ctx.$t("summary-data.med")
+            }, toDisplayString$1(this.throughputs[3]), 9, _hoisted_103)
           ])
         ])
       ])
     ])
   ]);
 }
-const SummaryPanel = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__scopeId", "data-v-718f4f75"]]);
+const SummaryPanel = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__scopeId", "data-v-0840b8e0"]]);
 const _hoisted_1 = { style: { "clear": "left" } };
 const _hoisted_2 = { key: 0 };
 const _hoisted_3 = ["title", "href"];
