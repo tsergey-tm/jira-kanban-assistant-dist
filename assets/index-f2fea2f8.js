@@ -59077,7 +59077,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const _sfc_main$i = {
+const _sfc_main$j = {
   name: "NameProgressBar",
   components: {
     VChart: S
@@ -59104,16 +59104,16 @@ const _sfc_main$i = {
     }
   }
 };
-const _hoisted_1$i = { class: "name-progressbar-name" };
-function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$j = { class: "name-progressbar-name" };
+function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", {
     class: "name-progressbar-box",
     style: normalizeStyle$1($options.progressLoadingStyle)
   }, [
-    createBaseVNode("span", _hoisted_1$i, toDisplayString$1($props.title), 1)
+    createBaseVNode("span", _hoisted_1$j, toDisplayString$1($props.title), 1)
   ], 4);
 }
-const NameProgressBar = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h], ["__scopeId", "data-v-adea8f9f"]]);
+const NameProgressBar = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__scopeId", "data-v-adea8f9f"]]);
 class LuxonError extends Error {
 }
 class InvalidDateTimeError extends LuxonError {
@@ -68537,6 +68537,10 @@ const messages = {
         "summary-data": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Summary"]);
+        },
+        "times-by-columns": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Time by columns"]);
         }
       },
       "config-info": {
@@ -68787,6 +68791,74 @@ const messages = {
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#wips-by-columns"]);
+        }
+      }
+    },
+    "times-by-columns": {
+      "tab": {
+        "max": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Maximums"]);
+        },
+        "avg": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Averages"]);
+        },
+        "med": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Medians"]);
+        },
+        "mod": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Modes"]);
+        },
+        "min": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Minimums"]);
+        }
+      },
+      "title": {
+        "name": {
+          "max": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Maximums"]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Averages"]);
+          },
+          "mod": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Modes"]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Medians"]);
+          },
+          "min": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Minimums"]);
+          }
+        },
+        "title": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize([_interpolate(_named("aggr")), " of time by columns : ", _interpolate(_named("title"))]);
+        }
+      },
+      "yAxis": {
+        "name": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Time spent in columns, days"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["This screen presents aggregated values of time spent by completed tasks in columns by period."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#time-by-columns"]);
         }
       }
     },
@@ -69961,6 +70033,10 @@ const messages = {
         "summary-data": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Сводка"]);
+        },
+        "times-by-columns": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время по колонкам"]);
         }
       },
       "config-info": {
@@ -70211,6 +70287,74 @@ const messages = {
         "link": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#wip-%D0%BF%D0%BE-%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BA%D0%B0%D0%BC"]);
+        }
+      }
+    },
+    "times-by-columns": {
+      "tab": {
+        "max": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Максимумы"]);
+        },
+        "avg": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Средние"]);
+        },
+        "med": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Медианы"]);
+        },
+        "mod": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Моды"]);
+        },
+        "min": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Минимумы"]);
+        }
+      },
+      "title": {
+        "name": {
+          "max": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Максимумы"]);
+          },
+          "avg": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Средние"]);
+          },
+          "med": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Медианы"]);
+          },
+          "mod": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Моды"]);
+          },
+          "min": (ctx) => {
+            const { normalize: _normalize } = ctx;
+            return _normalize(["Минимумы"]);
+          }
+        },
+        "title": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize([_interpolate(_named("aggr")), " времени проведённых в колонках : ", _interpolate(_named("title"))]);
+        }
+      },
+      "yAxis": {
+        "name": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Время проведённое в колонках, дни"]);
+        }
+      },
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["На этом экране представлены агрегированные значения времени, проведённых завершенными задачами в колонках по периодам."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%92%D1%80%D0%B5%D0%BC%D1%8F%20%D0%BF%D0%BE%20%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BA%D0%B0%D0%BC"]);
         }
       }
     },
@@ -71353,7 +71497,7 @@ function getDefaultLocale() {
   return l2;
 }
 const TriageTable_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$h = {
+const _sfc_main$i = {
   name: "TriageTable",
   props: {
     title: String,
@@ -72357,9 +72501,9 @@ const _sfc_main$h = {
     }
   }
 };
-const _hoisted_1$h = { class: "triage-selector" };
-const _hoisted_2$b = { style: { "clear": "both" } };
-const _hoisted_3$a = { key: 0 };
+const _hoisted_1$i = { class: "triage-selector" };
+const _hoisted_2$c = { style: { "clear": "both" } };
+const _hoisted_3$b = { key: 0 };
 const _hoisted_4$8 = {
   key: 1,
   class: "triage-table"
@@ -72388,10 +72532,10 @@ const _hoisted_25$1 = ["innerHTML"];
 const _hoisted_26$1 = ["innerHTML"];
 const _hoisted_27$1 = ["innerHTML"];
 const _hoisted_28$1 = ["title", "href"];
-function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$h, [
+    createBaseVNode("div", _hoisted_1$i, [
       createBaseVNode("div", {
         class: normalizeClass(["triage-selector-item", { "triage-selector-item-selected": _ctx.selected === "lead" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "lead")
@@ -72401,8 +72545,8 @@ function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[1] || (_cache[1] = ($event) => _ctx.selected = "cycle")
       }, toDisplayString$1(_ctx.$t("triage.tab.name", { col: $options.cycleTriageColName })), 3)
     ]),
-    createBaseVNode("div", _hoisted_2$b, [
-      !Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("div", _hoisted_3$a, toDisplayString$1($options.triageTable), 1)) : createCommentVNode("", true),
+    createBaseVNode("div", _hoisted_2$c, [
+      !Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("div", _hoisted_3$b, toDisplayString$1($options.triageTable), 1)) : createCommentVNode("", true),
       Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$8, [
         createBaseVNode("thead", null, [
           createBaseVNode("tr", null, [
@@ -72521,7 +72665,7 @@ function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_28$1)
   ], 64);
 }
-const TriageTable = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g]]);
+const TriageTable = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h]]);
 function sum$1(x2) {
   if (x2.length === 0) {
     return 0;
@@ -72812,7 +72956,7 @@ function quantile(x2, p2) {
   }
 }
 const LeadCycleTimeChart_vue_vue_type_style_index_0_scoped_d27db0c2_lang = "";
-const _sfc_main$g = {
+const _sfc_main$h = {
   name: "LeadCycleTimeChart",
   components: {
     VChart: S
@@ -73229,14 +73373,14 @@ const _sfc_main$g = {
   }
 };
 const _withScopeId$2 = (n2) => (pushScopeId("data-v-d27db0c2"), n2 = n2(), popScopeId(), n2);
-const _hoisted_1$g = { class: "lead-cycle-times-chart-selector" };
-const _hoisted_2$a = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "lead-cycle-times-chart-selector-space" }, "   ", -1));
-const _hoisted_3$9 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_1$h = { class: "lead-cycle-times-chart-selector" };
+const _hoisted_2$b = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "lead-cycle-times-chart-selector-space" }, "   ", -1));
+const _hoisted_3$a = { style: { "height": "100%", "clear": "both" } };
 const _hoisted_4$7 = ["title", "href"];
-function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$g, [
+    createBaseVNode("div", _hoisted_1$h, [
       createBaseVNode("div", {
         class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.typeSelected === "lead" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.typeSelected = "lead")
@@ -73245,7 +73389,7 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
         class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.typeSelected === "cycle" }]),
         onClick: _cache[1] || (_cache[1] = ($event) => _ctx.typeSelected = "cycle")
       }, toDisplayString$1(_ctx.$t("lead-cycle-times-chart.tab.cycle")), 3),
-      _hoisted_2$a,
+      _hoisted_2$b,
       createBaseVNode("div", {
         class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.aggrSelected === "perc" }]),
         onClick: _cache[2] || (_cache[2] = ($event) => _ctx.aggrSelected = "perc")
@@ -73255,7 +73399,7 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[3] || (_cache[3] = ($event) => _ctx.aggrSelected = "avg")
       }, toDisplayString$1(_ctx.$t("lead-cycle-times-chart.tab.averages")), 3)
     ]),
-    createBaseVNode("div", _hoisted_3$9, [
+    createBaseVNode("div", _hoisted_3$a, [
       createVNode(_component_v_chart, {
         class: "LeadCycleTimeChart",
         option: $options.option,
@@ -73270,9 +73414,9 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_4$7)
   ], 64);
 }
-const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-d27db0c2"]]);
+const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-d27db0c2"]]);
 const JiraFilters_vue_vue_type_style_index_0_scoped_dc5a911c_lang = "";
-const _sfc_main$f = {
+const _sfc_main$g = {
   name: "JiraFilters",
   props: {
     title: String,
@@ -73290,24 +73434,24 @@ const _sfc_main$f = {
     }
   }
 };
-const _hoisted_1$f = { class: "jira-filters-box" };
-const _hoisted_2$9 = { class: "jira-filter-box-title" };
-const _hoisted_3$8 = ["onClick"];
-function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$f, [
-    createBaseVNode("div", _hoisted_2$9, toDisplayString$1($props.title) + ":", 1),
+const _hoisted_1$g = { class: "jira-filters-box" };
+const _hoisted_2$a = { class: "jira-filter-box-title" };
+const _hoisted_3$9 = ["onClick"];
+function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("div", _hoisted_1$g, [
+    createBaseVNode("div", _hoisted_2$a, toDisplayString$1($props.title) + ":", 1),
     (openBlock(true), createElementBlock(Fragment, null, renderList($props.filters, (filter2) => {
       return openBlock(), createElementBlock("div", {
         class: normalizeClass(["jira-filter-box-item", { "jira-filter-box-item-selected": $props.selectedFilters.includes(filter2.id) }]),
         key: filter2.id,
         onClick: ($event) => $options.onClick(filter2.id)
-      }, toDisplayString$1(filter2.name), 11, _hoisted_3$8);
+      }, toDisplayString$1(filter2.name), 11, _hoisted_3$9);
     }), 128))
   ]);
 }
-const JiraFilters = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-dc5a911c"]]);
+const JiraFilters = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-dc5a911c"]]);
 const JiraColumnStatus_vue_vue_type_style_index_0_scoped_7d723413_lang = "";
-const _sfc_main$e = {
+const _sfc_main$f = {
   name: "JiraColumnStatus",
   props: {
     title: String,
@@ -73413,9 +73557,9 @@ const _sfc_main$e = {
   }
 };
 const _withScopeId$1 = (n2) => (pushScopeId("data-v-7d723413"), n2 = n2(), popScopeId(), n2);
-const _hoisted_1$e = { class: "jira-columns-box" };
-const _hoisted_2$8 = { class: "jira-columns-box-title" };
-const _hoisted_3$7 = { class: "jira-columns-box-table" };
+const _hoisted_1$f = { class: "jira-columns-box" };
+const _hoisted_2$9 = { class: "jira-columns-box-title" };
+const _hoisted_3$8 = { class: "jira-columns-box-table" };
 const _hoisted_4$6 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
 const _hoisted_5$4 = { class: "jira-columns-box-table-header" };
 const _hoisted_6$3 = { class: "jira-columns-box-table-header" };
@@ -73429,10 +73573,10 @@ const _hoisted_13$2 = ["onClick"];
 const _hoisted_14$2 = { class: "jira-columns-box-table-header" };
 const _hoisted_15$2 = { class: "jira-columns-box-table-header" };
 const _hoisted_16$2 = ["onClick"];
-function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$e, [
-    createBaseVNode("div", _hoisted_2$8, toDisplayString$1($props.title) + ":", 1),
-    createBaseVNode("table", _hoisted_3$7, [
+function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("div", _hoisted_1$f, [
+    createBaseVNode("div", _hoisted_2$9, toDisplayString$1($props.title) + ":", 1),
+    createBaseVNode("table", _hoisted_3$8, [
       createBaseVNode("thead", null, [
         createBaseVNode("tr", null, [
           _hoisted_4$6,
@@ -73517,7 +73661,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-const JiraColumnStatus = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-7d723413"]]);
+const JiraColumnStatus = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-7d723413"]]);
 var _a;
 const isClient = typeof window !== "undefined";
 const isString = (val) => typeof val === "string";
@@ -75828,7 +75972,7 @@ function F(e2, t, n2, d, r, s2) {
 }
 const y = /* @__PURE__ */ w(E, [["render", F]]);
 const VueSearchSelect = "";
-const _sfc_main$d = {
+const _sfc_main$e = {
   name: "LanguageSwitcher",
   data() {
     return {};
@@ -75839,8 +75983,8 @@ const _sfc_main$d = {
     }
   }
 };
-const _hoisted_1$d = ["value"];
-function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$e = ["value"];
+function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
   return withDirectives((openBlock(), createElementBlock("select", {
     onChange: _cache[0] || (_cache[0] = ($event) => $options.switchLanguage($event)),
     "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => _ctx.$i18n.locale = $event)
@@ -75849,15 +75993,15 @@ function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
       return openBlock(), createElementBlock("option", {
         key: `${locale}`,
         value: locale
-      }, toDisplayString$1(_ctx.$t(`locale.${locale}`)), 9, _hoisted_1$d);
+      }, toDisplayString$1(_ctx.$t(`locale.${locale}`)), 9, _hoisted_1$e);
     }), 128))
   ], 544)), [
     [vModelSelect, _ctx.$i18n.locale]
   ]);
 }
-const LanguageSwitcher = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c]]);
+const LanguageSwitcher = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d]]);
 const AppConfig_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$c = {
+const _sfc_main$d = {
   name: "AppConfig",
   props: {
     showConfigPanel: Object,
@@ -76074,9 +76218,9 @@ const _sfc_main$c = {
     }
   }
 };
-const _hoisted_1$c = { class: "app-config-option-dialog" };
-const _hoisted_2$7 = { class: "app-config-option-header" };
-const _hoisted_3$6 = { class: "app-config-locale" };
+const _hoisted_1$d = { class: "app-config-option-dialog" };
+const _hoisted_2$8 = { class: "app-config-option-header" };
+const _hoisted_3$7 = { class: "app-config-locale" };
 const _hoisted_4$5 = { class: "app-config-buttons" };
 const _hoisted_5$3 = ["value"];
 const _hoisted_6$2 = ["value"];
@@ -76093,7 +76237,7 @@ const _hoisted_16$1 = { class: "app-config-buttons" };
 const _hoisted_17$1 = ["value"];
 const _hoisted_18$1 = ["value"];
 const _hoisted_19$1 = ["value"];
-function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_language_switcher = resolveComponent("language-switcher");
   const _component_i18n_t = resolveComponent("i18n-t");
   const _component_model_select = resolveComponent("model-select");
@@ -76115,9 +76259,9 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     "swipe-to-close": "none"
   }, {
     default: withCtx(() => [
-      createBaseVNode("div", _hoisted_1$c, [
-        createBaseVNode("div", _hoisted_2$7, toDisplayString$1(_ctx.$t("app-config.title")), 1),
-        createBaseVNode("div", _hoisted_3$6, [
+      createBaseVNode("div", _hoisted_1$d, [
+        createBaseVNode("div", _hoisted_2$8, toDisplayString$1(_ctx.$t("app-config.title")), 1),
+        createBaseVNode("div", _hoisted_3$7, [
           createVNode(_component_i18n_t, { keypath: "app-config.locale" }, {
             default: withCtx(() => [
               createVNode(_component_language_switcher)
@@ -76285,7 +76429,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
   }, 8, ["modelValue"]);
 }
-const AppConfig = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b]]);
+const AppConfig = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c]]);
 const dayShift = 24 * 60 * 60 * 1e3;
 function nanStat() {
   return {
@@ -76832,7 +76976,7 @@ const KanbanStat = {
     return res;
   }
 };
-const _sfc_main$b = {
+const _sfc_main$c = {
   name: "TotalWIPChart",
   components: {
     VChart: S
@@ -77310,8 +77454,8 @@ const _sfc_main$b = {
     }
   }
 };
-const _hoisted_1$b = ["title", "href"];
-function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$c = ["title", "href"];
+function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
     createVNode(_component_v_chart, {
@@ -77324,11 +77468,11 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("total-wip.help.text"),
       href: _ctx.$t("total-wip.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_1$b)
+    }, " ‽ ", 8, _hoisted_1$c)
   ], 64);
 }
-const TotalWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a]]);
-const _sfc_main$a = {
+const TotalWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b]]);
+const _sfc_main$b = {
   name: "AccumulatedWIPChart",
   components: {
     VChart: S
@@ -77653,8 +77797,8 @@ const _sfc_main$a = {
     }
   }
 };
-const _hoisted_1$a = ["title", "href"];
-function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$b = ["title", "href"];
+function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
     createVNode(_component_v_chart, {
@@ -77667,12 +77811,12 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("accumulated-wip.help.text"),
       href: _ctx.$t("accumulated-wip.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_1$a)
+    }, " ‽ ", 8, _hoisted_1$b)
   ], 64);
 }
-const AccumulatedWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9]]);
+const AccumulatedWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a]]);
 const WIPsChart_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$9 = {
+const _sfc_main$a = {
   name: "WIPsChart",
   components: {
     VChart: S
@@ -77816,13 +77960,13 @@ const _sfc_main$9 = {
     }
   }
 };
-const _hoisted_1$9 = { class: "wips-chart-selector" };
-const _hoisted_2$6 = { style: { "height": "100%", "clear": "both" } };
-const _hoisted_3$5 = ["title", "href"];
-function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$a = { class: "wips-chart-selector" };
+const _hoisted_2$7 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_3$6 = ["title", "href"];
+function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$9, [
+    createBaseVNode("div", _hoisted_1$a, [
       createBaseVNode("div", {
         class: normalizeClass(["wips-chart-selector-item", { "wips-chart-selector-item-selected": _ctx.selected === "max" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "max")
@@ -77844,7 +77988,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[4] || (_cache[4] = ($event) => _ctx.selected = "min")
       }, toDisplayString$1(_ctx.$t("wip-by-columns.tab.min")), 3)
     ]),
-    createBaseVNode("div", _hoisted_2$6, [
+    createBaseVNode("div", _hoisted_2$7, [
       createVNode(_component_v_chart, {
         class: "WIPsChart",
         option: $options.option,
@@ -77856,12 +78000,12 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("wip-by-columns.help.text"),
       href: _ctx.$t("wip-by-columns.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_3$5)
+    }, " ‽ ", 8, _hoisted_3$6)
   ], 64);
 }
-const WIPsChart = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
+const WIPsChart = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9]]);
 const TimesChart_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$8 = {
+const _sfc_main$9 = {
   name: "TimesChart",
   components: {
     VChart: S
@@ -78331,14 +78475,14 @@ const _sfc_main$8 = {
     }
   }
 };
-const _hoisted_1$8 = { class: "times-chart-selector" };
-const _hoisted_2$5 = /* @__PURE__ */ createBaseVNode("div", { class: "times-chart-selector-space" }, "   ", -1);
-const _hoisted_3$4 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_1$9 = { class: "times-chart-selector" };
+const _hoisted_2$6 = /* @__PURE__ */ createBaseVNode("div", { class: "times-chart-selector-space" }, "   ", -1);
+const _hoisted_3$5 = { style: { "height": "100%", "clear": "both" } };
 const _hoisted_4$4 = ["title", "href"];
-function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$8, [
+    createBaseVNode("div", _hoisted_1$9, [
       createBaseVNode("div", {
         class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.typeSelected === "lead" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.typeSelected = "lead")
@@ -78351,7 +78495,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
         class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.typeSelected === "total" }]),
         onClick: _cache[2] || (_cache[2] = ($event) => _ctx.typeSelected = "total")
       }, toDisplayString$1(_ctx.$t("time-by-columns.tab.total")), 3),
-      _hoisted_2$5,
+      _hoisted_2$6,
       createBaseVNode("div", {
         class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.selected === "q0" }]),
         onClick: _cache[3] || (_cache[3] = ($event) => _ctx.selected = "q0")
@@ -78373,7 +78517,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[7] || (_cache[7] = ($event) => _ctx.selected = "avg")
       }, toDisplayString$1(_ctx.$t("time-by-columns.tab.avg")), 3)
     ]),
-    createBaseVNode("div", _hoisted_3$4, [
+    createBaseVNode("div", _hoisted_3$5, [
       createVNode(_component_v_chart, {
         class: "TimesChart",
         option: $options.option,
@@ -78388,8 +78532,8 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_4$4)
   ], 64);
 }
-const TimesChart = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7]]);
-const _sfc_main$7 = {
+const TimesChart = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
+const _sfc_main$8 = {
   name: "MainStatChart",
   components: {
     VChart: S
@@ -78838,8 +78982,8 @@ const _sfc_main$7 = {
     }
   }
 };
-const _hoisted_1$7 = ["title", "href"];
-function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$8 = ["title", "href"];
+function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
     createVNode(_component_v_chart, {
@@ -78852,11 +78996,11 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("main.help.text"),
       href: _ctx.$t("main.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_1$7)
+    }, " ‽ ", 8, _hoisted_1$8)
   ], 64);
 }
-const MainStatChart = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6]]);
-const _sfc_main$6 = {
+const MainStatChart = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7]]);
+const _sfc_main$7 = {
   name: "StatByWIPChart",
   components: {
     VChart: S
@@ -79174,8 +79318,8 @@ const _sfc_main$6 = {
     }
   }
 };
-const _hoisted_1$6 = ["title", "href"];
-function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$7 = ["title", "href"];
+function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
     createVNode(_component_v_chart, {
@@ -79188,12 +79332,12 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("analyze-by-wip.help.text"),
       href: _ctx.$t("analyze-by-wip.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_1$6)
+    }, " ‽ ", 8, _hoisted_1$7)
   ], 64);
 }
-const StatByWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5]]);
+const StatByWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6]]);
 const ControlChart_vue_vue_type_style_index_0_scoped_434f96bc_lang = "";
-const _sfc_main$5 = {
+const _sfc_main$6 = {
   name: "ControlChart",
   components: {
     VChart: S
@@ -79501,14 +79645,14 @@ const _sfc_main$5 = {
     }
   }
 };
-const _hoisted_1$5 = { class: "control-chart-issues-config" };
-const _hoisted_2$4 = { class: "control-chart-issues-table" };
-const _hoisted_3$3 = { class: "control-chart-issues-table-head" };
+const _hoisted_1$6 = { class: "control-chart-issues-config" };
+const _hoisted_2$5 = { class: "control-chart-issues-table" };
+const _hoisted_3$4 = { class: "control-chart-issues-table-head" };
 const _hoisted_4$3 = ["innerHTML"];
 const _hoisted_5$2 = { class: "control-chart-issues-winners" };
 const _hoisted_6$1 = ["href"];
 const _hoisted_7$1 = ["title", "href"];
-function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   const _component_i18n_t = resolveComponent("i18n-t");
   return openBlock(), createElementBlock(Fragment, null, [
@@ -79517,7 +79661,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
       option: $options.option,
       autoresize: ""
     }, null, 8, ["option"]),
-    createBaseVNode("div", _hoisted_1$5, [
+    createBaseVNode("div", _hoisted_1$6, [
       createVNode(_component_i18n_t, { keypath: "control-chart.config.search" }, {
         default: withCtx(() => [
           withDirectives(createBaseVNode("input", {
@@ -79542,11 +79686,11 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
         _: 1
       })
     ]),
-    createBaseVNode("table", _hoisted_2$4, [
+    createBaseVNode("table", _hoisted_2$5, [
       createBaseVNode("thead", null, [
         createBaseVNode("tr", null, [
           (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.issuesView.dataColumns, (col) => {
-            return openBlock(), createElementBlock("th", _hoisted_3$3, toDisplayString$1(col), 1);
+            return openBlock(), createElementBlock("th", _hoisted_3$4, toDisplayString$1(col), 1);
           }), 256))
         ])
       ]),
@@ -79588,9 +79732,9 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_7$1)
   ], 64);
 }
-const ControlChart = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__scopeId", "data-v-434f96bc"]]);
+const ControlChart = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5], ["__scopeId", "data-v-434f96bc"]]);
 const LeadTimeDistributionChart_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$4 = {
+const _sfc_main$5 = {
   name: "LeadTimeDistributionChart",
   components: {
     VChart: S
@@ -79834,15 +79978,15 @@ const _sfc_main$4 = {
     }
   }
 };
-const _hoisted_1$4 = { class: "ltds-chart-selector" };
-const _hoisted_2$3 = { class: "ltds-chart-selector" };
-const _hoisted_3$2 = ["onClick"];
+const _hoisted_1$5 = { class: "ltds-chart-selector" };
+const _hoisted_2$4 = { class: "ltds-chart-selector" };
+const _hoisted_3$3 = ["onClick"];
 const _hoisted_4$2 = { style: { "height": "90%", "clear": "both" } };
 const _hoisted_5$1 = ["title", "href"];
-function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$4, [
+    createBaseVNode("div", _hoisted_1$5, [
       createBaseVNode("div", {
         class: normalizeClass(["ltds-chart-selector-item", { "ltds-chart-selector-item-selected": _ctx.leadCycleSelected === "lead" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.leadCycleSelected = "lead")
@@ -79852,12 +79996,12 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[1] || (_cache[1] = ($event) => _ctx.leadCycleSelected = "cycle")
       }, toDisplayString$1(_ctx.$t("lead-time-distributions.tab.cycle")), 3)
     ]),
-    createBaseVNode("div", _hoisted_2$3, [
+    createBaseVNode("div", _hoisted_2$4, [
       (openBlock(true), createElementBlock(Fragment, null, renderList($options.groups, (group) => {
         return openBlock(), createElementBlock("div", {
           class: normalizeClass(["ltds-chart-selector-item", { "ltds-chart-selector-item-selected": _ctx.selected === group }]),
           onClick: ($event) => _ctx.selected = group
-        }, toDisplayString$1(this.groupName(group)), 11, _hoisted_3$2);
+        }, toDisplayString$1(this.groupName(group)), 11, _hoisted_3$3);
       }), 256))
     ]),
     createBaseVNode("div", _hoisted_4$2, [
@@ -79875,7 +80019,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_5$1)
   ], 64);
 }
-const LeadTimeDistributionChart = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3]]);
+const LeadTimeDistributionChart = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4]]);
 class ExpiringStorage {
   get(key) {
     const cached = JSON.parse(
@@ -79898,7 +80042,7 @@ class ExpiringStorage {
   }
 }
 const expiringStorage = new ExpiringStorage();
-const _sfc_main$3 = {
+const _sfc_main$4 = {
   props: {
     cacheLifetime: {
       type: Number,
@@ -80032,9 +80176,9 @@ const _sfc_main$3 = {
     };
   }
 };
-const _hoisted_1$3 = ["onClick"];
-const _hoisted_2$2 = ["aria-controls", "aria-selected", "href", "onClick", "innerHTML"];
-function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$4 = ["onClick"];
+const _hoisted_2$3 = ["aria-controls", "aria-selected", "href", "onClick", "innerHTML"];
+function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", {
     class: normalizeClass($props.wrapperClass)
   }, [
@@ -80057,8 +80201,8 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
             href: tab.hash,
             onClick: ($event) => $setup.selectTab(tab.hash, $event),
             innerHTML: tab.header
-          }, null, 10, _hoisted_2$2)
-        ], 10, _hoisted_1$3);
+          }, null, 10, _hoisted_2$3)
+        ], 10, _hoisted_1$4);
       }), 128))
     ], 2),
     createBaseVNode("div", {
@@ -80068,8 +80212,8 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
     ], 2)
   ], 2);
 }
-const Tabs = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2]]);
-const _sfc_main$2 = {
+const Tabs = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3]]);
+const _sfc_main$3 = {
   name: "Tab",
   props: {
     panelClass: {
@@ -80147,8 +80291,8 @@ const _sfc_main$2 = {
     };
   }
 };
-const _hoisted_1$2 = ["id", "data-tab-id", "aria-hidden"];
-function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$3 = ["id", "data-tab-id", "aria-hidden"];
+function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
   return withDirectives((openBlock(), createElementBlock("section", {
     ref: "tab",
     id: $setup.paneId,
@@ -80158,13 +80302,13 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     role: "tabpanel"
   }, [
     renderSlot(_ctx.$slots, "default")
-  ], 10, _hoisted_1$2)), [
+  ], 10, _hoisted_1$3)), [
     [vShow, $setup.isActive]
   ]);
 }
-const Tab = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1]]);
+const Tab = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2]]);
 const SummaryPanel_vue_vue_type_style_index_0_scoped_0840b8e0_lang = "";
-const _sfc_main$1 = {
+const _sfc_main$2 = {
   name: "SummaryPanel",
   props: {
     title: String,
@@ -80357,9 +80501,9 @@ const _sfc_main$1 = {
   }
 };
 const _withScopeId = (n2) => (pushScopeId("data-v-0840b8e0"), n2 = n2(), popScopeId(), n2);
-const _hoisted_1$1 = { class: "summary-data-div" };
-const _hoisted_2$1 = { class: "summary-data-cell" };
-const _hoisted_3$1 = { class: "summary-data-cell-table" };
+const _hoisted_1$2 = { class: "summary-data-div" };
+const _hoisted_2$2 = { class: "summary-data-cell" };
+const _hoisted_3$2 = { class: "summary-data-cell-table" };
 const _hoisted_4$1 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("th", null, " ", -1));
 const _hoisted_5 = ["title"];
 const _hoisted_6 = ["title"];
@@ -80475,11 +80619,11 @@ const _hoisted_100 = { class: "align-right" };
 const _hoisted_101 = { class: "align-right" };
 const _hoisted_102 = { class: "align-right" };
 const _hoisted_103 = ["title"];
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$1, [
-    createBaseVNode("fieldset", _hoisted_2$1, [
+function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("div", _hoisted_1$2, [
+    createBaseVNode("fieldset", _hoisted_2$2, [
       createBaseVNode("legend", null, toDisplayString$1(_ctx.$t("summary-data.cell.wip.name")), 1),
-      createBaseVNode("table", _hoisted_3$1, [
+      createBaseVNode("table", _hoisted_3$2, [
         createBaseVNode("thead", null, [
           createBaseVNode("tr", null, [
             _hoisted_4$1,
@@ -80835,7 +80979,196 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-const SummaryPanel = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__scopeId", "data-v-0840b8e0"]]);
+const SummaryPanel = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__scopeId", "data-v-0840b8e0"]]);
+const TimesByColsChart_vue_vue_type_style_index_0_lang = "";
+const _sfc_main$1 = {
+  name: "TimesByColsChart",
+  components: {
+    VChart: S
+  },
+  props: {
+    title: String,
+    periodStat: Array,
+    columns: Array,
+    selectedColumns: Array
+  },
+  data: function() {
+    return {
+      selected: "max"
+    };
+  },
+  methods: {
+    aggrName: function() {
+      switch (this.selected) {
+        case "max":
+          return this.$t("times-by-columns.title.name.max");
+        case "avg":
+          return this.$t("times-by-columns.title.name.avg");
+        case "mod":
+          return this.$t("times-by-columns.title.name.mod");
+        case "med":
+          return this.$t("times-by-columns.title.name.med");
+        case this.$t("times-by-columns.title.name.min"):
+          return "Minimums";
+        default:
+          return "";
+      }
+    }
+  },
+  watch: {},
+  computed: {
+    option() {
+      return {
+        animation: true,
+        title: {
+          text: this.$t("times-by-columns.title.title", {
+            aggr: this.aggrName(),
+            title: this.title
+          }),
+          left: "center"
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true
+            }
+          }
+        },
+        tooltip: {
+          axisPointer: {
+            show: true
+          }
+        },
+        legend: {
+          top: "bottom"
+        },
+        xAxis: {
+          axisPointer: {
+            show: true,
+            snap: true,
+            label: {
+              formatter: function(value) {
+                if (value == null ? void 0 : value.value) {
+                  return new Date(value.value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+                } else {
+                  return "";
+                }
+              }
+            }
+          },
+          type: "time",
+          axisLabel: {
+            hideOverlap: true,
+            formatter: function(value) {
+              if (value) {
+                return new Date(value).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" });
+              } else {
+                return "";
+              }
+            }
+          },
+          min: "dataMin",
+          max: "dataMax"
+        },
+        yAxis: {
+          name: this.$t("times-by-columns.yAxis.name"),
+          nameLocation: "middle",
+          nameGap: "30",
+          minInterval: 1,
+          axisPointer: {
+            show: true,
+            triggerTooltip: false
+          },
+          axisLabel: {
+            hideOverlap: true,
+            formatter: function(value) {
+              return value ? value.toFixed(0) : "";
+            }
+          },
+          min: 0
+        },
+        series: this.series
+      };
+    },
+    series() {
+      let res = [];
+      for (let i = 0; i < this.columns.length; i++) {
+        const id = this.columns[i].id;
+        if (this.selectedColumns.includes(id)) {
+          let ser = {
+            name: this.columns[i].name,
+            type: "line",
+            stack: "times",
+            smooth: true,
+            smoothMonotone: "x",
+            areaStyle: {
+              origin: "auto"
+            },
+            data: []
+          };
+          for (let item of this.periodStat) {
+            switch (this.selected) {
+              case "mod":
+              case "avg":
+                ser.data.push([item.date, item.timeStats[id][this.selected].toFixed(1)]);
+                break;
+              default:
+                ser.data.push([item.date, item.timeStats[id][this.selected].toFixed(1)]);
+                break;
+            }
+          }
+          res.push(ser);
+        }
+      }
+      return res;
+    }
+  }
+};
+const _hoisted_1$1 = { class: "times-by-cols-chart-selector" };
+const _hoisted_2$1 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_3$1 = ["title", "href"];
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_v_chart = resolveComponent("v-chart");
+  return openBlock(), createElementBlock(Fragment, null, [
+    createBaseVNode("div", _hoisted_1$1, [
+      createBaseVNode("div", {
+        class: normalizeClass(["times-by-cols-chart-selector-item", { "times-by-cols-chart-selector-item-selected": _ctx.selected === "max" }]),
+        onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "max")
+      }, toDisplayString$1(_ctx.$t("times-by-columns.tab.max")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["times-by-cols-chart-selector-item", { "times-by-cols-chart-selector-item-selected": _ctx.selected === "avg" }]),
+        onClick: _cache[1] || (_cache[1] = ($event) => _ctx.selected = "avg")
+      }, toDisplayString$1(_ctx.$t("times-by-columns.tab.avg")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["times-by-cols-chart-selector-item", { "times-by-cols-chart-selector-item-selected": _ctx.selected === "med" }]),
+        onClick: _cache[2] || (_cache[2] = ($event) => _ctx.selected = "med")
+      }, toDisplayString$1(_ctx.$t("times-by-columns.tab.med")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["times-by-cols-chart-selector-item", { "times-by-cols-chart-selector-item-selected": _ctx.selected === "mod" }]),
+        onClick: _cache[3] || (_cache[3] = ($event) => _ctx.selected = "mod")
+      }, toDisplayString$1(_ctx.$t("times-by-columns.tab.mod")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["times-by-cols-chart-selector-item", { "times-by-cols-chart-selector-item-selected": _ctx.selected === "min" }]),
+        onClick: _cache[4] || (_cache[4] = ($event) => _ctx.selected = "min")
+      }, toDisplayString$1(_ctx.$t("times-by-columns.tab.min")), 3)
+    ]),
+    createBaseVNode("div", _hoisted_2$1, [
+      createVNode(_component_v_chart, {
+        class: "TimesByColsChart",
+        option: $options.option,
+        autoresize: ""
+      }, null, 8, ["option"])
+    ]),
+    createBaseVNode("a", {
+      class: "icon-info-down",
+      title: _ctx.$t("times-by-columns.help.text"),
+      href: _ctx.$t("times-by-columns.help.link"),
+      target: "_blank"
+    }, " ‽ ", 8, _hoisted_3$1)
+  ], 64);
+}
+const TimesByColsChart = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render]]);
 const _hoisted_1 = { style: { "clear": "left" } };
 const _hoisted_2 = { key: 0 };
 const _hoisted_3 = ["title", "href"];
@@ -80852,6 +81185,7 @@ const __default__ = {
     StatByWIPChart,
     ModalsContainer: No,
     TotalWIPChart,
+    TimesByColsChart,
     AccumulatedWIPChart,
     SummaryPanel,
     AppConfig,
@@ -81458,6 +81792,20 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
               }, {
                 default: withCtx(() => [
                   createVNode(WIPsChart, {
+                    title: _ctx.kanbanBoardConfig.name,
+                    "period-stat": _ctx.periodStat,
+                    columns: _ctx.columns,
+                    "selected-columns": _ctx.selectedColumns
+                  }, null, 8, ["title", "period-stat", "columns", "selected-columns"])
+                ]),
+                _: 1
+              }, 8, ["name"]),
+              createVNode(Tab, {
+                id: "tabs-times",
+                name: _ctx.$t("app.tabs.times-by-columns")
+              }, {
+                default: withCtx(() => [
+                  createVNode(TimesByColsChart, {
                     title: _ctx.kanbanBoardConfig.name,
                     "period-stat": _ctx.periodStat,
                     columns: _ctx.columns,

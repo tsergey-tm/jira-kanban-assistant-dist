@@ -108,6 +108,13 @@ the WIP limits too much:
 if the minimum before the bottleneck is zero, then most likely your bottleneck was 
 idle due to lack of work.
 
+### Time by columns
+
+Here you can estimate how much time spent completed in each column aggregated.
+
+The aggregated values of the times in the waiting columns will allow 
+you to make decisions on changing processes in the direction of reducing idle tasks.
+
 ### Lead & cycle times
 
 Here you can evaluate the trends and range of lead and cycle times.
