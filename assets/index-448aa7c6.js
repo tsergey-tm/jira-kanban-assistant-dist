@@ -77929,8 +77929,8 @@ const _sfc_main$9 = {
           return this.$t("wip-by-columns.title.name.mod");
         case "med":
           return this.$t("wip-by-columns.title.name.med");
-        case this.$t("wip-by-columns.title.name.min"):
-          return "Minimums";
+        case "min":
+          return this.$t("wip-by-columns.title.name.min");
         default:
           return "";
       }
@@ -80421,8 +80421,8 @@ const _sfc_main$1 = {
           return this.$t("times-by-columns.title.name.mod");
         case "med":
           return this.$t("times-by-columns.title.name.med");
-        case this.$t("times-by-columns.title.name.min"):
-          return "Minimums";
+        case "min":
+          return this.$t("times-by-columns.title.name.min");
         default:
           return "";
       }
