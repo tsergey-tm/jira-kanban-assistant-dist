@@ -323,6 +323,30 @@
   padding: 0.2rem 0;
 }
 
+.wia-chart-selector {
+  margin: 0.1rem 0.2rem;
+  float: left;
+  clear: both;
+}
+.wia-chart-selector-space {
+  float: left;
+  margin: 0.1rem 0.2rem;
+  padding: 0.2rem 0.4rem;
+}
+.wia-chart-selector-item {
+  float: left;
+  margin: 0.1rem 0.2rem;
+  padding: 0.2rem 0.4rem;
+  background-color: var(--color-tabs-bg);
+  color: var(--color-tabs-text);
+  cursor: pointer;
+  border-radius: 5px;
+}
+.wia-chart-selector-item.wia-chart-selector-item-selected {
+  background-color: var(--color-tabs-bg-sel);
+  color: var(--color-tabs-text-sel);
+}
+
 .ControlChart[data-v-434f96bc] {
   height: 50%;
 }

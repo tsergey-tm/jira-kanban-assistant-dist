@@ -59163,7 +59163,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const _sfc_main$i = {
+const _sfc_main$j = {
   name: "NameProgressBar",
   components: {
     VChart: S
@@ -59190,16 +59190,16 @@ const _sfc_main$i = {
     }
   }
 };
-const _hoisted_1$i = { class: "name-progressbar-name" };
-function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$j = { class: "name-progressbar-name" };
+function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", {
     class: "name-progressbar-box",
     style: normalizeStyle$1($options.progressLoadingStyle)
   }, [
-    createBaseVNode("span", _hoisted_1$i, toDisplayString$1($props.title), 1)
+    createBaseVNode("span", _hoisted_1$j, toDisplayString$1($props.title), 1)
   ], 4);
 }
-const NameProgressBar = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h], ["__scopeId", "data-v-adea8f9f"]]);
+const NameProgressBar = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__scopeId", "data-v-adea8f9f"]]);
 class LuxonError extends Error {
 }
 class InvalidDateTimeError extends LuxonError {
@@ -68627,6 +68627,10 @@ const messages = {
         "times-by-columns": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Time by columns"]);
+        },
+        "wia": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Work item age"]);
         }
       },
       "config-info": {
@@ -70051,6 +70055,38 @@ const messages = {
         const { normalize: _normalize } = ctx;
         return _normalize(["Minimum"]);
       }
+    },
+    "wia": {
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["The amount of time that has passed since the start of work on the elements until the current moment\nA leading indicator that applies to active pending items.\nIt shows which ones are progressing well and which ones are not."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#work-item-age"]);
+        }
+      },
+      "tab": {
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Over lead time"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Over cycle time"]);
+        }
+      },
+      "title": {
+        "lead": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Work item age over lead time : ", _interpolate(_named("title"))]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Work item age over cycle time : ", _interpolate(_named("title"))]);
+        }
+      }
     }
   },
   "ru": {
@@ -70123,6 +70159,10 @@ const messages = {
         "times-by-columns": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Время по колонкам"]);
+        },
+        "wia": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Возраст рабочего элемента"]);
         }
       },
       "config-info": {
@@ -71547,6 +71587,38 @@ const messages = {
         const { normalize: _normalize } = ctx;
         return _normalize(["Минимум"]);
       }
+    },
+    "wia": {
+      "help": {
+        "text": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Количество времени, которое прошло с момента начала работы над элементов до текущего момента\nОпережающий индикатор, который применяется к активным незавершенным элементам.\nОн показывает какие из них продвигаются хорошо, а какие - нет."]);
+        },
+        "link": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%92%D1%80%D0%B5%D0%BC%D1%8F-%D0%B6%D0%B8%D0%B7%D0%BD%D0%B8-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0"]);
+        }
+      },
+      "tab": {
+        "lead": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["По времени поставки"]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["По времени цикла"]);
+        }
+      },
+      "title": {
+        "lead": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Возраст рабочего элемента по времени поставки : ", _interpolate(_named("title"))]);
+        },
+        "cycle": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Возраст рабочего элемента по времени цикла : ", _interpolate(_named("title"))]);
+        }
+      }
     }
   }
 };
@@ -71583,7 +71655,7 @@ function getDefaultLocale() {
   return l2;
 }
 const TriageTable_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$h = {
+const _sfc_main$i = {
   name: "TriageTable",
   props: {
     title: String,
@@ -72587,9 +72659,9 @@ const _sfc_main$h = {
     }
   }
 };
-const _hoisted_1$h = { class: "triage-selector" };
-const _hoisted_2$b = { style: { "clear": "both" } };
-const _hoisted_3$a = { key: 0 };
+const _hoisted_1$i = { class: "triage-selector" };
+const _hoisted_2$c = { style: { "clear": "both" } };
+const _hoisted_3$b = { key: 0 };
 const _hoisted_4$7 = {
   key: 1,
   class: "triage-table"
@@ -72618,10 +72690,10 @@ const _hoisted_25 = ["innerHTML"];
 const _hoisted_26 = ["innerHTML"];
 const _hoisted_27 = ["innerHTML"];
 const _hoisted_28 = ["title", "href"];
-function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$h, [
+    createBaseVNode("div", _hoisted_1$i, [
       createBaseVNode("div", {
         class: normalizeClass(["triage-selector-item", { "triage-selector-item-selected": _ctx.selected === "lead" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "lead")
@@ -72631,8 +72703,8 @@ function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[1] || (_cache[1] = ($event) => _ctx.selected = "cycle")
       }, toDisplayString$1(_ctx.$t("triage.tab.name", { col: $options.cycleTriageColName })), 3)
     ]),
-    createBaseVNode("div", _hoisted_2$b, [
-      !Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("div", _hoisted_3$a, toDisplayString$1($options.triageTable), 1)) : createCommentVNode("", true),
+    createBaseVNode("div", _hoisted_2$c, [
+      !Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("div", _hoisted_3$b, toDisplayString$1($options.triageTable), 1)) : createCommentVNode("", true),
       Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$7, [
         createBaseVNode("thead", null, [
           createBaseVNode("tr", null, [
@@ -72751,7 +72823,7 @@ function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_28)
   ], 64);
 }
-const TriageTable = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g]]);
+const TriageTable = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h]]);
 function sum$1(x2) {
   if (x2.length === 0) {
     return 0;
@@ -73042,7 +73114,7 @@ function quantile(x2, p2) {
   }
 }
 const LeadCycleTimeChart_vue_vue_type_style_index_0_scoped_d27db0c2_lang = "";
-const _sfc_main$g = {
+const _sfc_main$h = {
   name: "LeadCycleTimeChart",
   components: {
     VChart: S
@@ -73459,14 +73531,14 @@ const _sfc_main$g = {
   }
 };
 const _withScopeId$1 = (n2) => (pushScopeId("data-v-d27db0c2"), n2 = n2(), popScopeId(), n2);
-const _hoisted_1$g = { class: "lead-cycle-times-chart-selector" };
-const _hoisted_2$a = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "lead-cycle-times-chart-selector-space" }, "   ", -1));
-const _hoisted_3$9 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_1$h = { class: "lead-cycle-times-chart-selector" };
+const _hoisted_2$b = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "lead-cycle-times-chart-selector-space" }, "   ", -1));
+const _hoisted_3$a = { style: { "height": "100%", "clear": "both" } };
 const _hoisted_4$6 = ["title", "href"];
-function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$g, [
+    createBaseVNode("div", _hoisted_1$h, [
       createBaseVNode("div", {
         class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.typeSelected === "lead" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.typeSelected = "lead")
@@ -73475,7 +73547,7 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
         class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.typeSelected === "cycle" }]),
         onClick: _cache[1] || (_cache[1] = ($event) => _ctx.typeSelected = "cycle")
       }, toDisplayString$1(_ctx.$t("lead-cycle-times-chart.tab.cycle")), 3),
-      _hoisted_2$a,
+      _hoisted_2$b,
       createBaseVNode("div", {
         class: normalizeClass(["lead-cycle-times-chart-selector-item", { "lead-cycle-times-chart-selector-item-selected": _ctx.aggrSelected === "perc" }]),
         onClick: _cache[2] || (_cache[2] = ($event) => _ctx.aggrSelected = "perc")
@@ -73485,7 +73557,7 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[3] || (_cache[3] = ($event) => _ctx.aggrSelected = "avg")
       }, toDisplayString$1(_ctx.$t("lead-cycle-times-chart.tab.averages")), 3)
     ]),
-    createBaseVNode("div", _hoisted_3$9, [
+    createBaseVNode("div", _hoisted_3$a, [
       createVNode(_component_v_chart, {
         class: "LeadCycleTimeChart",
         option: $options.option,
@@ -73500,9 +73572,9 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_4$6)
   ], 64);
 }
-const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-d27db0c2"]]);
+const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-d27db0c2"]]);
 const JiraFilters_vue_vue_type_style_index_0_scoped_dc5a911c_lang = "";
-const _sfc_main$f = {
+const _sfc_main$g = {
   name: "JiraFilters",
   props: {
     title: String,
@@ -73520,24 +73592,24 @@ const _sfc_main$f = {
     }
   }
 };
-const _hoisted_1$f = { class: "jira-filters-box" };
-const _hoisted_2$9 = { class: "jira-filter-box-title" };
-const _hoisted_3$8 = ["onClick"];
-function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$f, [
-    createBaseVNode("div", _hoisted_2$9, toDisplayString$1($props.title) + ":", 1),
+const _hoisted_1$g = { class: "jira-filters-box" };
+const _hoisted_2$a = { class: "jira-filter-box-title" };
+const _hoisted_3$9 = ["onClick"];
+function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("div", _hoisted_1$g, [
+    createBaseVNode("div", _hoisted_2$a, toDisplayString$1($props.title) + ":", 1),
     (openBlock(true), createElementBlock(Fragment, null, renderList($props.filters, (filter2) => {
       return openBlock(), createElementBlock("div", {
         class: normalizeClass(["jira-filter-box-item", { "jira-filter-box-item-selected": $props.selectedFilters.includes(filter2.id) }]),
         key: filter2.id,
         onClick: ($event) => $options.onClick(filter2.id)
-      }, toDisplayString$1(filter2.name), 11, _hoisted_3$8);
+      }, toDisplayString$1(filter2.name), 11, _hoisted_3$9);
     }), 128))
   ]);
 }
-const JiraFilters = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-dc5a911c"]]);
+const JiraFilters = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-dc5a911c"]]);
 const JiraColumnStatus_vue_vue_type_style_index_0_scoped_7d723413_lang = "";
-const _sfc_main$e = {
+const _sfc_main$f = {
   name: "JiraColumnStatus",
   props: {
     title: String,
@@ -73643,9 +73715,9 @@ const _sfc_main$e = {
   }
 };
 const _withScopeId = (n2) => (pushScopeId("data-v-7d723413"), n2 = n2(), popScopeId(), n2);
-const _hoisted_1$e = { class: "jira-columns-box" };
-const _hoisted_2$8 = { class: "jira-columns-box-title" };
-const _hoisted_3$7 = { class: "jira-columns-box-table" };
+const _hoisted_1$f = { class: "jira-columns-box" };
+const _hoisted_2$9 = { class: "jira-columns-box-title" };
+const _hoisted_3$8 = { class: "jira-columns-box-table" };
 const _hoisted_4$5 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
 const _hoisted_5$3 = { class: "jira-columns-box-table-header" };
 const _hoisted_6$2 = { class: "jira-columns-box-table-header" };
@@ -73659,10 +73731,10 @@ const _hoisted_13$1 = ["onClick"];
 const _hoisted_14$1 = { class: "jira-columns-box-table-header" };
 const _hoisted_15$1 = { class: "jira-columns-box-table-header" };
 const _hoisted_16$1 = ["onClick"];
-function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$e, [
-    createBaseVNode("div", _hoisted_2$8, toDisplayString$1($props.title) + ":", 1),
-    createBaseVNode("table", _hoisted_3$7, [
+function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("div", _hoisted_1$f, [
+    createBaseVNode("div", _hoisted_2$9, toDisplayString$1($props.title) + ":", 1),
+    createBaseVNode("table", _hoisted_3$8, [
       createBaseVNode("thead", null, [
         createBaseVNode("tr", null, [
           _hoisted_4$5,
@@ -73747,7 +73819,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-const JiraColumnStatus = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-7d723413"]]);
+const JiraColumnStatus = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-7d723413"]]);
 var _a;
 const isClient = typeof window !== "undefined";
 const isString = (val) => typeof val === "string";
@@ -76058,7 +76130,7 @@ function F(e2, t, n2, d, r, s2) {
 }
 const y = /* @__PURE__ */ w(E, [["render", F]]);
 const VueSearchSelect = "";
-const _sfc_main$d = {
+const _sfc_main$e = {
   name: "LanguageSwitcher",
   data() {
     return {};
@@ -76069,8 +76141,8 @@ const _sfc_main$d = {
     }
   }
 };
-const _hoisted_1$d = ["value"];
-function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$e = ["value"];
+function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
   return withDirectives((openBlock(), createElementBlock("select", {
     onChange: _cache[0] || (_cache[0] = ($event) => $options.switchLanguage($event)),
     "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => _ctx.$i18n.locale = $event)
@@ -76079,15 +76151,15 @@ function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
       return openBlock(), createElementBlock("option", {
         key: `${locale}`,
         value: locale
-      }, toDisplayString$1(_ctx.$t(`locale.${locale}`)), 9, _hoisted_1$d);
+      }, toDisplayString$1(_ctx.$t(`locale.${locale}`)), 9, _hoisted_1$e);
     }), 128))
   ], 544)), [
     [vModelSelect, _ctx.$i18n.locale]
   ]);
 }
-const LanguageSwitcher = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c]]);
+const LanguageSwitcher = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d]]);
 const AppConfig_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$c = {
+const _sfc_main$d = {
   name: "AppConfig",
   props: {
     showConfigPanel: Object,
@@ -76304,9 +76376,9 @@ const _sfc_main$c = {
     }
   }
 };
-const _hoisted_1$c = { class: "app-config-option-dialog" };
-const _hoisted_2$7 = { class: "app-config-option-header" };
-const _hoisted_3$6 = { class: "app-config-locale" };
+const _hoisted_1$d = { class: "app-config-option-dialog" };
+const _hoisted_2$8 = { class: "app-config-option-header" };
+const _hoisted_3$7 = { class: "app-config-locale" };
 const _hoisted_4$4 = { class: "app-config-buttons" };
 const _hoisted_5$2 = ["value"];
 const _hoisted_6$1 = ["value"];
@@ -76323,7 +76395,7 @@ const _hoisted_16 = { class: "app-config-buttons" };
 const _hoisted_17 = ["value"];
 const _hoisted_18 = ["value"];
 const _hoisted_19 = ["value"];
-function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_language_switcher = resolveComponent("language-switcher");
   const _component_i18n_t = resolveComponent("i18n-t");
   const _component_model_select = resolveComponent("model-select");
@@ -76345,9 +76417,9 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     "swipe-to-close": "none"
   }, {
     default: withCtx(() => [
-      createBaseVNode("div", _hoisted_1$c, [
-        createBaseVNode("div", _hoisted_2$7, toDisplayString$1(_ctx.$t("app-config.title")), 1),
-        createBaseVNode("div", _hoisted_3$6, [
+      createBaseVNode("div", _hoisted_1$d, [
+        createBaseVNode("div", _hoisted_2$8, toDisplayString$1(_ctx.$t("app-config.title")), 1),
+        createBaseVNode("div", _hoisted_3$7, [
           createVNode(_component_i18n_t, { keypath: "app-config.locale" }, {
             default: withCtx(() => [
               createVNode(_component_language_switcher)
@@ -76515,7 +76587,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
   }, 8, ["modelValue"]);
 }
-const AppConfig = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b]]);
+const AppConfig = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c]]);
 const dayShift = 24 * 60 * 60 * 1e3;
 function nanStat() {
   return {
@@ -76585,6 +76657,19 @@ const KanbanStat = {
   // lastCol - index of last column,
   // periodChecked - issue was reach a ready columns
   issues: {},
+  // WIA by columns
+  // key - column id
+  // key - finished issue key
+  // value - wia
+  wiaLeadByColumns: {},
+  wiaCycleByColumns: {},
+  // Unfinished Issues:
+  // key - issue key
+  // cols - times in column,
+  // lastTrans - time of last transition,
+  // lastCol - index of last column,
+  // periodChecked - issue was reach a ready columns
+  unfinishedIssues: {},
   kanbanStat: function(columns, kanbanCFD, periodSize, periodType, periodsInStat, workColumns, waitColumns, readyColumns, leadColumns, cycleColumns) {
     let tmp = {
       columns: this.makeColumnsMap(columns),
@@ -76601,6 +76686,7 @@ const KanbanStat = {
       // lastCol - index of last column,
       // periodChecked - issue was reach a ready columns
       issues: {},
+      fullIssues: {},
       // WIP stats arrays by columns by days
       periodDayWIP: null,
       // Accumulated WIP stats arrays by days (work, waste)
@@ -76621,17 +76707,25 @@ const KanbanStat = {
       periodSize,
       periodType,
       periodsInStat,
-      today: null
+      today: null,
+      now: null,
+      // Work item age calculation by columns
+      wiaCycleColumns: {},
+      wiaLeadColumns: {}
     };
     tmp.columnsIndexToId = this.makeColumnsIndexToId(tmp.columns, kanbanCFD.columns);
     for (const id in tmp.columns) {
       tmp.board[id] = 0;
+      tmp.wiaCycleColumns[id] = {};
+      tmp.wiaLeadColumns[id] = {};
     }
     this.periodStat = [];
     this.issuesStat = {};
     tmp.today = DateTime.now().startOf("day").toMillis();
+    tmp.now = DateTime.now().toMillis();
     tmp.currentDayBoardTime = null;
     this.calcFirstLastBoardDay(tmp);
+    tmp.firstTime = tmp.nextDayBoardTime;
     for (const [time, transitions] of Object.entries(kanbanCFD.columnChanges)) {
       while (time >= tmp.nextDayBoardTime) {
         this.tickEventDay(tmp);
@@ -76649,6 +76743,10 @@ const KanbanStat = {
     }
     this.tickEventDay(tmp);
     this.tickPeriod(tmp);
+    this.calcByCurrentTimeStat(tmp, kanbanCFD);
+    this.unfinishedIssues = this.findUnfinishedIssues(tmp);
+    this.wiaLeadByColumns = this.calcWIA(tmp.wiaLeadColumns);
+    this.wiaCycleByColumns = this.calcWIA(tmp.wiaCycleColumns);
     return this;
   },
   tickEventDay: function(tmp) {
@@ -77060,9 +77158,89 @@ const KanbanStat = {
       }
     }
     return res;
+  },
+  calcWIA(wbc) {
+    let res = wbc;
+    for (let id of Object.keys(res)) {
+      let keys2 = Object.keys(res[id]);
+      for (const key of keys2) {
+        if (key in this.unfinishedIssues) {
+          delete res[id][key];
+        } else {
+          res[id][key] /= dayShift;
+        }
+      }
+    }
+    return res;
+  },
+  findUnfinishedIssues(tmp) {
+    let res = {};
+    for (const [key, issueStat] of Object.entries(tmp.fullIssues)) {
+      if (!tmp.readyColumns.includes(issueStat.lastCol)) {
+        res[key] = issueStat;
+        let wia = (tmp.now - res[key].lastTrans) / dayShift;
+        for (let id of tmp.cycleColumns) {
+          wia = sum(wia, issueStat.times[id] / dayShift);
+        }
+        res[key].wiaCycle = wia;
+        wia = (tmp.now - res[key].lastTrans) / dayShift;
+        for (let id of tmp.leadColumns) {
+          wia = sum(wia, issueStat.times[id] / dayShift);
+        }
+        res[key].wiaLead = wia;
+      }
+    }
+    return res;
+  },
+  calcByCurrentTimeStat(tmp, kanbanCFD) {
+    for (const [time, transitions] of Object.entries(kanbanCFD.columnChanges)) {
+      if (time >= tmp.firstTime) {
+        for (const transition of transitions) {
+          if (transition.hasOwnProperty("columnFrom") && transition.key in tmp.fullIssues) {
+            const columnFrom = tmp.columnsIndexToId[transition.columnFrom];
+            let timeDelta = time - tmp.fullIssues[transition.key].lastAct;
+            if (tmp.fullIssues[transition.key].times[columnFrom]) {
+              tmp.fullIssues[transition.key].times[columnFrom] += timeDelta;
+            } else {
+              tmp.fullIssues[transition.key].times[columnFrom] = timeDelta;
+            }
+            tmp.fullIssues[transition.key].lastAct = time;
+            tmp.fullIssues[transition.key].lastCol = null;
+            if (tmp.cycleColumns.includes(columnFrom)) {
+              let wia = 0;
+              for (let id of tmp.cycleColumns) {
+                wia = sum(wia, tmp.fullIssues[transition.key].times[id]);
+              }
+              tmp.wiaCycleColumns[columnFrom][transition.key] = wia;
+            }
+            if (tmp.leadColumns.includes(columnFrom)) {
+              let wia = 0;
+              for (let id of tmp.leadColumns) {
+                wia = sum(wia, tmp.fullIssues[transition.key].times[id]);
+              }
+              tmp.wiaLeadColumns[columnFrom][transition.key] = wia;
+            }
+          }
+          if (transition.hasOwnProperty("columnTo")) {
+            const columnTo = tmp.columnsIndexToId[transition.columnTo];
+            if (transition.key in tmp.fullIssues) {
+              tmp.fullIssues[transition.key].lastAct = time;
+              tmp.fullIssues[transition.key].lastCol = columnTo;
+            } else {
+              tmp.fullIssues[transition.key] = {
+                key: transition.key,
+                times: Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN])),
+                lastAct: time,
+                lastCol: columnTo
+              };
+            }
+          }
+        }
+      }
+    }
   }
 };
-const _sfc_main$b = {
+const _sfc_main$c = {
   name: "TotalWIPChart",
   components: {
     VChart: S
@@ -77540,8 +77718,8 @@ const _sfc_main$b = {
     }
   }
 };
-const _hoisted_1$b = ["title", "href"];
-function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$c = ["title", "href"];
+function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
     createVNode(_component_v_chart, {
@@ -77554,11 +77732,11 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("total-wip.help.text"),
       href: _ctx.$t("total-wip.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_1$b)
+    }, " ‽ ", 8, _hoisted_1$c)
   ], 64);
 }
-const TotalWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a]]);
-const _sfc_main$a = {
+const TotalWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b]]);
+const _sfc_main$b = {
   name: "AccumulatedWIPChart",
   components: {
     VChart: S
@@ -77883,8 +78061,8 @@ const _sfc_main$a = {
     }
   }
 };
-const _hoisted_1$a = ["title", "href"];
-function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$b = ["title", "href"];
+function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
     createVNode(_component_v_chart, {
@@ -77897,12 +78075,12 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("accumulated-wip.help.text"),
       href: _ctx.$t("accumulated-wip.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_1$a)
+    }, " ‽ ", 8, _hoisted_1$b)
   ], 64);
 }
-const AccumulatedWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9]]);
+const AccumulatedWIPChart = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a]]);
 const WIPsChart_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$9 = {
+const _sfc_main$a = {
   name: "WIPsChart",
   components: {
     VChart: S
@@ -78046,13 +78224,13 @@ const _sfc_main$9 = {
     }
   }
 };
-const _hoisted_1$9 = { class: "wips-chart-selector" };
-const _hoisted_2$6 = { style: { "height": "100%", "clear": "both" } };
-const _hoisted_3$5 = ["title", "href"];
-function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$a = { class: "wips-chart-selector" };
+const _hoisted_2$7 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_3$6 = ["title", "href"];
+function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$9, [
+    createBaseVNode("div", _hoisted_1$a, [
       createBaseVNode("div", {
         class: normalizeClass(["wips-chart-selector-item", { "wips-chart-selector-item-selected": _ctx.selected === "max" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selected = "max")
@@ -78074,7 +78252,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[4] || (_cache[4] = ($event) => _ctx.selected = "min")
       }, toDisplayString$1(_ctx.$t("wip-by-columns.tab.min")), 3)
     ]),
-    createBaseVNode("div", _hoisted_2$6, [
+    createBaseVNode("div", _hoisted_2$7, [
       createVNode(_component_v_chart, {
         class: "WIPsChart",
         option: $options.option,
@@ -78086,12 +78264,12 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("wip-by-columns.help.text"),
       href: _ctx.$t("wip-by-columns.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_3$5)
+    }, " ‽ ", 8, _hoisted_3$6)
   ], 64);
 }
-const WIPsChart = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
+const WIPsChart = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9]]);
 const TimesChart_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$8 = {
+const _sfc_main$9 = {
   name: "TimesChart",
   components: {
     VChart: S
@@ -78561,14 +78739,14 @@ const _sfc_main$8 = {
     }
   }
 };
-const _hoisted_1$8 = { class: "times-chart-selector" };
-const _hoisted_2$5 = /* @__PURE__ */ createBaseVNode("div", { class: "times-chart-selector-space" }, "   ", -1);
-const _hoisted_3$4 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_1$9 = { class: "times-chart-selector" };
+const _hoisted_2$6 = /* @__PURE__ */ createBaseVNode("div", { class: "times-chart-selector-space" }, "   ", -1);
+const _hoisted_3$5 = { style: { "height": "100%", "clear": "both" } };
 const _hoisted_4$3 = ["title", "href"];
-function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("div", _hoisted_1$8, [
+    createBaseVNode("div", _hoisted_1$9, [
       createBaseVNode("div", {
         class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.typeSelected === "lead" }]),
         onClick: _cache[0] || (_cache[0] = ($event) => _ctx.typeSelected = "lead")
@@ -78581,7 +78759,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
         class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.typeSelected === "total" }]),
         onClick: _cache[2] || (_cache[2] = ($event) => _ctx.typeSelected = "total")
       }, toDisplayString$1(_ctx.$t("time-by-columns.tab.total")), 3),
-      _hoisted_2$5,
+      _hoisted_2$6,
       createBaseVNode("div", {
         class: normalizeClass(["times-chart-selector-item", { "times-chart-selector-item-selected": _ctx.selected === "q0" }]),
         onClick: _cache[3] || (_cache[3] = ($event) => _ctx.selected = "q0")
@@ -78603,7 +78781,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[7] || (_cache[7] = ($event) => _ctx.selected = "avg")
       }, toDisplayString$1(_ctx.$t("time-by-columns.tab.avg")), 3)
     ]),
-    createBaseVNode("div", _hoisted_3$4, [
+    createBaseVNode("div", _hoisted_3$5, [
       createVNode(_component_v_chart, {
         class: "TimesChart",
         option: $options.option,
@@ -78618,7 +78796,237 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
     }, " ‽ ", 8, _hoisted_4$3)
   ], 64);
 }
-const TimesChart = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7]]);
+const TimesChart = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
+const WIAChart_vue_vue_type_style_index_0_lang = "";
+const _sfc_main$8 = {
+  name: "WIAChart",
+  components: {
+    VChart: S
+  },
+  props: {
+    title: String,
+    wiaLeadByColumns: Array,
+    wiaCycleByColumns: Array,
+    unfinishedIssues: Object,
+    columns: Array,
+    issuesMap: Object,
+    cycleColumns: Array,
+    leadColumns: Array,
+    conf: Object
+  },
+  data: function() {
+    return {
+      selected: "total",
+      typeSelected: "cycle"
+    };
+  },
+  methods: {},
+  watch: {},
+  computed: {
+    option() {
+      return {
+        animation: true,
+        title: {
+          text: this.$t("wia.title." + this.typeSelected, { title: this.title }),
+          left: "center"
+        },
+        yAxis: [
+          {
+            type: "value",
+            axisLabel: {
+              show: true
+            },
+            axisLine: {
+              show: true
+            },
+            min: 0,
+            max: this.maxY
+          }
+        ],
+        xAxis: [
+          {
+            nameGap: "10",
+            type: "category",
+            axisLabel: {
+              hideOverlap: false,
+              rotate: 30
+            },
+            data: this.columnsData
+          }
+        ],
+        series: this.series
+      };
+    },
+    categories() {
+      let vals = this.periodStat.map((item) => new Date(item.date).toLocaleDateString(i18n.global.locale.value, { dateStyle: "short" }));
+      vals.reverse();
+      return vals;
+    },
+    columnsData() {
+      const cols = this.typeSelected === "cycle" ? this.cycleColumns : this.leadColumns;
+      return this.columns.filter((value) => cols.includes(value.id)).map((item) => item.name);
+    },
+    filteredIssues() {
+      let filteredIssues = [];
+      const cols = this.typeSelected === "cycle" ? this.cycleColumns : this.leadColumns;
+      for (const [key, issue] of Object.entries(this.unfinishedIssues)) {
+        if (cols.includes(issue.lastCol)) {
+          filteredIssues.push(issue);
+        }
+      }
+      return filteredIssues;
+    },
+    maxY() {
+      const issues = this.filteredIssues;
+      let res = 0;
+      for (const issue of issues) {
+        res = max(res, this.typeSelected === "cycle" ? issue.wiaCycle : issue.wiaLead);
+      }
+      res += 1;
+      return Math.ceil(res);
+    },
+    series() {
+      var _a2, _b2;
+      let dataQ0 = [];
+      let dataQ1 = [];
+      let dataQ2 = [];
+      let dataQ3 = [];
+      let dataQ4 = [];
+      const src = this.typeSelected === "cycle" ? this.wiaCycleByColumns : this.wiaLeadByColumns;
+      const cols = this.typeSelected === "cycle" ? this.cycleColumns : this.leadColumns;
+      for (const colId of cols) {
+        const colName = (_a2 = this.columns.find((value) => value.id === colId)) == null ? void 0 : _a2.name;
+        let da = [];
+        for (let [key, wia] of Object.entries(src[colId])) {
+          da.push(wia);
+        }
+        let dq = quantile(da, [0, 0.25, 0.5, 0.75, 1]);
+        dataQ0.push([colName, dq[0]]);
+        dataQ1.push([colName, dq[1] - dq[0]]);
+        dataQ2.push([colName, dq[2] - dq[1]]);
+        dataQ3.push([colName, dq[3] - dq[2]]);
+        dataQ4.push([colName, dq[4] - dq[3]]);
+      }
+      const issues = this.filteredIssues;
+      let dataIssues = [];
+      for (const issue of issues) {
+        const colName = (_b2 = this.columns.find((value) => value.id === issue.lastCol)) == null ? void 0 : _b2.name;
+        dataIssues.push({
+          value: [colName, this.typeSelected === "cycle" ? issue.wiaCycle : issue.wiaLead],
+          name: issue.key
+        });
+      }
+      let serQ0 = {
+        name: "wia.series.q0",
+        type: "bar",
+        stack: "q",
+        showBackground: true,
+        backgroundStyle: {
+          color: "rgba(191,0,0,0.75)"
+        },
+        itemStyle: {
+          color: "rgba(0,255,0,0.75)"
+        },
+        data: dataQ0
+      };
+      let serQ1 = {
+        name: "wia.series.q1",
+        type: "bar",
+        stack: "q",
+        showBackground: true,
+        backgroundStyle: {
+          color: "rgba(191,0,0,0.75)"
+        },
+        itemStyle: {
+          color: "rgba(102,255,0,0.75)"
+        },
+        data: dataQ1
+      };
+      let serQ2 = {
+        name: "wia.series.q2",
+        type: "bar",
+        stack: "q",
+        showBackground: true,
+        backgroundStyle: {
+          color: "rgba(191,0,0,0.75)"
+        },
+        itemStyle: {
+          color: "rgba(204,255,0,0.75)"
+        },
+        data: dataQ2
+      };
+      let serQ3 = {
+        name: "wia.series.q3",
+        type: "bar",
+        stack: "q",
+        showBackground: true,
+        backgroundStyle: {
+          color: "rgba(191,0,0,0.75)"
+        },
+        itemStyle: {
+          color: "rgba(255,204,0,0.75)"
+        },
+        data: dataQ3
+      };
+      let serQ4 = {
+        name: "wia.series.q4",
+        type: "bar",
+        stack: "q",
+        showBackground: true,
+        backgroundStyle: {
+          color: "rgba(255,0,0,0.75)"
+        },
+        itemStyle: {
+          color: "rgba(255,102,0,0.75)"
+        },
+        data: dataQ4
+      };
+      let serIssues = {
+        name: "wia.series.issues",
+        type: "scatter",
+        data: dataIssues,
+        label: {
+          show: true,
+          position: "right",
+          formatter: "{b}"
+        }
+      };
+      return [serQ0, serQ1, serQ2, serQ3, serQ4, serIssues];
+    }
+  }
+};
+const _hoisted_1$8 = { class: "wia-chart-selector" };
+const _hoisted_2$5 = { style: { "height": "100%", "clear": "both" } };
+const _hoisted_3$4 = ["title", "href"];
+function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_v_chart = resolveComponent("v-chart");
+  return openBlock(), createElementBlock(Fragment, null, [
+    createBaseVNode("div", _hoisted_1$8, [
+      createBaseVNode("div", {
+        class: normalizeClass(["wia-chart-selector-item", { "wia-chart-selector-item-selected": _ctx.typeSelected === "lead" }]),
+        onClick: _cache[0] || (_cache[0] = ($event) => _ctx.typeSelected = "lead")
+      }, toDisplayString$1(_ctx.$t("wia.tab.lead")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["wia-chart-selector-item", { "wia-chart-selector-item-selected": _ctx.typeSelected === "cycle" }]),
+        onClick: _cache[1] || (_cache[1] = ($event) => _ctx.typeSelected = "cycle")
+      }, toDisplayString$1(_ctx.$t("wia.tab.cycle")), 3)
+    ]),
+    createBaseVNode("div", _hoisted_2$5, [
+      createVNode(_component_v_chart, {
+        class: "WIAChart",
+        option: $options.option,
+        autoresize: ""
+      }, null, 8, ["option"])
+    ]),
+    createBaseVNode("a", {
+      class: "icon-info-down",
+      title: _ctx.$t("wia.help.text"),
+      href: _ctx.$t("wia.help.link"),
+      target: "_blank"
+    }, " ‽ ", 8, _hoisted_3$4)
+  ], 64);
+}
+const WIAChart = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7]]);
 const _sfc_main$7 = {
   name: "MainStatChart",
   components: {
@@ -80595,6 +81003,7 @@ const __default__ = {
   components: {
     WIPsChart,
     TimesChart,
+    WIAChart,
     MainStatChart,
     StatByWIPChart,
     ModalsContainer: No,
@@ -80638,6 +81047,9 @@ const __default__ = {
       issuesMap: {},
       leadCycleTimeDistribution: {},
       columns: [],
+      wiaLeadByColumns: [],
+      wiaCycleByColumns: [],
+      unfinishedIssues: {},
       fieldsData: {},
       boardAllData: {},
       conf: this.makeInitConf(),
@@ -80715,6 +81127,9 @@ const __default__ = {
       this.columns.splice(0);
       this.issues.splice(0);
       this.issuesMap = {};
+      this.wiaLeadByColumns.splice(0);
+      this.wiaCycleByColumns.splice(0);
+      this.unfinishedIssues = {};
       await this.loadBoardConfig();
     },
     loadBoardConfig: async function() {
@@ -80801,6 +81216,9 @@ const __default__ = {
       this.leadCycleTimeDistribution = {};
       this.issues.splice(0);
       this.issuesMap = {};
+      this.wiaLeadByColumns.splice(0);
+      this.wiaCycleByColumns.splice(0);
+      this.unfinishedIssues = {};
       let url = this.jiraBase + "/rest/greenhopper/1.0/rapid/charts/cumulativeflowdiagram.json?rapidViewId=" + this.jiraBoardId;
       for (const id of this.conf.swimlanes) {
         url += "&swimlaneId=" + id;
@@ -80836,6 +81254,21 @@ const __default__ = {
         }
         for (const [key, issueStat] of Object.entries(kanbanStat.issuesStat)) {
           this.issuesStat[key] = issueStat;
+        }
+        for (let colId in kanbanStat.wiaLeadByColumns) {
+          this.wiaLeadByColumns[colId] = {};
+          for (const [key, issue] of Object.entries(kanbanStat.wiaLeadByColumns[colId])) {
+            this.wiaLeadByColumns[colId][key] = issue;
+          }
+        }
+        for (let colId in kanbanStat.wiaCycleByColumns) {
+          this.wiaCycleByColumns[colId] = {};
+          for (const [key, issue] of Object.entries(kanbanStat.wiaCycleByColumns[colId])) {
+            this.wiaCycleByColumns[colId][key] = issue;
+          }
+        }
+        for (const [key, issue] of Object.entries(kanbanStat.unfinishedIssues)) {
+          this.unfinishedIssues[key] = issue;
         }
       } catch (err) {
         console.warn(err);
@@ -81263,6 +81696,25 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                     "jira-base": _ctx.jiraBase,
                     conf: _ctx.conf
                   }, null, 8, ["title", "issues-stat", "columns", "selected-columns", "jira-base", "conf"])
+                ]),
+                _: 1
+              }, 8, ["name"]),
+              createVNode(Tab, {
+                id: "tabs-wia",
+                name: _ctx.$t("app.tabs.wia")
+              }, {
+                default: withCtx(() => [
+                  createVNode(WIAChart, {
+                    title: _ctx.kanbanBoardConfig.name,
+                    "wia-lead-by-columns": _ctx.wiaLeadByColumns,
+                    "wia-cycle-by-columns": _ctx.wiaCycleByColumns,
+                    "unfinished-issues": _ctx.unfinishedIssues,
+                    "issues-map": _ctx.issuesMap,
+                    columns: _ctx.columns,
+                    "cycle-columns": _ctx.conf.cycle,
+                    "lead-columns": _ctx.conf.lead,
+                    conf: _ctx.conf
+                  }, null, 8, ["title", "wia-lead-by-columns", "wia-cycle-by-columns", "unfinished-issues", "issues-map", "columns", "cycle-columns", "lead-columns", "conf"])
                 ]),
                 _: 1
               }, 8, ["name"]),

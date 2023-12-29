@@ -156,6 +156,11 @@ of lead time - also wins small nominations.
 
 Also at the bottom of the page appears a list of "winners", sorted by the number of "prizes".
 
+### Work item age
+
+Allows you to correlate the current lifetime of each unfinished element with the statistical times of leaving the element of the current column.
+This will help to pay attention to elements that are already clearly out of the general statistics.
+
 ### Analyze by WIP
 
 In theory, if your processes are stable, then these graphs will show you that the more work in progress (WIP),
