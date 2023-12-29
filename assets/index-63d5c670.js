@@ -78897,8 +78897,10 @@ const _sfc_main$8 = {
       for (const colId of cols) {
         const colName = (_a2 = this.columns.find((value) => value.id === colId)) == null ? void 0 : _a2.name;
         let da = [];
-        for (let [key, wia] of Object.entries(src[colId])) {
-          da.push(wia);
+        if (src[colId]) {
+          for (let [key, wia] of Object.entries(src[colId])) {
+            da.push(wia);
+          }
         }
         let dq = quantile(da, [0, 0.25, 0.5, 0.75, 1]);
         dataQ0.push([colName, dq[0]]);
