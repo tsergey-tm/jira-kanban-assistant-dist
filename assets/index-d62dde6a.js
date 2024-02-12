@@ -76750,6 +76750,7 @@ const KanbanStat = {
     return this;
   },
   tickEventDay: function(tmp) {
+    var _a2;
     if (tmp.periodDayWIP == null) {
       tmp.periodDayWIP = [];
       for (const id in tmp.columns) {
@@ -76770,7 +76771,7 @@ const KanbanStat = {
     } else {
       let tWIP = 0;
       for (const [id, cnt] of Object.entries(tmp.board)) {
-        tmp.periodDayWIP[id].push(cnt);
+        (_a2 = tmp.periodDayWIP[id]) == null ? void 0 : _a2.push(cnt);
         if (tmp.leadColumns.includes(Number(id))) {
           tWIP += cnt;
         }
@@ -78829,6 +78830,14 @@ const _sfc_main$8 = {
         title: {
           text: this.$t("wia.title." + this.typeSelected, { title: this.title }),
           left: "center"
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true
+            }
+          }
         },
         yAxis: [
           {
