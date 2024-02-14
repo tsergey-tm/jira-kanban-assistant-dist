@@ -72662,15 +72662,15 @@ const _sfc_main$i = {
 const _hoisted_1$i = { class: "triage-selector" };
 const _hoisted_2$c = { style: { "clear": "both" } };
 const _hoisted_3$b = { key: 0 };
-const _hoisted_4$7 = {
+const _hoisted_4$8 = {
   key: 1,
   class: "triage-table"
 };
-const _hoisted_5$4 = ["innerHTML"];
-const _hoisted_6$3 = ["innerHTML"];
-const _hoisted_7$3 = ["innerHTML"];
-const _hoisted_8$2 = ["innerHTML"];
-const _hoisted_9$2 = ["innerHTML"];
+const _hoisted_5$5 = ["innerHTML"];
+const _hoisted_6$4 = ["innerHTML"];
+const _hoisted_7$4 = ["innerHTML"];
+const _hoisted_8$3 = ["innerHTML"];
+const _hoisted_9$3 = ["innerHTML"];
 const _hoisted_10$2 = ["innerHTML"];
 const _hoisted_11$2 = ["innerHTML"];
 const _hoisted_12$2 = ["innerHTML"];
@@ -72705,29 +72705,29 @@ function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
     ]),
     createBaseVNode("div", _hoisted_2$c, [
       !Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("div", _hoisted_3$b, toDisplayString$1($options.triageTable), 1)) : createCommentVNode("", true),
-      Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$7, [
+      Array.isArray($options.triageTable) ? (openBlock(), createElementBlock("table", _hoisted_4$8, [
         createBaseVNode("thead", null, [
           createBaseVNode("tr", null, [
             createBaseVNode("th", {
               class: "triage-table-th",
               innerHTML: this.$t("triage.column.issue")
-            }, null, 8, _hoisted_5$4),
+            }, null, 8, _hoisted_5$5),
             createBaseVNode("th", {
               class: "triage-table-th",
               innerHTML: this.$t("triage.column.value-acquisition-lifecycle")
-            }, null, 8, _hoisted_6$3),
+            }, null, 8, _hoisted_6$4),
             createBaseVNode("th", {
               class: "triage-table-th",
               innerHTML: this.$t("triage.column.shelf-life-ratio")
-            }, null, 8, _hoisted_7$3),
+            }, null, 8, _hoisted_7$4),
             createBaseVNode("th", {
               class: "triage-table-th",
               innerHTML: this.$t("triage.column.desired-delivery-date")
-            }, null, 8, _hoisted_8$2),
+            }, null, 8, _hoisted_8$3),
             createBaseVNode("th", {
               class: "triage-table-th",
               innerHTML: this.$t("triage.column.issue-size")
-            }, null, 8, _hoisted_9$2),
+            }, null, 8, _hoisted_9$3),
             createBaseVNode("th", {
               class: "triage-table-th",
               innerHTML: this.$t("triage.column.lead-time-distribution-ranges." + this.selected)
@@ -73534,7 +73534,7 @@ const _withScopeId$1 = (n2) => (pushScopeId("data-v-d27db0c2"), n2 = n2(), popSc
 const _hoisted_1$h = { class: "lead-cycle-times-chart-selector" };
 const _hoisted_2$b = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "lead-cycle-times-chart-selector-space" }, "   ", -1));
 const _hoisted_3$a = { style: { "height": "100%", "clear": "both" } };
-const _hoisted_4$6 = ["title", "href"];
+const _hoisted_4$7 = ["title", "href"];
 function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
@@ -73569,7 +73569,7 @@ function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("lead-cycle-times-chart.help.text"),
       href: _ctx.$t("lead-cycle-times-chart.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_4$6)
+    }, " ‽ ", 8, _hoisted_4$7)
   ], 64);
 }
 const LeadCycleTimeChart = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-d27db0c2"]]);
@@ -73718,12 +73718,12 @@ const _withScopeId = (n2) => (pushScopeId("data-v-7d723413"), n2 = n2(), popScop
 const _hoisted_1$f = { class: "jira-columns-box" };
 const _hoisted_2$9 = { class: "jira-columns-box-title" };
 const _hoisted_3$8 = { class: "jira-columns-box-table" };
-const _hoisted_4$5 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
-const _hoisted_5$3 = { class: "jira-columns-box-table-header" };
-const _hoisted_6$2 = { class: "jira-columns-box-table-header" };
-const _hoisted_7$2 = ["onClick"];
-const _hoisted_8$1 = { class: "jira-columns-box-table-header" };
-const _hoisted_9$1 = ["onClick"];
+const _hoisted_4$6 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("td", null, " ", -1));
+const _hoisted_5$4 = { class: "jira-columns-box-table-header" };
+const _hoisted_6$3 = { class: "jira-columns-box-table-header" };
+const _hoisted_7$3 = ["onClick"];
+const _hoisted_8$2 = { class: "jira-columns-box-table-header" };
+const _hoisted_9$2 = ["onClick"];
 const _hoisted_10$1 = { class: "jira-columns-box-table-header" };
 const _hoisted_11$1 = ["onClick"];
 const _hoisted_12$1 = { class: "jira-columns-box-table-header" };
@@ -73737,15 +73737,15 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
     createBaseVNode("table", _hoisted_3$8, [
       createBaseVNode("thead", null, [
         createBaseVNode("tr", null, [
-          _hoisted_4$5,
+          _hoisted_4$6,
           (openBlock(true), createElementBlock(Fragment, null, renderList($props.columns, (column) => {
-            return openBlock(), createElementBlock("td", _hoisted_5$3, toDisplayString$1(column.name), 1);
+            return openBlock(), createElementBlock("td", _hoisted_5$4, toDisplayString$1(column.name), 1);
           }), 256))
         ])
       ]),
       createBaseVNode("tbody", null, [
         createBaseVNode("tr", null, [
-          createBaseVNode("td", _hoisted_6$2, toDisplayString$1(_ctx.$t("app-config.jira-column-status.row.skip")), 1),
+          createBaseVNode("td", _hoisted_6$3, toDisplayString$1(_ctx.$t("app-config.jira-column-status.row.skip")), 1),
           (openBlock(true), createElementBlock(Fragment, null, renderList($props.columns, (column) => {
             return openBlock(), createElementBlock("td", {
               class: normalizeClass(["jira-columns-box-table-item", {
@@ -73753,11 +73753,11 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
                 "jira-columns-box-table-item-unsel": $props.workColumns.includes(column.id) || $props.waitColumns.includes(column.id) || $props.readyColumns.includes(column.id)
               }]),
               onClick: ($event) => $options.skipOnClick(column.id)
-            }, "  ", 10, _hoisted_7$2);
+            }, "  ", 10, _hoisted_7$3);
           }), 256))
         ]),
         createBaseVNode("tr", null, [
-          createBaseVNode("td", _hoisted_8$1, toDisplayString$1(_ctx.$t("app-config.jira-column-status.row.work")), 1),
+          createBaseVNode("td", _hoisted_8$2, toDisplayString$1(_ctx.$t("app-config.jira-column-status.row.work")), 1),
           (openBlock(true), createElementBlock(Fragment, null, renderList($props.columns, (column) => {
             return openBlock(), createElementBlock("td", {
               class: normalizeClass(["jira-columns-box-table-item", {
@@ -73765,7 +73765,7 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
                 "jira-columns-box-table-item-unsel": !$props.workColumns.includes(column.id)
               }]),
               onClick: ($event) => $options.workOnClick(column.id)
-            }, "  ", 10, _hoisted_9$1);
+            }, "  ", 10, _hoisted_9$2);
           }), 256))
         ]),
         createBaseVNode("tr", null, [
@@ -76379,12 +76379,12 @@ const _sfc_main$d = {
 const _hoisted_1$d = { class: "app-config-option-dialog" };
 const _hoisted_2$8 = { class: "app-config-option-header" };
 const _hoisted_3$7 = { class: "app-config-locale" };
-const _hoisted_4$4 = { class: "app-config-buttons" };
-const _hoisted_5$2 = ["value"];
-const _hoisted_6$1 = ["value"];
-const _hoisted_7$1 = ["value"];
-const _hoisted_8 = { class: "app-config-option-box" };
-const _hoisted_9 = { class: "app-config-option-box" };
+const _hoisted_4$5 = { class: "app-config-buttons" };
+const _hoisted_5$3 = ["value"];
+const _hoisted_6$2 = ["value"];
+const _hoisted_7$2 = ["value"];
+const _hoisted_8$1 = { class: "app-config-option-box" };
+const _hoisted_9$1 = { class: "app-config-option-box" };
 const _hoisted_10 = { class: "app-config-filters" };
 const _hoisted_11 = { class: "app-config-issue-size" };
 const _hoisted_12 = { class: "app-config-life-cycle" };
@@ -76427,27 +76427,27 @@ function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
             _: 1
           })
         ]),
-        createBaseVNode("div", _hoisted_4$4, [
+        createBaseVNode("div", _hoisted_4$5, [
           createBaseVNode("input", {
             type: "button",
             value: _ctx.$t("app-config.button.apply"),
             class: "app-config-button",
             onClick: _cache[0] || (_cache[0] = ($event) => $options.onApply())
-          }, null, 8, _hoisted_5$2),
+          }, null, 8, _hoisted_5$3),
           createBaseVNode("input", {
             type: "button",
             value: _ctx.$t("app-config.button.save"),
             class: "app-config-button",
             onClick: _cache[1] || (_cache[1] = ($event) => $options.onSave())
-          }, null, 8, _hoisted_6$1),
+          }, null, 8, _hoisted_6$2),
           createBaseVNode("input", {
             type: "button",
             value: _ctx.$t("app-config.button.discard"),
             class: "app-config-button",
             onClick: _cache[2] || (_cache[2] = ($event) => $options.onDiscard())
-          }, null, 8, _hoisted_7$1)
+          }, null, 8, _hoisted_7$2)
         ]),
-        createBaseVNode("div", _hoisted_8, [
+        createBaseVNode("div", _hoisted_8$1, [
           createVNode(_component_i18n_t, { keypath: "app-config.period-type.text" }, {
             default: withCtx(() => [
               withDirectives(createBaseVNode("input", {
@@ -76473,7 +76473,7 @@ function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
             _: 1
           })
         ]),
-        createBaseVNode("div", _hoisted_9, [
+        createBaseVNode("div", _hoisted_9$1, [
           createVNode(_component_i18n_t, { keypath: "app-config.analyze-size" }, {
             default: withCtx(() => [
               withDirectives(createBaseVNode("input", {
@@ -76653,7 +76653,7 @@ const KanbanStat = {
   // Issues:
   // key - issue key
   // cols - times in column,
-  // lastTrans - time of last transition,
+  // lastAct - time of last transition,
   // lastCol - index of last column,
   // periodChecked - issue was reach a ready columns
   issues: {},
@@ -76666,7 +76666,7 @@ const KanbanStat = {
   // Unfinished Issues:
   // key - issue key
   // cols - times in column,
-  // lastTrans - time of last transition,
+  // lastAct - time of last transition,
   // lastCol - index of last column,
   // periodChecked - issue was reach a ready columns
   unfinishedIssues: {},
@@ -76682,7 +76682,7 @@ const KanbanStat = {
       // Issues:
       // key - issue key
       // cols - times in column,
-      // lastTrans - time of last transition,
+      // lastAct - time of last transition,
       // lastCol - index of last column,
       // periodChecked - issue was reach a ready columns
       issues: {},
@@ -77179,12 +77179,12 @@ const KanbanStat = {
     for (const [key, issueStat] of Object.entries(tmp.fullIssues)) {
       if (!tmp.readyColumns.includes(issueStat.lastCol)) {
         res[key] = issueStat;
-        let wia = (tmp.now - res[key].lastTrans) / dayShift;
+        let wia = (tmp.now - res[key].lastAct) / dayShift;
         for (let id of tmp.cycleColumns) {
           wia = sum(wia, issueStat.times[id] / dayShift);
         }
         res[key].wiaCycle = wia;
-        wia = (tmp.now - res[key].lastTrans) / dayShift;
+        wia = (tmp.now - res[key].lastAct) / dayShift;
         for (let id of tmp.leadColumns) {
           wia = sum(wia, issueStat.times[id] / dayShift);
         }
@@ -78743,7 +78743,7 @@ const _sfc_main$9 = {
 const _hoisted_1$9 = { class: "times-chart-selector" };
 const _hoisted_2$6 = /* @__PURE__ */ createBaseVNode("div", { class: "times-chart-selector-space" }, "   ", -1);
 const _hoisted_3$5 = { style: { "height": "100%", "clear": "both" } };
-const _hoisted_4$3 = ["title", "href"];
+const _hoisted_4$4 = ["title", "href"];
 function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
@@ -78794,7 +78794,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
       title: _ctx.$t("time-by-columns.help.text"),
       href: _ctx.$t("time-by-columns.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_4$3)
+    }, " ‽ ", 8, _hoisted_4$4)
   ], 64);
 }
 const TimesChart = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
@@ -78813,7 +78813,8 @@ const _sfc_main$8 = {
     issuesMap: Object,
     cycleColumns: Array,
     leadColumns: Array,
-    conf: Object
+    conf: Object,
+    jiraBase: String
   },
   data: function() {
     return {
@@ -78894,8 +78895,21 @@ const _sfc_main$8 = {
       res += 1;
       return Math.ceil(res);
     },
+    dataIssues() {
+      var _a2;
+      const issues = this.filteredIssues;
+      let dataIssues = [];
+      for (const issue of issues) {
+        const colName = (_a2 = this.columns.find((value) => value.id === issue.lastCol)) == null ? void 0 : _a2.name;
+        dataIssues.push({
+          value: [colName, this.typeSelected === "cycle" ? issue.wiaCycle : issue.wiaLead],
+          name: issue.key
+        });
+      }
+      return dataIssues;
+    },
     series() {
-      var _a2, _b2;
+      var _a2;
       let dataQ0 = [];
       let dataQ1 = [];
       let dataQ2 = [];
@@ -78918,15 +78932,7 @@ const _sfc_main$8 = {
         dataQ3.push([colName, dq[3] - dq[2]]);
         dataQ4.push([colName, dq[4] - dq[3]]);
       }
-      const issues = this.filteredIssues;
-      let dataIssues = [];
-      for (const issue of issues) {
-        const colName = (_b2 = this.columns.find((value) => value.id === issue.lastCol)) == null ? void 0 : _b2.name;
-        dataIssues.push({
-          value: [colName, this.typeSelected === "cycle" ? issue.wiaCycle : issue.wiaLead],
-          name: issue.key
-        });
-      }
+      const dataIssues = this.dataIssues;
       let serQ0 = {
         name: "wia.series.q0",
         type: "bar",
@@ -79008,7 +79014,13 @@ const _sfc_main$8 = {
 };
 const _hoisted_1$8 = { class: "wia-chart-selector" };
 const _hoisted_2$5 = { style: { "height": "100%", "clear": "both" } };
-const _hoisted_3$4 = ["title", "href"];
+const _hoisted_3$4 = { style: { "clear": "both" } };
+const _hoisted_4$3 = { class: "wia-table" };
+const _hoisted_5$2 = ["innerHTML"];
+const _hoisted_6$1 = { class: "wia-table-td" };
+const _hoisted_7$1 = ["href"];
+const _hoisted_8 = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
+const _hoisted_9 = ["title", "href"];
 function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_v_chart = resolveComponent("v-chart");
   return openBlock(), createElementBlock(Fragment, null, [
@@ -79029,12 +79041,44 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
         autoresize: ""
       }, null, 8, ["option"])
     ]),
+    createBaseVNode("div", _hoisted_3$4, [
+      createBaseVNode("table", _hoisted_4$3, [
+        createBaseVNode("thead", null, [
+          createBaseVNode("tr", null, [
+            (openBlock(true), createElementBlock(Fragment, null, renderList($options.columnsData, (col) => {
+              return openBlock(), createElementBlock("th", {
+                class: "wia-table-th",
+                innerHTML: col
+              }, null, 8, _hoisted_5$2);
+            }), 256))
+          ])
+        ]),
+        createBaseVNode("tbody", null, [
+          createBaseVNode("tr", null, [
+            (openBlock(true), createElementBlock(Fragment, null, renderList($options.columnsData, (col) => {
+              return openBlock(), createElementBlock("td", _hoisted_6$1, [
+                (openBlock(true), createElementBlock(Fragment, null, renderList($options.dataIssues.filter((value) => value.value[0] === col).sort((a, b2) => b2.value[1] - a.value[1]), (data) => {
+                  var _a2;
+                  return openBlock(), createElementBlock("span", null, [
+                    createBaseVNode("a", {
+                      href: $props.jiraBase + "/browse/" + data.name,
+                      target: "_blank"
+                    }, toDisplayString$1(((_a2 = data.value[1]) == null ? void 0 : _a2.toFixed(1)) + " - " + data.name), 9, _hoisted_7$1),
+                    _hoisted_8
+                  ]);
+                }), 256))
+              ]);
+            }), 256))
+          ])
+        ])
+      ])
+    ]),
     createBaseVNode("a", {
       class: "icon-info-down",
       title: _ctx.$t("wia.help.text"),
       href: _ctx.$t("wia.help.link"),
       target: "_blank"
-    }, " ‽ ", 8, _hoisted_3$4)
+    }, " ‽ ", 8, _hoisted_9)
   ], 64);
 }
 const WIAChart = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7]]);
@@ -81724,8 +81768,9 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                     columns: _ctx.columns,
                     "cycle-columns": _ctx.conf.cycle,
                     "lead-columns": _ctx.conf.lead,
-                    conf: _ctx.conf
-                  }, null, 8, ["title", "wia-lead-by-columns", "wia-cycle-by-columns", "unfinished-issues", "issues-map", "columns", "cycle-columns", "lead-columns", "conf"])
+                    conf: _ctx.conf,
+                    "jira-base": _ctx.jiraBase
+                  }, null, 8, ["title", "wia-lead-by-columns", "wia-cycle-by-columns", "unfinished-issues", "issues-map", "columns", "cycle-columns", "lead-columns", "conf", "jira-base"])
                 ]),
                 _: 1
               }, 8, ["name"]),

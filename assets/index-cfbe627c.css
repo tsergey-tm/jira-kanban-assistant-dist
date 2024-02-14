@@ -346,6 +346,27 @@
   background-color: var(--color-tabs-bg-sel);
   color: var(--color-tabs-text-sel);
 }
+.wia-table {
+  border-collapse: collapse;
+}
+.wia-table-th {
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-table-border);
+  padding: 0.2rem;
+  font-weight: bold;
+}
+.wia-table-td {
+  text-align: left;
+  vertical-align: top;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-table-border);
+  padding: 0.3rem;
+}
+
+
 
 .ControlChart[data-v-434f96bc] {
   height: 50%;
