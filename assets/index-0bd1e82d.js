@@ -81255,14 +81255,20 @@ const __default__ = {
             this.conf.analyzeLength = 13;
           }
           const colIds = this.columns.map((col) => col.id);
-          this.conf.wait = this.conf.wait.filter((colId) => colIds.includes(colId));
-          this.conf.work = this.conf.work.filter((colId) => colIds.includes(colId));
           this.conf.ready = this.conf.ready.filter((colId) => colIds.includes(colId));
-          this.conf.cycle = this.conf.cycle.filter((colId) => colIds.includes(colId));
-          this.conf.lead = [.../* @__PURE__ */ new Set([...this.conf.work, ...this.conf.wait])];
           if (this.conf.ready.length === 0) {
             this.conf.ready.push(...colIds.slice(-1));
           }
+          this.conf.ready.forEach((colId) => {
+            const index = colIds.indexOf(colId);
+            if (index > -1) {
+              colIds.splice(index, 1);
+            }
+          });
+          this.conf.wait = this.conf.wait.filter((colId) => colIds.includes(colId));
+          this.conf.work = this.conf.work.filter((colId) => colIds.includes(colId));
+          this.conf.cycle = this.conf.cycle.filter((colId) => colIds.includes(colId));
+          this.conf.lead = [.../* @__PURE__ */ new Set([...this.conf.work, ...this.conf.wait])];
           const swimlanes = this.kanbanBoardConfig.swimlanesConfig.swimlanes.map((item) => item.id);
           this.conf.swimlanes = this.conf.swimlanes.filter((swimlane) => swimlanes.includes(swimlane));
           const filters = this.kanbanBoardConfig.quickFilterConfig.quickFilters.map((item) => item.id);
