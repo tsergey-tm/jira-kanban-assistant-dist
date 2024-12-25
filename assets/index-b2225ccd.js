@@ -70075,6 +70075,10 @@ const messages = {
         "cycle": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["Over cycle time"]);
+        },
+        "column": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["Over column time"]);
         }
       },
       "title": {
@@ -70085,6 +70089,10 @@ const messages = {
         "cycle": (ctx) => {
           const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
           return _normalize(["Work item age over cycle time : ", _interpolate(_named("title"))]);
+        },
+        "column": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Work item age over column time : ", _interpolate(_named("title"))]);
         }
       }
     }
@@ -71607,6 +71615,10 @@ const messages = {
         "cycle": (ctx) => {
           const { normalize: _normalize } = ctx;
           return _normalize(["По времени цикла"]);
+        },
+        "column": (ctx) => {
+          const { normalize: _normalize } = ctx;
+          return _normalize(["По времени в колонке"]);
         }
       },
       "title": {
@@ -71617,6 +71629,10 @@ const messages = {
         "cycle": (ctx) => {
           const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
           return _normalize(["Возраст рабочего элемента по времени цикла : ", _interpolate(_named("title"))]);
+        },
+        "column": (ctx) => {
+          const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+          return _normalize(["Возраст рабочего элемента по времени в колонке : ", _interpolate(_named("title"))]);
         }
       }
     }
@@ -76711,13 +76727,15 @@ const KanbanStat = {
       now: null,
       // Work item age calculation by columns
       wiaCycleColumns: {},
-      wiaLeadColumns: {}
+      wiaLeadColumns: {},
+      wiaColumns: {}
     };
     tmp.columnsIndexToId = this.makeColumnsIndexToId(tmp.columns, kanbanCFD.columns);
     for (const id in tmp.columns) {
       tmp.board[id] = 0;
       tmp.wiaCycleColumns[id] = {};
       tmp.wiaLeadColumns[id] = {};
+      tmp.wiaColumns[id] = {};
     }
     this.periodStat = [];
     this.issuesStat = {};
@@ -76747,6 +76765,7 @@ const KanbanStat = {
     this.unfinishedIssues = this.findUnfinishedIssues(tmp);
     this.wiaLeadByColumns = this.calcWIA(tmp.wiaLeadColumns);
     this.wiaCycleByColumns = this.calcWIA(tmp.wiaCycleColumns);
+    this.wiaByColumns = this.calcWIA(tmp.wiaColumns);
     return this;
   },
   tickEventDay: function(tmp) {
@@ -77189,6 +77208,8 @@ const KanbanStat = {
           wia = sum(wia, issueStat.times[id] / dayShift);
         }
         res[key].wiaLead = wia;
+        wia = (tmp.now - res[key].lastAct) / dayShift;
+        res[key].wiaColumn = wia;
       }
     }
     return res;
@@ -77220,6 +77241,9 @@ const KanbanStat = {
                 wia = sum(wia, tmp.fullIssues[transition.key].times[id]);
               }
               tmp.wiaLeadColumns[columnFrom][transition.key] = wia;
+            }
+            if (tmp.cycleColumns.includes(columnFrom)) {
+              tmp.wiaColumns[columnFrom][transition.key] = tmp.fullIssues[transition.key].times[columnFrom];
             }
           }
           if (transition.hasOwnProperty("columnTo")) {
@@ -78808,6 +78832,7 @@ const _sfc_main$8 = {
     title: String,
     wiaLeadByColumns: Array,
     wiaCycleByColumns: Array,
+    wiaByColumns: Array,
     unfinishedIssues: Object,
     columns: Array,
     issuesMap: Object,
@@ -78822,7 +78847,26 @@ const _sfc_main$8 = {
       typeSelected: "cycle"
     };
   },
-  methods: {},
+  methods: {
+    getCols() {
+      if (this.typeSelected === "cycle") {
+        return this.cycleColumns;
+      } else if (this.typeSelected === "lead") {
+        return this.leadColumns;
+      } else {
+        return this.cycleColumns;
+      }
+    },
+    getWiaVals(issue) {
+      if (this.typeSelected === "cycle") {
+        return issue.wiaCycle;
+      } else if (this.typeSelected === "lead") {
+        return issue.wiaLead;
+      } else {
+        return issue.wiaColumn;
+      }
+    }
+  },
   watch: {},
   computed: {
     option() {
@@ -78873,12 +78917,12 @@ const _sfc_main$8 = {
       return vals;
     },
     columnsData() {
-      const cols = this.typeSelected === "cycle" ? this.cycleColumns : this.leadColumns;
+      const cols = this.getCols();
       return this.columns.filter((value) => cols.includes(value.id)).map((item) => item.name);
     },
     filteredIssues() {
       let filteredIssues = [];
-      const cols = this.typeSelected === "cycle" ? this.cycleColumns : this.leadColumns;
+      const cols = this.getCols();
       for (const [key, issue] of Object.entries(this.unfinishedIssues)) {
         if (cols.includes(issue.lastCol)) {
           filteredIssues.push(issue);
@@ -78890,7 +78934,7 @@ const _sfc_main$8 = {
       const issues = this.filteredIssues;
       let res = 0;
       for (const issue of issues) {
-        res = max(res, this.typeSelected === "cycle" ? issue.wiaCycle : issue.wiaLead);
+        res = max(res, this.getWiaVals(issue));
       }
       res += 1;
       return Math.ceil(res);
@@ -78902,7 +78946,7 @@ const _sfc_main$8 = {
       for (const issue of issues) {
         const colName = (_a2 = this.columns.find((value) => value.id === issue.lastCol)) == null ? void 0 : _a2.name;
         dataIssues.push({
-          value: [colName, this.typeSelected === "cycle" ? issue.wiaCycle : issue.wiaLead],
+          value: [colName, this.getWiaVals(issue)],
           name: issue.key
         });
       }
@@ -78915,8 +78959,8 @@ const _sfc_main$8 = {
       let dataQ2 = [];
       let dataQ3 = [];
       let dataQ4 = [];
-      const src = this.typeSelected === "cycle" ? this.wiaCycleByColumns : this.wiaLeadByColumns;
-      const cols = this.typeSelected === "cycle" ? this.cycleColumns : this.leadColumns;
+      const src = this.typeSelected === "cycle" ? this.wiaCycleByColumns : this.typeSelected === "lead" ? this.wiaLeadByColumns : this.wiaByColumns;
+      const cols = this.getCols();
       for (const colId of cols) {
         const colName = (_a2 = this.columns.find((value) => value.id === colId)) == null ? void 0 : _a2.name;
         let da = [];
@@ -79032,7 +79076,11 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
       createBaseVNode("div", {
         class: normalizeClass(["wia-chart-selector-item", { "wia-chart-selector-item-selected": _ctx.typeSelected === "cycle" }]),
         onClick: _cache[1] || (_cache[1] = ($event) => _ctx.typeSelected = "cycle")
-      }, toDisplayString$1(_ctx.$t("wia.tab.cycle")), 3)
+      }, toDisplayString$1(_ctx.$t("wia.tab.cycle")), 3),
+      createBaseVNode("div", {
+        class: normalizeClass(["wia-chart-selector-item", { "wia-chart-selector-item-selected": _ctx.typeSelected === "column" }]),
+        onClick: _cache[2] || (_cache[2] = ($event) => _ctx.typeSelected = "column")
+      }, toDisplayString$1(_ctx.$t("wia.tab.column")), 3)
     ]),
     createBaseVNode("div", _hoisted_2$5, [
       createVNode(_component_v_chart, {
@@ -81104,6 +81152,7 @@ const __default__ = {
       columns: [],
       wiaLeadByColumns: [],
       wiaCycleByColumns: [],
+      wiaByColumns: [],
       unfinishedIssues: {},
       fieldsData: {},
       boardAllData: {},
@@ -81184,6 +81233,7 @@ const __default__ = {
       this.issuesMap = {};
       this.wiaLeadByColumns.splice(0);
       this.wiaCycleByColumns.splice(0);
+      this.wiaByColumns.splice(0);
       this.unfinishedIssues = {};
       await this.loadBoardConfig();
     },
@@ -81291,6 +81341,7 @@ const __default__ = {
       this.issuesMap = {};
       this.wiaLeadByColumns.splice(0);
       this.wiaCycleByColumns.splice(0);
+      this.wiaByColumns.splice(0);
       this.unfinishedIssues = {};
       let url = this.jiraBase + "/rest/greenhopper/1.0/rapid/charts/cumulativeflowdiagram.json?rapidViewId=" + this.jiraBoardId;
       for (const id of this.conf.swimlanes) {
@@ -81338,6 +81389,12 @@ const __default__ = {
           this.wiaCycleByColumns[colId] = {};
           for (const [key, issue] of Object.entries(kanbanStat.wiaCycleByColumns[colId])) {
             this.wiaCycleByColumns[colId][key] = issue;
+          }
+        }
+        for (let colId in kanbanStat.wiaByColumns) {
+          this.wiaByColumns[colId] = {};
+          for (const [key, issue] of Object.entries(kanbanStat.wiaByColumns[colId])) {
+            this.wiaByColumns[colId][key] = issue;
           }
         }
         for (const [key, issue] of Object.entries(kanbanStat.unfinishedIssues)) {
@@ -81781,6 +81838,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                     title: _ctx.kanbanBoardConfig.name,
                     "wia-lead-by-columns": _ctx.wiaLeadByColumns,
                     "wia-cycle-by-columns": _ctx.wiaCycleByColumns,
+                    "wia-by-columns": _ctx.wiaByColumns,
                     "unfinished-issues": _ctx.unfinishedIssues,
                     "issues-map": _ctx.issuesMap,
                     columns: _ctx.columns,
@@ -81788,7 +81846,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                     "lead-columns": _ctx.conf.lead,
                     conf: _ctx.conf,
                     "jira-base": _ctx.jiraBase
-                  }, null, 8, ["title", "wia-lead-by-columns", "wia-cycle-by-columns", "unfinished-issues", "issues-map", "columns", "cycle-columns", "lead-columns", "conf", "jira-base"])
+                  }, null, 8, ["title", "wia-lead-by-columns", "wia-cycle-by-columns", "wia-by-columns", "unfinished-issues", "issues-map", "columns", "cycle-columns", "lead-columns", "conf", "jira-base"])
                 ]),
                 _: 1
               }, 8, ["name"]),
