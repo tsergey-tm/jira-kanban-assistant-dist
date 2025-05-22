@@ -69712,7 +69712,7 @@ const messages = {
         },
         "swimlanes": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Swimlanes"]);
+          return _normalize(["Swimlanes (if nothing is selected, all will be used)"]);
         },
         "columns": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -71252,7 +71252,7 @@ const messages = {
         },
         "swimlanes": (ctx) => {
           const { normalize: _normalize } = ctx;
-          return _normalize(["Линии"]);
+          return _normalize(["Линии (если ничего не выбрано, то будут использованы все)"]);
         },
         "columns": (ctx) => {
           const { normalize: _normalize } = ctx;
@@ -81344,8 +81344,12 @@ const __default__ = {
       this.wiaByColumns.splice(0);
       this.unfinishedIssues = {};
       let url = this.jiraBase + "/rest/greenhopper/1.0/rapid/charts/cumulativeflowdiagram.json?rapidViewId=" + this.jiraBoardId;
-      for (const id of this.conf.swimlanes) {
-        url += "&swimlaneId=" + id;
+      if (this.conf.swimlanes.length === 0) {
+        url += this.kanbanBoardConfig.swimlanesConfig.swimlanes.map((item) => "&swimlaneId=" + item.id).join();
+      } else {
+        for (const id of this.conf.swimlanes) {
+          url += "&swimlaneId=" + id;
+        }
       }
       for (const col of this.columns) {
         url += "&columnId=" + col.id;
