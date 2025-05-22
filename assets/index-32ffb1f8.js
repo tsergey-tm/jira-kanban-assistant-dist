@@ -81345,7 +81345,7 @@ const __default__ = {
       this.unfinishedIssues = {};
       let url = this.jiraBase + "/rest/greenhopper/1.0/rapid/charts/cumulativeflowdiagram.json?rapidViewId=" + this.jiraBoardId;
       if (this.conf.swimlanes.length === 0) {
-        url += this.kanbanBoardConfig.swimlanesConfig.swimlanes.map((item) => "&swimlaneId=" + item.id).join();
+        url += this.kanbanBoardConfig.swimlanesConfig.swimlanes.map((item) => "&swimlaneId=" + item.id).join("");
       } else {
         for (const id of this.conf.swimlanes) {
           url += "&swimlaneId=" + id;
