@@ -76750,12 +76750,8 @@ const KanbanStat = {
       }
       if (time < tmp.lastDayBoardTime) {
         for (const transition of transitions) {
-          if (transition.hasOwnProperty("columnFrom")) {
-            this.issueLeave(tmp, time, transition);
-          }
-          if (transition.hasOwnProperty("columnTo")) {
-            this.issueEnter(tmp, time, transition);
-          }
+          this.issueLeave(tmp, time, transition);
+          this.issueEnter(tmp, time, transition);
         }
       }
     }
@@ -77060,21 +77056,26 @@ const KanbanStat = {
     tmp.periodDayWIP = null;
   },
   issueLeave(tmp, evTime, transition) {
-    const columnFrom = tmp.columnsIndexToId[transition.columnFrom];
-    tmp.board[columnFrom] -= 1;
     if (transition.key in tmp.issues) {
-      let timeDelta = evTime - tmp.issues[transition.key].lastAct;
-      if (tmp.issues[transition.key].times[columnFrom]) {
-        tmp.issues[transition.key].times[columnFrom] += timeDelta;
-      } else {
-        tmp.issues[transition.key].times[columnFrom] = timeDelta;
+      const timeDelta = evTime - tmp.issues[transition.key].lastAct;
+      const columnFrom = tmp.issues[transition.key].lastCol;
+      if (columnFrom !== "") {
+        if (tmp.issues[transition.key].times[columnFrom]) {
+          tmp.issues[transition.key].times[columnFrom] += timeDelta;
+        } else {
+          tmp.issues[transition.key].times[columnFrom] = timeDelta;
+        }
+        tmp.issues[transition.key].lastAct = evTime;
+        tmp.issues[transition.key].lastCol = "";
+        tmp.board[columnFrom] -= 1;
       }
-      tmp.issues[transition.key].lastAct = evTime;
-      tmp.issues[transition.key].lastCol = null;
     }
   },
   issueEnter(tmp, evTime, transition) {
-    const columnTo = tmp.columnsIndexToId[transition.columnTo];
+    const columnTo = "columnTo" in transition ? tmp.columnsIndexToId[transition.columnTo] : null;
+    if (columnTo === null || columnTo === void 0) {
+      return;
+    }
     tmp.board[columnTo] += 1;
     if (transition.key in tmp.issues) {
       tmp.issues[transition.key].lastAct = evTime;
