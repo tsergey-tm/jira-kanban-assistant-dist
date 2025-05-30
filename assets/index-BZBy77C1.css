@@ -1,0 +1,594 @@
+/* semantic color variables for this project */
+:root {
+    --color-main-1: #a862ea;
+    --color-main-2: #6545a4;
+    --color-main-3: #bf62ea;
+    --color-main-4: #6383ea;
+    --color-main-4-5: rgba(99, 130, 235, 0.5);
+    --color-main-5: #465ca4;
+    --color-main-6: #eedffb;
+    --color-main-7: #f6effd;
+
+    --color-background: #ffffff;
+    --color-background-soft: #f8f8f8;
+    --color-background-mute: #f2f2f2;
+
+    --color-heading: #2c3e50;
+    --color-text: #2c3e50;
+    --color-text-white: #f2f2f2;
+    --color-table-border: rgba(0, 0, 0, 0.25);
+
+    --color-button-bg: var(--color-main-6);
+    --color-button-text: var(--color-main-3);
+
+    --color-button-bg-gray: var(--color-main-6);
+    --color-button-text-gray: var(--color-main-3);
+
+    --color-button-bg-sel: var(--color-main-1);
+    --color-button-text-sel: #f2f2f2;
+
+    --color-tabs-border: var(--color-main-7);
+    --color-tabs-bg: var(--color-main-6);
+    --color-tabs-text: var(--color-main-5);
+
+    --color-tabs-bg-gray: var(--color-main-6);
+    --color-tabs-text-gray: var(--color-main-3);
+
+    --color-tabs-bg-sel: var(--color-main-1);
+    --color-tabs-text-sel: var(--color-text-white);
+
+    --color-tabs-bg-sel-alt: var(--color-main-5);
+    --color-tabs-text-sel-alt: var(--color-text-white);
+
+    --color-tabs-bg-sel-alt1: var(--color-main-7);
+    --color-tabs-text-sel-alt1: var(--color-main-3);
+
+    --color-eff: rgb(40, 128, 0);
+    --color-wait: rgb(185, 55, 55);
+}
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    position: relative;
+    font-weight: normal;
+}
+body {
+    color: var(--color-text);
+    background: var(--color-background);
+    transition: color 0.5s, background-color 0.5s;
+    line-height: 1.6;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-size: 15px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 0.5em;
+}
+#app {
+  padding: 10px;
+
+  font-weight: normal;
+}
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+}
+.tabs-component {
+  width: 100%;
+  height: 100%;
+}
+.tabs-component-panels {
+  width: 100%;
+  height: 100%;
+}
+.tabs-component-panel {
+  width: 100%;
+  height: 100%;
+}
+.tabs-component-tabs {
+  display: table;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.tabs-component-tab {
+  float: left;
+  padding: 0.2rem 0.4rem;
+  margin: 0.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.tabs-component-tab.is-active,
+.tabs-component-tab-a.is-active {
+  background-color: var(--color-tabs-bg-sel);
+  color: var(--color-tabs-text-sel);
+}
+.tabs-component-tab.is-inactive,
+.tabs-component-tab-a.is-inactive {
+  background-color: var(--color-tabs-bg);
+  color: var(--color-tabs-text);
+}
+.tabs-component-tab.is-disabled,
+.tabs-component-tab-a.is-disabled {
+  background-color: var(--color-tabs-bg-gray);
+  color: var(--color-tabs-text-gray);
+}
+h1 {
+  font-size: large;
+}
+.icon-info{
+  background-color: rgba(0, 143, 191, 0.1);
+  color: var(--color-text);
+}
+.icon-info-down{
+  color: var(--color-text);
+  background-color: rgba(0, 143, 191, 0.1);
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  font-size: xx-large;
+}
+a.icon-info-down {
+  text-decoration: underline dotted;
+}
+.app-config-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: var(--color-background);
+}
+
+.app-config-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-background-mute);
+}
+.NameProgressbarBox {
+    width: 100%;
+    margin: 0.2rem;
+    text-align: center;
+    position: relative;
+}
+
+.NameProgressbarName {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+.react-tabs {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.react-tabs__tab-list {
+    margin: 0 0 10px;
+    padding: 0;
+}
+
+.react-tabs__tab {
+    display: inline-block;
+    border: 1px solid transparent;
+    position: relative;
+    list-style: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    background: var(--color-tabs-bg-sel-alt1);
+    margin: 0.2rem;
+}
+
+.react-tabs__tab--selected {
+    background: var(--color-tabs-bg-sel);
+    color: var(--color-tabs-text-sel);
+    border-radius: 5px;
+}
+
+.react-tabs__tab--disabled {
+    color: GrayText;
+    cursor: default;
+}
+
+.react-tabs__tab:focus {
+    outline: none;
+}
+
+.react-tabs__tab:focus:after {
+    content: '';
+    position: absolute;
+    height: 5px;
+    left: -4px;
+    right: -4px;
+    bottom: -5px;
+    background: #fff;
+}
+
+.react-tabs__tab-panel {
+    display: none;
+}
+
+.react-tabs__tab-panel--selected {
+    display: block;
+}
+.MainStatChart {
+    width: 98vw;
+    clear: both;
+}
+.TotalWIPChart {
+    width: 98vw;
+    clear: both;
+}
+.AccumulatedWIPChart {
+    width: 98vw;
+}
+.wips-chart-selector {
+    margin: 0.1rem 0.2rem;
+    float: left;
+    clear: both;
+}
+
+.wips-chart-selector-item {
+    float: left;
+    margin: 0.1rem 0.2rem;
+    padding: 0.2rem 0.4rem;
+    background-color: var(--color-tabs-bg);
+    color: var(--color-tabs-text);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.wips-chart-selector-item.wips-chart-selector-item-selected {
+    background-color: var(--color-tabs-bg-sel);
+    color: var(--color-tabs-text-sel);
+}
+
+.jira-filter-box-title {
+    padding: 0.2rem 0;
+}
+.times-by-cols-chart-selector {
+    margin: 0.1rem 0.2rem;
+    float: left;
+    clear: both;
+}
+
+.times-by-cols-chart-selector-item {
+    float: left;
+    margin: 0.1rem 0.2rem;
+    padding: 0.2rem 0.4rem;
+    background-color: var(--color-tabs-bg);
+    color: var(--color-tabs-text);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.times-by-cols-chart-selector-item.times-by-cols-chart-selector-item-selected {
+    background-color: var(--color-tabs-bg-sel);
+    color: var(--color-tabs-text-sel);
+}
+
+.jira-filter-box-title {
+    padding: 0.2rem 0;
+}
+.lead-cycle-times-chart-selector {
+    margin: 0.1rem 0.2rem;
+    float: left;
+    clear: both;
+}
+
+.lead-cycle-times-chart-selector-space {
+    float: left;
+    margin: 0.1rem 0.2rem;
+    padding: 0.2rem 0.4rem;
+}
+
+.lead-cycle-times-chart-selector-item {
+    float: left;
+    margin: 0.1rem 0.2rem;
+    padding: 0.2rem 0.4rem;
+    background-color: var(--color-tabs-bg);
+    color: var(--color-tabs-text);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.lead-cycle-times-chart-selector-item.lead-cycle-times-chart-selector-item-selected {
+    background-color: var(--color-tabs-bg-sel);
+    color: var(--color-tabs-text-sel);
+}
+.times-chart-selector {
+    margin: 0.1rem 0.2rem;
+    float: left;
+    clear: both;
+}
+
+.times-chart-selector-space {
+    float: left;
+    margin: 0.1rem 0.2rem;
+    padding: 0.2rem 0.4rem;
+}
+
+.times-chart-selector-item {
+    float: left;
+    margin: 0.1rem 0.2rem;
+    padding: 0.2rem 0.4rem;
+    background-color: var(--color-tabs-bg);
+    color: var(--color-tabs-text);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.times-chart-selector-item.times-chart-selector-item-selected {
+    background-color: var(--color-tabs-bg-sel);
+    color: var(--color-tabs-text-sel);
+}
+
+.jira-filter-box-title {
+    padding: 0.2rem 0;
+}
+.ltds-chart-selector {
+    margin: 0.1rem 0.2rem;
+    float: left;
+    clear: both;
+}
+
+.ltds-chart-selector-item {
+    float: left;
+    margin: 0.1rem 0.2rem;
+    padding: 0.2rem 0.4rem;
+    background-color: var(--color-tabs-bg);
+    color: var(--color-tabs-text);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.ltds-chart-selector-item.ltds-chart-selector-item-selected {
+    background-color: var(--color-tabs-bg-sel);
+    color: var(--color-tabs-text-sel);
+}
+
+.jira-filter-box-title {
+    padding: 0.2rem 0;
+}
+.ControlChart {
+    width: 98vw;
+    clear: both;
+}
+
+.control-chart-issues-config {
+    padding: 0.2rem;
+}
+
+.control-chart-issues-table {
+    border-collapse: collapse;
+}
+
+.control-chart-issues-table-head {
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--color-table-border);
+    padding: 0.2rem;
+    font-weight: bold;
+}
+
+.control-chart-issues-table-item {
+    text-align: right;
+    vertical-align: top;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--color-table-border);
+    padding: 0.2rem;
+}
+
+.control-chart-issues-winners {
+    padding: 1rem;
+}
+.wia-chart-selector {
+    margin: 0.1rem 0.2rem;
+    float: left;
+    clear: both;
+}
+
+.wia-chart-selector-space {
+    float: left;
+    margin: 0.1rem 0.2rem;
+    padding: 0.2rem 0.4rem;
+}
+
+.wia-chart-selector-item {
+    float: left;
+    margin: 0.1rem 0.2rem;
+    padding: 0.2rem 0.4rem;
+    background-color: var(--color-tabs-bg);
+    color: var(--color-tabs-text);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.wia-chart-selector-item.wia-chart-selector-item-selected {
+    background-color: var(--color-tabs-bg-sel);
+    color: var(--color-tabs-text-sel);
+}
+
+.wia-table {
+    border-collapse: collapse;
+}
+
+.wia-table-th {
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--color-table-border);
+    padding: 0.2rem;
+    font-weight: bold;
+}
+
+.wia-table-td {
+    text-align: left;
+    vertical-align: top;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--color-table-border);
+    padding: 0.3rem;
+}
+
+.app-config-dialog {
+    background-color: var(--color-background);
+}
+
+.app-config-option-box {
+    margin: 0.1rem 0.5rem;
+}
+
+.app-config-option-dialog {
+    padding: 1rem 2rem;
+    height: 100vh;
+    overflow: auto;
+}
+
+.app-config-option-header {
+
+    margin: 1rem 2rem;
+    alignment: center;
+    text-align: center;
+    font-size: large;
+}
+
+.app-config-button {
+    margin: 0.2rem 0.3rem;
+    padding: 0.3rem 0.7rem;
+    background-color: var(--color-tabs-bg);
+    color: var(--color-tabs-text);
+    cursor: pointer;
+    border-radius: 5px;
+    border-width: 0;
+}
+
+.app-config-issue-size,
+.app-config-life-cycle,
+.app-config-shelf-life-ratio,
+.app-config-deadline-date,
+.app-config-desired-delivery-date {
+    margin: 0.1rem 0.5rem;
+    width: 50%;
+}
+
+.app-config-filters {
+    margin: 0.1rem 0.5rem;
+}
+
+.app-config-buttons {
+    padding: 0.3rem 0.5rem;
+}
+
+.app-config-period-type {
+    width: 30rem !important;
+}
+
+.ui.selection.dropdown {
+    display: inline-block;
+    padding: 0.2rem;
+}
+
+.ui.selection.dropdown > .dropdown.icon {
+    padding: 0.2rem;
+}
+
+.app-config-period-size {
+    width: 10rem;
+    height: 100%;
+}
+
+.app-config-analyze {
+    width: 5rem;
+}
+
+.app-config-noreworktime {
+    width: 5rem;
+}
+
+.app-config-locale {
+    margin: 0.1rem 0.5rem;
+}
+
+.jira-columns-box {
+    margin: 0.1rem 0.2rem;
+    clear: left;
+}
+
+.jira-columns-box-table {
+    background-color: var(--color-tabs-bg);
+    border-radius: 5px;
+    margin: 0.2rem;
+    padding: 0.2rem 0.4rem;
+}
+
+.jira-columns-box-table-header {
+    background-color: var(--color-tabs-bg-sel);
+    color: var(--color-tabs-text-sel);
+    border-radius: 5px;
+    padding: 0.2rem 0.4rem;
+}
+
+.jira-columns-box-table-item {
+    padding: 0.2rem 0.4rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.jira-columns-box-table-item-sel {
+    background-color: var(--color-tabs-bg-sel-alt);
+    color: var(--color-tabs-text-sel-alt);
+}
+
+.jira-columns-box-table-item-sel1 {
+    background-color: var(--color-main-4);
+    color: var(--color-tabs-text-sel);
+}
+
+.jira-columns-box-table-item-unsel {
+    background-color: var(--color-tabs-bg-sel-alt1);
+    color: var(--color-tabs-text-sel-alt1);
+}
+
+.jira-columns-box-title {
+    padding: 0.2rem 0;
+}
+.jira-filters-box {
+    margin: 0.1rem 0.2rem;
+    clear: both;
+}
+
+.jira-filter-box-items {
+    clear: both;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.jira-filter-box-item {
+    float: left;
+    margin: 0.1rem 0.2rem;
+    padding: 0.2rem 0.4rem;
+    background-color: var(--color-tabs-bg);
+    color: var(--color-tabs-text);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.jira-filter-box-item-selected {
+    background-color: var(--color-tabs-bg-sel);
+    color: var(--color-tabs-text-sel);
+}
+
+.jira-filter-box-title {
+    padding: 0.2rem 0;
+    clear: both;
+}
