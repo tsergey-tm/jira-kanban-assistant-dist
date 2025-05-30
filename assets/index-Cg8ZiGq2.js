@@ -93713,8 +93713,8 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
     return vals;
   };
   const columnsData = () => columns.filter((value) => selectedColumns.includes(value.id)).map((item) => item.name);
-  const heatMapSeriesDataMin = () => heatMapSeriesData.min;
-  const heatMapSeriesDataMax = () => heatMapSeriesData.max;
+  const heatMapSeriesDataMin = () => heatMapSeriesData.min || 0;
+  const heatMapSeriesDataMax = () => heatMapSeriesData.max || 1;
   const series = () => {
     const serHeatMap = {
       type: "custom",
@@ -106756,8 +106756,14 @@ const normalizeConf = (res, colIds, swimlanes, filters) => {
   });
   res.wait = res.wait.filter((colId) => colIds.includes(colId));
   res.work = res.work.filter((colId) => colIds.includes(colId));
+  if (res.wait.length + res.work.length === 0) {
+    res.work.push(...colIds.slice(1));
+  }
   res.cycle = res.cycle.filter((colId) => colIds.includes(colId));
   res.lead = [.../* @__PURE__ */ new Set([...res.work, ...res.wait])];
+  if (res.cycle.length === 0) {
+    res.cycle.push(...res.lead.slice(1));
+  }
   res.swimlanes = res.swimlanes.filter((swimlane) => swimlanes.includes(swimlane));
   if (res.swimlanes.length === 0) {
     res.swimlanes = [...swimlanes];
