@@ -9,7 +9,7 @@ var __privateGet = (obj, member, getter) => (__accessCheck(obj, member, "read fr
 var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot add the same private member more than once") : member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
 var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
-var _finishStep, _currentStep, _stepSize, _currentStepProgress, _progressBarData, _DataLoader_static, makeInitConf_fn, _DataLoader_instances, updateProgressBar_fn, _clearData, loadBoardConfig_fn, loadConfig_fn, loadCFD_fn, recalcCFD_fn, calcLTD_fn, loadIssues_fn, recalcDetailedLTD_fn, calcIssuesLCTD_fn, recalcColumns_fn;
+var _finishStep, _currentStep, _stepSize, _currentStepProgress, _progressBarData, _DataLoader_instances, updateProgressBar_fn, _clearData, loadBoardConfig_fn, loadConfig_fn, loadCFD_fn, recalcCFD_fn, calcLTD_fn, loadIssues_fn, _loadIssue, recalcDetailedLTD_fn, calcIssuesLCTD_fn, recalcColumns_fn;
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -92960,6 +92960,7 @@ const LeadCycleTimeChart = ({ title, periodStat }) => {
     const leadChartData = [];
     const cycleChartData = [];
     const reworkChartData = [];
+    const blockChartData = [];
     const leadThroughput = [];
     const cycleThroughput = [];
     for (const item of periodStat) {
@@ -93003,6 +93004,16 @@ const LeadCycleTimeChart = ({ title, periodStat }) => {
           item.rework.med.toFixed(1),
           item.rework.q3.toFixed(1),
           item.rework.max.toFixed(1)
+        ]
+      });
+      blockChartData.push({
+        value: [
+          item.date,
+          item.block.min.toFixed(1),
+          item.block.q1.toFixed(1),
+          item.block.med.toFixed(1),
+          item.block.q3.toFixed(1),
+          item.block.max.toFixed(1)
         ]
       });
     }
@@ -93078,6 +93089,24 @@ const LeadCycleTimeChart = ({ title, periodStat }) => {
       // @ts-expect-error TS2322
       data: reworkChartData
     };
+    const blockSeries = {
+      xAxisIndex: 0,
+      yAxisIndex: 0,
+      id: "blockSeries",
+      name: t2("lead-cycle-times-chart.series.block.name.perc"),
+      type: "boxplot",
+      boxWidth: ["5%", "10%"],
+      encode: {
+        x: 0,
+        y: [1, 2, 3, 4, 5]
+      },
+      itemStyle: {
+        color: "rgba(128,149,255,0.75)",
+        borderColor: "rgb(32,48,128)"
+      },
+      // @ts-expect-error TS2322
+      data: blockChartData
+    };
     const leadThroughputSeries = {
       id: "leadThroughputSeries",
       name: t2("lead-cycle-times-chart.series.lead.throughput"),
@@ -93117,6 +93146,7 @@ const LeadCycleTimeChart = ({ title, periodStat }) => {
       leadSeries,
       cycleSeries,
       reworkSeries,
+      blockSeries,
       leadThroughputSeries,
       cycleThroughputSeries
     ];
@@ -93126,6 +93156,7 @@ const LeadCycleTimeChart = ({ title, periodStat }) => {
     const leadChartData = [];
     const cycleChartData = [];
     const reworkChartData = [];
+    const blockChartData = [];
     const leadThroughput = [];
     const cycleThroughput = [];
     for (const item of periodStat) {
@@ -93146,6 +93177,10 @@ const LeadCycleTimeChart = ({ title, periodStat }) => {
       reworkChartData.push([
         item.date,
         item.rework.avg.toFixed(1)
+      ]);
+      blockChartData.push([
+        item.date,
+        item.block.avg.toFixed(1)
       ]);
     }
     const lifeSeries = {
@@ -93216,6 +93251,23 @@ const LeadCycleTimeChart = ({ title, periodStat }) => {
       },
       data: reworkChartData
     };
+    const blockSeries = {
+      xAxisIndex: 0,
+      yAxisIndex: 0,
+      id: "blockSeries",
+      name: t2("lead-cycle-times-chart.series.block.name.avg"),
+      type: "scatter",
+      clip: true,
+      itemStyle: {
+        color: "rgba(128,149,255,0.75)",
+        borderColor: "rgb(32,48,128)"
+      },
+      label: {
+        show: true,
+        position: "top"
+      },
+      data: blockChartData
+    };
     const leadThroughputSeries = {
       id: "leadThroughputSeries",
       name: t2("lead-cycle-times-chart.series.lead.throughput"),
@@ -93255,6 +93307,7 @@ const LeadCycleTimeChart = ({ title, periodStat }) => {
       leadSeries,
       cycleSeries,
       reworkSeries,
+      blockSeries,
       leadThroughputSeries,
       cycleThroughputSeries
     ];
@@ -100793,6 +100846,7 @@ class KanbanStat {
         times: Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN])),
         timesByColumnPos: new Array(tmp.columnsIndexToId.length).fill(0),
         lastAct: evTime,
+        updated: NaN,
         lastCol: columnTo,
         readyTime: isClosed ? evTime : NaN,
         wiaLead: NaN,
@@ -100803,6 +100857,7 @@ class KanbanStat {
         wiaByColumns: Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, NaN])),
         creationTime: evTime,
         reworkTime: 0,
+        blockTime: NaN,
         isClosed,
         periodIndex: NaN,
         transitions: [{ enterTime: evTime, leaveTime: NaN, columnId: columnTo, columnPos: transition.columnTo }]
@@ -100909,6 +100964,7 @@ class KanbanStat {
       wait: nanStat(),
       life: nanStat(),
       rework: nanStat(),
+      block: nanStat(),
       waitPercent: NaN,
       effPercent: NaN,
       timeStats: Object.fromEntries(Object.keys(tmp.columns).map((v) => [v, nanStat()]))
@@ -100942,6 +100998,7 @@ class KanbanStat {
         const periodIndex = this.periodStat.findIndex((ps) => ps.dateStart <= issueStat.readyTime && issueStat.readyTime < ps.dateEnd);
         if (periodIndex >= 0) {
           this.periodStat[periodIndex].closedIssues.push(issueStat.key);
+          this.issues[issueStat.key] = issueStat;
         }
         issueStat.periodIndex = periodIndex;
       }
@@ -101163,6 +101220,7 @@ class KanbanStat {
       wait: timeWait / dayShift,
       rework: reworkTime / dayShift,
       life: timeLife / dayShift,
+      block: NaN,
       cyclePercent: timeLead > 0 ? 100 * timeCycle / timeLead : NaN,
       workPercent: timeLead > 0 ? 100 * timeWork / timeLead : NaN,
       waitPercent: timeSum > 0 ? 100 * timeWait / timeSum : NaN,
@@ -101256,26 +101314,75 @@ use([
 ]);
 const ControlChart = ({ title, issuesStat, columns, selectedColumns, jiraBase: jiraBase2, conf }) => {
   const { t: t2, i18n } = useTranslation();
-  const [issuesViewColumns, setIssuesViewColumns] = reactExports.useState(new Array());
-  const [issuesViewIssues, setIssuesViewIssues] = reactExports.useState(new Array());
-  const [issuesViewTimes, setIssuesViewTimes] = reactExports.useState(new Array());
   const [issuesViewDataColumns, setIssuesViewDataColumns] = reactExports.useState(new Array());
   const [issuesViewDataRows, setIssuesViewDataRows] = reactExports.useState(new Array());
   const [issuesViewWinners, setIssuesViewWinners] = reactExports.useState(new Array());
   const [bound, setBound] = reactExports.useState(95);
   const [periods, setPeriods] = reactExports.useState(2);
-  const [chartData, setChartData] = reactExports.useState(new Array());
-  const [seekTime, setSeekTime] = reactExports.useState(NaN);
   const [seekBound, setSeekBound] = reactExports.useState(NaN);
-  reactExports.useEffect(() => {
-    calcData();
-  }, [title, issuesStat, columns, selectedColumns, jiraBase2, conf, bound, periods]);
-  const calcData = () => {
-    const _columns = new Array();
+  const today = DateTime.now().startOf("day");
+  const seekTime = reactExports.useMemo(() => {
+    switch (conf.periodType) {
+      case "days":
+        return today.minus({ days: conf.periodSize * periods }).toMillis();
+      case "seven-days":
+        return today.minus({ weeks: conf.periodSize * periods }).toMillis();
+      case "weeks-mon-exclude":
+        return today.startOf("week").minus({ weeks: conf.periodSize * periods }).toMillis();
+      case "weeks-mon-include":
+        return today.startOf("week").minus({ weeks: conf.periodSize * periods - 1 }).toMillis();
+      case "weeks-sun-exclude":
+        return today.endOf("week").minus({ weeks: conf.periodSize * periods + 1 }).toMillis();
+      case "weeks-sun-include":
+        return today.startOf("week").minus({ weeks: conf.periodSize * periods }).toMillis();
+      case "months-exclude":
+        return today.startOf("month").minus({ months: conf.periodSize * periods }).toMillis();
+      case "months-include":
+        return today.startOf("month").minus({ months: conf.periodSize * periods - 1 }).toMillis();
+      case "quarters-exclude":
+        return today.startOf("quarter").minus({ quarters: conf.periodSize * periods }).toMillis();
+      case "quarters-include":
+        return today.startOf("quarter").minus({ quarters: conf.periodSize * periods - 1 }).toMillis();
+      case "years-exclude":
+        return today.startOf("year").minus({ years: conf.periodSize * periods }).toMillis();
+      case "years-include":
+        return today.startOf("year").minus({ years: conf.periodSize * periods - 1 }).toMillis();
+    }
+    return 0;
+  }, [conf, periods, today]);
+  const chartData = reactExports.useMemo(() => {
+    const dd = {};
+    for (const [key, issueStat] of Object.entries(issuesStat)) {
+      if (issueStat.lead) {
+        const lead = issueStat.lead.toFixed(0);
+        const ready = new Date(issueStat.readyTime).setHours(0, 0, 0, 0);
+        if (ready in dd) {
+          if (lead in dd[ready]) {
+            dd[ready][lead].cnt++;
+            dd[ready][lead].key += "," + key;
+          } else {
+            dd[ready][lead] = { cnt: 1, key };
+          }
+        } else {
+          dd[ready] = {};
+          dd[ready][lead] = { cnt: 1, key };
+        }
+      }
+    }
+    const _chartData = [];
+    for (const ready in dd) {
+      for (const lead in dd[ready]) {
+        _chartData.push([Number(ready), lead, dd[ready][lead].cnt, dd[ready][lead].key]);
+      }
+    }
+    return _chartData;
+  }, [issuesStat]);
+  const calcData = reactExports.useCallback(() => {
+    const issuesViewColumns = new Array();
     const _columnsi = new Array();
     for (let i = 0; i < columns.length; i++) {
       if (selectedColumns.includes(columns[i].id)) {
-        _columns.push(columns[i].name);
+        issuesViewColumns.push(columns[i].name);
         _columnsi.push(columns[i].id);
       }
     }
@@ -101303,9 +101410,9 @@ const ControlChart = ({ title, issuesStat, columns, selectedColumns, jiraBase: j
         issues.push(issue);
       }
     }
-    _columns.push(t2("control-chart.columns.cycle"));
-    _columns.push(t2("control-chart.columns.lead"));
-    const tt = new Array();
+    issuesViewColumns.push(t2("control-chart.columns.cycle"));
+    issuesViewColumns.push(t2("control-chart.columns.lead"));
+    const issuesViewTimes = new Array();
     for (const time2 of times) {
       const stat = Object.assign(calcStat(time2), { bound: NaN });
       if (Array.isArray(time2) && time2.length > 0) {
@@ -101313,12 +101420,9 @@ const ControlChart = ({ title, issuesStat, columns, selectedColumns, jiraBase: j
       } else {
         stat.bound = NaN;
       }
-      tt.push(stat);
+      issuesViewTimes.push(stat);
     }
-    setSeekBound(tt[tt.length - 1].bound);
-    setIssuesViewColumns(_columns);
-    setIssuesViewIssues(issues);
-    setIssuesViewTimes(tt);
+    setSeekBound(issuesViewTimes[issuesViewTimes.length - 1].bound);
     const dCols = [" "];
     for (let i = 0; i < issuesViewColumns.length; i++) {
       dCols.push(issuesViewColumns[i]);
@@ -101331,14 +101435,13 @@ const ControlChart = ({ title, issuesStat, columns, selectedColumns, jiraBase: j
       [t2("control-chart.row.winners")]
     ];
     const totalWinners = {};
-    setSeekTime(calcSeekTime());
     for (let i = 0; i < issuesViewColumns.length; i++) {
       dRows[0].push(issuesViewTimes[i].min.toFixed(1));
       dRows[1].push(issuesViewTimes[i].med.toFixed(1));
       dRows[2].push(issuesViewTimes[i].max.toFixed(1));
       dRows[3].push(issuesViewTimes[i].bound.toFixed(1));
       const winners = new Array();
-      for (const issue of issuesViewIssues) {
+      for (const issue of issues) {
         if (issue.readyTime >= seekTime && issue.times[i] > issuesViewTimes[i].bound) {
           winners.push({ time: issue.times[i], key: issue.key });
           if (issue.key in totalWinners) {
@@ -101363,61 +101466,10 @@ const ControlChart = ({ title, issuesStat, columns, selectedColumns, jiraBase: j
     setIssuesViewDataColumns(dCols);
     setIssuesViewDataRows(dRows);
     setIssuesViewWinners(totalWinnerArray);
-    const dd = {};
-    for (const [key, issueStat] of Object.entries(issuesStat)) {
-      if (issueStat.lead) {
-        const lead = issueStat.lead.toFixed(0);
-        const ready = new Date(issueStat.readyTime).setHours(0, 0, 0, 0);
-        if (ready in dd) {
-          if (lead in dd[ready]) {
-            dd[ready][lead].cnt++;
-            dd[ready][lead].key += "," + key;
-          } else {
-            dd[ready][lead] = { cnt: 1, key };
-          }
-        } else {
-          dd[ready] = {};
-          dd[ready][lead] = { cnt: 1, key };
-        }
-      }
-    }
-    const _chartData = [];
-    for (const ready in dd) {
-      for (const lead in dd[ready]) {
-        _chartData.push([Number(ready), lead, dd[ready][lead].cnt, dd[ready][lead].key]);
-      }
-    }
-    setChartData(_chartData);
-  };
-  const calcSeekTime = () => {
-    switch (conf.periodType) {
-      case "days":
-        return DateTime.now().startOf("day").minus({ days: conf.periodSize * periods }).toMillis();
-      case "seven-days":
-        return DateTime.now().startOf("day").minus({ weeks: conf.periodSize * periods }).toMillis();
-      case "weeks-mon-exclude":
-        return DateTime.now().startOf("day").startOf("week").minus({ weeks: conf.periodSize * periods }).toMillis();
-      case "weeks-mon-include":
-        return DateTime.now().startOf("day").startOf("week").minus({ weeks: conf.periodSize * periods - 1 }).toMillis();
-      case "weeks-sun-exclude":
-        return DateTime.now().startOf("day").endOf("week").minus({ weeks: conf.periodSize * periods + 1 }).toMillis();
-      case "weeks-sun-include":
-        return DateTime.now().startOf("day").startOf("week").minus({ weeks: conf.periodSize * periods }).toMillis();
-      case "months-exclude":
-        return DateTime.now().startOf("day").startOf("month").minus({ months: conf.periodSize * periods }).toMillis();
-      case "months-include":
-        return DateTime.now().startOf("day").startOf("month").minus({ months: conf.periodSize * periods - 1 }).toMillis();
-      case "quarters-exclude":
-        return DateTime.now().startOf("day").startOf("quarter").minus({ quarters: conf.periodSize * periods }).toMillis();
-      case "quarters-include":
-        return DateTime.now().startOf("day").startOf("quarter").minus({ quarters: conf.periodSize * periods - 1 }).toMillis();
-      case "years-exclude":
-        return DateTime.now().startOf("day").startOf("year").minus({ years: conf.periodSize * periods }).toMillis();
-      case "years-include":
-        return DateTime.now().startOf("day").startOf("year").minus({ years: conf.periodSize * periods - 1 }).toMillis();
-    }
-    return 0;
-  };
+  }, [t2, bound, columns, selectedColumns, issuesStat, seekTime, jiraBase2]);
+  reactExports.useEffect(() => {
+    calcData();
+  }, [title, issuesStat, columns, selectedColumns, jiraBase2, conf, bound, periods, calcData]);
   const option = () => ({
     animation: true,
     animationDuration: 500,
@@ -105929,8 +105981,8 @@ const en = {
   "lead-time-distributions": { "group": { "total": "Total", "default": "Without size", "title": "Lead time distributions: {{title}}" }, "xAxis": { "name": { "lead": "Lead time, days", "cycle": "Cycle time, days" } }, "yAxis": { "name": "Count of issues" }, "series": { "count": "{{group}} count", "percent": "{{group}} percent of progress", "sum": "Cumulative sum of completed tasks" }, "info": { "lead": "Avg lead time: {{avg}}\nMedian lead time: {{med}}\nDistribution: {{tailName}} ({{tailValue}})", "cycle": "Avg cycle time: {{avg}}\nMedian cycle time: {{med}}\nDistribution: {{tailName}} ({{tailValue}})" }, "tail": { "fat": "Fat-tailed", "thin": "Thin-tailed" }, "help": { "text": "A diagram on the basis of which you can make a probabilistic forecast about the time of task.\nOn the horizontal axis is laid by LEAD TIME,\nBy vertical - the number of tasks performed with such LEAD TIME.\nIf the tasks are has the dimensions, then the diagram can be viewed for each of them.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead-time-distributions" }, "tab": { "lead": "Lead time", "cycle": "Cycle time" } },
   "control-chart": { "config": { "search": "Search <0/> periods ago with bound <1/> %" }, "columns": { "cycle": "Cycle", "lead": "Lead" }, "row": { "min": "Minimum, days", "med": "Median, days", "max": "Maximum, days", "bound": "{{bound}} %, days", "winners": "Winners" }, "title": "Control chart: {{title}}", "yAxis": { "name": "Lead time, days" }, "series": { "issues": "Issues" }, "help": { "text": "The control chart shows the dispersion of the task execution time.\nIt is used to search and analyze the reasons leading to the instability of the work process.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead-time-distributions" } },
   "analyze-by-wip": { "title": "Throughput, Efficiency, Lead & Cycle times by WIP: {{title}}", "yAxis": { "throughput": "Throughput, 1/period", "efficiency": "Efficiency, %", "lead": "Lead time, days", "cycle": "Cycle time, days" }, "series": { "efficiency": "Efficiency", "lead": "Lead time", "cycle": "Cycle time", "throughput": "Throughput" }, "help": { "text": "Parameters of throughput, efficiency,\nlead time and cycle time of completed tasks\nby the average WIP during the production of the task", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#analyze-by-wip" } },
-  "app-config": { "period-type": { "text": "Analyze period <0/> of <1/>", "days": "days", "seven-days": "seven days", "weeks-mon-exclude": "weeks, from Monday, excluding the current incomplete", "weeks-mon-include": "weeks, from Monday, including the current incomplete", "weeks-sun-exclude": "weeks, from Sunday, excluding the current incomplete", "weeks-sun-include": "weeks, from Sunday, including the current incomplete", "months-exclude": "months, excluding the current incomplete", "months-include": "months, including the current incomplete", "quarters-exclude": "quarters, excluding the current incomplete", "quarters-include": "quarters, including the current incomplete", "years-exclude": "years, excluding the current incomplete", "years-include": "years, including the current incomplete" }, "analyze-size": "Analyse <0/> periods", "no-rework-time": "Do not take into account in the calculations of redone tasks, the statuses in which the task was less than <0/> minutes", "locale": "Select language <0/>", "title": "Configuration", "button": { "apply": "Apply and close", "save": "Save and close", "discard": "Discard and close" }, "board": { "filters": "Filters", "swimlanes": "Swimlanes (if nothing is selected, all will be used)", "columns": "Columns" }, "field": { "issue-size": "Field for issue size (type Option):", "value-acquisition-lifecycle": "Field for value-acquisition lifecycle (type Option):", "shelf-life-ratio": "Field for shelf-life ratio (type Option):", "desire-delivery-date": "Field for desired delivery date (type Date or DateTime):", "deadline-date": "Field for deadline date (type Date or DateTime):", "dont-use": "Don't use" }, "jira-column-status": { "row": { "skip": "Skip", "work": "Work", "wait": "Wait", "ready": "Ready", "lead": "Lead", "cycle": "Cycle" } } },
-  "lead-cycle-times-chart": { "help": { "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead--cycle-times", "text": "Lead and cycle time statistics for completed tasks" }, "title": { "perc": "Times percentiles: {{title}}", "avg": "Average times: {{title}}" }, "yAxis": { "throughput": "Throughput", "perc": "Time, days", "avg": "Avg. time, days" }, "series": { "lead": { "name": { "perc": "Lead time", "avg": "Avg. lead time" }, "throughput": "Lead throughput" }, "cycle": { "name": { "perc": "Cycle time", "avg": "Avg. cycle time" }, "throughput": "Cycle throughput" }, "life": { "name": { "perc": "Life time", "avg": "Avg. life time" } }, "rework": { "name": { "perc": "Rework time", "avg": "Avg. rework time" } } }, "tab": { "perc": "Percentiles", "avg": "Averages" } },
+  "app-config": { "period-type": { "text": "Analyze period <0/> of <1/>", "days": "days", "seven-days": "seven days", "weeks-mon-exclude": "weeks, from Monday, excluding the current incomplete", "weeks-mon-include": "weeks, from Monday, including the current incomplete", "weeks-sun-exclude": "weeks, from Sunday, excluding the current incomplete", "weeks-sun-include": "weeks, from Sunday, including the current incomplete", "months-exclude": "months, excluding the current incomplete", "months-include": "months, including the current incomplete", "quarters-exclude": "quarters, excluding the current incomplete", "quarters-include": "quarters, including the current incomplete", "years-exclude": "years, excluding the current incomplete", "years-include": "years, including the current incomplete" }, "analyze-size": "Analyse <0/> periods", "no-rework-time": "Do not take into account in the calculations of redone tasks, the statuses in which the task was less than <0/> minutes", "locale": "Select language <0/>", "title": "Configuration", "button": { "apply": "Apply and close", "save": "Save and close", "discard": "Discard and close" }, "board": { "filters": "Filters", "swimlanes": "Swimlanes (if nothing is selected, all will be used)", "columns": "Columns" }, "field": { "issue-size": "Field for issue size (type Option):", "issue-block-checklist": "Field for blocks as checklist:", "issue-block-flagged": "Field for blocks as flagged:", "dont-use": "Don't use" }, "jira-column-status": { "row": { "skip": "Skip", "work": "Work", "wait": "Wait", "ready": "Ready", "lead": "Lead", "cycle": "Cycle" } } },
+  "lead-cycle-times-chart": { "help": { "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead--cycle-times", "text": "Lead and cycle time statistics for completed tasks" }, "title": { "perc": "Times percentiles: {{title}}", "avg": "Average times: {{title}}" }, "yAxis": { "throughput": "Throughput", "perc": "Time, days", "avg": "Avg. time, days" }, "series": { "lead": { "name": { "perc": "Lead time", "avg": "Avg. lead time" }, "throughput": "Lead throughput" }, "cycle": { "name": { "perc": "Cycle time", "avg": "Avg. cycle time" }, "throughput": "Cycle throughput" }, "life": { "name": { "perc": "Life time", "avg": "Avg. life time" } }, "rework": { "name": { "perc": "Rework time", "avg": "Avg. rework time" } }, "block": { "name": { "perc": "Block time", "avg": "Avg. block time" } } }, "tab": { "perc": "Percentiles", "avg": "Averages" } },
   "accumulated-wip": { "help": { "text": "The amount of work in progress accumulated on the board.\nThe sum of days spent unfinished by issues in the work and waiting columns.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#accumulated-wip" }, "title": "Accumulated WIP: {{title}}", "yAxis": { "awipsum": "Total WIP, days", "awipwork": "Work WIP, days", "awipwait": "Waitd WIP, days" }, "series": { "awipsum": "Sum of days spent in all columns", "awipwork": "Sum of days spent in the work columns", "awipwait": "Sum of days spent in the wait columns" } },
   "summary-data": { "cell": { "wip": { "name": "Work in progress", "issues": "WIP", "days": "Days spent on the board", "wait-eff": "Wait / efficiency, %", "burn": "WIP can be processed, periods" }, "head": { "last": { "name": "Last", "title": "Data for the last completed period" }, "prev": { "name": "Penult.", "title": "Data for the penultimate completed period" }, "preprev": { "name": "Pre-penult.", "title": "Data for the pre-penultimate completed period" }, "total": { "name": "Total", "title": "Data for all observation periods" } }, "times": { "name": "Times", "lead": "Lead time, days", "cycle": "Cycle time, days", "throughput": "Throughput, tasks/period" } }, "max": "Maximum", "med": "Median", "min": "Minimum" },
   wia: wia$1
@@ -105950,8 +106002,8 @@ const ru = {
   "lead-time-distributions": { "group": { "total": "Общее", "default": "Без размера", "title": "Распределение времени выполнения: {{title}}" }, "xAxis": { "name": { "lead": "Время поставки, дни", "cycle": "Время цикла, дни" } }, "yAxis": { "name": "Число задач" }, "series": { "count": "{{group}} число задач", "percent": "Процент выполнения {{group}}", "sum": "Накопительная сумма завершенных задач" }, "info": { "lead": "Среднее время поставки: {{avg}}\nМедиана времени поставки: {{med}}\nРаспределение: {{tailName}} ({{tailValue}})", "cycle": "Среднее время цикла: {{avg}}\nМедиана времени цикла: {{med}}\nРаспределение: {{tailName}} ({{tailValue}})" }, "tail": { "fat": "с длинным хвостом", "thin": "с коротким хвостом" }, "help": { "text": "Диаграмма, на основе которой можно делать вероятностный прогноз о времени выполнения задач.\nПо горизонтальной оси откладывается Lead Time,\nпо вертикальной — количество задач, выполненных с таким Lead Time.\nЕсли у задач заданы размеры, то диаграмму можно посмотреть для каждого из них.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%B8-%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F" }, "tab": { "lead": "Время поставки", "cycle": "Время цикла" } },
   "control-chart": { "config": { "search": "Искать на <0/> периодов назад с порогом <1/> %" }, "columns": { "cycle": "Цикл", "lead": "Поставка" }, "row": { "min": "Минимум, дни", "med": "Медиана, дни", "max": "Максимум, дни", "bound": "{{bound}} %, дни", "winners": "Победители" }, "title": "Контрольная диаграмма: {{title}}", "yAxis": { "name": "Время поставки, дни" }, "series": { "issues": "Задачи" }, "help": { "text": "Контрольная диаграмма показывает дисперсию времени выполнения задач.\nИспользуется для поиска и анализа причин, приводящих к нестабильности рабочего процесса.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0" } },
   "analyze-by-wip": { "title": "Пропускная способность, эффективность, время поставки и цикла от объёма незавершенной работы: {{title}}", "yAxis": { "throughput": "Пропускная способность, 1/период", "efficiency": "Эффективность, %", "lead": "Время поставки, дни", "cycle": "Время цикла, дни" }, "series": { "efficiency": "Эффективность", "lead": "Время поставки", "cycle": "Время цикла", "throughput": "Пропускная способность" }, "help": { "text": "Параметры пропускной способности, эффективности,\nвремени поставки и времени цикла завершенных задач\n по среднему WIP за время производства задачи", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7-%D0%BF%D0%BE-wip" } },
-  "app-config": { "period-type": { "text": "Размер периода для анализа <0/> <1/>", "days": "дней", "seven-days": "семидневок", "weeks-mon-exclude": "недель, с понедельника, исключая текущую неполную", "weeks-mon-include": "недель, с понедельника, включая текущую неполную", "weeks-sun-exclude": "недель, с воскресенья, исключая текущую неполную", "weeks-sun-include": "недель, с воскресенья, включая текущую неполную", "months-exclude": "месяцев, исключая текущий неполный", "months-include": "месяцев, включая текущий неполный", "quarters-exclude": "кварталов, исключая текущий неполный", "quarters-include": "кварталов, включая текущий неполный", "years-exclude": "лет, исключая текущий неполный", "years-include": "лет, включая текущий неполный" }, "analyze-size": "Анализировать <0/> периодов", "no-rework-time": "Не учитывать в расчётах переделываемых задач, статусы в которых задача находилась меньше <0/> минут", "locale": "Select language <0/>", "title": "Настройки", "button": { "apply": "Применить и закрыть без сохранения", "save": "Сохранить и закрыть", "discard": "Отменить и закрыть" }, "board": { "filters": "Фильтры", "swimlanes": "Линии (если ничего не выбрано, то будут использованы все)", "columns": "Колонки" }, "field": { "issue-size": "Поле для размера задач (тип Option):", "value-acquisition-lifecycle": "Поле для функции жизненного цикла получения ценности (тип Option):", "shelf-life-ratio": "Поле для коэффициента времени жизни (тип Option):", "desire-delivery-date": "Поле для желаемой даты поставки (тип Date или DateTime):", "deadline-date": "Поле для даты дедлайна (тип Date или DateTime):", "dont-use": "Не используется" }, "jira-column-status": { "row": { "skip": "Пропустить", "work": "В работе", "wait": "В ожидании", "ready": "Готово", "lead": "Время поставки", "cycle": "Время цикла" } } },
-  "lead-cycle-times-chart": { "help": { "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%B2%D1%80%D0%B5%D0%BC%D1%8F-%D0%BF%D0%BE%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B8-%D0%B8-%D1%86%D0%B8%D0%BA%D0%BB%D0%B0", "text": "Статистика времен поставки и цикла для завершенных задач" }, "title": { "perc": "Процентили времён: {{title}}", "avg": "Средние времён: {{title}}" }, "yAxis": { "throughput": "Пр. сп.", "perc": "Время, дни", "avg": "Ср. вр., дни" }, "series": { "lead": { "name": { "perc": "Время поставки", "avg": "Среднее время поставки" }, "throughput": "Пр. сп. поставки" }, "cycle": { "name": { "perc": "Время цикла", "avg": "Среднее время цикла" }, "throughput": "Пр. сп. цикла" }, "life": { "name": { "perc": "Время жизни", "avg": "Среднее время жизни" } }, "rework": { "name": { "perc": "Время повторной работы", "avg": "Среднее время повторной работы" } } }, "tab": { "perc": "Процентили", "avg": "Средние" } },
+  "app-config": { "period-type": { "text": "Размер периода для анализа <0/> <1/>", "days": "дней", "seven-days": "семидневок", "weeks-mon-exclude": "недель, с понедельника, исключая текущую неполную", "weeks-mon-include": "недель, с понедельника, включая текущую неполную", "weeks-sun-exclude": "недель, с воскресенья, исключая текущую неполную", "weeks-sun-include": "недель, с воскресенья, включая текущую неполную", "months-exclude": "месяцев, исключая текущий неполный", "months-include": "месяцев, включая текущий неполный", "quarters-exclude": "кварталов, исключая текущий неполный", "quarters-include": "кварталов, включая текущий неполный", "years-exclude": "лет, исключая текущий неполный", "years-include": "лет, включая текущий неполный" }, "analyze-size": "Анализировать <0/> периодов", "no-rework-time": "Не учитывать в расчётах переделываемых задач, статусы в которых задача находилась меньше <0/> минут", "locale": "Select language <0/>", "title": "Настройки", "button": { "apply": "Применить и закрыть без сохранения", "save": "Сохранить и закрыть", "discard": "Отменить и закрыть" }, "board": { "filters": "Фильтры", "swimlanes": "Линии (если ничего не выбрано, то будут использованы все)", "columns": "Колонки" }, "field": { "issue-size": "Поле для размера задач (тип Option):", "issue-block-checklist": "Поле для блокировок в виде чеклиста:", "issue-block-flagged": "Поле для блокировок в виде флажка:", "dont-use": "Не используется" }, "jira-column-status": { "row": { "skip": "Пропустить", "work": "В работе", "wait": "В ожидании", "ready": "Готово", "lead": "Время поставки", "cycle": "Время цикла" } } },
+  "lead-cycle-times-chart": { "help": { "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%B2%D1%80%D0%B5%D0%BC%D1%8F-%D0%BF%D0%BE%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B8-%D0%B8-%D1%86%D0%B8%D0%BA%D0%BB%D0%B0", "text": "Статистика времен поставки и цикла для завершенных задач" }, "title": { "perc": "Процентили времён: {{title}}", "avg": "Средние времён: {{title}}" }, "yAxis": { "throughput": "Пр. сп.", "perc": "Время, дни", "avg": "Ср. вр., дни" }, "series": { "lead": { "name": { "perc": "Время поставки", "avg": "Среднее время поставки" }, "throughput": "Пр. сп. поставки" }, "cycle": { "name": { "perc": "Время цикла", "avg": "Среднее время цикла" }, "throughput": "Пр. сп. цикла" }, "life": { "name": { "perc": "Время жизни", "avg": "Среднее время жизни" } }, "rework": { "name": { "perc": "Время повторной работы", "avg": "Среднее время повторной работы" } }, "block": { "name": { "perc": "Время блокировки", "avg": "Среднее время блокировки" } } }, "tab": { "perc": "Процентили", "avg": "Средние" } },
   "accumulated-wip": { "help": { "text": "Накопленный на доске объем незавершенной работы.\nСумма дней, проведённых незавершенными задачами в колонках работы и ожидания.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BD%D0%B0%D0%BA%D0%BE%D0%BF%D0%BB%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9-wip" }, "title": "Накопленный WIP: {{title}}", "yAxis": { "awipsum": "Общий WIP, дни", "awipwork": "WIP в работе, дни", "awipwait": "WIP в ожидании, дни" }, "series": { "awipsum": "Сумма дней, проведённых задачами во всех колонках", "awipwork": "Сумма дней, проведённых задачами в колонках работы", "awipwait": "Сумма дней, проведённых задачами в колонках ожидания" } },
   "summary-data": { "cell": { "wip": { "name": "Незавершенная работа", "issues": "Задачи", "days": "Зависших в задачах дней", "wait-eff": "Ожид. / эффективность, %", "burn": "WIP может быть обработан, периоды" }, "head": { "last": { "name": "Посл.", "title": "Данные за последний завершенный период" }, "prev": { "name": "Пред.", "title": "Данные за предпоследний завершенный период" }, "preprev": { "name": "Пред-пред.", "title": "Данные за пред-предпоследний завершенный период" }, "total": { "name": "Общий", "title": "Данные за все периоды наблюдения" } }, "times": { "name": "Времена", "lead": "Время поставки, дней", "cycle": "Время цикла, дней", "throughput": "Пропускная способность, задач в период" } }, "max": "Максимум", "med": "Медиана", "min": "Минимум" },
   wia
@@ -106017,6 +106069,8 @@ const AppConfig = ({ onSaveAction, onApplyAction, onCloseAction, kanbanBoardConf
   const [localPeriodSize, setLocalPeriodSize] = reactExports.useState(conf.periodSize);
   const [localPeriodType, setLocalPeriodType] = reactExports.useState(conf.periodType);
   const [localIssueSizeField, setLocalIssueSizeField] = reactExports.useState(conf.issueSizeField);
+  const [localIssueBlockChecklistField, setLocalIssueBlockChecklistField] = reactExports.useState(conf.issueBlockChecklistField);
+  const [localIssueBlockFlaggedField, setLocalIssueBlockFlaggedField] = reactExports.useState(conf.issueBlockFlaggedField);
   const [localFilters, setLocalFilters] = reactExports.useState(conf.filters);
   const [localSwimlanes, setLocalSwimlanes] = reactExports.useState(conf.configSwimlanes);
   const [localWork, setLocalWork] = reactExports.useState(conf.work);
@@ -106081,6 +106135,8 @@ const AppConfig = ({ onSaveAction, onApplyAction, onCloseAction, kanbanBoardConf
       periodSize: localPeriodSize,
       periodType: localPeriodType,
       issueSizeField: localIssueSizeField,
+      issueBlockChecklistField: localIssueBlockChecklistField,
+      issueBlockFlaggedField: localIssueBlockFlaggedField,
       filters: localFilters,
       swimlanes: localSwimlanes.length === kanbanBoardConfig.swimlanesConfig.swimlanes.length ? kanbanBoardConfig.swimlanesConfig.swimlanes.map((i) => i.id) : localSwimlanes,
       configSwimlanes: localSwimlanes.length === kanbanBoardConfig.swimlanesConfig.swimlanes.length ? [] : localSwimlanes,
@@ -106099,6 +106155,8 @@ const AppConfig = ({ onSaveAction, onApplyAction, onCloseAction, kanbanBoardConf
       periodSize: localPeriodSize,
       periodType: localPeriodType,
       issueSizeField: localIssueSizeField,
+      issueBlockChecklistField: localIssueBlockChecklistField,
+      issueBlockFlaggedField: localIssueBlockFlaggedField,
       filters: localFilters,
       swimlanes: localSwimlanes.length === kanbanBoardConfig.swimlanesConfig.swimlanes.length ? kanbanBoardConfig.swimlanesConfig.swimlanes.map((i) => i.id) : localSwimlanes,
       configSwimlanes: localSwimlanes.length === kanbanBoardConfig.swimlanesConfig.swimlanes.length ? [] : localSwimlanes,
@@ -106197,6 +106255,36 @@ const AppConfig = ({ onSaveAction, onApplyAction, onCloseAction, kanbanBoardConf
       }
     }
     return _issueSizeOptions;
+  }, [fieldsData]);
+  const issueBlockListOptions = reactExports.useMemo(() => {
+    var _a2, _b2, _c2;
+    const _issueBlockListOptions = [];
+    if (Array.isArray(fieldsData)) {
+      for (const field of fieldsData) {
+        if (((_a2 = field.schema) == null ? void 0 : _a2.type) === "array" && ((_b2 = field.schema) == null ? void 0 : _b2.items) === "checklist-item" && ((_c2 = field.schema) == null ? void 0 : _c2.custom) === "com.okapya.jira.checklist:checklist") {
+          _issueBlockListOptions.push({
+            value: field.id,
+            text: field.name
+          });
+        }
+      }
+    }
+    return _issueBlockListOptions;
+  }, [fieldsData]);
+  const issueFlaggedOptions = reactExports.useMemo(() => {
+    var _a2, _b2, _c2;
+    const _issueFlaggedOptions = [];
+    if (Array.isArray(fieldsData)) {
+      for (const field of fieldsData) {
+        if (((_a2 = field.schema) == null ? void 0 : _a2.type) === "array" && ((_b2 = field.schema) == null ? void 0 : _b2.items) === "option" && ((_c2 = field.schema) == null ? void 0 : _c2.custom) === "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes") {
+          _issueFlaggedOptions.push({
+            value: field.id,
+            text: field.name
+          });
+        }
+      }
+    }
+    return _issueFlaggedOptions;
   }, [fieldsData]);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "app-config-option-dialog", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "app-config-option-header", children: t2("app-config.title") }),
@@ -106390,6 +106478,7 @@ const AppConfig = ({ onSaveAction, onApplyAction, onCloseAction, kanbanBoardConf
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "app-config-issue-size", children: [
       t2("app-config.field.issue-size"),
+      " ",
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "select",
         {
@@ -106400,6 +106489,40 @@ const AppConfig = ({ onSaveAction, onApplyAction, onCloseAction, kanbanBoardConf
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: void 0, children: t2("app-config.field.dont-use") }, "null"),
             issueSizeOptions.map((option) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: option.value, children: option.text }, option.value))
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "app-config-issue-size", children: [
+      t2("app-config.field.issue-block-checklist"),
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "select",
+        {
+          value: localIssueBlockChecklistField || void 0,
+          id: "issue-block-checklist-field",
+          name: "issueBlockChecklistField",
+          onChange: (event) => setLocalIssueBlockChecklistField(event.target.value || null),
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: void 0, children: t2("app-config.field.dont-use") }, "null"),
+            issueBlockListOptions.map((option) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: option.value, children: option.text }, option.value))
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "app-config-issue-size", children: [
+      t2("app-config.field.issue-block-flagged"),
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "select",
+        {
+          value: localIssueBlockFlaggedField || void 0,
+          id: "issue-block-flagged-field",
+          name: "issueBlockFlaggedField",
+          onChange: (event) => setLocalIssueBlockFlaggedField(event.target.value || null),
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: void 0, children: t2("app-config.field.dont-use") }, "null"),
+            issueFlaggedOptions.map((option) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: option.value, children: option.text }, option.value))
           ]
         }
       )
@@ -106470,8 +106593,11 @@ class ExpiringStorage {
     const expires = new Date(currentTime + lifeTimeInMinutes * 6e4);
     localStorage.setItem(key, JSON.stringify({ value, expires }));
   }
+  remove(key) {
+    localStorage.removeItem(key);
+  }
 }
-const ExpiringStorage$1 = new ExpiringStorage();
+const expiringStorage = new ExpiringStorage();
 const App = observer(({ dataLoader: dataLoader2 }) => {
   var _a2, _b2, _c2, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m;
   const { t: t2 } = useTranslation();
@@ -106564,8 +106690,8 @@ const App = observer(({ dataLoader: dataLoader2 }) => {
     ((_c2 = dataLoader2.kanbanBoardConfig) == null ? void 0 : _c2.name) && dataLoader2.periodStat.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { clear: "left", width: "95vw", height: "80vh" }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
       Tabs,
       {
-        defaultIndex: ExpiringStorage$1.get("app.tabs.lasttab") || 0,
-        onSelect: (index) => ExpiringStorage$1.set("app.tabs.lasttab", index, 60),
+        defaultIndex: expiringStorage.get("app.tabs.lasttab") || 0,
+        onSelect: (index) => expiringStorage.set("app.tabs.lasttab", index, 60),
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs(TabList, { children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Tab, { children: t2("app.tabs.main") }),
@@ -106686,6 +106812,8 @@ const makeInitConf = () => ({
   cycle: [],
   selectedColumns: /* @__PURE__ */ new Set(),
   issueSizeField: null,
+  issueBlockFlaggedField: null,
+  issueBlockChecklistField: null,
   noReworkTime: 15
 });
 const makeConfV1 = (conf) => ({
@@ -106702,6 +106830,8 @@ const makeConfV1 = (conf) => ({
   cycle: conf.cycle.map((v) => String(v)),
   selectedColumns: /* @__PURE__ */ new Set([...conf.lead.map((v) => String(v)), ...conf.cycle.map((v) => String(v))]),
   issueSizeField: conf.issueSizeField,
+  issueBlockFlaggedField: null,
+  issueBlockChecklistField: null,
   noReworkTime: 15
 });
 const makeConfV2 = (conf) => ({
@@ -106718,6 +106848,8 @@ const makeConfV2 = (conf) => ({
   cycle: conf.cycle.map((v) => String(v)),
   selectedColumns: /* @__PURE__ */ new Set([...conf.lead.map((v) => String(v)), ...conf.cycle.map((v) => String(v))]),
   issueSizeField: conf.issueSizeField,
+  issueBlockFlaggedField: conf.issueBlockFlaggedField,
+  issueBlockChecklistField: conf.issueBlockChecklistField,
   noReworkTime: conf.noReworkTime
 });
 const makeSaveConfV2 = (conf) => ({
@@ -106732,6 +106864,8 @@ const makeSaveConfV2 = (conf) => ({
   lead: [...conf.lead].map((v) => Number(v)),
   cycle: [...conf.cycle].map((v) => Number(v)),
   issueSizeField: conf.issueSizeField,
+  issueBlockFlaggedField: conf.issueBlockFlaggedField,
+  issueBlockChecklistField: conf.issueBlockChecklistField,
   noReworkTime: conf.noReworkTime
 });
 const normalizeConf = (res, colIds, swimlanes, filters) => {
@@ -106782,13 +106916,15 @@ const loadConfig = async (jiraBase2, jiraBoardId2, colIds, swimlanes, filters) =
       }
     } catch {
     }
-    try {
-      const url = jiraBase2 + "/rest/agile/1.0/board/" + jiraBoardId2 + "/properties/tsergey.jka.config.v1";
-      const conf1 = await fetch(url).then((res2) => res2.ok ? res2.json() : void 0);
-      if (conf1 == null ? void 0 : conf1.value) {
-        res = makeConfV1(conf1.value);
+    if (!res) {
+      try {
+        const url = jiraBase2 + "/rest/agile/1.0/board/" + jiraBoardId2 + "/properties/tsergey.jka.config.v1";
+        const conf1 = await fetch(url).then((res2) => res2.ok ? res2.json() : void 0);
+        if (conf1 == null ? void 0 : conf1.value) {
+          res = makeConfV1(conf1.value);
+        }
+      } catch {
       }
-    } catch {
     }
     if (!res) {
       res = makeInitConf();
@@ -106813,10 +106949,200 @@ const saveConfig = async (jiraBase2, jiraBoardId2, conf) => {
     console.error("Can't save config to board: " + reason);
   }
 };
-const _DataLoader = class _DataLoader {
+const combinePath = (path1, path2) => {
+  if (path1.charAt(path1.length - 1) === "/") {
+    return path1 + path2;
+  } else {
+    return path1 + "/" + path2;
+  }
+};
+class IssueStatStorage {
+  get(jiraBase2, data) {
+    const key = combinePath(jiraBase2, data.key);
+    const savedData = expiringStorage.get(key);
+    if (savedData === null) {
+      return null;
+    }
+    if (savedData.updated !== data.updated || savedData.fieldBlocksChecklist !== data.fieldBlocksChecklist || savedData.fieldBlocksOption !== data.fieldBlocksOption) {
+      expiringStorage.remove(key);
+      return null;
+    }
+    return savedData;
+  }
+  set(jiraBase2, data) {
+    const expiredTime = data.isClosed ? 92 * 24 * 60 : 60;
+    expiringStorage.set(combinePath(jiraBase2, data.key), data, expiredTime);
+  }
+  remove(jiraBase2, data) {
+    expiringStorage.remove(combinePath(jiraBase2, data.key));
+  }
+}
+const IssueStatStorage$1 = new IssueStatStorage();
+const processFlagged = (item, flaggedItems) => {
+  var _a2, _b2;
+  const fVals = ((_a2 = item.fromString) == null ? void 0 : _a2.split(/,(?! )/)) || [];
+  const tVals = ((_b2 = item.toString) == null ? void 0 : _b2.split(/,(?! )/)) || [];
+  const added = tVals.filter((x) => !fVals.includes(x));
+  const removed = fVals.filter((x) => !tVals.includes(x));
+  removed.filter((a2) => a2 !== "" && a2 !== null && a2 != void 0).forEach((r2) => {
+    const flaggedItem = flaggedItems.find((i) => i.name === r2);
+    if (flaggedItem) {
+      flaggedItem.active = false;
+    }
+  });
+  added.filter((a2) => a2 !== "" && a2 !== null && a2 != void 0).forEach((a2) => {
+    const flaggedItem = flaggedItems.find((i) => i.name === a2);
+    if (flaggedItem) {
+      flaggedItem.active = true;
+    } else {
+      flaggedItems.push({
+        name: a2,
+        active: true
+      });
+    }
+  });
+};
+const processCheckList = (changelogItem, checkListItems) => {
+  var _a2, _b2;
+  const actionRE = /^(\d+)\) (?:\[([A-Za-z, ]{2,})] )?(?:(\[H]) )?(.*)/s;
+  const fromStrings2 = ((_a2 = changelogItem.fromString) == null ? void 0 : _a2.split("\r\n")) || [];
+  const toStrings = ((_b2 = changelogItem.toString) == null ? void 0 : _b2.split("\r\n")) || [];
+  if (toStrings.length === 1 && toStrings[0] === "All items removed") {
+    while (toStrings.length < fromStrings2.length) {
+      toStrings.push("All items removed");
+    }
+  }
+  for (let i = 0; i < toStrings.length; i++) {
+    const t2 = toStrings[i];
+    const f = fromStrings2[i];
+    const fMatch = f == null ? void 0 : f.match(actionRE);
+    const fStrNum = fMatch == null ? void 0 : fMatch[1];
+    const fHeader = fMatch == null ? void 0 : fMatch[3];
+    const fBody = fMatch == null ? void 0 : fMatch[4];
+    if (t2 === "No changes but items were reordered") {
+      continue;
+    }
+    if (t2 === "All items removed") {
+      if (fHeader === "[H]") {
+        continue;
+      }
+      const find2 = checkListItems.findIndex((value) => value.name === fBody);
+      if (find2 >= 0) {
+        checkListItems.splice(find2, 1);
+      }
+      continue;
+    }
+    const tMatch = t2.match(actionRE);
+    if (tMatch) {
+      const tStrNum = tMatch[1];
+      const tActionStr = tMatch[2];
+      const tHeader = tMatch[3];
+      const tBody = tMatch[4];
+      const tActions = (tActionStr == null ? void 0 : tActionStr.split(", ")) || [];
+      if (tActions.includes("Added")) {
+        if (tHeader === "[H]") {
+          continue;
+        }
+        checkListItems.push({ name: tBody, active: !tActions.includes("Checked") });
+        continue;
+      }
+      if (tStrNum !== fStrNum) {
+        console.error(`Mismatch in line numbers: ${fStrNum} vs ${tStrNum}`);
+        continue;
+      }
+      if (fHeader === "[H]" && tHeader === "[H]") {
+        continue;
+      }
+      if (fHeader === "[H]") {
+        if (tActions.includes("Removed")) {
+          continue;
+        }
+        checkListItems.push({ name: tBody, active: !tActions.includes("Checked") });
+        continue;
+      }
+      if (tHeader === "[H]") {
+        const find2 = checkListItems.findIndex((value) => value.name === fBody);
+        if (find2 >= 0) {
+          checkListItems.splice(find2, 1);
+        }
+        continue;
+      }
+      if (tActions.includes("Removed")) {
+        const find2 = checkListItems.findIndex((value) => value.name === fBody);
+        if (find2 >= 0) {
+          checkListItems.splice(find2, 1);
+        }
+        continue;
+      }
+      if (tActions.includes("Unchecked")) {
+        const find2 = checkListItems.find((value) => value.name === fBody);
+        if (find2) {
+          find2.active = true;
+          if (fBody !== tBody) {
+            find2.name = tBody;
+          }
+        }
+        continue;
+      }
+      if (tActions.includes("Checked")) {
+        const find2 = checkListItems.find((value) => value.name === fBody);
+        if (find2) {
+          find2.active = false;
+          if (fBody !== tBody) {
+            find2.name = tBody;
+          }
+        }
+        continue;
+      }
+      if (fBody !== tBody) {
+        const find2 = checkListItems.find((value) => value.name === fBody);
+        if (find2) {
+          find2.name = tBody;
+        }
+      }
+    }
+  }
+};
+const calcBlockTime = (history, blockCheckListField, blockFlaggedField) => {
+  try {
+    let blockTime = 0;
+    let lastStartBlockTime = NaN;
+    const flaggedItems = [];
+    const checkListItems = [];
+    for (const hist of history) {
+      const time2 = Date.parse(hist.created).valueOf();
+      for (const item of hist.items) {
+        if (blockFlaggedField && item.field === blockFlaggedField) {
+          processFlagged(item, flaggedItems);
+        }
+        if (blockCheckListField && item.field === blockCheckListField) {
+          processCheckList(item, checkListItems);
+        }
+      }
+      if (flaggedItems.findIndex((value) => value.active) >= 0 || checkListItems.findIndex((value) => value.active) >= 0) {
+        if (Number.isNaN(lastStartBlockTime)) {
+          lastStartBlockTime = time2;
+        }
+      } else {
+        if (!Number.isNaN(lastStartBlockTime)) {
+          blockTime += time2 - lastStartBlockTime;
+          lastStartBlockTime = NaN;
+        }
+      }
+    }
+    if (!Number.isNaN(lastStartBlockTime)) {
+      blockTime += (/* @__PURE__ */ new Date()).getTime() - lastStartBlockTime;
+    }
+    return blockTime / (24 * 60 * 60 * 1e3);
+  } catch (error) {
+    console.error(error);
+    return NaN;
+  }
+};
+class DataLoader {
   constructor(progressBarData2, jiraBase2, jiraBoardId2) {
     __privateAdd(this, _DataLoader_instances);
-    __privateAdd(this, _finishStep, 4);
+    __privateAdd(this, _finishStep, 5);
     __privateAdd(this, _currentStep, -1);
     __privateAdd(this, _stepSize, 1);
     __privateAdd(this, _currentStepProgress, 0);
@@ -106828,7 +107154,6 @@ const _DataLoader = class _DataLoader {
     __publicField(this, "kanbanCFD");
     __publicField(this, "periodStat");
     __publicField(this, "issuesStat");
-    __publicField(this, "issues");
     __publicField(this, "issuesMap");
     __publicField(this, "leadCycleTimeDistribution");
     __publicField(this, "columns");
@@ -106840,10 +107165,9 @@ const _DataLoader = class _DataLoader {
     __publicField(this, "boardAllData");
     __publicField(this, "conf");
     __privateAdd(this, _clearData, () => {
-      var _a2;
       this.kanbanPlanColumns.splice(0);
       this.kanbanBoardConfig = void 0;
-      this.conf = __privateMethod(_a2 = _DataLoader, _DataLoader_static, makeInitConf_fn).call(_a2);
+      this.conf = makeInitConf();
       this.fieldsData = [];
       this.boardAllData = void 0;
       this.kanbanCFD = {
@@ -106856,14 +107180,49 @@ const _DataLoader = class _DataLoader {
       this.issuesStat = {};
       this.leadCycleTimeDistribution = {};
       this.columns.splice(0);
-      this.issues.splice(0);
       this.issuesMap = {};
       this.wiaLeadByColumns = {};
       this.wiaCycleByColumns = {};
       this.wiaByColumns = {};
       this.unfinishedIssues = {};
     });
-    var _a2;
+    __privateAdd(this, _loadIssue, async (issKey) => {
+      var _a2, _b2;
+      let issueData = IssueStatStorage$1.get(this.jiraBase, {
+        key: issKey,
+        updated: this.issuesMap[issKey].fields["updated"].numValue,
+        isClosed: this.issuesMap[issKey].isClosed,
+        fieldBlocksChecklist: this.conf.issueBlockChecklistField || void 0,
+        fieldBlocksOption: this.conf.issueBlockFlaggedField || void 0,
+        blockDays: NaN
+      });
+      if (issueData) {
+        return issueData;
+      }
+      const reqUrl = this.jiraBase + "/rest/api/2/issue/" + issKey + "?fields=updated&expand=changelog";
+      const data = await fetch(
+        reqUrl,
+        {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json"
+          }
+        }
+      ).then((res) => res.json());
+      const issueBlockChecklistFieldName = ((_a2 = this.fieldsData.find((value) => value.id === this.conf.issueBlockChecklistField)) == null ? void 0 : _a2.name) || null;
+      const issueBlockFlaggedFieldName = ((_b2 = this.fieldsData.find((value) => value.id === this.conf.issueBlockFlaggedField)) == null ? void 0 : _b2.name) || null;
+      const blockDays = calcBlockTime(data.changelog.histories, issueBlockChecklistFieldName, issueBlockFlaggedFieldName);
+      issueData = {
+        key: issKey,
+        updated: this.issuesMap[issKey].fields["updated"].numValue,
+        isClosed: this.issuesMap[issKey].isClosed,
+        fieldBlocksChecklist: this.conf.issueBlockChecklistField || void 0,
+        fieldBlocksOption: this.conf.issueBlockFlaggedField || void 0,
+        blockDays
+      };
+      IssueStatStorage$1.set(this.jiraBase, issueData);
+      return issueData;
+    });
     makeAutoObservable(this);
     __privateSet(this, _progressBarData, progressBarData2);
     this.jiraBase = jiraBase2;
@@ -106873,7 +107232,6 @@ const _DataLoader = class _DataLoader {
     this.kanbanCFD = { columns: [], columnChanges: {}, firstChangeTime: NaN, now: NaN };
     this.periodStat = [];
     this.issuesStat = {};
-    this.issues = [];
     this.issuesMap = {};
     this.leadCycleTimeDistribution = {};
     this.columns = [];
@@ -106883,7 +107241,7 @@ const _DataLoader = class _DataLoader {
     this.unfinishedIssues = {};
     this.fieldsData = [];
     this.boardAllData = void 0;
-    this.conf = __privateMethod(_a2 = _DataLoader, _DataLoader_static, makeInitConf_fn).call(_a2);
+    this.conf = makeInitConf();
   }
   async startLoading() {
     __privateMethod(this, _DataLoader_instances, updateProgressBar_fn).call(this, 0, 1, 0);
@@ -106894,7 +107252,7 @@ const _DataLoader = class _DataLoader {
       const newConf = await __privateMethod(this, _DataLoader_instances, loadConfig_fn).call(this);
       await this.configureAndLoad(newConf);
     } finally {
-      __privateMethod(this, _DataLoader_instances, updateProgressBar_fn).call(this, 4, 1, 0);
+      __privateMethod(this, _DataLoader_instances, updateProgressBar_fn).call(this, __privateGet(this, _finishStep), 1, 0);
     }
   }
   async configureAndLoad(newConf) {
@@ -106914,37 +107272,18 @@ const _DataLoader = class _DataLoader {
         __privateMethod(this, _DataLoader_instances, recalcDetailedLTD_fn).call(this);
       });
     } finally {
-      __privateMethod(this, _DataLoader_instances, updateProgressBar_fn).call(this, 4, 1, 0);
+      __privateMethod(this, _DataLoader_instances, updateProgressBar_fn).call(this, __privateGet(this, _finishStep), 1, 0);
     }
   }
   async saveConfig(newConf) {
     await saveConfig(this.jiraBase, this.jiraBoardId, newConf);
   }
-};
+}
 _finishStep = new WeakMap();
 _currentStep = new WeakMap();
 _stepSize = new WeakMap();
 _currentStepProgress = new WeakMap();
 _progressBarData = new WeakMap();
-_DataLoader_static = new WeakSet();
-makeInitConf_fn = function() {
-  return {
-    periodSize: 1,
-    periodType: "seven-days",
-    analyzeLength: 13,
-    filters: [],
-    swimlanes: [],
-    configSwimlanes: [],
-    work: [],
-    wait: [],
-    ready: [],
-    lead: [],
-    cycle: [],
-    selectedColumns: /* @__PURE__ */ new Set(),
-    issueSizeField: null,
-    noReworkTime: 15
-  };
-};
 _DataLoader_instances = new WeakSet();
 updateProgressBar_fn = function(currentStep, stepSize, currentStepProgress) {
   runInAction(() => {
@@ -107060,6 +107399,14 @@ recalcCFD_fn = function() {
     for (const [key, issue] of Object.entries(kanbanStat.unfinishedIssues)) {
       this.unfinishedIssues[key] = issue;
     }
+    Object.entries(kanbanStat.issues).forEach(([key, stat]) => {
+      this.issuesMap[key] = {
+        key,
+        isClosed: stat.isClosed,
+        updated: NaN,
+        fields: {}
+      };
+    });
   } catch (err) {
     console.warn(err);
   }
@@ -107068,72 +107415,84 @@ calcLTD_fn = function() {
   this.leadCycleTimeDistribution = { total: __privateMethod(this, _DataLoader_instances, calcIssuesLCTD_fn).call(this, Object.values(this.issuesStat)) };
 };
 loadIssues_fn = async function(stepNumber) {
-  if (this.conf.issueSizeField) {
-    const issuesToLoad = Object.keys(this.issuesStat);
-    const issuesSummary = {};
-    for (const issue of this.boardAllData.issuesData.issues) {
-      if (!issuesToLoad.includes(issue.key)) {
-        issuesToLoad.push(issue.key);
-        issuesSummary[issue.key] = issue.summary;
-      }
+  if (!this.conf.issueSizeField && !this.conf.issueBlockFlaggedField && !this.conf.issueBlockChecklistField) {
+    return;
+  }
+  const issuesToLoad = Object.keys(this.issuesMap);
+  const issuesToLoadCnt = issuesToLoad.length;
+  try {
+    const url = this.jiraBase + "/rest/api/2/search";
+    const req = {
+      jql: "",
+      startAt: 0,
+      maxResults: 100,
+      fields: ["updated", "summary"]
+    };
+    if (this.conf.issueSizeField) {
+      req.fields.push(this.conf.issueSizeField);
     }
-    const issuesToLoadCnt = issuesToLoad.length;
-    try {
-      const url = this.jiraBase + "/rest/api/2/search";
-      const req = {
-        jql: "",
-        startAt: 0,
-        maxResults: 100,
-        fields: new Array()
-      };
-      if (this.conf.issueSizeField) {
-        req.fields.push(this.conf.issueSizeField);
-      }
-      while (issuesToLoad.length > 0) {
-        const issKeys = issuesToLoad.splice(0, 100);
-        req.jql = "issuekey in (" + issKeys.join(",") + ")";
-        const data = await fetch(
-          url,
-          {
-            method: "POST",
-            headers: {
-              "Content-type": "application/json"
-            },
-            body: JSON.stringify(req)
-          }
-        ).then((res) => res.json());
-        __privateMethod(this, _DataLoader_instances, updateProgressBar_fn).call(this, stepNumber, issuesToLoadCnt, issuesToLoadCnt - issuesToLoad.length);
-        for (const issue of data.issues) {
-          this.issues.push(issue);
-          const im = Object.assign(issue, { summary: void 0 });
-          if (im.key in issuesSummary) {
-            im.summary = issuesSummary[im.key];
-          }
-          this.issuesMap[issue.key] = im;
+    while (issuesToLoad.length > 0) {
+      const issKeys = issuesToLoad.splice(0, 100);
+      req.jql = "issuekey in (" + issKeys.join(",") + ")";
+      const data = await fetch(
+        url,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify(req)
         }
+      ).then((res) => res.json());
+      __privateMethod(this, _DataLoader_instances, updateProgressBar_fn).call(this, stepNumber, issuesToLoadCnt, issuesToLoadCnt - issuesToLoad.length);
+      for (const issue of data.issues) {
+        if ("updated" in issue.fields) {
+          this.issuesMap[issue.key].updated = new Date(issue.fields["updated"].value).getTime();
+        }
+        this.issuesMap[issue.key].fields = issue.fields;
       }
-    } catch (e2) {
-      console.warn(e2);
     }
+    if (!this.conf.issueBlockFlaggedField && !this.conf.issueBlockChecklistField) {
+      return;
+    }
+    issuesToLoad.push(...Object.keys(this.issuesMap));
+    while (issuesToLoad.length > 0) {
+      const issKey = issuesToLoad.shift();
+      if (issKey in this.issuesStat) {
+        const data = await __privateGet(this, _loadIssue).call(this, issKey);
+        this.issuesStat[issKey].block = data.blockDays;
+      }
+      __privateMethod(this, _DataLoader_instances, updateProgressBar_fn).call(this, stepNumber + 1, issuesToLoadCnt, issuesToLoadCnt - issuesToLoad.length);
+    }
+  } catch (e2) {
+    console.warn(e2);
   }
 };
+_loadIssue = new WeakMap();
 recalcDetailedLTD_fn = function() {
-  const groups = { "default": [] };
-  for (const [key, issueStat] of Object.entries(this.issuesStat)) {
-    let group = "default";
-    if (key in this.issuesMap && this.conf.issueSizeField && this.conf.issueSizeField in this.issuesMap[key].fields) {
-      const sizeField = this.issuesMap[key].fields[this.conf.issueSizeField];
-      if (sizeField == null ? void 0 : sizeField.value) {
-        group = sizeField.value;
+  if (this.conf.issueSizeField) {
+    const groups = { "default": [] };
+    for (const [key, issueStat] of Object.entries(this.issuesStat)) {
+      let group = "default";
+      if (key in this.issuesMap && this.conf.issueSizeField in this.issuesMap[key].fields) {
+        const sizeField = this.issuesMap[key].fields[this.conf.issueSizeField];
+        if (sizeField == null ? void 0 : sizeField.value) {
+          group = sizeField.value;
+        }
       }
+      if (!(group in groups)) {
+        groups[group] = [];
+      }
+      groups[group].push(issueStat);
     }
-    if (!(group in groups)) {
-      groups[group] = [];
+    for (const [group, issueStats] of Object.entries(groups)) {
+      this.leadCycleTimeDistribution[group] = __privateMethod(this, _DataLoader_instances, calcIssuesLCTD_fn).call(this, issueStats);
     }
-    groups[group].push(issueStat);
   }
-  for (const [group, issueStats] of Object.entries(groups)) {
-    this.leadCycleTimeDistribution[group] = __privateMethod(this, _DataLoader_instances, calcIssuesLCTD_fn).call(this, issueStats);
+  if (this.conf.issueBlockFlaggedField || this.conf.issueBlockChecklistField) {
+    for (const tPeriodsStat of this.periodStat) {
+      tPeriodsStat.block = calcStat(tPeriodsStat.closedIssues.map((key) => this.issuesStat[key].block));
+    }
   }
 };
 calcIssuesLCTD_fn = function(filteredIssuesStats) {
@@ -107243,8 +107602,6 @@ recalcColumns_fn = function() {
     }
   }
 };
-__privateAdd(_DataLoader, _DataLoader_static);
-let DataLoader = _DataLoader;
 const queryString = window.location.hash.substring(1);
 const urlParams = new URLSearchParams(queryString);
 const jiraBase = urlParams.get("base") || "";
