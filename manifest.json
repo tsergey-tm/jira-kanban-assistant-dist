@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Jira Kanban Assistant",
-  "version": "20250709.144746",
+  "version": "20250709.145127",
   "description": "Kanban Method assistant on Jira Boards",
   "icons": {
     "16": "icons/icon_16.png",
