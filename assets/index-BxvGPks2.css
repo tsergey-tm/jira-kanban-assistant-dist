@@ -457,7 +457,6 @@ a.icon-info-down {
 .app-config-option-header {
 
     margin: 1rem 2rem;
-    alignment: center;
     text-align: center;
     font-size: large;
 }
@@ -536,6 +535,24 @@ a.icon-info-down {
     color: var(--color-tabs-text-sel);
     border-radius: 5px;
     padding: 0.2rem 0.4rem;
+}
+
+.jira-columns-box-table-subheader {
+    background-color: var(--color-tabs-bg);
+    border-radius: 5px;
+    padding: 0.2rem 0.4rem;
+}
+
+.jira-columns-box-table-button {
+    background-color: var(--color-tabs-bg-sel);
+    color: var(--color-tabs-text-sel);
+    padding: 0.2rem 0.4rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.jira-columns-box-table-clickable {
+    cursor: pointer;
 }
 
 .jira-columns-box-table-item {
