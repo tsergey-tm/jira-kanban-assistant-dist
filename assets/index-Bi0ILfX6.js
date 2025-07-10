@@ -93622,6 +93622,9 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
     const ids = [];
     const names = [];
     const times = [];
+    const waitData = [];
+    const throughputData = [];
+    const workData = [];
     const prevColumnWait = [];
     const columnWait = [];
     const periodsCount = periodStat.length;
@@ -93633,16 +93636,16 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
         prevColumnWait.push(colIndex > 0 && conf.wait.includes(columns[colIndex - 1].id));
         columnWait.push(conf.wait.includes(id2));
         times.push(new Array(periodsCount).fill(NaN));
+        waitData.push(new Array(periodsCount).fill(NaN));
+        throughputData.push(new Array(periodsCount).fill(NaN));
+        workData.push(new Array(periodsCount).fill(NaN));
       }
     }
+    let waitMax = NaN;
+    let throughputMax = NaN;
+    let workMax = NaN;
     for (let periodIndex = 0; periodIndex < periodStat.length; periodIndex++) {
       const item = periodStat[periodIndex];
-      let waitMax = NaN;
-      let throughputMax = NaN;
-      let workMax = NaN;
-      let waitData = new Array(ids.length).fill(NaN);
-      let throughputData = new Array(ids.length).fill(NaN);
-      let workData = new Array(ids.length).fill(NaN);
       for (let colIndex = 0; colIndex < ids.length; colIndex++) {
         const id2 = ids[colIndex];
         if (columnWait[colIndex]) {
@@ -93654,7 +93657,7 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
             /* total */
           );
           waitMax = max([waitMax, time2]);
-          waitData[colIndex] = time2;
+          waitData[colIndex][periodIndex] = time2;
         } else {
           const th = calcTime(
             item,
@@ -93664,7 +93667,7 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
             /* throughput */
           );
           throughputMax = max([throughputMax, th]);
-          throughputData[colIndex] = th;
+          throughputData[colIndex][periodIndex] = th;
           const work = calcTime(
             item,
             id2,
@@ -93673,12 +93676,14 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
             /* lead */
           );
           workMax = max([workMax, work]);
-          workData[colIndex] = work;
+          workData[colIndex][periodIndex] = work;
         }
       }
+    }
+    for (let periodIndex = 0; periodIndex < periodStat.length; periodIndex++) {
       for (let colIndex = 0; colIndex < ids.length; colIndex++) {
         if (columnWait[colIndex]) {
-          const wait = waitData[colIndex];
+          const wait = waitData[colIndex][periodIndex];
           if (wait !== null && wait !== void 0) {
             times[colIndex][periodIndex] = wait * WAIT_TIME_WEIGHT / waitMax;
           } else {
@@ -93686,13 +93691,13 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
           }
         } else {
           const wait = prevColumnWait[colIndex] ? times[colIndex - 1][periodIndex] : NaN;
-          let throughput = throughputData[colIndex];
+          let throughput = throughputData[colIndex][periodIndex];
           if (throughput !== null && throughput !== void 0) {
             throughput = (throughputMax - throughput) * THROUGHPUT_WEIGHT / throughputMax;
           } else {
             throughput = NaN;
           }
-          let work = workData[colIndex];
+          let work = workData[colIndex][periodIndex];
           if (work !== null && work !== void 0) {
             work = work * WORK_TIME_WEIGHT / workMax;
           } else {
@@ -93795,16 +93800,18 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
         }
       }
     }
+    let waitMax = NaN;
+    let throughputMax = NaN;
+    let workMax = NaN;
     for (let periodIndex = 0; periodIndex < periodStat.length; periodIndex++) {
-      const item = periodStat[periodIndex];
-      let waitMax = NaN;
-      let throughputMax = NaN;
-      let workMax = NaN;
       for (let resIndex = 0; resIndex < resources2.length; resIndex++) {
         waitMax = max([waitMax, waitData[resIndex][periodIndex]]);
         throughputMax = max([throughputMax, throughputData[resIndex][periodIndex]]);
         workMax = max([workMax, workData[resIndex][periodIndex]]);
       }
+    }
+    for (let periodIndex = 0; periodIndex < periodStat.length; periodIndex++) {
+      const item = periodStat[periodIndex];
       for (let resIndex = 0; resIndex < resources2.length; resIndex++) {
         let wait = waitData[resIndex][periodIndex];
         if (wait !== null && wait !== void 0) {
