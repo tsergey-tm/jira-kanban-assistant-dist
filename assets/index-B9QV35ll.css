@@ -609,3 +609,7 @@ a.icon-info-down {
     padding: 0.2rem 0;
     clear: both;
 }
+.TrendChart {
+    width: 98vw;
+    clear: both;
+}

@@ -93369,11 +93369,15 @@ const LeadCycleTimeChart = ({ title, periodStat }) => {
     grid: [
       {
         top: "10%",
-        height: "60%"
+        height: "60%",
+        left: "5%",
+        width: "90%"
       },
       {
         bottom: "10%",
-        height: "15%"
+        height: "15%",
+        left: "5%",
+        width: "90%"
       }
     ],
     xAxis: [
@@ -93518,15 +93522,12 @@ use([
   installUniversalTransition,
   install
 ]);
-const THROUGHPUT_WEIGHT = 35;
-const WAIT_TIME_WEIGHT = 50;
-const WORK_TIME_WEIGHT = 15;
 var TypeSelected = /* @__PURE__ */ ((TypeSelected2) => {
   TypeSelected2["lead"] = "lead";
   TypeSelected2["wip"] = "wip";
   TypeSelected2["total"] = "total";
   TypeSelected2["throughput"] = "throughput";
-  TypeSelected2["scoring"] = "scoring";
+  TypeSelected2["waiting"] = "waiting";
   TypeSelected2["resources"] = "resources";
   return TypeSelected2;
 })(TypeSelected || {});
@@ -93579,8 +93580,8 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
     /* q3 */
   );
   const [typeSelected, setTypeSelected] = reactExports.useState(
-    "scoring"
-    /* scoring */
+    "waiting"
+    /* waiting */
   );
   const heatMapSeriesDataSingle = (data) => {
     for (let i = 0; i < columns.length; i++) {
@@ -93625,127 +93626,46 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
       }
     }
   };
-  const heatMapSeriesDataScoring = (data) => {
-    const ids = [];
-    const names = [];
-    const times = [];
-    const waitData = [];
-    const throughputData = [];
-    const workData = [];
-    const prevColumnWait = [];
-    const columnWait = [];
-    const periodsCount = periodStat.length;
-    for (let colIndex = 0; colIndex < columns.length; colIndex++) {
-      const id2 = columns[colIndex].id;
-      if (selectedColumns.includes(id2)) {
-        ids.push(id2);
-        names.push(columns[colIndex].name);
-        prevColumnWait.push(colIndex > 0 && conf.wait.includes(columns[colIndex - 1].id));
-        columnWait.push(conf.wait.includes(id2));
-        times.push(new Array(periodsCount).fill(NaN));
-        waitData.push(new Array(periodsCount).fill(NaN));
-        throughputData.push(new Array(periodsCount).fill(NaN));
-        workData.push(new Array(periodsCount).fill(NaN));
-      }
-    }
-    let waitMax = NaN;
-    let throughputMax = NaN;
-    let workMax = NaN;
-    for (let periodIndex = 0; periodIndex < periodStat.length; periodIndex++) {
-      const item = periodStat[periodIndex];
-      for (let colIndex = 0; colIndex < ids.length; colIndex++) {
-        const id2 = ids[colIndex];
-        if (columnWait[colIndex]) {
-          const time2 = calcTime(
-            item,
-            id2,
-            selected,
-            "total"
-            /* total */
-          );
-          waitMax = max([waitMax, time2]);
-          waitData[colIndex][periodIndex] = time2;
-        } else {
-          const th = calcTime(
-            item,
-            id2,
-            selected,
-            "throughput"
-            /* throughput */
-          );
-          throughputMax = max([throughputMax, th]);
-          throughputData[colIndex][periodIndex] = th;
-          const work = calcTime(
-            item,
-            id2,
-            selected,
-            "lead"
-            /* lead */
-          );
-          workMax = max([workMax, work]);
-          workData[colIndex][periodIndex] = work;
-        }
-      }
-    }
-    for (let periodIndex = 0; periodIndex < periodStat.length; periodIndex++) {
-      for (let colIndex = 0; colIndex < ids.length; colIndex++) {
-        if (columnWait[colIndex]) {
-          const wait = waitData[colIndex][periodIndex];
-          if (wait !== null && wait !== void 0) {
-            times[colIndex][periodIndex] = wait * WAIT_TIME_WEIGHT / waitMax;
-          } else {
-            times[colIndex][periodIndex] = NaN;
-          }
-        } else {
-          const wait = prevColumnWait[colIndex] ? times[colIndex - 1][periodIndex] : NaN;
-          let throughput = throughputData[colIndex][periodIndex];
-          if (throughput !== null && throughput !== void 0) {
-            throughput = (throughputMax - throughput) * THROUGHPUT_WEIGHT / throughputMax;
-          } else {
-            throughput = NaN;
-          }
-          let work = workData[colIndex][periodIndex];
-          if (work !== null && work !== void 0) {
-            work = work * WORK_TIME_WEIGHT / workMax;
-          } else {
-            work = NaN;
-          }
-          const value = sum([wait, throughput, work]);
-          times[colIndex][periodIndex] = value;
-          if (prevColumnWait[colIndex]) {
-            times[colIndex - 1][periodIndex] = value;
-          }
-        }
-      }
-    }
-    for (let colIndex = 0; colIndex < ids.length; colIndex++) {
-      let timeMin = NaN;
-      let timeMax = NaN;
-      for (let periodIndex = 0; periodIndex < periodStat.length; periodIndex++) {
-        const item = periodStat[periodIndex];
-        const time2 = times[colIndex][periodIndex];
-        if (time2 !== null && time2 !== void 0 && !isNaN(time2)) {
-          data.value.push({
-            value: [
-              names[colIndex],
-              new Date(item.date).toLocaleDateString(i18n.language, { dateStyle: "short" }),
-              time2,
-              columnWait[colIndex],
-              prevColumnWait[colIndex]
-            ],
-            label: {
-              position: columnWait ? "insideRight" : "inside"
+  const heatMapSeriesDataWaiting = (data) => {
+    for (let i = 0; i < columns.length; i++) {
+      if (conf.wait.includes(columns[i].id)) {
+        const id2 = columns[i].id;
+        const minData = [];
+        const maxData = [];
+        if (selectedColumns.includes(id2)) {
+          for (const item of periodStat) {
+            const time2 = calcTime(item, id2, selected, typeSelected);
+            if (time2 !== null && time2 !== void 0) {
+              data.value.push({
+                value: [
+                  columns[i].name,
+                  new Date(item.date).toLocaleDateString(i18n.language, { dateStyle: "short" }),
+                  time2,
+                  true,
+                  false
+                ],
+                label: {
+                  position: "insideRight"
+                }
+              });
+              data.min = min([data.min, time2]);
+              data.max = max([data.max, time2]);
             }
-          });
-          data.min = min([data.min, time2]);
-          data.max = max([data.max, time2]);
-          timeMin = min([timeMin, time2]);
-          timeMax = max([timeMax, time2]);
+            const timeMin = calcTime(item, id2, "q0", typeSelected);
+            if (timeMin !== null && timeMin !== void 0) {
+              minData.push(timeMin);
+            }
+            const timeMax = calcTime(item, id2, "q4", typeSelected);
+            if (timeMax !== null && timeMax !== void 0) {
+              maxData.push(timeMax);
+            }
+          }
         }
-      }
-      if (!isNaN(timeMin)) {
-        data.mins.push([names[colIndex], timeMin]);
-        data.maxs.push([names[colIndex], timeMax - timeMin]);
+        if (minData.length > 0) {
+          const min$12 = min(minData);
+          data.mins.push([columns[i].name, min$12]);
+          data.maxs.push([columns[i].name, max(maxData) - min$12]);
+        }
       }
     }
   };
@@ -93753,13 +93673,9 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
     const resources2 = Object.keys(conf.resources).sort();
     const periodsCount = periodStat.length;
     const waitData = new Array(resources2.length);
-    const throughputData = new Array(resources2.length);
-    const workData = new Array(resources2.length);
     const times = new Array(resources2.length);
     for (let resIndex = 0; resIndex < resources2.length; resIndex++) {
       waitData[resIndex] = new Array(periodsCount).fill(NaN);
-      throughputData[resIndex] = new Array(periodsCount).fill(NaN);
-      workData[resIndex] = new Array(periodsCount).fill(NaN);
       times[resIndex] = [];
     }
     const cols = [...new Set(Object.values(conf.resources).flatMap((v) => [...v])).values()];
@@ -93786,75 +93702,30 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
               /* total */
             );
             waitData[resIndex][periodIndex] = sum([waitData[resIndex][periodIndex], time2]);
-          } else {
-            const th = calcTime(
-              item,
-              id2,
-              selected,
-              "throughput"
-              /* throughput */
-            );
-            throughputData[resIndex][periodIndex] = sum([throughputData[resIndex][periodIndex], th]);
-            const work = calcTime(
-              item,
-              id2,
-              selected,
-              "lead"
-              /* lead */
-            );
-            workData[resIndex][periodIndex] = sum([workData[resIndex][periodIndex], work]);
           }
         }
-      }
-    }
-    let waitMax = NaN;
-    let throughputMax = NaN;
-    let workMax = NaN;
-    for (let periodIndex = 0; periodIndex < periodStat.length; periodIndex++) {
-      for (let resIndex = 0; resIndex < resources2.length; resIndex++) {
-        waitMax = max([waitMax, waitData[resIndex][periodIndex]]);
-        throughputMax = max([throughputMax, throughputData[resIndex][periodIndex]]);
-        workMax = max([workMax, workData[resIndex][periodIndex]]);
       }
     }
     for (let periodIndex = 0; periodIndex < periodStat.length; periodIndex++) {
       const item = periodStat[periodIndex];
       for (let resIndex = 0; resIndex < resources2.length; resIndex++) {
         let wait = waitData[resIndex][periodIndex];
-        if (wait !== null && wait !== void 0) {
-          wait = wait * WAIT_TIME_WEIGHT / waitMax;
-        } else {
-          wait = NaN;
-        }
-        let throughput = throughputData[resIndex][periodIndex];
-        if (throughput !== null && throughput !== void 0) {
-          throughput = (throughputMax - throughput) * THROUGHPUT_WEIGHT / throughputMax;
-        } else {
-          throughput = NaN;
-        }
-        let work = workData[resIndex][periodIndex];
-        if (work !== null && work !== void 0) {
-          work = work * WORK_TIME_WEIGHT / workMax;
-        } else {
-          work = NaN;
-        }
-        const value = sum([wait, throughput, work]);
-        if (value !== null && value !== void 0 && !isNaN(value)) {
+        if (wait !== null && wait !== void 0 && !isNaN(wait)) {
           data.value.push({
             value: [
               resources2[resIndex],
               new Date(item.date).toLocaleDateString(i18n.language, { dateStyle: "short" }),
-              value,
-              false,
+              wait,
+              true,
               false
             ],
             label: {
               position: "inside"
             }
           });
-          data.min = min([data.min, value]);
-          data.max = max([data.max, value]);
-          times[resIndex].push(value);
+          data.min = min([data.min, wait]);
+          data.max = max([data.max, wait]);
+          times[resIndex].push(wait);
         }
       }
     }
@@ -93873,8 +93744,8 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
       mins: new Array(),
       maxs: new Array()
     };
-    if (typeSelected === "scoring") {
-      heatMapSeriesDataScoring(data);
+    if (typeSelected === "waiting") {
+      heatMapSeriesDataWaiting(data);
     } else if (typeSelected === "resources") {
       heatMapSeriesDataResources(data);
     } else {
@@ -94043,6 +93914,8 @@ const TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
   const columnsData = () => {
     if (typeSelected === "resources") {
       return Object.keys(conf.resources).sort();
+    } else if (typeSelected === "waiting") {
+      return columns.filter((value) => selectedColumns.includes(value.id)).filter((value) => conf.wait.includes(value.id)).map((item) => item.name);
     } else {
       return columns.filter((value) => selectedColumns.includes(value.id)).map((item) => item.name);
     }
@@ -106347,9 +106220,10 @@ class Browser {
 }
 Browser.type = "languageDetector";
 const locale$1 = { "ru": "Russian", "en": "English" };
-const app$1 = { "title": { "without-name": "Jira Kanban assistant", "with-name": "Jira Kanban assistant: {{name}}" }, "tabs": { "main": "Main statistics", "total-wip": "Total WIP", "wip-by-columns": "WIPs by columns", "time-by-columns": "Bottleneck search", "lead-time-distributions": "Lead time distributions", "long-times": "Control Chart", "analyze-by-wip": "Analyze by WIP", "lead-cycle-times": "Lead, cycle times & etc", "accumulated-wip": "Accumulated WIP", "summary-data": "Summary", "times-by-columns": "Time by columns", "wia": "Work item age" }, "config-info": { "text": "Selected columns: {{columns}}, swimlanes: {{swimlanes}}, filters: {{filters}}", "help": { "text": "Information about columns, lines and filters selected for analysis.\nTo change settings, click on the gear icon.\nFor a detailed description, click on this icon.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#configuration" } } };
+const app$1 = { "title": { "without-name": "Jira Kanban assistant", "with-name": "Jira Kanban assistant: {{name}}" }, "tabs": { "main": "Main statistics", "total-wip": "Total WIP", "wip-by-columns": "WIPs by columns", "time-by-columns": "Bottleneck search", "lead-time-distributions": "Lead time distributions", "long-times": "Control Chart", "analyze-by-wip": "Analyze by WIP", "lead-cycle-times": "Lead, cycle times & etc", "accumulated-wip": "Accumulated WIP", "summary-data": "Summary", "times-by-columns": "Time by columns", "wia": "Work item age", "trend": "Trends" }, "config-info": { "text": "Selected columns: {{columns}}, swimlanes: {{swimlanes}}, filters: {{filters}}", "help": { "text": "Information about columns, lines and filters selected for analysis.\nTo change settings, click on the gear icon.\nFor a detailed description, click on this icon.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#configuration" } } };
 const main$1 = { "title": "Kanban statistics: {{title}}", "yAxis": { "avg-wip": "Avg WIP", "eff-wait": "Eff / Wait, %", "lead-cycle": "Lead / Cycle, days", "throughput": "Throughput, 1/period" }, "series": { "efficiency": "Efficiency", "wait": "Wait", "avg-total-wip": "Avg total WIP", "throughput": { "name": "Throughput", "avg": "Avg", "med": "Med" }, "lead": "Lead time", "cycle": "Cycle time", "lead-throughput": { "name": "Lead throughput" }, "cycle-throughput": { "name": "Cycle throughput" } }, "help": { "text": "On this screen is presented:\nThe average value of WIP for periods.\nThe ratio of time how many completed tasks were carried out in the columns of work by the time spent in the waiting columns for the periods.\nDelivery time and cycle of completed tasks for periods.\nThe capacity of the team for the period.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#main-screen" } };
 const wia$1 = { "help": { "text": "The amount of time that has passed since the start of work on the elements until the current moment\nA leading indicator that applies to active pending items.\nIt shows which ones are progressing well and which ones are not.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#work-item-age" }, "tab": { "lead": "Over lead time", "cycle": "Over cycle time", "column": "Over column time" }, "title": { "lead": "Work item age over lead time : {{title}}", "cycle": "Work item age over cycle time : {{title}}", "column": "Work item age over column time : {{title}}" } };
+const trend$1 = { "help": { "text": "Trend analysis of key performance indicators.\nThe trend line is built using the linear regression method.\nThe trend direction is determined by the angle of inclination of the trend line.\nIf the angle is positive, then the trend is increasing, if negative, then decreasing.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#trends" }, "title": "Trends: {{title}}", "yAxis": { "throughput": "Throughput, issue/period", "awip": "Accumulated WIP, issue*days" }, "series": { "throughput": "Throughput", "awip": "Accumulated WIP" } };
 const en = {
   locale: locale$1,
   app: app$1,
@@ -106357,7 +106231,7 @@ const en = {
   "total-wip": { "title": "Total WIP: {{title}}", "yAxis": { "wip": "Count issues in progress", "periods": "WIP / throughput, per.", "throughput": "Throughput, 1/per." }, "series": { "max": "Maximum", "avg": "Average", "med": "Median", "min": "Minimum", "throughput": { "name": "Throughput", "avg": "Avg. throughput", "med": "Med. throughput", "q3": "75% throughput" }, "periods": { "avg": "WIP / avg. throughput", "med": "WIP / med. throughput", "q3": "WIP / 75% throughput" } }, "help": { "text": "This screen contains aggregated values of total WIP on the board by the periods.\nAs well as the number of periods for which the current WIP will be implemented based on the average, median and 75 percentile throughput", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#total-wip" } },
   "wip-by-columns": { "tab": { "max": "Maximums", "avg": "Averages", "med": "Medians", "min": "Minimums" }, "title": { "name": { "max": "Maximums", "avg": "Averages", "med": "Medians", "min": "Minimums" }, "title": "{{aggr}} WIP by columns : {{title}}" }, "yAxis": { "name": "Count issues in progress" }, "help": { "text": "This screen contains aggregated values of WIP in the columns according by the periods.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#wips-by-columns" } },
   "times-by-columns": { "tab": { "max": "Maximums", "avg": "Averages", "med": "Medians", "min": "Minimums", "sum": "Sum" }, "title": { "name": { "max": "Maximums", "avg": "Averages", "med": "Medians", "min": "Minimums", "sum": "Sum" }, "title": "{{aggr}} of time by columns : {{title}}" }, "yAxis": { "name": "Time spent in columns, days" }, "help": { "text": "This screen presents aggregated values of time spent by completed tasks in columns by period.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#time-by-columns" } },
-  "time-by-columns": { "tab": { "q0": "Minimums", "q2": "Medians", "q3": "75 percentiles", "q4": "Maximums", "avg": "Averages", "lead": "Time in columns", "wip": "WIP", "total": "Days spent on the board", "throughput": "Throughput", "scoring": "Scoring", "resources": "Scoring by resources" }, "xAxis": { "throughput": "Throughput, 1/period", "columns": "Time in column, days" }, "title": { "lead": { "q0": "Minimums of time by columns for released issues: {{title}}", "q2": "Medians of time by columns for released issues: {{title}}", "q3": "75 percentiles of time by columns for released issues: {{title}}", "q4": "Maximums of time by columns for released issues: {{title}}", "avg": "Averages of time by columns for released issues: {{title}}" }, "wip": { "q0": "Minimums of work in progress: {{title}}", "q2": "Medians of work in progress: {{title}}", "q3": "75 percentiles of work in progress: {{title}}", "q4": "Maximums of work in progress: {{title}}", "avg": "Averages of work in progress: {{title}}" }, "total": { "q0": "Minimums of total time in WIP: {{title}}", "q2": "Medians of total time in WIP: {{title}}", "q3": "75 percentiles of total time in WIP: {{title}}", "q4": "Maximums of total time in WIP: {{title}}", "avg": "Averages of total time in WIP: {{title}}" }, "throughput": { "q0": "Throughput: {{title}}", "q2": "Throughput: {{title}}", "q3": "Throughput: {{title}}", "q4": "Throughput: {{title}}", "avg": "Throughput: {{title}}" }, "scoring": { "q0": "Generalized estimate by minimums: {{title}}", "q2": "Generalized estimate by medians: {{title}}", "q3": "Generalized estimate by 75th percentiles: {{title}}", "q4": "Generalized estimate by maximums: {{title}}", "avg": "Generalized estimate by averages: {{title}}" }, "resources": { "q0": "Generalized estimate by resources by minimums: {{title}}", "q2": "Generalized estimate by resources by medians: {{title}}", "q3": "Generalized estimate by resources by 75th percentiles: {{title}}", "q4": "Generalized estimate by resources by maximums: {{title}}", "avg": "Generalized estimate by resources by averages: {{title}}" } }, "help": { "text": "This screen shows the time that spent in the columns the tasks completed in the period.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#bottleneck-search" }, "series": { "lead-throughput": { "name": "Throughput" }, "cycle-throughput": { "name": "Cycle throughput" }, "lead": { "name": "Time in columns, days" }, "wip": { "name": "WIP" }, "total": { "name": "Total time of work in progress, days" }, "throughput": { "name": "Throughput by columns" }, "scoring": { "name": "Generalized estimate" }, "resources": { "name": "Generalized estimate by resources" } } },
+  "time-by-columns": { "tab": { "q0": "Minimums", "q2": "Medians", "q3": "75 percentiles", "q4": "Maximums", "avg": "Averages", "lead": "Time in columns", "wip": "WIP", "total": "Days spent on the board", "throughput": "Throughput", "waiting": "Step waiting", "resources": "Resource waiting" }, "xAxis": { "throughput": "Throughput, 1/period", "columns": "Time in column, days" }, "title": { "lead": { "q0": "Minimums of time by columns for released issues: {{title}}", "q2": "Medians of time by columns for released issues: {{title}}", "q3": "75 percentiles of time by columns for released issues: {{title}}", "q4": "Maximums of time by columns for released issues: {{title}}", "avg": "Averages of time by columns for released issues: {{title}}" }, "wip": { "q0": "Minimums of work in progress: {{title}}", "q2": "Medians of work in progress: {{title}}", "q3": "75 percentiles of work in progress: {{title}}", "q4": "Maximums of work in progress: {{title}}", "avg": "Averages of work in progress: {{title}}" }, "total": { "q0": "Minimums of total time in WIP: {{title}}", "q2": "Medians of total time in WIP: {{title}}", "q3": "75 percentiles of total time in WIP: {{title}}", "q4": "Maximums of total time in WIP: {{title}}", "avg": "Averages of total time in WIP: {{title}}" }, "throughput": { "q0": "Throughput: {{title}}", "q2": "Throughput: {{title}}", "q3": "Throughput: {{title}}", "q4": "Throughput: {{title}}", "avg": "Throughput: {{title}}" }, "scoring": { "q0": "Step waiting by minimums: {{title}}", "q2": "Step waiting by medians: {{title}}", "q3": "Step waiting by 75th percentiles: {{title}}", "q4": "Step waiting by maximums: {{title}}", "avg": "Step waiting by averages: {{title}}" }, "resources": { "q0": "Resource waiting by minimums: {{title}}", "q2": "Resource waiting by medians: {{title}}", "q3": "Resource waiting by 75th percentiles: {{title}}", "q4": "Resource waiting by maximums: {{title}}", "avg": "Resource waiting by averages: {{title}}" } }, "help": { "text": "This screen shows the time that spent in the columns the tasks completed in the period.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#bottleneck-search" }, "series": { "lead-throughput": { "name": "Throughput" }, "cycle-throughput": { "name": "Cycle throughput" }, "lead": { "name": "Time in columns, days" }, "wip": { "name": "WIP" }, "total": { "name": "Total time of work in progress, days" }, "throughput": { "name": "Throughput by columns" }, "waiting": { "name": "Step waiting" }, "resources": { "name": "Resource waiting" } } },
   "lead-time-distributions": { "group": { "total": "Total", "default": "Without size", "title": "Lead time distributions: {{title}}" }, "xAxis": { "name": { "lead": "Lead time, days", "cycle": "Cycle time, days" } }, "yAxis": { "name": "Count of issues" }, "series": { "count": "{{group}} count", "percent": "{{group}} percent of progress", "sum": "Cumulative sum of completed tasks" }, "info": { "lead": "Avg lead time: {{avg}}\nMedian lead time: {{med}}\n75% lead time: {{q75}}\n85% lead time: {{q85}}\nDistribution: {{tailName}} ({{tailValue}})", "cycle": "Avg cycle time: {{avg}}\nMedian cycle time: {{med}}\n75% cycle time: {{q75}}\n85% cycle time: {{q85}}\nDistribution: {{tailName}} ({{tailValue}})" }, "tail": { "fat": "Fat-tailed", "thin": "Thin-tailed" }, "help": { "text": "A diagram on the basis of which you can make a probabilistic forecast about the time of task.\nOn the horizontal axis is laid by LEAD TIME,\nBy vertical - the number of tasks performed with such LEAD TIME.\nIf the tasks are has the dimensions, then the diagram can be viewed for each of them.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead-time-distributions" }, "tab": { "lead": "Lead time", "cycle": "Cycle time" } },
   "control-chart": { "config": { "search": "Search <0/> periods ago with bound <1/> %" }, "columns": { "cycle": "Cycle", "lead": "Lead" }, "row": { "min": "Minimum, days", "med": "Median, days", "max": "Maximum, days", "bound": "{{bound}} %, days", "winners": "Winners" }, "title": "Control chart: {{title}}", "yAxis": { "name": "Lead time, days" }, "series": { "issues": "Issues" }, "help": { "text": "The control chart shows the dispersion of the task execution time.\nIt is used to search and analyze the reasons leading to the instability of the work process.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead-time-distributions" } },
   "analyze-by-wip": { "title": "Throughput, Efficiency, Lead & Cycle times by WIP: {{title}}", "yAxis": { "throughput": "Throughput, 1/period", "efficiency": "Efficiency, %", "lead": "Lead time, days", "cycle": "Cycle time, days" }, "series": { "efficiency": "Efficiency", "lead": "Lead time", "cycle": "Cycle time", "throughput": "Throughput" }, "help": { "text": "Parameters of throughput, efficiency,\nlead time and cycle time of completed tasks\nby the average WIP during the production of the task", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#analyze-by-wip" } },
@@ -106365,12 +106239,14 @@ const en = {
   "lead-cycle-times-chart": { "help": { "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#lead--cycle-times", "text": "Lead and cycle time statistics for completed tasks" }, "title": { "perc": "Times percentiles: {{title}}", "avg": "Average times: {{title}}" }, "yAxis": { "throughput": "Throughput", "perc": "Time, days", "avg": "Avg. time, days" }, "series": { "lead": { "name": { "perc": "Lead time", "avg": "Avg. lead time" }, "throughput": "Lead throughput" }, "cycle": { "name": { "perc": "Cycle time", "avg": "Avg. cycle time" }, "throughput": "Cycle throughput" }, "life": { "name": { "perc": "Life time", "avg": "Avg. life time" } }, "rework": { "name": { "perc": "Rework time", "avg": "Avg. rework time" } }, "block": { "name": { "perc": "Block time", "avg": "Avg. block time" } } }, "tab": { "perc": "Percentiles", "avg": "Averages" } },
   "accumulated-wip": { "help": { "text": "The amount of work in progress accumulated on the board.\nThe sum of days spent unfinished by issues in the work and waiting columns.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#accumulated-wip" }, "title": "Accumulated WIP: {{title}}", "yAxis": { "awipsum": "Total WIP, days", "awipwork": "Work WIP, days", "awipwait": "Waitd WIP, days" }, "series": { "awipsum": "Sum of days spent in all columns", "awipwork": "Sum of days spent in the work columns", "awipwait": "Sum of days spent in the wait columns" } },
   "summary-data": { "cell": { "wip": { "name": "Work in progress", "issues": "WIP", "days": "Days spent on the board", "wait-eff": "Wait / efficiency, %", "burn": "WIP can be processed, periods" }, "head": { "last": { "name": "Last", "title": "Data for the last completed period" }, "prev": { "name": "Penult.", "title": "Data for the penultimate completed period" }, "preprev": { "name": "Pre-penult.", "title": "Data for the pre-penultimate completed period" }, "total": { "name": "Total", "title": "Data for all observation periods" } }, "times": { "name": "Times", "lead": "Lead time, days", "cycle": "Cycle time, days", "throughput": "Throughput, tasks/period" } }, "max": "Maximum", "med": "Median", "min": "Minimum" },
-  wia: wia$1
+  wia: wia$1,
+  trend: trend$1
 };
 const locale = { "ru": "Русский", "en": "English" };
-const app = { "title": { "without-name": "Jira Kanban assistant", "with-name": "Jira Kanban assistant: {{name}}" }, "tabs": { "main": "Основная статистика", "total-wip": "Общий WIP", "wip-by-columns": "WIP по колонкам", "time-by-columns": "Поиск узких мест", "lead-time-distributions": "Распределение времени выполнения", "long-times": "Контрольная диаграмма", "analyze-by-wip": "Анализ по WIP", "lead-cycle-times": "Время поставки, цикла и т.п.", "accumulated-wip": "Накопленный WIP", "summary-data": "Сводка", "times-by-columns": "Время по колонкам", "wia": "Возраст рабочего элемента" }, "config-info": { "text": "Выбрано колонок: {{columns}}, линий: {{swimlanes}}, фильтров: {{filters}}", "help": { "text": "Информация о выбранных для анализа колонок, линий и фильтров.\nЧтобы изменить настройки, нажмите на значок шестерёнки.\nДля подробного описания кликните на значок.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0" } } };
+const app = { "title": { "without-name": "Jira Kanban assistant", "with-name": "Jira Kanban assistant: {{name}}" }, "tabs": { "main": "Основная статистика", "total-wip": "Общий WIP", "wip-by-columns": "WIP по колонкам", "time-by-columns": "Поиск узких мест", "lead-time-distributions": "Распределение времени выполнения", "long-times": "Контрольная диаграмма", "analyze-by-wip": "Анализ по WIP", "lead-cycle-times": "Время поставки, цикла и т.п.", "accumulated-wip": "Накопленный WIP", "summary-data": "Сводка", "times-by-columns": "Время по колонкам", "wia": "Возраст рабочего элемента", "trend": "Тренды" }, "config-info": { "text": "Выбрано колонок: {{columns}}, линий: {{swimlanes}}, фильтров: {{filters}}", "help": { "text": "Информация о выбранных для анализа колонок, линий и фильтров.\nЧтобы изменить настройки, нажмите на значок шестерёнки.\nДля подробного описания кликните на значок.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0" } } };
 const main = { "title": "Статистика Канбана: {{title}}", "yAxis": { "avg-wip": "Средний WIP", "eff-wait": "Эфф / ожид., %", "lead-cycle": "Поставка / цикл, дн.", "throughput": "Проп. сп., 1/период" }, "series": { "efficiency": "Эффективность", "wait": "Потери", "avg-total-wip": "Ср. общий WIP", "throughput": { "name": "Пропускная способность", "avg": "Сред.", "med": "Медиана" }, "lead": "Время поставки", "cycle": "Время цикла", "lead-throughput": { "name": "Пропускная способность в поставке" }, "cycle-throughput": { "name": "Пропускная способность в цикле" } }, "help": { "text": "На этом экране представлены:\nСреднее значение незавершенной работы (WIP) по периодам.\nОтношение времени сколько завершенные задачи провели в колонках работы ко времени проведенном в колонках ожидания по периодам.\nВремя поставки и цикла завершенных задач по периодам.\nПропускная способность команды по периодам.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9-%D1%8D%D0%BA%D1%80%D0%B0%D0%BD" } };
 const wia = { "help": { "text": "Количество времени, которое прошло с момента начала работы над элементов до текущего момента\nОпережающий индикатор, который применяется к активным незавершенным элементам.\nОн показывает какие из них продвигаются хорошо, а какие - нет.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%92%D1%80%D0%B5%D0%BC%D1%8F-%D0%B6%D0%B8%D0%B7%D0%BD%D0%B8-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0" }, "tab": { "lead": "По времени поставки", "cycle": "По времени цикла", "column": "По времени в колонке" }, "title": { "lead": "Возраст рабочего элемента по времени поставки : {{title}}", "cycle": "Возраст рабочего элемента по времени цикла : {{title}}", "column": "Возраст рабочего элемента по времени в колонке : {{title}}" } };
+const trend = { "help": { "text": "Тренды изменения ключевых показателей команды по периодам.\nИспользуется для оценки влияния изменений на показатели.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#тренды" }, "title": "Тренды: {{title}}", "yAxis": { "throughput": "Проход, задач/период", "awip": "Накопленный объём незавершенной работы, задач * дни" }, "series": { "throughput": "Пропускная способность", "awip": "Накопленный объём незавершенной работы" } };
 const ru = {
   locale,
   app,
@@ -106378,7 +106254,7 @@ const ru = {
   "total-wip": { "title": "Общая незавершенная работа (WIP): {{title}}", "yAxis": { "wip": "Число незавершенных задач", "periods": "WIP / проп. сп., пер.", "throughput": "Проп. сп., 1/пер." }, "series": { "max": "Максимум", "avg": "Среднее", "med": "Медиана", "min": "Минимум", "throughput": { "name": "Пропускная способность", "avg": "Проп. сп. сред.", "med": "Проп. сп. медиана", "q3": "Проп. сп. 75%" }, "periods": { "avg": "WIP / ср. проп. сп.", "med": "WIP / мед. проп. сп.", "q3": "WIP / 75% проп. сп." } }, "help": { "text": "На этом экране представлены агрегированные значения общей незавершенной работы на доске по периодам.\nА так же Количество периодов, за которые текущий WIP будет реализован исходя из средней, медианы и 75 персентили пропускной способности", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BE%D0%B1%D1%89%D0%B8%D0%B9-wip" } },
   "wip-by-columns": { "tab": { "max": "Максимумы", "avg": "Средние", "med": "Медианы", "min": "Минимумы" }, "title": { "name": { "max": "Максимумы", "avg": "Средние", "med": "Медианы", "min": "Минимумы" }, "title": "{{aggr}} незавершенной работы WIP по колонкам : {{title}}" }, "yAxis": { "name": "Число незавершенных задач" }, "help": { "text": "На этом экране представлены агрегированные значения незавершенной работы в колонках по периодам.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#wip-%D0%BF%D0%BE-%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BA%D0%B0%D0%BC" } },
   "times-by-columns": { "tab": { "max": "Максимумы", "avg": "Средние", "med": "Медианы", "min": "Минимумы", "sum": "Сумма" }, "title": { "name": { "max": "Максимумы", "avg": "Средние", "med": "Медианы", "min": "Минимумы", "sum": "Сумма" }, "title": "{{aggr}} времени проведённых в колонках : {{title}}" }, "yAxis": { "name": "Время проведённое в колонках, дни" }, "help": { "text": "На этом экране представлены агрегированные значения времени, проведённых завершенными задачами в колонках по периодам.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%92%D1%80%D0%B5%D0%BC%D1%8F%20%D0%BF%D0%BE%20%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BA%D0%B0%D0%BC" } },
-  "time-by-columns": { "tab": { "q0": "Минимумы", "q2": "Медианы", "q3": "75 процентиль", "q4": "Максимумы", "avg": "Средние", "lead": "Время в колонке", "wip": "Незавершенная работа", "total": "Накопленный объём незавершенной работы", "throughput": "Пропускная способность", "scoring": "Обобщенная оценка", "resources": "Обобщенная оценка по ресурсам" }, "xAxis": { "throughput": "Проп. спос., 1/период", "columns": "Время в колонке, дни" }, "title": { "lead": { "q0": "Минимумы времени по колонкам для завершенных задач: {{title}}", "q2": "Медианы времени по колонкам для завершенных задач: {{title}}", "q3": "75 процентиль времени по колонкам для завершенных задач: {{title}}", "q4": "Максимумы времени по колонкам для завершенных задач: {{title}}", "avg": "Средние времена по колонкам для завершенных задач: {{title}}" }, "wip": { "q0": "Минимумы незавершенной работы: {{title}}", "q2": "Медианы незавершенной работы: {{title}}", "q3": "75 процентиль незавершенной работы: {{title}}", "q4": "Максимумы незавершенной работы: {{title}}", "avg": "Средние незавершенной работы: {{title}}" }, "total": { "q0": "Минимумы объёма незавершенной работы: {{title}}", "q2": "Медианы  объёма незавершенной работы: {{title}}", "q3": "75 процентиль  объёма незавершенной работы: {{title}}", "q4": "Максимумы  объёма незавершенной работы: {{title}}", "avg": "Средние  объёма незавершенной работы: {{title}}" }, "throughput": { "q0": "Пропускная способность по колонкам: {{title}}", "q2": "Пропускная способность по колонкам: {{title}}", "q3": "Пропускная способность по колонкам: {{title}}", "q4": "Пропускная способность по колонкам: {{title}}", "avg": "Пропускная способность по колонкам: {{title}}" }, "scoring": { "q0": "Обобщенная оценка по минимумам: {{title}}", "q2": "Обобщенная оценка по медианам: {{title}}", "q3": "Обобщенная оценка по 75 процентили: {{title}}", "q4": "Обобщенная оценка по максимумам: {{title}}", "avg": "Обобщенная оценка по средним: {{title}}" }, "resources": { "q0": "Обобщенная оценка по ресурсам по минимумам: {{title}}", "q2": "Обобщенная оценка по ресурсам по медианам: {{title}}", "q3": "Обобщенная оценка по ресурсам по 75 процентили: {{title}}", "q4": "Обобщенная оценка по ресурсам по максимумам: {{title}}", "avg": "Обобщенная оценка по ресурсам по средним: {{title}}" } }, "help": { "text": "На этом экране представлено время, которые провели в колонках завершенные в периоде задачи.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BF%D0%BE%D0%B8%D1%81%D0%BA-%D1%83%D0%B7%D0%BA%D0%B8%D1%85-%D0%BC%D0%B5%D1%81%D1%82" }, "series": { "lead-throughput": { "name": "Пропускная способность" }, "cycle-throughput": { "name": "Пропускная способность в цикле" }, "lead": { "name": "Время, проведённое в колонке, дни" }, "wip": { "name": "Незавершенная работа, шт." }, "total": { "name": "Объём времени незавершенной работы, дни" }, "throughput": { "name": "Пропускная способность по колонкам" }, "scoring": { "name": "Обобщенная оценка" }, "resources": { "name": "Обобщенная оценка по ресурсам" } } },
+  "time-by-columns": { "tab": { "q0": "Минимумы", "q2": "Медианы", "q3": "75 процентиль", "q4": "Максимумы", "avg": "Средние", "lead": "Время в колонке", "wip": "Незавершенная работа", "total": "Накопленный объём незавершенной работы", "throughput": "Пропускная способность", "waiting": "Ожидание шага", "resources": "Ожидание ресурса" }, "xAxis": { "throughput": "Проп. спос., 1/период", "columns": "Время в колонке, дни" }, "title": { "lead": { "q0": "Минимумы времени по колонкам для завершенных задач: {{title}}", "q2": "Медианы времени по колонкам для завершенных задач: {{title}}", "q3": "75 процентиль времени по колонкам для завершенных задач: {{title}}", "q4": "Максимумы времени по колонкам для завершенных задач: {{title}}", "avg": "Средние времена по колонкам для завершенных задач: {{title}}" }, "wip": { "q0": "Минимумы незавершенной работы: {{title}}", "q2": "Медианы незавершенной работы: {{title}}", "q3": "75 процентиль незавершенной работы: {{title}}", "q4": "Максимумы незавершенной работы: {{title}}", "avg": "Средние незавершенной работы: {{title}}" }, "total": { "q0": "Минимумы объёма незавершенной работы: {{title}}", "q2": "Медианы  объёма незавершенной работы: {{title}}", "q3": "75 процентиль  объёма незавершенной работы: {{title}}", "q4": "Максимумы  объёма незавершенной работы: {{title}}", "avg": "Средние  объёма незавершенной работы: {{title}}" }, "throughput": { "q0": "Пропускная способность по колонкам: {{title}}", "q2": "Пропускная способность по колонкам: {{title}}", "q3": "Пропускная способность по колонкам: {{title}}", "q4": "Пропускная способность по колонкам: {{title}}", "avg": "Пропускная способность по колонкам: {{title}}" }, "waiting": { "q0": "Ожидание шага по минимумам: {{title}}", "q2": "Ожидание шага по медианам: {{title}}", "q3": "Ожидание шага по 75 процентили: {{title}}", "q4": "Ожидание шага по максимумам: {{title}}", "avg": "Ожидание шага по средним: {{title}}" }, "resources": { "q0": "Ожидание ресурса по минимумам: {{title}}", "q2": "Ожидание ресурса по медианам: {{title}}", "q3": "Ожидание ресурса по 75 процентили: {{title}}", "q4": "Ожидание ресурса по максимумам: {{title}}", "avg": "Ожидание ресурса по средним: {{title}}" } }, "help": { "text": "На этом экране представлено время, которые провели в колонках завершенные в периоде задачи.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BF%D0%BE%D0%B8%D1%81%D0%BA-%D1%83%D0%B7%D0%BA%D0%B8%D1%85-%D0%BC%D0%B5%D1%81%D1%82" }, "series": { "lead-throughput": { "name": "Пропускная способность" }, "cycle-throughput": { "name": "Пропускная способность в цикле" }, "lead": { "name": "Время, проведённое в колонке, дни" }, "wip": { "name": "Незавершенная работа, шт." }, "total": { "name": "Объём времени незавершенной работы, дни" }, "throughput": { "name": "Пропускная способность по колонкам" }, "waiting": { "name": "Ожидание шага" }, "resources": { "name": "Ожидание ресурса" } } },
   "lead-time-distributions": { "group": { "total": "Общее", "default": "Без размера", "title": "Распределение времени выполнения: {{title}}" }, "xAxis": { "name": { "lead": "Время поставки, дни", "cycle": "Время цикла, дни" } }, "yAxis": { "name": "Число задач" }, "series": { "count": "{{group}} число задач", "percent": "Процент выполнения {{group}}", "sum": "Накопительная сумма завершенных задач" }, "info": { "lead": "Среднее время поставки: {{avg}}\nМедиана времени поставки: {{med}}\n75% времени поставки: {{q75}}\n85% времени поставки: {{q85}}\nРаспределение: {{tailName}} ({{tailValue}})", "cycle": "Среднее время цикла: {{avg}}\nМедиана времени цикла: {{med}}\n75% времени цикла: {{q75}}\n85% времени цикла: {{q85}}\nРаспределение: {{tailName}} ({{tailValue}})" }, "tail": { "fat": "с длинным хвостом", "thin": "с коротким хвостом" }, "help": { "text": "Диаграмма, на основе которой можно делать вероятностный прогноз о времени выполнения задач.\nПо горизонтальной оси откладывается Lead Time,\nпо вертикальной — количество задач, выполненных с таким Lead Time.\nЕсли у задач заданы размеры, то диаграмму можно посмотреть для каждого из них.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%B8-%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F" }, "tab": { "lead": "Время поставки", "cycle": "Время цикла" } },
   "control-chart": { "config": { "search": "Искать на <0/> периодов назад с порогом <1/> %" }, "columns": { "cycle": "Цикл", "lead": "Поставка" }, "row": { "min": "Минимум, дни", "med": "Медиана, дни", "max": "Максимум, дни", "bound": "{{bound}} %, дни", "winners": "Победители" }, "title": "Контрольная диаграмма: {{title}}", "yAxis": { "name": "Время поставки, дни" }, "series": { "issues": "Задачи" }, "help": { "text": "Контрольная диаграмма показывает дисперсию времени выполнения задач.\nИспользуется для поиска и анализа причин, приводящих к нестабильности рабочего процесса.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0" } },
   "analyze-by-wip": { "title": "Пропускная способность, эффективность, время поставки и цикла от объёма незавершенной работы: {{title}}", "yAxis": { "throughput": "Пропускная способность, 1/период", "efficiency": "Эффективность, %", "lead": "Время поставки, дни", "cycle": "Время цикла, дни" }, "series": { "efficiency": "Эффективность", "lead": "Время поставки", "cycle": "Время цикла", "throughput": "Пропускная способность" }, "help": { "text": "Параметры пропускной способности, эффективности,\nвремени поставки и времени цикла завершенных задач\n по среднему WIP за время производства задачи", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7-%D0%BF%D0%BE-wip" } },
@@ -106386,7 +106262,8 @@ const ru = {
   "lead-cycle-times-chart": { "help": { "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%B2%D1%80%D0%B5%D0%BC%D1%8F-%D0%BF%D0%BE%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B8-%D0%B8-%D1%86%D0%B8%D0%BA%D0%BB%D0%B0", "text": "Статистика времен поставки и цикла для завершенных задач" }, "title": { "perc": "Процентили времён: {{title}}", "avg": "Средние времён: {{title}}" }, "yAxis": { "throughput": "Пр. сп.", "perc": "Время, дни", "avg": "Ср. вр., дни" }, "series": { "lead": { "name": { "perc": "Время поставки", "avg": "Среднее время поставки" }, "throughput": "Пр. сп. поставки" }, "cycle": { "name": { "perc": "Время цикла", "avg": "Среднее время цикла" }, "throughput": "Пр. сп. цикла" }, "life": { "name": { "perc": "Время жизни", "avg": "Среднее время жизни" } }, "rework": { "name": { "perc": "Время повторной работы", "avg": "Среднее время повторной работы" } }, "block": { "name": { "perc": "Время блокировки", "avg": "Среднее время блокировки" } } }, "tab": { "perc": "Процентили", "avg": "Средние" } },
   "accumulated-wip": { "help": { "text": "Накопленный на доске объем незавершенной работы.\nСумма дней, проведённых незавершенными задачами в колонках работы и ожидания.", "link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BD%D0%B0%D0%BA%D0%BE%D0%BF%D0%BB%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9-wip" }, "title": "Накопленный WIP: {{title}}", "yAxis": { "awipsum": "Общий WIP, дни", "awipwork": "WIP в работе, дни", "awipwait": "WIP в ожидании, дни" }, "series": { "awipsum": "Сумма дней, проведённых задачами во всех колонках", "awipwork": "Сумма дней, проведённых задачами в колонках работы", "awipwait": "Сумма дней, проведённых задачами в колонках ожидания" } },
   "summary-data": { "cell": { "wip": { "name": "Незавершенная работа", "issues": "Задачи", "days": "Зависших в задачах дней", "wait-eff": "Ожид. / эффективность, %", "burn": "WIP может быть обработан, периоды" }, "head": { "last": { "name": "Посл.", "title": "Данные за последний завершенный период" }, "prev": { "name": "Пред.", "title": "Данные за предпоследний завершенный период" }, "preprev": { "name": "Пред-пред.", "title": "Данные за пред-предпоследний завершенный период" }, "total": { "name": "Общий", "title": "Данные за все периоды наблюдения" } }, "times": { "name": "Времена", "lead": "Время поставки, дней", "cycle": "Время цикла, дней", "throughput": "Пропускная способность, задач в период" } }, "max": "Максимум", "med": "Медиана", "min": "Минимум" },
-  wia
+  wia,
+  trend
 };
 const resources = {
   en: { translation: en },
@@ -107162,8 +107039,416 @@ class ExpiringStorage {
   }
 }
 const expiringStorage = new ExpiringStorage();
+use([
+  install$i,
+  install$k,
+  install$r,
+  install$2,
+  install$3,
+  install$R,
+  install$S,
+  installLabelLayout,
+  installUniversalTransition,
+  install
+]);
+const minmax = (minVal, maxVal) => {
+  let delta = (minVal - maxVal) / 10;
+  let steps = 0;
+  while (delta > 10) {
+    delta = delta / 10;
+    steps++;
+  }
+  delta = 10;
+  for (let i = 1; i < steps; i++) {
+    delta = delta * 10;
+  }
+  return [Math.floor(minVal / delta) * delta, Math.ceil(maxVal / delta) * delta];
+};
+const TrendChart = ({ title, periodStat }) => {
+  const { t: t2, i18n } = useTranslation();
+  const throughput = new Array();
+  const AWIPSum = new Array();
+  let AWIPSumMin = Number.MAX_VALUE;
+  let AWIPSumMax = Number.MIN_VALUE;
+  let throughputMin = Number.MAX_VALUE;
+  let throughputMax = Number.MIN_VALUE;
+  if (periodStat.length > 0) {
+    let dtMin = Number.MAX_VALUE;
+    let dtMax = Number.MIN_VALUE;
+    for (let item of periodStat) {
+      dtMin = Math.min(dtMin, item.date);
+      dtMax = Math.max(dtMax, item.date);
+    }
+    const totalWipMeds = [];
+    for (const item of periodStat) {
+      item.throughput ? item.throughput : 0;
+      totalWipMeds.push(item.AWIPSum.out);
+    }
+    for (const item of periodStat) {
+      const tp = item.throughput ? item.throughput : 0;
+      throughput.push([item.date, tp.toFixed(2)]);
+      throughputMin = min([throughputMin, tp]);
+      throughputMax = max([throughputMax, tp]);
+      AWIPSum.push({
+        value: [
+          item.date,
+          item.AWIPSum.in.toFixed(0),
+          item.AWIPSum.out.toFixed(0),
+          item.AWIPSum.min.toFixed(0),
+          item.AWIPSum.max.toFixed(0)
+        ]
+      });
+      AWIPSumMin = min([AWIPSumMin, item.AWIPSum.min]);
+      AWIPSumMax = max([AWIPSumMax, item.AWIPSum.max]);
+    }
+  } else {
+    const d = (/* @__PURE__ */ new Date()).getTime();
+    throughput.push([d, 0]);
+    throughputMin = 0;
+    throughputMax = 1;
+    AWIPSum.push({ value: [d, 0] });
+    AWIPSumMin = 0;
+    AWIPSumMax = 1;
+  }
+  const AWIPSumMid = (AWIPSumMax + AWIPSumMin) / 2;
+  [AWIPSumMax, AWIPSumMax] = minmax(AWIPSumMin, AWIPSumMax);
+  const throughputMid = (throughputMax + throughputMin) / 2;
+  [throughputMin, throughputMax] = minmax(throughputMin, throughputMax);
+  const xAxisMin = () => {
+    let res = Number.MAX_VALUE;
+    for (const item of periodStat) {
+      res = Math.min(res, item.date);
+    }
+    if (res === Number.MAX_VALUE) {
+      return NaN;
+    } else {
+      return res - 6e4;
+    }
+  };
+  const xAxisMax = () => {
+    let res = Number.MIN_VALUE;
+    for (const item of periodStat) {
+      res = Math.max(res, item.date);
+    }
+    if (res === Number.MIN_VALUE) {
+      return NaN;
+    } else {
+      return res + 6e4;
+    }
+  };
+  const renderItem = (_params, api) => {
+    const xValue = api.value(0);
+    const openPoint = api.coord([xValue, api.value(1)]);
+    const closePoint = api.coord([xValue, api.value(2)]);
+    const lowPoint = api.coord([xValue, api.value(3)]);
+    const highPoint = api.coord([xValue, api.value(4)]);
+    const halfWidth = 5;
+    const style = {
+      stroke: "black",
+      lineWidth: 1
+    };
+    const rect = {
+      x: lowPoint[0] - halfWidth,
+      y: lowPoint[1],
+      width: 2 * halfWidth,
+      height: highPoint[1] - lowPoint[1]
+    };
+    return {
+      type: "group",
+      children: [
+        {
+          type: "rect",
+          shape: rect,
+          style: {
+            stroke: "black",
+            fill: api.visual("color")
+          }
+        },
+        {
+          type: "line",
+          shape: {
+            x1: openPoint[0] - halfWidth,
+            y1: openPoint[1],
+            x2: openPoint[0] - 2 * halfWidth,
+            y2: openPoint[1]
+          },
+          style
+        },
+        {
+          type: "line",
+          shape: {
+            x1: closePoint[0] + halfWidth,
+            y1: closePoint[1],
+            x2: closePoint[0] + 2 * halfWidth,
+            y2: closePoint[1]
+          },
+          style
+        }
+      ]
+    };
+  };
+  const option = () => ({
+    animation: true,
+    animationDuration: 500,
+    animationThreshold: 1e3,
+    title: {
+      text: t2("trend.title", { title }),
+      left: "center"
+    },
+    toolbox: {
+      show: true,
+      feature: {
+        saveAsImage: {
+          show: true
+        }
+      }
+    },
+    axisPointer: {
+      link: [
+        {
+          xAxisIndex: "all"
+        }
+      ]
+    },
+    tooltip: {
+      axisPointer: {
+        show: true
+      }
+    },
+    legend: {
+      top: "bottom"
+    },
+    grid: [
+      {
+        top: "5%",
+        height: "40%",
+        left: "5%",
+        width: "90%"
+      },
+      {
+        top: "50%",
+        height: "40%",
+        left: "5%",
+        width: "90%"
+      }
+    ],
+    xAxis: [
+      {
+        axisLabel: {
+          show: false
+        },
+        gridIndex: 0,
+        boundaryGap: [0, "100%"],
+        axisPointer: {
+          show: true,
+          snap: true,
+          label: {
+            formatter: (value) => {
+              if (value == null ? void 0 : value.value) {
+                return new Date(value.value).toLocaleDateString(i18n.language, { dateStyle: "short" });
+              } else {
+                return "";
+              }
+            }
+          }
+        },
+        type: "time",
+        min: xAxisMin(),
+        max: xAxisMax()
+      },
+      {
+        gridIndex: 1,
+        boundaryGap: [0, "100%"],
+        axisPointer: {
+          show: true,
+          snap: true,
+          label: {
+            formatter: (value) => {
+              if (value == null ? void 0 : value.value) {
+                return new Date(value.value).toLocaleDateString(i18n.language, { dateStyle: "short" });
+              } else {
+                return "";
+              }
+            }
+          }
+        },
+        axisLabel: {
+          hideOverlap: true,
+          formatter: (value) => {
+            if (value) {
+              return new Date(value).toLocaleDateString(i18n.language, { dateStyle: "short" });
+            } else {
+              return "";
+            }
+          }
+        },
+        type: "time",
+        min: xAxisMin(),
+        max: xAxisMax()
+      }
+    ],
+    yAxis: [
+      {
+        gridIndex: 0,
+        boundaryGap: [0, "100%"],
+        name: t2("trend.yAxis.throughput"),
+        nameLocation: "middle",
+        nameGap: 50,
+        minInterval: 1,
+        axisPointer: {
+          show: true,
+          triggerTooltip: false
+        },
+        axisLabel: {
+          hideOverlap: true,
+          formatter: (value) => value ? value.toFixed(0) : ""
+        },
+        min: throughputMin,
+        max: throughputMax
+      },
+      {
+        gridIndex: 1,
+        boundaryGap: [0, "100%"],
+        name: t2("trend.yAxis.awip"),
+        nameLocation: "middle",
+        nameGap: 50,
+        minInterval: 1,
+        alignTicks: true,
+        axisPointer: {
+          show: true,
+          triggerTooltip: false
+        },
+        axisLabel: {
+          hideOverlap: true,
+          formatter: (value) => value ? value.toFixed(0) : ""
+        },
+        min: AWIPSumMin,
+        max: AWIPSumMax
+      }
+    ],
+    series: [
+      {
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        name: t2("trend.series.throughput"),
+        type: "line",
+        smooth: true,
+        smoothMonotone: "x",
+        label: {
+          show: true,
+          position: "top"
+        },
+        data: throughput,
+        color: "rgb(64,255,64)",
+        markArea: {
+          silent: true,
+          itemStyle: {
+            opacity: 0.05
+          },
+          data: [
+            [
+              {
+                itemStyle: {
+                  color: "lime"
+                },
+                yAxis: throughputMid
+              },
+              {
+                itemStyle: {
+                  color: "lime"
+                },
+                yAxis: throughputMax
+              }
+            ],
+            [
+              {
+                itemStyle: {
+                  color: "red"
+                },
+                yAxis: throughputMin
+              },
+              {
+                itemStyle: {
+                  color: "red"
+                },
+                yAxis: throughputMid
+              }
+            ]
+          ]
+        }
+      },
+      {
+        xAxisIndex: 1,
+        yAxisIndex: 1,
+        name: t2("trend.series.awip"),
+        type: "custom",
+        label: {
+          show: true,
+          position: "top"
+        },
+        renderItem,
+        data: AWIPSum,
+        color: "rgba(255,64,64,0.75)",
+        markArea: {
+          silent: true,
+          itemStyle: {
+            opacity: 0.05
+          },
+          data: [
+            [
+              {
+                itemStyle: {
+                  color: "red"
+                },
+                yAxis: AWIPSumMid
+              },
+              {
+                itemStyle: {
+                  color: "red"
+                },
+                yAxis: AWIPSumMax
+              }
+            ],
+            [
+              {
+                itemStyle: {
+                  color: "lime"
+                },
+                yAxis: AWIPSumMin
+              },
+              {
+                itemStyle: {
+                  color: "lime"
+                },
+                yAxis: AWIPSumMid
+              }
+            ]
+          ]
+        }
+      }
+    ]
+  });
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      EChartsReact,
+      {
+        className: "TrendChart",
+        option: option(),
+        notMerge: true,
+        style: { height: "85vh" }
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      HelpLink,
+      {
+        title: t2("trend.help.text"),
+        href: t2("trend.help.link")
+      }
+    )
+  ] });
+};
 const App = observer(({ dataLoader: dataLoader2 }) => {
-  var _a2, _b2, _c2, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m;
+  var _a2, _b2, _c2, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n;
   const { t: t2 } = useTranslation();
   const [showConfig, setShowConfig] = reactExports.useState(false);
   reactExports.useEffect(() => {
@@ -107267,7 +107552,8 @@ const App = observer(({ dataLoader: dataLoader2 }) => {
             /* @__PURE__ */ jsxRuntimeExports.jsx(Tab, { children: t2("app.tabs.time-by-columns") }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(Tab, { children: t2("app.tabs.lead-time-distributions") }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(Tab, { children: t2("app.tabs.long-times") }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Tab, { children: t2("app.tabs.wia") })
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Tab, { children: t2("app.tabs.wia") }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Tab, { children: t2("app.tabs.trend") })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(TabPanel, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
             MainStatChart,
@@ -107355,6 +107641,13 @@ const App = observer(({ dataLoader: dataLoader2 }) => {
               cycleColumns: dataLoader2.conf.cycle,
               leadColumns: dataLoader2.conf.lead,
               unfinishedIssues: dataLoader2.unfinishedIssues
+            }
+          ) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TabPanel, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            TrendChart,
+            {
+              title: (_n = dataLoader2.kanbanBoardConfig) == null ? void 0 : _n.name,
+              periodStat: dataLoader2.periodStat
             }
           ) })
         ]
@@ -108190,5 +108483,5 @@ const jiraBoardId = urlParams.get("board") || "";
 const dataLoader = new DataLoader(progressBarData, jiraBase, jiraBoardId);
 Modal.setAppElement("#root");
 clientExports.createRoot(document.getElementById("root")).render(
-  /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, { dataLoader }) })
+  /* @__PURE__ */ jsxRuntimeExports.jsx(App, { dataLoader })
 );

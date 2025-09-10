@@ -161,7 +161,32 @@ Also at the bottom of the page appears a list of "winners", sorted by the number
 Allows you to correlate the current lifetime of each unfinished element with the statistical times of leaving the element of the current column.
 This will help to pay attention to elements that are already clearly out of the general statistics.
 
-### Analyze by WIP
+### Trends
 
-In theory, if your processes are stable, then these graphs will show you that the more work in progress (WIP),
-the longer the delivery and cycle time, the lower the efficiency (since tasks wait longer in waiting columns).
+The team should have one primary metric: this is the metric that is most important to us to change.
+
+In addition, the team should have secondary metrics that prevent the system from achieving a change in the primary metric at any cost.
+
+That is, these are metrics that, if possible, should not deteriorate when the primary metric improves.
+
+Processes most often balance on the edge of some extreme
+
+(for example, maximum throughput with minimum delivery time),
+therefore, improving one metric often leads to deterioration of another.
+That is why we need to choose some one primary metric in order to improve it, even at the cost of a slight deterioration of secondary metrics.
+If we choose several primary metrics, then we will rush between them, without achieving improvement in any of them.
+
+There are two metrics on this screen: throughput and inventory.
+
+* Throughput is the amount of work completed during the period.
+* Inventory is the accumulated amount of unfinished work.
+  This is how much of our commitments are stuck in the process of implementation.
+  Unit of measurement: throughput units multiplied by the number of days these throughput units were in progress.
+  Shown as Japanese candlesticks, which show the volume of unfinished work at the beginning and end of the period,
+  as well as the maximum and minimum volume of unfinished work for the period.
+
+Why do we look at the accumulated volume of unfinished work instead of time metrics (t2m, lead time, cycle time)?
+The fact is that time metrics appear only after the tasks are completed.
+Which greatly slows down the feedback.
+And the accumulated volume of unfinished work reacts faster as soon as our change begins to affect the process.
+And the accumulated volume of unfinished work includes time metrics.
