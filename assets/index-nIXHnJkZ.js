@@ -91743,14 +91743,6 @@ const sum = (vals) => {
     return NaN;
   }
 };
-const quantiles = (x, p) => {
-  const xx = filter(x);
-  if (xx.length > 0) {
-    return quantile$1(xx, p);
-  } else {
-    return new Array(p.length).fill(NaN);
-  }
-};
 const quantile = (x, p) => {
   const xx = filter(x);
   if (xx.length > 0) {
@@ -101974,12 +101966,16 @@ const WIAChart = ({
     const cols = getCols();
     for (const colId of cols) {
       const colName = (_a2 = columns.find((value) => value.id === colId)) == null ? void 0 : _a2.name;
-      const dq = quantiles(src[colId], [0, 0.25, 0.5, 0.75, 1]);
-      dataQ0.push([colName, dq[0]]);
-      dataQ1.push([colName, dq[1] - dq[0]]);
-      dataQ2.push([colName, dq[2] - dq[1]]);
-      dataQ3.push([colName, dq[3] - dq[2]]);
-      dataQ4.push([colName, dq[4] - dq[3]]);
+      const dqMin = min(src[colId]);
+      const dqQ1 = quantile(src[colId], 0.25);
+      const dqMed = median(src[colId]);
+      const dqQ3 = quantile(src[colId], 0.75);
+      const dqMax = max(src[colId]);
+      dataQ0.push([colName, dqMin]);
+      dataQ1.push([colName, dqQ1 - dqMin]);
+      dataQ2.push([colName, dqMed - dqQ1]);
+      dataQ3.push([colName, dqQ3 - dqMed]);
+      dataQ4.push([colName, dqMax - dqQ3]);
     }
     const serQ0 = {
       name: "wia.series.q0",
@@ -108431,26 +108427,26 @@ calcIssuesLCTD_fn = function(filteredIssuesStats) {
     }
   }
   if (leads.length > 0) {
-    const qq = quantiles(leads, [0.5, 0.85, 1, 0.98, 0.75]);
+    const med = quantile(leads, 0.5);
     lctd.lead.ranges = {
-      q50: qq[0],
-      q75: qq[4],
-      q85: qq[1],
-      max: qq[2],
+      q50: med,
+      q75: quantile(leads, 0.75),
+      q85: quantile(leads, 0.85),
+      max: max(leads),
       avg: mean(leads)
     };
-    lctd.lead.tail = qq[3] / qq[0];
+    lctd.lead.tail = quantile(leads, 0.98) / med;
   }
   if (cycles.length > 0) {
-    const qq = quantiles(cycles, [0.5, 0.85, 1, 0.98, 0.75]);
+    const med = quantile(cycles, 0.5);
     lctd.cycle.ranges = {
-      q50: qq[0],
-      q75: qq[4],
-      q85: qq[1],
-      max: qq[2],
+      q50: med,
+      q75: quantile(cycles, 0.75),
+      q85: quantile(cycles, 0.85),
+      max: max(cycles),
       avg: mean(cycles)
     };
-    lctd.cycle.tail = qq[3] / qq[0];
+    lctd.cycle.tail = quantile(cycles, 0.98) / med;
   }
   return lctd;
 };
