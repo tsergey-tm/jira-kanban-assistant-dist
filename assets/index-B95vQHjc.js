@@ -94180,6 +94180,33 @@ function mean$1(x) {
 	return sum$1(x) / x.length;
 }
 /**
+* The sum of deviations to the Nth power.
+* When n=2 it's the sum of squared deviations.
+* When n=3 it's the sum of cubed deviations.
+*
+* @param {Array<number>} x
+* @param {number} n power
+* @returns {number} sum of nth power deviations
+*
+* @example
+* var input = [1, 2, 3];
+* // since the variance of a set is the mean squared
+* // deviations, we can calculate that with sumNthPowerDeviations:
+* sumNthPowerDeviations(input, 2) / input.length;
+*/
+function sumNthPowerDeviations(x, n) {
+	var meanValue = mean$1(x);
+	var sum = 0;
+	var tempValue;
+	var i;
+	if (n === 2) for (i = 0; i < x.length; i++) {
+		tempValue = x[i] - meanValue;
+		sum += tempValue * tempValue;
+	}
+	else for (i = 0; i < x.length; i++) sum += Math.pow(x[i] - meanValue, n);
+	return sum;
+}
+/**
 * This computes the maximum number in an array.
 *
 * This runs in `O(n)`, linear time, with respect to the length of the array.
@@ -94382,6 +94409,45 @@ function median$1(x) {
 	return +quantile$1(x, .5);
 }
 /**
+* The [variance](http://en.wikipedia.org/wiki/Variance)
+* is the sum of squared deviations from the mean.
+*
+* This is an implementation of variance, not sample variance:
+* see the `sampleVariance` method if you want a sample measure.
+*
+* @param {Array<number>} x a population of one or more data points
+* @returns {number} variance: a value greater than or equal to zero.
+* zero indicates that all values are identical.
+* @throws {Error} if x's length is 0
+* @example
+* variance([1, 2, 3, 4, 5, 6]); // => 2.9166666666666665
+*/
+function variance(x) {
+	if (x.length === 0) throw new Error("variance requires at least one data point");
+	return sumNthPowerDeviations(x, 2) / x.length;
+}
+/**
+* The [standard deviation](http://en.wikipedia.org/wiki/Standard_deviation)
+* is the square root of the variance. This is also known as the population
+* standard deviation. It's useful for measuring the amount
+* of variation or dispersion in a set of values.
+*
+* Standard deviation is only appropriate for full-population knowledge: for
+* samples of a population, {@link sampleStandardDeviation} is
+* more appropriate.
+*
+* @param {Array<number>} x input
+* @returns {number} standard deviation
+* @example
+* variance([2, 4, 4, 4, 5, 5, 7, 9]); // => 4
+* standardDeviation([2, 4, 4, 4, 5, 5, 7, 9]); // => 2
+*/
+function standardDeviation$1(x) {
+	if (x.length === 1) return 0;
+	var v = variance(x);
+	return Math.sqrt(v);
+}
+/**
 * [Bayesian Classifier](http://en.wikipedia.org/wiki/Naive_Bayes_classifier)
 *
 * This is a naïve bayesian classifier that takes
@@ -94556,6 +94622,11 @@ var mean = (vals) => {
 var median = (vals) => {
 	const x = filter(vals);
 	if (x.length > 0) return median$1(x);
+	else return NaN;
+};
+var standardDeviation = (vals) => {
+	const x = filter(vals);
+	if (x.length > 0) return standardDeviation$1(x);
 	else return NaN;
 };
 var sum = (vals) => {
@@ -96217,7 +96288,7 @@ var TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
 		for (let periodIndex = 0; periodIndex < periodStat.length; periodIndex++) {
 			const item = periodStat[periodIndex];
 			for (let resIndex = 0; resIndex < resources.length; resIndex++) {
-				let wait = waitData[resIndex][periodIndex];
+				const wait = waitData[resIndex][periodIndex];
 				if (wait !== null && wait !== void 0 && !isNaN(wait)) {
 					data.value.push({
 						value: [
@@ -96259,7 +96330,10 @@ var TimesChart = ({ title, periodStat, columns, selectedColumns, conf }) => {
 		selectedColumns,
 		selected,
 		typeSelected,
-		i18n.language
+		i18n.language,
+		heatMapSeriesDataResources,
+		heatMapSeriesDataSingle,
+		heatMapSeriesDataWaiting
 	]);
 	const option = () => ({
 		animation: true,
@@ -103017,7 +103091,8 @@ var nanStat = () => ({
 	max: NaN,
 	avg: NaN,
 	q1: NaN,
-	q3: NaN
+	q3: NaN,
+	p85: NaN
 });
 var calcStat = (arr) => {
 	if (Array.isArray(arr) && arr.length > 0) return {
@@ -103026,7 +103101,8 @@ var calcStat = (arr) => {
 		max: max(arr),
 		avg: mean(arr),
 		q1: quantile(arr, .25),
-		q3: quantile(arr, .75)
+		q3: quantile(arr, .75),
+		p85: quantile(arr, .85)
 	};
 	else return nanStat();
 };
@@ -103038,6 +103114,7 @@ var calcStatWithSum = (arr) => {
 		avg: mean(arr),
 		q1: quantile(arr, .25),
 		q3: quantile(arr, .75),
+		p85: quantile(arr, .85),
 		sum: sum(arr)
 	};
 	else return Object.assign(nanStat(), { sum: NaN });
@@ -103050,6 +103127,7 @@ var zeroNaNStatWithSum = (stat) => {
 		avg: stat.avg || 0,
 		q1: stat.q1 || 0,
 		q3: stat.q3 || 0,
+		p85: stat.p85 || 0,
 		sum: stat.sum || 0
 	};
 };
@@ -103281,7 +103359,7 @@ var KanbanStat = class {
 			periodDayAWIPCol[id] = calcStat(data);
 		}
 		const ct = {};
-		for (let colId in tmp.columnsThroughput) ct[colId] = tmp.columnsThroughput[colId];
+		for (const colId in tmp.columnsThroughput) ct[colId] = tmp.columnsThroughput[colId];
 		for (const colId of tmp.columnsKeys) for (const key of tmp.board[colId]) tmp.columnTimes[colId].push(tmp.nextPeriodBoardTime - tmp.issues[key].lastAct);
 		const ps = {
 			date: tmp.nextPeriodBoardTime - dayShift,
@@ -103310,7 +103388,7 @@ var KanbanStat = class {
 		};
 		this.periodStat.push(ps);
 		tmp.periodDayWIP = {};
-		for (let colId in tmp.columnsThroughput) {
+		for (const colId in tmp.columnsThroughput) {
 			tmp.columnsThroughput[colId] = NaN;
 			tmp.columnTimes[colId] = [];
 		}
@@ -104052,7 +104130,9 @@ var WIAChart = ({ title, wiaLeadByColumns, wiaCycleByColumns, wiaByColumns, unfi
 		series: series()
 	});
 	const onChartClick = (params) => {
-		if (params.componentType === "series" && params.seriesName === "wia.series.issues") params.data?.name && window.open(jiraBase + "/browse/" + params.data.name, "_blank");
+		if (params.componentType === "series" && params.seriesName === "wia.series.issues") {
+			if (params.data?.name) window.open(jiraBase + "/browse/" + params.data.name, "_blank");
+		}
 	};
 	const onEvents = { "click": onChartClick };
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
@@ -105715,7 +105795,8 @@ var resources = {
 				"summary-data": "Summary",
 				"times-by-columns": "Time by columns",
 				"wia": "Work item age",
-				"trend": "Trends"
+				"trend": "Trends",
+				"indicators": "Indicators"
 			},
 			"config-info": {
 				"text": "Selected columns: {{columns}}, swimlanes: {{swimlanes}}, filters: {{filters}}",
@@ -106160,6 +106241,71 @@ var resources = {
 				"throughput": "Throughput",
 				"awip": "Accumulated WIP"
 			}
+		},
+		indicators: {
+			"help": {
+				"text": "Key performance indicators of the team and the process.",
+				"link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#indicators"
+			},
+			"title": "Indicators",
+			"value": { "na": "N/A" },
+			"period-selector": {
+				"all": "All periods",
+				"last3": "Last 3 periods",
+				"last": "Last period"
+			},
+			"awip": {
+				"section": "Accumulated Work in Progress (AWIP), Work in Progress (WIP)",
+				"title": "Parameter",
+				"work": { "title": "Work AWIP, task * days" },
+				"wait": { "title": "Wait AWIP, task * days" },
+				"total": { "title": "Total AWIP, task * days" },
+				"wip": { "title": "WIP, tasks" },
+				"wipByThp": { "title": "WIP / throughput, periods" },
+				"cv": {
+					"title": "Variability",
+					"description": "&lt; 0.5 - Low variability,&#13;0.5 - 1 - Medium variability,&#13;&gt; 1 - High variability"
+				}
+			},
+			"throughput": {
+				"section": "Average throughput, tasks/period",
+				"title": "Throughput",
+				"lead": { "title": "Lead" },
+				"cycle": { "title": "Cycle" },
+				"cv": {
+					"title": "Variability, %",
+					"description": "&lt; 50% - Low variability,&#13;50% - 100% - Medium variability,&#13;&gt; 100% - High variability"
+				}
+			},
+			"time-percentiles": {
+				"section": "Time Percentiles, days",
+				"title": "Time",
+				"param": {
+					"title": "Parameter",
+					"p50": "50%",
+					"p75": "75%",
+					"p85": "85%",
+					"ct": {
+						"title": "Predictability",
+						"description": "&lt; 3 - High predictability,&#13;3 - 5.6 - Medium predictability,&#13;&gt; 5.6 - Low predictability"
+					}
+				},
+				"lifetime": { "title": "Lifetime" },
+				"lead": { "title": "Lead Time" },
+				"cycle": { "title": "Cycle Time" },
+				"rework": { "title": "Rework Time" },
+				"block": { "title": "Blocked Time" }
+			},
+			"detailed-metrics": {
+				"title": "Detailed Metrics by Period",
+				"period": "Period",
+				"throughput": "Throughput",
+				"cycle-time": "Cycle Time",
+				"lead-time": "Lead Time",
+				"wip-work": "WIP Work",
+				"wip-wait": "WIP Wait",
+				"wip-total": "WIP Total"
+			}
 		}
 	} },
 	ru: { translation: {
@@ -106185,7 +106331,8 @@ var resources = {
 				"summary-data": "Сводка",
 				"times-by-columns": "Время по колонкам",
 				"wia": "Возраст рабочего элемента",
-				"trend": "Тренды"
+				"trend": "Тренды",
+				"indicators": "Индикаторы"
 			},
 			"config-info": {
 				"text": "Выбрано колонок: {{columns}}, линий: {{swimlanes}}, фильтров: {{filters}}",
@@ -106629,6 +106776,71 @@ var resources = {
 			"series": {
 				"throughput": "Пропускная способность",
 				"awip": "Накопленный объём незавершенной работы"
+			}
+		},
+		indicators: {
+			"help": {
+				"text": "Индикаторы, которые помогают оценить стабильность и предсказуемость процесса на основе пропускной способности,\nвремени поставки, времени цикла и накопленного объёма незавершенной работы.\nИспользуются для оценки стабильности и предсказуемости процесса.",
+				"link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#индикаторы"
+			},
+			"title": "Индикаторы",
+			"value": { "na": "N/A" },
+			"period-selector": {
+				"all": "За период наблюдения",
+				"last3": "За 3 периода",
+				"last": "За последний период"
+			},
+			"awip": {
+				"section": "Накопленный объём незавершенки (AWIP), незавершенка (WIP)",
+				"title": "Параметр",
+				"work": { "title": "AWIP в работе, задач * дней" },
+				"wait": { "title": "AWIP в ожидании, задач * дней" },
+				"total": { "title": "AWIP Общий, задач * дней" },
+				"wip": { "title": "WIP, задач" },
+				"wipByThp": { "title": "WIP / проп. сп., периодов" },
+				"cv": {
+					"title": "Вариативность",
+					"description": "< 0.5 - Стабильный процесс,\n0.5 - 1.0 - Умеренно стабильный процесс,\n> 1.0 - Нестабильный процесс"
+				}
+			},
+			"throughput": {
+				"section": "Средняя пропускная способность, задач/период",
+				"title": "Пропускная способность ",
+				"lead": { "title": "В поставке" },
+				"cycle": { "title": "В цикле" },
+				"cv": {
+					"title": "Вариативность, %",
+					"description": "< 50% - Стабильный процесс,\n50% - 100% - Умеренно стабильный процесс,\n> 100% - Нестабильный процесс"
+				}
+			},
+			"time-percentiles": {
+				"section": "Процентили времён, дни",
+				"title": "Времена",
+				"param": {
+					"title": "Параметр",
+					"p50": "50%",
+					"p75": "75%",
+					"p85": "85%",
+					"ct": {
+						"title": "Предсказуемость",
+						"description": "< 3 - Высокая предсказуемость,\n3 - 5.6 - Средняя предсказуемость,\n> 5.6 - Низкая предсказуемость"
+					}
+				},
+				"lifetime": { "title": "Время жизни" },
+				"lead": { "title": "Время поставки" },
+				"cycle": { "title": "Время цикла" },
+				"rework": { "title": "Время повторной работы" },
+				"block": { "title": "Время блокировок" }
+			},
+			"detailed-metrics": {
+				"title": "Подробные метрики по периодам",
+				"period": "Период",
+				"throughput": "Пропускная способность",
+				"cycle-time": "Время цикла",
+				"lead-time": "Время поставки",
+				"wip-work": "WIP в работе",
+				"wip-wait": "WIP в ожидании",
+				"wip-total": "Общий WIP"
 			}
 		}
 	} }
@@ -107260,7 +107472,7 @@ var TrendChart = ({ title, periodStat }) => {
 	if (periodStat.length > 0) {
 		let dtMin = Number.MAX_VALUE;
 		let dtMax = Number.MIN_VALUE;
-		for (let item of periodStat) {
+		for (const item of periodStat) {
 			dtMin = Math.min(dtMin, item.date);
 			dtMax = Math.max(dtMax, item.date);
 		}
@@ -107535,13 +107747,512 @@ var TrendChart = ({ title, periodStat }) => {
 //#region src/components/TrendChart/index.ts
 var TrendChart_default = TrendChart;
 //#endregion
+//#region src/components/TeamIndicators/TeamIndicators.utils.ts
+var getAWIPStats = (periods) => {
+	const workAvg = mean(periods.map((p) => p.AWIPWork.out));
+	const waitAvg = mean(periods.map((p) => p.AWIPWait.out));
+	const totalAvg = mean(periods.map((p) => p.AWIPSum.out));
+	const workSD = standardDeviation(periods.map((p) => p.AWIPWork.out));
+	const waitSD = standardDeviation(periods.map((p) => p.AWIPWait.out));
+	const totalSD = standardDeviation(periods.map((p) => p.AWIPSum.out));
+	return {
+		work: workAvg,
+		workSD,
+		workCV: workAvg > 0 ? workSD / workAvg : NaN,
+		wait: waitAvg,
+		waitSD,
+		waitCV: waitAvg > 0 ? waitSD / waitAvg : NaN,
+		total: totalAvg,
+		totalSD,
+		totalCV: totalAvg > 0 ? totalSD / totalAvg : NaN
+	};
+};
+var getWipStats = (periods, throughput) => {
+	const vals = periods.map((p) => isNumber$1(p.totalWip.avg) ? p.totalWip.avg : 0);
+	const wip = mean(vals);
+	const wipSD = standardDeviation(vals);
+	return {
+		wip,
+		wipSD,
+		wipCV: wip > 0 ? 100 * wipSD / wip : NaN,
+		wipByThp: throughput > 0 ? wip / throughput : NaN
+	};
+};
+var getThroughputStats = (periods) => {
+	const leadThp = periods.map((p) => isNumber$1(p.throughput) ? p.throughput : 0);
+	const cycleThp = periods.map((p) => isNumber$1(p.cycleThroughput) ? p.cycleThroughput : 0);
+	const leadAvg = mean(leadThp);
+	const cycleAvg = mean(cycleThp);
+	const leadSD = standardDeviation(leadThp);
+	const cycleSD = standardDeviation(cycleThp);
+	return {
+		lead: leadAvg,
+		leadSD,
+		leadCV: leadAvg > 0 ? 100 * leadSD / leadAvg : NaN,
+		cycle: cycleAvg,
+		cycleSD,
+		cycleCV: cycleAvg > 0 ? 100 * cycleSD / cycleAvg : NaN
+	};
+};
+var getTimePercentiles = (periods, statType, needZero = false) => {
+	const values50 = periods.map((p) => isNumber$1(p[statType].med) ? p[statType].med : needZero ? 0 : NaN);
+	const values75 = periods.map((p) => isNumber$1(p[statType].q3) ? p[statType].q3 : needZero ? 0 : NaN);
+	const values85 = periods.map((p) => isNumber$1(p[statType].p85) ? p[statType].p85 : needZero ? 0 : NaN);
+	const p50 = mean(values50);
+	const p75 = mean(values75);
+	const p85 = mean(values85);
+	return {
+		p50,
+		sd50: standardDeviation(values50),
+		p75,
+		sd75: standardDeviation(values75),
+		p85,
+		sd85: standardDeviation(values85),
+		ct: p50 > 0 ? p85 / p50 : NaN
+	};
+};
+//#endregion
+//#region src/components/TeamIndicators/TeamIndicators.tsx
+var TeamIndicators = ({ title, periodStat }) => {
+	const { t } = useTranslation();
+	const colorStyleByCT = (val) => {
+		if (val === void 0 || val === null || Number.isNaN(val)) return "";
+		else if (val < 3) return "colorGood";
+		else if (val < 5.6) return "colorSome";
+		else return "colorBad";
+	};
+	const colorStyleByCV = (val) => {
+		if (val === void 0 || val === null || Number.isNaN(val)) return "";
+		else if (val < 50) return "colorGood";
+		else if (val < 100) return "colorSome";
+		else return "colorBad";
+	};
+	const colorStyleGoodLess = (val, sd, prevVal) => {
+		if (val === void 0 || val === null || Number.isNaN(val) || sd === void 0 || sd === null || Number.isNaN(sd) || prevVal === void 0 || prevVal === null || Number.isNaN(prevVal)) return "";
+		else if (val === prevVal) return "";
+		else if (val < prevVal) if (val > prevVal - sd) return "colorGood25";
+		else if (val > prevVal - 2 * sd) return "colorGood50";
+		else if (val > prevVal - 3 * sd) return "colorGood75";
+		else return "colorGood100";
+		else if (val > prevVal + sd) return "colorBad25";
+		else if (val < prevVal + 2 * sd) return "colorBad50";
+		else if (val < prevVal + 3 * sd) return "colorBad75";
+		else return "colorBad100";
+	};
+	const colorStyleGoodMore = (val, sd, prevVal) => {
+		if (val === void 0 || val === null || Number.isNaN(val) || sd === void 0 || sd === null || Number.isNaN(sd) || prevVal === void 0 || prevVal === null || Number.isNaN(prevVal)) return "";
+		else if (val === prevVal) return "";
+		else if (val < prevVal) if (val > prevVal - sd) return "colorBad25";
+		else if (val > prevVal - 2 * sd) return "colorBad50";
+		else if (val > prevVal - 3 * sd) return "colorBad75";
+		else return "colorBad100";
+		else if (val > prevVal + sd) return "colorGood25";
+		else if (val < prevVal + 2 * sd) return "colorGood50";
+		else if (val < prevVal + 3 * sd) return "colorGood75";
+		else return "colorGood100";
+	};
+	const allPeriods = periodStat;
+	const last3Periods = periodStat.slice(-3);
+	const lastPeriod = periodStat.slice(-1);
+	const throughputAll = getThroughputStats(allPeriods);
+	const throughputLast3 = getThroughputStats(last3Periods);
+	const throughputLast = getThroughputStats(lastPeriod);
+	const awipAll = getAWIPStats(allPeriods);
+	const awipLast3 = getAWIPStats(last3Periods);
+	const awipLast = getAWIPStats(lastPeriod);
+	const lifePercentilesAll = getTimePercentiles(allPeriods, "life");
+	const lifePercentilesLast3 = getTimePercentiles(last3Periods, "life");
+	const lifePercentilesLast = getTimePercentiles(lastPeriod, "life");
+	const leadPercentilesAll = getTimePercentiles(allPeriods, "lead");
+	const leadPercentilesLast3 = getTimePercentiles(last3Periods, "lead");
+	const leadPercentilesLast = getTimePercentiles(lastPeriod, "lead");
+	const cyclePercentilesAll = getTimePercentiles(allPeriods, "cycle");
+	const cyclePercentilesLast3 = getTimePercentiles(last3Periods, "cycle");
+	const cyclePercentilesLast = getTimePercentiles(lastPeriod, "cycle");
+	const reworkPercentilesAll = getTimePercentiles(allPeriods, "rework", true);
+	const reworkPercentilesLast3 = getTimePercentiles(last3Periods, "rework", true);
+	const reworkPercentilesLast = getTimePercentiles(lastPeriod, "rework", true);
+	const blockPercentilesAll = getTimePercentiles(allPeriods, "block", true);
+	const blockPercentilesLast3 = getTimePercentiles(last3Periods, "block", true);
+	const blockPercentilesLast = getTimePercentiles(lastPeriod, "block", true);
+	const wipAll = getWipStats(allPeriods, throughputAll.lead);
+	const wipLast3 = getWipStats(last3Periods, throughputLast3.lead);
+	const wipLast = getWipStats(lastPeriod, throughputLast.lead);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "team-indicators",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", { children: [
+			title,
+			" - ",
+			t("indicators.title")
+		] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "metrics-container",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "metrics-block times-block",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: t("indicators.time-percentiles.section") }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "percentile-section",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
+							className: "metrics-table",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.title") }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.title") }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.period-selector.all") }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.period-selector.last3") }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.period-selector.last") })
+							] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tbody", { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+									className: "divcell",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											rowSpan: 4,
+											children: t("indicators.time-percentiles.lifetime.title")
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p50") }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: lifePercentilesAll.p50.toFixed(1) }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+											className: colorStyleGoodLess(lifePercentilesLast3.p50, lifePercentilesLast3.sd50, lifePercentilesAll.p50),
+											children: lifePercentilesLast3.p50.toFixed(1)
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: lifePercentilesLast.p50.toFixed(1) })
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p75") }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: lifePercentilesAll.p75.toFixed(1) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleGoodLess(lifePercentilesLast3.p75, lifePercentilesAll.sd75, lifePercentilesAll.p75),
+										children: lifePercentilesLast3.p75.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: lifePercentilesLast.p75.toFixed(1) })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p85") }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: lifePercentilesAll.p85.toFixed(1) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleGoodLess(lifePercentilesLast3.p85, lifePercentilesAll.sd85, lifePercentilesAll.p85),
+										children: lifePercentilesLast3.p85.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: lifePercentilesLast.p85.toFixed(1) })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										title: t("indicators.time-percentiles.param.ct.description"),
+										children: t("indicators.time-percentiles.param.ct.title")
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleByCT(lifePercentilesAll.ct),
+										children: lifePercentilesAll.ct.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleByCT(lifePercentilesLast3.ct),
+										children: lifePercentilesLast3.ct.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: "\xA0" })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+									className: "divcell",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											rowSpan: 4,
+											children: t("indicators.time-percentiles.lead.title")
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p50") }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: leadPercentilesAll.p50.toFixed(1) }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+											className: colorStyleGoodLess(leadPercentilesLast3.p50, leadPercentilesAll.sd50, leadPercentilesAll.p50),
+											children: leadPercentilesLast3.p50.toFixed(1)
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: leadPercentilesLast.p50.toFixed(1) })
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p75") }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: leadPercentilesAll.p75.toFixed(1) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleGoodLess(leadPercentilesLast3.p75, leadPercentilesAll.sd75, leadPercentilesAll.p75),
+										children: leadPercentilesLast3.p75.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: leadPercentilesLast.p75.toFixed(1) })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p85") }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: leadPercentilesAll.p85.toFixed(1) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleGoodLess(leadPercentilesLast3.p85, leadPercentilesAll.sd85, leadPercentilesAll.p85),
+										children: leadPercentilesLast3.p85.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: leadPercentilesLast.p85.toFixed(1) })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										title: t("indicators.time-percentiles.param.ct.description"),
+										children: t("indicators.time-percentiles.param.ct.title")
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleByCT(leadPercentilesAll.ct),
+										children: leadPercentilesAll.ct.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleByCT(leadPercentilesLast3.ct),
+										children: leadPercentilesLast3.ct.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: "\xA0" })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+									className: "divcell",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											rowSpan: 4,
+											children: t("indicators.time-percentiles.cycle.title")
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p50") }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: cyclePercentilesAll.p50.toFixed(1) }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+											className: colorStyleGoodLess(cyclePercentilesLast3.p50, cyclePercentilesAll.sd50, cyclePercentilesAll.p50),
+											children: cyclePercentilesLast3.p50.toFixed(1)
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: cyclePercentilesLast.p50.toFixed(1) })
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p75") }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: cyclePercentilesAll.p75.toFixed(1) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleGoodLess(cyclePercentilesLast3.p75, cyclePercentilesAll.sd75, cyclePercentilesAll.p75),
+										children: cyclePercentilesLast3.p75.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: cyclePercentilesLast.p75.toFixed(1) })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p85") }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: cyclePercentilesAll.p85.toFixed(1) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleGoodLess(cyclePercentilesLast3.p85, cyclePercentilesAll.sd85, cyclePercentilesAll.p85),
+										children: cyclePercentilesLast3.p85.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: cyclePercentilesLast.p85.toFixed(1) })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										title: t("indicators.time-percentiles.param.ct.description"),
+										children: t("indicators.time-percentiles.param.ct.title")
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleByCT(cyclePercentilesAll.ct),
+										children: cyclePercentilesAll.ct.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleByCT(cyclePercentilesLast3.ct),
+										children: cyclePercentilesLast3.ct.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: "\xA0" })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+									className: "divcell",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											rowSpan: 3,
+											children: t("indicators.time-percentiles.rework.title")
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p50") }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: reworkPercentilesAll.p50.toFixed(1) }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+											className: colorStyleGoodLess(reworkPercentilesLast3.p50, reworkPercentilesAll.sd50, reworkPercentilesAll.p50),
+											children: reworkPercentilesLast3.p50.toFixed(1)
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: reworkPercentilesLast.p50.toFixed(1) })
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p75") }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: reworkPercentilesAll.p75.toFixed(1) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleGoodLess(reworkPercentilesLast3.p75, reworkPercentilesAll.sd75, reworkPercentilesAll.p75),
+										children: reworkPercentilesLast3.p75.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: reworkPercentilesLast.p75.toFixed(1) })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p85") }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: reworkPercentilesAll.p85.toFixed(1) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleGoodLess(reworkPercentilesLast3.p85, reworkPercentilesAll.sd85, reworkPercentilesAll.p85),
+										children: reworkPercentilesLast3.p85.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: reworkPercentilesLast.p85.toFixed(1) })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+									className: "divcell",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											rowSpan: 3,
+											children: t("indicators.time-percentiles.block.title")
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p50") }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: blockPercentilesAll.p50.toFixed(1) }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+											className: colorStyleGoodLess(blockPercentilesLast3.p50, blockPercentilesAll.sd50, blockPercentilesAll.p50),
+											children: blockPercentilesLast3.p50.toFixed(1)
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: blockPercentilesLast.p50.toFixed(1) })
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p75") }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: blockPercentilesAll.p75.toFixed(1) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleGoodLess(blockPercentilesLast3.p75, blockPercentilesAll.sd75, blockPercentilesAll.p75),
+										children: blockPercentilesLast3.p75.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: blockPercentilesLast.p75.toFixed(1) })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.time-percentiles.param.p85") }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: blockPercentilesAll.p85.toFixed(1) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: colorStyleGoodLess(blockPercentilesLast3.p85, blockPercentilesAll.sd85, blockPercentilesAll.p85),
+										children: blockPercentilesLast3.p85.toFixed(1)
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: blockPercentilesLast.p85.toFixed(1) })
+								] })
+							] })]
+						})
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "metrics-block",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: t("indicators.awip.section") }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
+						className: "metrics-table",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.awip.title") }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+								title: t("indicators.awip.cv.description"),
+								children: t("indicators.awip.cv.title")
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.period-selector.all") }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.period-selector.last3") }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.period-selector.last") })
+						] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tbody", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.awip.total.title") }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+									className: colorStyleByCV(awipAll.workCV),
+									children: awipAll.workCV.toFixed(1)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: awipAll.work.toFixed(1) }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+									className: colorStyleGoodLess(awipLast3.work, awipAll.workSD, awipAll.work),
+									children: awipLast3.work.toFixed(1)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: awipLast.work.toFixed(1) })
+							] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.awip.work.title") }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+									className: colorStyleByCV(awipAll.waitCV),
+									children: awipAll.waitCV.toFixed(1)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: awipAll.wait.toFixed(1) }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+									className: colorStyleGoodLess(awipLast3.wait, awipAll.waitSD, awipAll.wait),
+									children: awipLast3.wait.toFixed(1)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: awipLast.wait.toFixed(1) })
+							] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.awip.wait.title") }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+									className: colorStyleByCV(awipAll.totalCV),
+									children: awipAll.totalCV.toFixed(1)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: awipAll.total.toFixed(1) }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+									className: colorStyleGoodLess(awipLast3.total, awipAll.totalSD, awipAll.total),
+									children: awipLast3.total.toFixed(1)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: awipLast.total.toFixed(1) })
+							] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.awip.wip.title") }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+									className: colorStyleByCV(wipAll.wipCV),
+									children: wipAll.wipCV.toFixed(1)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: wipAll.wip.toFixed(1) }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+									className: colorStyleGoodLess(wipLast3.wip, wipAll.wipSD, wipAll.wip),
+									children: wipLast3.wip.toFixed(1)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: wipLast.wip.toFixed(1) })
+							] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.awip.wipByThp.title") }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: "\xA0" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: wipAll.wipByThp.toFixed(1) }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: wipLast3.wipByThp.toFixed(1) }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: "\xA0" })
+							] })
+						] })]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "metrics-block",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: t("indicators.throughput.section") }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
+						className: "metrics-table",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.throughput.title") }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+								title: t("indicators.throughput.cv.description"),
+								children: t("indicators.throughput.cv.title")
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.period-selector.all") }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.period-selector.last3") }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.period-selector.last") })
+						] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tbody", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.throughput.lead.title") }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+								className: colorStyleByCV(throughputAll.leadCV),
+								children: throughputAll.leadCV.toFixed(1)
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: throughputAll.lead.toFixed(1) }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+								className: colorStyleGoodMore(throughputLast3.lead, throughputAll.leadSD, throughputAll.lead),
+								children: throughputLast3.lead.toFixed(1)
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: throughputLast.lead.toFixed(1) })
+						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.throughput.cycle.title") }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+								className: colorStyleByCV(throughputAll.cycleCV),
+								children: throughputAll.cycleCV.toFixed(1)
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: throughputAll.cycle.toFixed(1) }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+								className: colorStyleGoodMore(throughputLast3.cycle, throughputAll.cycleSD, throughputAll.cycle),
+								children: throughputLast3.cycle.toFixed(1)
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: throughputLast.cycle.toFixed(1) })
+						] })] })]
+					})]
+				})
+			]
+		})]
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HelpLink, {
+		title: t("indicators.help.text"),
+		href: t("indicators.help.link")
+	})] });
+};
+//#endregion
+//#region src/components/TeamIndicators/index.ts
+var TeamIndicators_default = TeamIndicators;
+//#endregion
 //#region src/App.tsx
 var App = observer(({ dataLoader }) => {
 	const { t } = useTranslation();
 	const [showConfig, setShowConfig] = (0, import_react.useState)(false);
 	(0, import_react.useEffect)(() => {
 		(async () => await dataLoader.startLoading())();
-	}, []);
+	}, [dataLoader]);
 	const selectedColumns = () => {
 		const res = [];
 		for (const id of dataLoader.conf.cycle.concat(dataLoader.conf.lead)) if (!res.includes(id)) res.push(id);
@@ -107627,7 +108338,8 @@ var App = observer(({ dataLoader }) => {
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Tab, { children: t("app.tabs.lead-time-distributions") }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Tab, { children: t("app.tabs.long-times") }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Tab, { children: t("app.tabs.wia") }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Tab, { children: t("app.tabs.trend") })
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Tab, { children: t("app.tabs.trend") }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Tab, { children: t("app.tabs.indicators") })
 					] }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MainStatChart_default, {
 						title: dataLoader.kanbanBoardConfig?.name,
@@ -107688,6 +108400,10 @@ var App = observer(({ dataLoader }) => {
 						unfinishedIssues: dataLoader.unfinishedIssues
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendChart_default, {
+						title: dataLoader.kanbanBoardConfig?.name,
+						periodStat: dataLoader.periodStat
+					}) }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TeamIndicators_default, {
 						title: dataLoader.kanbanBoardConfig?.name,
 						periodStat: dataLoader.periodStat
 					}) })
@@ -108163,8 +108879,10 @@ var DataLoader = class {
 	#recalcCFD() {
 		try {
 			const kanbanStat = new KanbanStat(this.columns, this.kanbanCFD, this.conf);
-			this.periodStat = [];
-			for (const periodStatElement of kanbanStat.periodStat) this.periodStat.push(periodStatElement);
+			runInAction(() => {
+				this.periodStat = [];
+				for (const periodStatElement of kanbanStat.periodStat) this.periodStat.push(periodStatElement);
+			});
 			this.issuesStat = {};
 			for (const [key, issueStat] of Object.entries(kanbanStat.issuesStat)) this.issuesStat[key] = issueStat;
 			this.wiaLeadByColumns = kanbanStat.wiaLeadByColumns;
@@ -108208,8 +108926,8 @@ var DataLoader = class {
 					body: JSON.stringify(req)
 				}).then((res) => res.json());
 				this.#updateProgressBar(stepNumber, issuesToLoadCnt, issuesToLoadCnt - issuesToLoad.length);
-				for (const issue of data.issues) {
-					if ("updated" in issue.fields) this.issuesMap[issue.key].updated = new Date(issue.fields["updated"].value).getTime();
+				for (const issue of data.issues) if (issue.key in this.issuesMap) {
+					if ("updated" in issue.fields) this.issuesMap[issue.key].updated = issue.fields["updated"]?.value ? new Date(issue.fields["updated"].value).getTime() : NaN;
 					this.issuesMap[issue.key].fields = issue.fields;
 				}
 			}
@@ -108270,7 +108988,11 @@ var DataLoader = class {
 			}
 			for (const [group, issueStats] of Object.entries(groups)) this.leadCycleTimeDistribution[group] = this.#calcIssuesLCTD(issueStats);
 		}
-		if (this.conf.issueBlockFlaggedField || this.conf.issueBlockChecklistField) for (const tPeriodsStat of this.periodStat) tPeriodsStat.block = calcStat(tPeriodsStat.closedIssues.map((key) => this.issuesStat[key].block));
+		if (this.conf.issueBlockFlaggedField || this.conf.issueBlockChecklistField) runInAction(() => {
+			const ps = [...this.periodStat];
+			for (const tPeriodsStat of ps) tPeriodsStat.block = calcStat(tPeriodsStat.closedIssues.map((key) => this.issuesStat[key].block));
+			this.periodStat = ps;
+		});
 	}
 	#calcIssuesLCTD(filteredIssuesStats) {
 		const lctd = {

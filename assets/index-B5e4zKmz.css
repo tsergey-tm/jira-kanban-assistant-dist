@@ -613,3 +613,151 @@ a.icon-info-down {
     width: 98vw;
     clear: both;
 }
+.team-indicators {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.team-indicators h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.team-indicators .metrics-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 30px;
+}
+
+.team-indicators .metrics-container .times-block {
+    grid-row: span 2;
+}
+
+.team-indicators .metrics-block {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.team-indicators .metrics-block h3 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: large;
+    padding-bottom: 10px;
+}
+
+.team-indicators .metrics-block h4 {
+    color: #495057;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: medium;
+}
+
+.team-indicators .metrics-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.team-indicators .metrics-table thead th {
+    background-color: #f8f9fa;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    font-size: small;
+}
+
+.team-indicators .metrics-table td {
+    padding: 10px 15px;
+    font-size: small;
+    text-align: right;
+    color: #495057;
+}
+
+.team-indicators .metrics-table thead tr {
+    background-color: #f0f0f0;
+}
+
+
+.team-indicators .metrics-table tbody tr th {
+    background-color: #ffffff;
+}
+
+.team-indicators .metrics-table tbody tr:last-child {
+}
+
+.team-indicators .metrics-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.team-indicators .metrics-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.team-indicators .metrics-table tbody tr:nth-child(even) td {
+    background-color: #f9f9f9;
+}
+
+.team-indicators .metrics-table tbody tr:nth-child(odd) td {
+    background-color: #ffffff;
+}
+
+.team-indicators .colorGood25 {
+    background-color: #ccffcc !important;
+}
+
+.team-indicators .colorGood50 {
+    background-color: #99ff99 !important;
+}
+
+.team-indicators .colorGood75 {
+    background-color: #66ff66 !important;
+}
+
+.team-indicators .colorGood100 {
+    background-color: #33ff33 !important;
+}
+
+.team-indicators .colorBad25 {
+    background-color: #FFCCCC !important;
+}
+
+.team-indicators .colorBad50 {
+    background-color: #ff9999 !important;
+}
+
+.team-indicators .colorBad75 {
+    background-color: #ff6666 !important;
+}
+
+.team-indicators .colorBad100 {
+    background-color: #ff3333 !important;
+}
+
+.team-indicators .colorGood {
+    background-color: #ccffcc !important;
+}
+
+.team-indicators .colorSome {
+    background-color: #ffffcc !important;
+}
+
+.team-indicators .colorBad {
+    background-color: #ffcccc !important;
+}
+
+
+.team-indicators .metrics-table tbody tr:hover td {
+    color: #000000;
+}
+
+.team-indicators .divcell {
+    border-top: 1px solid #ddd;
+}
