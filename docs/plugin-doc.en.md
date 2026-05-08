@@ -204,12 +204,14 @@ and what changes are occurring within it.
   * Blocking Time - time wasted on blocking
 * Accumulated WIP: the degree to which our commitments are stale
   (We've committed to something, but how much and what is the total amount of these commitments?):
-  * Total Accumulated WIP is the sum of the time in days spent by all unfinished tasks on the board.
-  * In Progress is the sum of the time in days spent by all unfinished tasks on the board in work columns. 
-  * * Waiting is the sum of the time in days spent by all unfinished tasks on the board in the waiting columns.
+  * Total AWIP - is the sum of the time in days spent by all unfinished tasks on the board.
+  * Work AWIP - is the sum of the time in days spent by all unfinished tasks on the board in work columns. 
+  * Wait AWIP - is the sum of the time in days spent by all unfinished tasks on the board in the waiting columns.
     By reducing the WIP limit, you primarily impact this metric,
     since tasks stop wasting time waiting to be worked on.
     If this metric is greater than "In Progress," you're having huge problems squeezing in unsqueezable work.
+  * WIP - is the average volume of work in progress for the period.
+  * WIP / throughput - is the time it takes to complete the average amount of work in progress at average throughput.
 * Throughput: This is the amount of work completed over a period.
   * Lead: This is the amount of work completed over a period measured by lead time.
   * Cycle: This is the amount of work completed over a period measured by cycle time.
