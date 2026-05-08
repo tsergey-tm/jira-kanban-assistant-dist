@@ -190,3 +190,26 @@ The fact is that time metrics appear only after the tasks are completed.
 Which greatly slows down the feedback.
 And the accumulated volume of unfinished work reacts faster as soon as our change begins to affect the process.
 And the accumulated volume of unfinished work includes time metrics.
+
+### Indicators
+
+This screen contains indicators that help you assess how well the system is working overall
+and what changes are occurring within it.
+
+* Time Percentiles: Overview data for the 50th, 75th, and 85th percentiles of time:
+  * Task Lifetime - from creation to completion
+  * Delivery Time - from commitment to completion
+  * Cycle Time - from task start to completion
+  * Rework Time - time wasted on returns and rework
+  * Blocking Time - time wasted on blocking
+* Accumulated WIP: the degree to which our commitments are stale
+  (We've committed to something, but how much and what is the total amount of these commitments?):
+  * Total Accumulated WIP is the sum of the time in days spent by all unfinished tasks on the board.
+  * In Progress is the sum of the time in days spent by all unfinished tasks on the board in work columns. 
+  * * Waiting is the sum of the time in days spent by all unfinished tasks on the board in the waiting columns.
+    By reducing the WIP limit, you primarily impact this metric,
+    since tasks stop wasting time waiting to be worked on.
+    If this metric is greater than "In Progress," you're having huge problems squeezing in unsqueezable work.
+* Throughput: This is the amount of work completed over a period.
+  * Lead: This is the amount of work completed over a period measured by lead time.
+  * Cycle: This is the amount of work completed over a period measured by cycle time.
