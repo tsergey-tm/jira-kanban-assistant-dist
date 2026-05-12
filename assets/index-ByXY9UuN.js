@@ -105799,7 +105799,7 @@ var resources = {
 				"indicators": "Indicators"
 			},
 			"config-info": {
-				"text": "Selected columns: {{columns}}, swimlanes: {{swimlanes}}, filters: {{filters}}",
+				"text": "Selected columns: {{columns}}, swimlanes: {{swimlanes}}, filters: {{filters}}, analysis for {{analyzeLength}} periods by ({{periodSize}} {{periodType}})",
 				"help": {
 					"text": "Information about columns, lines and filters selected for analysis.\nTo change settings, click on the gear icon.\nFor a detailed description, click on this icon.",
 					"link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.en.md#configuration"
@@ -106335,7 +106335,7 @@ var resources = {
 				"indicators": "Индикаторы"
 			},
 			"config-info": {
-				"text": "Выбрано колонок: {{columns}}, линий: {{swimlanes}}, фильтров: {{filters}}",
+				"text": "Выбрано колонок: {{columns}}, линий: {{swimlanes}}, фильтров: {{filters}}, анализ за {{analyzeLength}} периодов по ({{periodSize}} {{periodType}})",
 				"help": {
 					"text": "Информация о выбранных для анализа колонок, линий и фильтров.\nЧтобы изменить настройки, нажмите на значок шестерёнки.\nДля подробного описания кликните на значок.",
 					"link": "https://github.com/tsergey-tm/jira-kanban-assistant-dist/blob/master/docs/plugin-doc.ru.md#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0"
@@ -108285,10 +108285,14 @@ var App = observer(({ dataLoader }) => {
 				t("app.config-info.text", {
 					columns: dataLoader.conf.selectedColumns.size,
 					swimlanes: dataLoader.conf.swimlanes.length,
-					filters: dataLoader.conf.filters.length
+					filters: dataLoader.conf.filters.length,
+					periodSize: dataLoader.conf.periodSize,
+					periodType: t("app-config.period-type." + dataLoader.conf.periodType),
+					analyzeLength: dataLoader.conf.analyzeLength
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 					style: {
+						marginLeft: "0.5em",
 						cursor: "pointer",
 						fontSize: "x-large"
 					},
