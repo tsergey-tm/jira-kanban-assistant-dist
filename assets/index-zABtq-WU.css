@@ -714,15 +714,15 @@ a.icon-info-down {
 }
 
 .team-indicators .colorGood50 {
-    background-color: #99ff99 !important;
+    background-color: #b3ffb3 !important;
 }
 
 .team-indicators .colorGood75 {
-    background-color: #66ff66 !important;
+    background-color: #99ff99 !important;
 }
 
 .team-indicators .colorGood100 {
-    background-color: #33ff33 !important;
+    background-color: #80ff80 !important;
 }
 
 .team-indicators .colorBad25 {
@@ -730,15 +730,15 @@ a.icon-info-down {
 }
 
 .team-indicators .colorBad50 {
-    background-color: #ff9999 !important;
+    background-color: #ffb3b3 !important;
 }
 
 .team-indicators .colorBad75 {
-    background-color: #ff6666 !important;
+    background-color: #ff9999 !important;
 }
 
 .team-indicators .colorBad100 {
-    background-color: #ff3333 !important;
+    background-color: #ff8080 !important;
 }
 
 .team-indicators .colorGood {
@@ -756,6 +756,7 @@ a.icon-info-down {
 
 .team-indicators .metrics-table tbody tr:hover td {
     color: #000000;
+    font-weight: bold;
 }
 
 .team-indicators .divcell {
