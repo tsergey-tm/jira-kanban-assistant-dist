@@ -24223,17 +24223,8 @@ var calcBlockTime = (history, blockCheckListField, blockFlaggedField) => {
 	}
 };
 //#endregion
-//#region src/data/DataLoader.ts
-var DataLoader = class {
-	#nowTime;
-	#fetcher;
-	#finishStep = 5;
-	#currentStep = -1;
-	#stepSize = 1;
-	#currentStepProgress = 0;
-	#progressBarData;
-	jiraBase;
-	jiraBoardId;
+//#region src/data/DataStorage.ts
+var DataStorage = class {
 	kanbanPlanColumns;
 	kanbanBoardConfig;
 	kanbanCFD;
@@ -24249,13 +24240,8 @@ var DataLoader = class {
 	fieldsData;
 	boardAllData;
 	conf;
-	constructor(progressBarData, jiraBase, jiraBoardId, fetcher = new Fetcher(), nowTime = DateTime.now()) {
+	constructor() {
 		makeAutoObservable(this);
-		this.#fetcher = fetcher;
-		this.#nowTime = nowTime;
-		this.#progressBarData = progressBarData;
-		this.jiraBase = jiraBase;
-		this.jiraBoardId = jiraBoardId;
 		this.kanbanPlanColumns = [];
 		this.kanbanBoardConfig = void 0;
 		this.kanbanCFD = {
@@ -24277,53 +24263,7 @@ var DataLoader = class {
 		this.boardAllData = void 0;
 		this.conf = makeInitConf();
 	}
-	#updateProgressBar(currentStep, stepSize, currentStepProgress) {
-		runInAction(() => {
-			this.#currentStep = currentStep;
-			this.#stepSize = stepSize;
-			this.#currentStepProgress = currentStepProgress;
-			if (this.#currentStep === -1 || this.#currentStep >= this.#finishStep) {
-				this.#progressBarData.setLoading(false);
-				return;
-			}
-			const maxVal = this.#finishStep * this.#stepSize;
-			const currVal = this.#currentStep * this.#stepSize + this.#currentStepProgress;
-			this.#progressBarData.setValuesAndMakeLoading(currVal, maxVal);
-		});
-	}
-	async startLoading() {
-		this.#updateProgressBar(0, 1, 0);
-		try {
-			this.#clearData();
-			await this.#loadBoardConfig();
-			this.#updateProgressBar(1, 1, 0);
-			const newConf = await this.#loadConfig();
-			await this.configureAndLoad(newConf);
-		} finally {
-			this.#updateProgressBar(this.#finishStep, 1, 0);
-		}
-	}
-	async configureAndLoad(newConf) {
-		runInAction(() => {
-			this.conf = newConf;
-		});
-		try {
-			this.#updateProgressBar(2, 1, 0);
-			await this.#loadCFD();
-			runInAction(() => {
-				this.#recalcCFD();
-				this.#calcLTD();
-			});
-			this.#updateProgressBar(3, 1, 0);
-			await this.#loadIssues(3);
-			runInAction(() => {
-				this.#recalcDetailedLTD();
-			});
-		} finally {
-			this.#updateProgressBar(this.#finishStep, 1, 0);
-		}
-	}
-	#clearData = () => {
+	clearData() {
 		this.kanbanPlanColumns.splice(0);
 		this.kanbanBoardConfig = void 0;
 		this.conf = makeInitConf();
@@ -24344,8 +24284,96 @@ var DataLoader = class {
 		this.wiaCycleByColumns = {};
 		this.wiaByColumns = {};
 		this.unfinishedIssues = {};
-	};
-	async #loadBoardConfig() {
+	}
+	setBoardConfig(data) {
+		runInAction(() => {
+			this.columns = data.columns;
+			this.kanbanPlanColumns = data.kanbanPlanColumns;
+			this.kanbanBoardConfig = data.kanbanBoardConfig;
+			this.fieldsData = data.fieldsData;
+			this.boardAllData = data.boardAllData;
+			this.conf = data.conf;
+		});
+	}
+	setCFD(cfd) {
+		runInAction(() => {
+			this.kanbanCFD = cfd;
+		});
+	}
+	setPeriodStat(periodStat) {
+		runInAction(() => {
+			this.periodStat = periodStat;
+		});
+	}
+	setIssuesStat(issuesStat) {
+		runInAction(() => {
+			this.issuesStat = issuesStat;
+		});
+	}
+	setIssuesMap(issuesMap) {
+		runInAction(() => {
+			this.issuesMap = issuesMap;
+		});
+	}
+	setLeadCycleTimeDistribution(data) {
+		runInAction(() => {
+			this.leadCycleTimeDistribution = data;
+		});
+	}
+	setWIAInfo(wiaLeadByColumns, wiaCycleByColumns, wiaByColumns) {
+		runInAction(() => {
+			this.wiaLeadByColumns = wiaLeadByColumns;
+			this.wiaCycleByColumns = wiaCycleByColumns;
+			this.wiaByColumns = wiaByColumns;
+		});
+	}
+	setUnfinishedIssues(unfinishedIssues) {
+		runInAction(() => {
+			this.unfinishedIssues = unfinishedIssues;
+		});
+	}
+	setConf(conf) {
+		runInAction(() => {
+			this.conf = conf;
+		});
+	}
+	setColumns(columns) {
+		runInAction(() => {
+			this.columns = columns;
+		});
+	}
+};
+//#endregion
+//#region src/data/DataCollector.ts
+var DataCollector = class {
+	#nowTime;
+	#fetcher;
+	jiraBase;
+	jiraBoardId;
+	dataStorage;
+	#progressBarData;
+	constructor(progressBarData, jiraBase, jiraBoardId, dataStorage, fetcher, nowTime) {
+		makeAutoObservable(this);
+		this.#nowTime = nowTime;
+		this.#fetcher = fetcher;
+		this.#progressBarData = progressBarData;
+		this.jiraBase = jiraBase;
+		this.jiraBoardId = jiraBoardId;
+		this.dataStorage = dataStorage;
+	}
+	#updateProgressBar(currentStep, stepSize, currentStepProgress) {
+		const finishStep = 5;
+		runInAction(() => {
+			if (currentStep === -1 || currentStep >= finishStep) {
+				this.#progressBarData.setLoading(false);
+				return;
+			}
+			const maxVal = finishStep * stepSize;
+			const currVal = currentStep * stepSize + currentStepProgress;
+			this.#progressBarData.setValuesAndMakeLoading(currVal, maxVal);
+		});
+	}
+	async loadBoardConfig() {
 		let url = this.jiraBase + "/rest/greenhopper/1.0/rapidviewconfig/editmodel.json?rapidViewId=" + this.jiraBoardId;
 		const editModel = this.#fetcher.fetchData(url);
 		url = this.jiraBase + "/rest/api/2/field";
@@ -24357,6 +24385,9 @@ var DataLoader = class {
 			fields,
 			boardAll
 		]);
+		const columns = [];
+		const kanbanPlanColumns = [];
+		const conf = makeInitConf();
 		for (let i = 0; i < editModelData.rapidListConfig.mappedColumns.length; i++) {
 			const item = editModelData.rapidListConfig.mappedColumns[i];
 			if (Array.isArray(item.mappedStatuses) && item.mappedStatuses.length > 0) {
@@ -24367,78 +24398,81 @@ var DataLoader = class {
 					isKanPlanColumn: false
 				};
 				if (item.isKanPlanColumn) {
-					this.kanbanPlanColumns.push(String(item.id));
+					kanbanPlanColumns.push(String(item.id));
 					col.isKanPlanColumn = true;
 				} else col.isKanPlanColumn = false;
-				this.columns.push(col);
+				columns.push(col);
 			}
 		}
-		for (let i = 0; i < this.columns.length; i++) {
-			const col = this.columns[i];
-			if (!col.isKanPlanColumn) if (i >= this.columns.length - 1) this.conf.ready.push(col.id);
+		for (let i = 0; i < columns.length; i++) {
+			const col = columns[i];
+			if (!col.isKanPlanColumn) if (i >= columns.length - 1) conf.ready.push(col.id);
 			else {
-				this.conf.work.push(col.id);
-				this.conf.lead.push(col.id);
-				this.conf.cycle.push(col.id);
+				conf.work.push(col.id);
+				conf.lead.push(col.id);
+				conf.cycle.push(col.id);
 			}
 		}
-		for (const item of editModelData.swimlanesConfig.swimlanes) this.conf.swimlanes.push(item.id);
-		runInAction(() => {
-			this.kanbanBoardConfig = editModelData;
-			this.fieldsData = fieldsData;
-			this.boardAllData = boardAllData;
+		for (const item of editModelData.swimlanesConfig.swimlanes) conf.swimlanes.push(item.id);
+		this.dataStorage.setBoardConfig({
+			columns,
+			kanbanPlanColumns,
+			kanbanBoardConfig: editModelData,
+			fieldsData,
+			boardAllData,
+			conf
 		});
 		this.#recalcColumns();
 	}
-	async #loadConfig() {
-		return await loadConfig(this.jiraBase, this.jiraBoardId, this.columns.map((col) => col.id), this.kanbanBoardConfig.swimlanesConfig.swimlanes.map((item) => item.id), this.kanbanBoardConfig.quickFilterConfig.quickFilters.map((item) => item.id), this.#fetcher);
+	async loadConfig() {
+		return await loadConfig(this.jiraBase, this.jiraBoardId, this.dataStorage.columns.map((col) => col.id), this.dataStorage.kanbanBoardConfig.swimlanesConfig.swimlanes.map((item) => item.id), this.dataStorage.kanbanBoardConfig.quickFilterConfig.quickFilters.map((item) => item.id), this.#fetcher);
 	}
 	async saveConfig(newConf) {
 		await saveConfig(this.jiraBase, this.jiraBoardId, newConf);
 	}
-	async #loadCFD() {
+	async loadCFD() {
 		let url = this.jiraBase + "/rest/greenhopper/1.0/rapid/charts/cumulativeflowdiagram.json?rapidViewId=" + this.jiraBoardId;
-		if (this.conf.swimlanes.length === 0) url += this.kanbanBoardConfig.swimlanesConfig.swimlanes.map((item) => "&swimlaneId=" + item.id).join("");
-		else for (const id of this.conf.swimlanes) url += "&swimlaneId=" + id;
-		for (const col of this.columns) url += "&columnId=" + col.id;
-		for (const id of this.conf.filters) url += "&quickFilterId=" + id;
+		if (this.dataStorage.conf.swimlanes.length === 0) url += this.dataStorage.kanbanBoardConfig.swimlanesConfig.swimlanes.map((item) => "&swimlaneId=" + item.id).join("");
+		else for (const id of this.dataStorage.conf.swimlanes) url += "&swimlaneId=" + id;
+		for (const col of this.dataStorage.columns) url += "&columnId=" + col.id;
+		for (const id of this.dataStorage.conf.filters) url += "&quickFilterId=" + id;
 		const kanbanCFD = await this.#fetcher.fetchData(url);
-		runInAction(() => {
-			this.kanbanCFD = kanbanCFD;
-		});
+		this.dataStorage.setCFD(kanbanCFD);
 	}
-	#recalcCFD() {
+	recalcCFD() {
 		try {
-			const kanbanStat = new KanbanStat(this.columns, this.kanbanCFD, this.conf, this.#nowTime);
-			runInAction(() => {
-				this.periodStat = [];
-				for (const periodStatElement of kanbanStat.periodStat) this.periodStat.push(periodStatElement);
-			});
-			this.issuesStat = {};
-			for (const [key, issueStat] of Object.entries(kanbanStat.issuesStat)) this.issuesStat[key] = issueStat;
-			this.wiaLeadByColumns = kanbanStat.wiaLeadByColumns;
-			this.wiaCycleByColumns = kanbanStat.wiaCycleByColumns;
-			this.wiaByColumns = kanbanStat.wiaByColumns;
-			this.unfinishedIssues = {};
-			for (const [key, issue] of Object.entries(kanbanStat.unfinishedIssues)) this.unfinishedIssues[key] = issue;
+			const kanbanStat = new KanbanStat(this.dataStorage.columns, this.dataStorage.kanbanCFD, this.dataStorage.conf, this.#nowTime);
+			const periodStat = [];
+			for (const periodStatElement of kanbanStat.periodStat) periodStat.push(periodStatElement);
+			this.dataStorage.setPeriodStat(periodStat);
+			const issuesStat = {};
+			for (const [key, issueStat] of Object.entries(kanbanStat.issuesStat)) issuesStat[key] = issueStat;
+			this.dataStorage.setIssuesStat(issuesStat);
+			const issuesMap = {};
 			Object.entries(kanbanStat.issues).forEach(([key, stat]) => {
-				this.issuesMap[key] = {
+				issuesMap[key] = {
 					key,
 					isClosed: stat.isClosed,
 					updated: NaN,
 					fields: {}
 				};
 			});
+			this.dataStorage.setIssuesMap(issuesMap);
+			this.dataStorage.setWIAInfo(kanbanStat.wiaLeadByColumns, kanbanStat.wiaCycleByColumns, kanbanStat.wiaByColumns);
+			const unfinishedIssues = {};
+			for (const [key, issue] of Object.entries(kanbanStat.unfinishedIssues)) unfinishedIssues[key] = issue;
+			this.dataStorage.setUnfinishedIssues(unfinishedIssues);
 		} catch (err) {
 			console.warn(err);
 		}
 	}
-	#calcLTD() {
-		this.leadCycleTimeDistribution = { total: this.#calcIssuesLCTD(Object.values(this.issuesStat)) };
+	calcLTD() {
+		const lctd = { total: this.#calcIssuesLCTD(Object.values(this.dataStorage.issuesStat)) };
+		this.dataStorage.setLeadCycleTimeDistribution(lctd);
 	}
-	async #loadIssues(stepNumber) {
-		if (!this.conf.issueSizeField && !this.conf.issueBlockFlaggedField && !this.conf.issueBlockChecklistField) return;
-		const issuesToLoad = Object.keys(this.issuesMap);
+	async loadIssues(stepNumber) {
+		if (!this.dataStorage.conf.issueSizeField && !this.dataStorage.conf.issueBlockFlaggedField && !this.dataStorage.conf.issueBlockChecklistField) return;
+		const issuesToLoad = Object.keys(this.dataStorage.issuesMap);
 		const issuesToLoadCnt = issuesToLoad.length;
 		try {
 			const url = this.jiraBase + "/rest/api/2/search";
@@ -24448,7 +24482,7 @@ var DataLoader = class {
 				maxResults: 100,
 				fields: ["updated", "summary"]
 			};
-			if (this.conf.issueSizeField) req.fields.push(this.conf.issueSizeField);
+			if (this.dataStorage.conf.issueSizeField) req.fields.push(this.dataStorage.conf.issueSizeField);
 			while (issuesToLoad.length > 0) {
 				req.jql = "issuekey in (" + issuesToLoad.splice(0, 100).join(",") + ")";
 				const data = await this.#fetcher.fetchData(url, {
@@ -24457,21 +24491,25 @@ var DataLoader = class {
 					body: JSON.stringify(req)
 				});
 				this.#updateProgressBar(stepNumber, issuesToLoadCnt, issuesToLoadCnt - issuesToLoad.length);
-				for (const issue of data.issues) if (issue.key in this.issuesMap) {
-					if ("updated" in issue.fields) this.issuesMap[issue.key].updated = issue.fields["updated"]?.value ? new Date(issue.fields["updated"].value).getTime() : NaN;
-					this.issuesMap[issue.key].fields = issue.fields;
+				const issuesMap = this.dataStorage.issuesMap;
+				for (const issue of data.issues) if (issue.key in issuesMap) {
+					if ("updated" in issue.fields) issuesMap[issue.key].updated = issue.fields["updated"]?.value ? new Date(issue.fields["updated"].value).getTime() : NaN;
+					issuesMap[issue.key].fields = issue.fields;
 				}
+				this.dataStorage.setIssuesMap(issuesMap);
 			}
-			if (!this.conf.issueBlockFlaggedField && !this.conf.issueBlockChecklistField) return;
-			issuesToLoad.push(...Object.keys(this.issuesMap));
+			if (!this.dataStorage.conf.issueBlockFlaggedField && !this.dataStorage.conf.issueBlockChecklistField) return;
+			issuesToLoad.push(...Object.keys(this.dataStorage.issuesMap));
+			const issuesStat = this.dataStorage.issuesStat;
 			while (issuesToLoad.length > 0) {
 				const issKey = issuesToLoad.shift();
-				if (issKey in this.issuesStat) {
+				if (issKey in issuesStat) {
 					const data = await this.#loadIssue(issKey);
-					this.issuesStat[issKey].block = data.blockDays;
+					issuesStat[issKey].block = data.blockDays;
 				}
 				this.#updateProgressBar(stepNumber + 1, issuesToLoadCnt, issuesToLoadCnt - issuesToLoad.length);
 			}
+			this.dataStorage.setIssuesStat(issuesStat);
 		} catch (e) {
 			console.warn(e);
 		}
@@ -24479,10 +24517,10 @@ var DataLoader = class {
 	#loadIssue = async (issKey) => {
 		let issueData = IssueStatStorage_default.get(this.jiraBase, {
 			key: issKey,
-			updated: this.issuesMap[issKey].fields["updated"].numValue,
-			isClosed: this.issuesMap[issKey].isClosed,
-			fieldBlocksChecklist: this.conf.issueBlockChecklistField || void 0,
-			fieldBlocksOption: this.conf.issueBlockFlaggedField || void 0,
+			updated: this.dataStorage.issuesMap[issKey].fields["updated"].numValue,
+			isClosed: this.dataStorage.issuesMap[issKey].isClosed,
+			fieldBlocksChecklist: this.dataStorage.conf.issueBlockChecklistField || void 0,
+			fieldBlocksOption: this.dataStorage.conf.issueBlockFlaggedField || void 0,
 			blockDays: NaN
 		});
 		if (issueData) return issueData;
@@ -24491,38 +24529,40 @@ var DataLoader = class {
 			method: "GET",
 			headers: { "Content-type": "application/json" }
 		});
-		const issueBlockChecklistFieldName = this.fieldsData.find((value) => value.id === this.conf.issueBlockChecklistField)?.name || null;
-		const issueBlockFlaggedFieldName = this.fieldsData.find((value) => value.id === this.conf.issueBlockFlaggedField)?.name || null;
+		const issueBlockChecklistFieldName = this.dataStorage.fieldsData.find((value) => value.id === this.dataStorage.conf.issueBlockChecklistField)?.name || null;
+		const issueBlockFlaggedFieldName = this.dataStorage.fieldsData.find((value) => value.id === this.dataStorage.conf.issueBlockFlaggedField)?.name || null;
 		const blockDays = calcBlockTime(data.changelog.histories, issueBlockChecklistFieldName, issueBlockFlaggedFieldName);
 		issueData = {
 			key: issKey,
-			updated: this.issuesMap[issKey].fields["updated"].numValue,
-			isClosed: this.issuesMap[issKey].isClosed,
-			fieldBlocksChecklist: this.conf.issueBlockChecklistField || void 0,
-			fieldBlocksOption: this.conf.issueBlockFlaggedField || void 0,
+			updated: this.dataStorage.issuesMap[issKey].fields["updated"].numValue,
+			isClosed: this.dataStorage.issuesMap[issKey].isClosed,
+			fieldBlocksChecklist: this.dataStorage.conf.issueBlockChecklistField || void 0,
+			fieldBlocksOption: this.dataStorage.conf.issueBlockFlaggedField || void 0,
 			blockDays
 		};
 		IssueStatStorage_default.set(this.jiraBase, issueData);
 		return issueData;
 	};
-	#recalcDetailedLTD() {
-		if (this.conf.issueSizeField) {
+	recalcDetailedLTD() {
+		if (this.dataStorage.conf.issueSizeField) {
 			const groups = { "default": [] };
-			for (const [key, issueStat] of Object.entries(this.issuesStat)) {
+			for (const [key, issueStat] of Object.entries(this.dataStorage.issuesStat)) {
 				let group = "default";
-				if (key in this.issuesMap && this.conf.issueSizeField in this.issuesMap[key].fields) {
-					const sizeField = this.issuesMap[key].fields[this.conf.issueSizeField];
+				if (key in this.dataStorage.issuesMap && this.dataStorage.conf.issueSizeField in this.dataStorage.issuesMap[key].fields) {
+					const sizeField = this.dataStorage.issuesMap[key].fields[this.dataStorage.conf.issueSizeField];
 					if (sizeField?.value) group = sizeField.value;
 				}
 				if (!(group in groups)) groups[group] = [];
 				groups[group].push(issueStat);
 			}
-			for (const [group, issueStats] of Object.entries(groups)) this.leadCycleTimeDistribution[group] = this.#calcIssuesLCTD(issueStats);
+			const lctd = { total: this.dataStorage.leadCycleTimeDistribution.total };
+			for (const [group, issueStats] of Object.entries(groups)) lctd[group] = this.#calcIssuesLCTD(issueStats);
+			this.dataStorage.setLeadCycleTimeDistribution(lctd);
 		}
-		if (this.conf.issueBlockFlaggedField || this.conf.issueBlockChecklistField) runInAction(() => {
-			const ps = [...this.periodStat];
-			for (const tPeriodsStat of ps) tPeriodsStat.block = calcStat(tPeriodsStat.closedIssues.map((key) => this.issuesStat[key].block));
-			this.periodStat = ps;
+		if (this.dataStorage.conf.issueBlockFlaggedField || this.dataStorage.conf.issueBlockChecklistField) runInAction(() => {
+			const ps = [...this.dataStorage.periodStat];
+			for (const tPeriodsStat of ps) tPeriodsStat.block = calcStat(tPeriodsStat.closedIssues.map((key) => this.dataStorage.issuesStat[key].block));
+			this.dataStorage.setPeriodStat(ps);
 		});
 	}
 	#calcIssuesLCTD(filteredIssuesStats) {
@@ -24614,15 +24654,75 @@ var DataLoader = class {
 	}
 	#recalcColumns() {
 		const statusToColIndex = {};
-		for (const colData of this.boardAllData.columnsData.columns) if (Array.isArray(colData.statusIds) && colData.statusIds.length > 0) {
-			let index = this.columns.length - 1;
-			while (index >= 0 && this.columns[index].id !== String(colData.id)) index--;
+		for (const colData of this.dataStorage.boardAllData.columnsData.columns) if (Array.isArray(colData.statusIds) && colData.statusIds.length > 0) {
+			let index = this.dataStorage.columns.length - 1;
+			while (index >= 0 && this.dataStorage.columns[index].id !== String(colData.id)) index--;
 			if (index >= 0) for (const statusId of colData.statusIds) statusToColIndex[statusId] = index;
 		}
-		for (const issue of this.boardAllData.issuesData.issues) {
+		const columns = this.dataStorage.columns;
+		for (const issue of this.dataStorage.boardAllData.issuesData.issues) {
 			const colIndex = statusToColIndex[issue.statusId];
-			if (colIndex >= 0) this.columns[colIndex].issues.push(issue.key);
+			if (colIndex >= 0) columns[colIndex].issues.push(issue.key);
 		}
+		this.dataStorage.setColumns(columns);
+	}
+};
+//#endregion
+//#region src/data/DataLoader.ts
+var DataLoader = class {
+	#progressBarData;
+	jiraBase;
+	jiraBoardId;
+	dataStorage;
+	dataCollector;
+	constructor(progressBarData, jiraBase, jiraBoardId, fetcher = new Fetcher(), nowTime = DateTime.now()) {
+		makeAutoObservable(this);
+		this.#progressBarData = progressBarData;
+		this.jiraBase = jiraBase;
+		this.jiraBoardId = jiraBoardId;
+		this.dataStorage = new DataStorage();
+		this.dataCollector = new DataCollector(progressBarData, jiraBase, jiraBoardId, this.dataStorage, fetcher, nowTime);
+	}
+	#updateProgressBar(currentStep, stepSize, currentStepProgress) {
+		const finishStep = 5;
+		runInAction(() => {
+			if (currentStep === -1 || currentStep >= finishStep) {
+				this.#progressBarData.setLoading(false);
+				return;
+			}
+			const maxVal = finishStep * stepSize;
+			const currVal = currentStep * stepSize + currentStepProgress;
+			this.#progressBarData.setValuesAndMakeLoading(currVal, maxVal);
+		});
+	}
+	async startLoading() {
+		this.#updateProgressBar(0, 1, 0);
+		try {
+			this.dataStorage.clearData();
+			await this.dataCollector.loadBoardConfig();
+			this.#updateProgressBar(1, 1, 0);
+			const newConf = await this.dataCollector.loadConfig();
+			await this.configureAndLoad(newConf);
+		} finally {
+			this.#updateProgressBar(5, 1, 0);
+		}
+	}
+	async configureAndLoad(newConf) {
+		this.dataStorage.setConf(newConf);
+		try {
+			this.#updateProgressBar(2, 1, 0);
+			await this.dataCollector.loadCFD();
+			this.dataCollector.recalcCFD();
+			this.dataCollector.calcLTD();
+			this.#updateProgressBar(3, 1, 0);
+			await this.dataCollector.loadIssues(3);
+			this.dataCollector.recalcDetailedLTD();
+		} finally {
+			this.#updateProgressBar(5, 1, 0);
+		}
+	}
+	async saveConfig(newConf) {
+		await this.dataCollector.saveConfig(newConf);
 	}
 };
 //#endregion
@@ -108912,6 +109012,22 @@ var TeamIndicators = ({ title, periodStat }) => {
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.awip.total.title") }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+									className: colorStyleByCV(awipAll.totalCV),
+									children: awipAll.totalCV.toFixed(1)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: awipAll.total.toFixed(1) }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+									className: colorStyleGoodLess(awipLast3.total, awipAll.totalSD, awipAll.total),
+									children: awipLast3.total.toFixed(1)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+									className: colorStyleGoodLess(awipLast.total, awipAll.totalSD, awipAll.total),
+									children: awipLast.total.toFixed(1)
+								})
+							] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.awip.work.title") }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
 									className: colorStyleByCV(awipAll.workCV),
 									children: awipAll.workCV.toFixed(1)
 								}),
@@ -108926,7 +109042,7 @@ var TeamIndicators = ({ title, periodStat }) => {
 								})
 							] }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.awip.work.title") }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.awip.wait.title") }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
 									className: colorStyleByCV(awipAll.waitCV),
 									children: awipAll.waitCV.toFixed(1)
@@ -108939,22 +109055,6 @@ var TeamIndicators = ({ title, periodStat }) => {
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
 									className: colorStyleGoodLess(awipLast.wait, awipAll.waitSD, awipAll.wait),
 									children: awipLast.wait.toFixed(1)
-								})
-							] }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: t("indicators.awip.wait.title") }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-									className: colorStyleByCV(awipAll.totalCV),
-									children: awipAll.totalCV.toFixed(1)
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: awipAll.total.toFixed(1) }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-									className: colorStyleGoodLess(awipLast3.total, awipAll.totalSD, awipAll.total),
-									children: awipLast3.total.toFixed(1)
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-									className: colorStyleGoodLess(awipLast.total, awipAll.totalSD, awipAll.total),
-									children: awipLast.total.toFixed(1)
 								})
 							] }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
@@ -109041,6 +109141,7 @@ var TeamIndicators = ({ title, periodStat }) => {
 var TeamIndicators_default = TeamIndicators;
 //#endregion
 //#region src/App.tsx
+var getStorage = (dataLoader) => dataLoader.dataStorage;
 var App = observer(({ dataLoader }) => {
 	const { t } = useTranslation();
 	const [showConfig, setShowConfig] = (0, import_react.useState)(false);
@@ -109049,11 +109150,12 @@ var App = observer(({ dataLoader }) => {
 	}, [dataLoader]);
 	const selectedColumns = () => {
 		const res = [];
-		for (const id of dataLoader.conf.cycle.concat(dataLoader.conf.lead)) if (!res.includes(id)) res.push(id);
+		for (const id of storage.conf.cycle.concat(storage.conf.lead)) if (!res.includes(id)) res.push(id);
 		return res;
 	};
+	const storage = getStorage(dataLoader);
 	let title;
-	if (dataLoader.kanbanBoardConfig?.name) title = t("app.title.with-name", { name: dataLoader.kanbanBoardConfig.name });
+	if (storage.kanbanBoardConfig?.name) title = t("app.title.with-name", { name: storage.kanbanBoardConfig.name });
 	else title = t("app.title.without-name");
 	const applyConfig = async (newConfig) => {
 		setShowConfig(false);
@@ -109069,7 +109171,7 @@ var App = observer(({ dataLoader }) => {
 			title,
 			data: progressBarData
 		}),
-		dataLoader.kanbanBoardConfig?.name && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		storage.kanbanBoardConfig?.name && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			style: { clear: "left" },
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(HelpLink, {
@@ -109077,12 +109179,12 @@ var App = observer(({ dataLoader }) => {
 					href: t("app.config-info.help.link")
 				}),
 				t("app.config-info.text", {
-					columns: dataLoader.conf.selectedColumns.size,
-					swimlanes: dataLoader.conf.swimlanes.length,
-					filters: dataLoader.conf.filters.length,
-					periodSize: dataLoader.conf.periodSize,
-					periodType: t("app-config.period-type." + dataLoader.conf.periodType),
-					analyzeLength: dataLoader.conf.analyzeLength
+					columns: storage.conf.selectedColumns.size,
+					swimlanes: storage.conf.swimlanes.length,
+					filters: storage.conf.filters.length,
+					periodSize: storage.conf.periodSize,
+					periodType: t("app-config.period-type." + storage.conf.periodType),
+					analyzeLength: storage.conf.analyzeLength
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 					style: {
@@ -109106,16 +109208,16 @@ var App = observer(({ dataLoader }) => {
 				margin: "auto"
 			} },
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppConfig_default, {
-				conf: dataLoader.conf,
-				columns: dataLoader.columns,
-				fieldsData: dataLoader.fieldsData,
-				kanbanBoardConfig: dataLoader.kanbanBoardConfig,
+				conf: storage.conf,
+				columns: storage.columns,
+				fieldsData: storage.fieldsData,
+				kanbanBoardConfig: storage.kanbanBoardConfig,
 				onApplyAction: (newConfig) => applyConfig(newConfig),
 				onCloseAction: () => setShowConfig(false),
 				onSaveAction: (newConfig) => saveConfig(newConfig)
 			})
 		})] }),
-		dataLoader.kanbanBoardConfig?.name && dataLoader.periodStat.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		storage.kanbanBoardConfig?.name && storage.periodStat.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			style: {
 				clear: "left",
 				width: "95vw",
@@ -109140,70 +109242,70 @@ var App = observer(({ dataLoader }) => {
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Tab, { children: t("app.tabs.indicators") })
 					] }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MainStatChart_default, {
-						title: dataLoader.kanbanBoardConfig?.name,
-						periodStat: dataLoader.periodStat
+						title: storage.kanbanBoardConfig?.name,
+						periodStat: storage.periodStat
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TotalWIPChart_default, {
-						title: dataLoader.kanbanBoardConfig?.name,
-						periodStat: dataLoader.periodStat
+						title: storage.kanbanBoardConfig?.name,
+						periodStat: storage.periodStat
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AccumulatedWIPChart_default, {
-						title: dataLoader.kanbanBoardConfig?.name,
-						periodStat: dataLoader.periodStat
+						title: storage.kanbanBoardConfig?.name,
+						periodStat: storage.periodStat
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WIPsChart_default, {
-						title: dataLoader.kanbanBoardConfig?.name,
-						periodStat: dataLoader.periodStat,
+						title: storage.kanbanBoardConfig?.name,
+						periodStat: storage.periodStat,
 						selectedColumns: selectedColumns(),
-						columns: dataLoader.columns
+						columns: storage.columns
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TimesByColsChart_default, {
-						title: dataLoader.kanbanBoardConfig?.name,
-						periodStat: dataLoader.periodStat,
+						title: storage.kanbanBoardConfig?.name,
+						periodStat: storage.periodStat,
 						selectedColumns: selectedColumns(),
-						columns: dataLoader.columns
+						columns: storage.columns
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LeadCycleTimeChart_default, {
-						title: dataLoader.kanbanBoardConfig?.name,
-						periodStat: dataLoader.periodStat
+						title: storage.kanbanBoardConfig?.name,
+						periodStat: storage.periodStat
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TimesChart_default, {
-						title: dataLoader.kanbanBoardConfig?.name,
-						periodStat: dataLoader.periodStat,
+						title: storage.kanbanBoardConfig?.name,
+						periodStat: storage.periodStat,
 						selectedColumns: selectedColumns(),
-						columns: dataLoader.columns,
-						conf: dataLoader.conf
+						columns: storage.columns,
+						conf: storage.conf
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LeadTimeDistributionChart_default, {
-						title: dataLoader.kanbanBoardConfig?.name,
-						leadCycleTimeDistribution: dataLoader.leadCycleTimeDistribution
+						title: storage.kanbanBoardConfig?.name,
+						leadCycleTimeDistribution: storage.leadCycleTimeDistribution
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ControlChart_default, {
-						title: dataLoader.kanbanBoardConfig?.name,
-						conf: dataLoader.conf,
-						columns: dataLoader.columns,
+						title: storage.kanbanBoardConfig?.name,
+						conf: storage.conf,
+						columns: storage.columns,
 						selectedColumns: selectedColumns(),
-						issuesStat: dataLoader.issuesStat,
+						issuesStat: storage.issuesStat,
 						jiraBase: dataLoader.jiraBase
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WIAChart_default, {
-						title: dataLoader.kanbanBoardConfig?.name,
-						columns: dataLoader.columns,
-						wiaLeadByColumns: dataLoader.wiaLeadByColumns,
-						wiaCycleByColumns: dataLoader.wiaCycleByColumns,
-						wiaByColumns: dataLoader.wiaByColumns,
+						title: storage.kanbanBoardConfig?.name,
+						columns: storage.columns,
+						wiaLeadByColumns: storage.wiaLeadByColumns,
+						wiaCycleByColumns: storage.wiaCycleByColumns,
+						wiaByColumns: storage.wiaByColumns,
 						jiraBase: dataLoader.jiraBase,
-						cycleColumns: dataLoader.conf.cycle,
-						leadColumns: dataLoader.conf.lead,
-						unfinishedIssues: dataLoader.unfinishedIssues
+						cycleColumns: storage.conf.cycle,
+						leadColumns: storage.conf.lead,
+						unfinishedIssues: storage.unfinishedIssues
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendChart_default, {
-						title: dataLoader.kanbanBoardConfig?.name,
-						periodStat: dataLoader.periodStat
+						title: storage.kanbanBoardConfig?.name,
+						periodStat: storage.periodStat
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabPanel, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TeamIndicators_default, {
-						title: dataLoader.kanbanBoardConfig?.name,
-						periodStat: dataLoader.periodStat
+						title: storage.kanbanBoardConfig?.name,
+						periodStat: storage.periodStat
 					}) })
 				]
 			})
